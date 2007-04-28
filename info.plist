@@ -11,11 +11,11 @@
 	<key>AllowSystem</key>
 	<true/>
 	<key>CFBundleDisplayName</key>
-	<string>Xmltv 2</string>
+	<string>EPG</string>
 	<key>CFBundleIdentifier</key>
 	<string>se.bizo.widget.epg</string>
 	<key>CFBundleName</key>
-	<string>EPG</string>
+	<string>epgwidget</string>
 	<key>CFBundleVersion</key>
 	<string>2.0</string>
 	<key>CloseBoxInsetX</key>
