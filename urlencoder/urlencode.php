@@ -13,6 +13,7 @@ if($file != FALSE)
 } 
 else 
 {
+	fclose($file);
 	$stderr = fopen("php://stderr","w");
 	fwrite($stderr,"Could not open ".$filename);
 	fclose($stderr);
