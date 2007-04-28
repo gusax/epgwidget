@@ -1,8 +1,19 @@
-/*
+﻿/*
 	Common styles shared between all skins
 */
-body {
+body 
+{
 	font-size:  76%;
 	margin: 	0em;
 	padding: 	0em;
+}
+
+#front, #allChannels
+{
+	display: block;
+}
+
+#back, #oneChannel
+{
+	display: none;
 }
