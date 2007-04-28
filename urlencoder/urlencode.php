@@ -3,7 +3,18 @@
 $filename = $argv[1];
 echo $filename;
 $file = fopen($filename, 'r');
-$filecontents = fread($file, filesize($filename));
-fclose($file);
-echo urlencode($filecontents);
+if($file != FALSE)
+{
+	$filecontents = fread($file, filesize($filename));
+	fclose($file);
+	$stdout = fopen("php://stdout","w");
+	fwrite($stdout, urlencode($filecontents));
+	fclose($stdout);
+} 
+else 
+{
+	$stderr = fopen("php://stderr","w");
+	fwrite($stderr,"Could not open ".$filename);
+	fclose($stderr);
+}
 ?>
