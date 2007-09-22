@@ -1,0 +1,45 @@
+div.topbar
+{
+  width: 27em;
+  height: 3.9em;
+}
+
+div.contents div.text
+{
+  font-size: 1.4em;
+  color: #fff;
+}
+
+div.channels
+{
+  width: 27em;
+  height: 25em;
+}
+
+div.channellist
+{
+  height: 100%;
+  margin: 0em 2em 0em 1.5em;
+  text-align: center;
+  overflow: auto;
+}
+
+div.channellist img.icon
+{
+  width: 4em;
+  height: 4em;
+  padding: 0.5em;
+  opacity: 0.5;
+}
+
+div.channellist img.icon:hover
+{
+  background: #444;
+  opacity: 1;
+}
+
+div.bottombar
+{
+  width: 27em;
+  height: 3.9em;
+}
