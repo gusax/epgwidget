@@ -5,6 +5,7 @@
  debug:false,
  eqeqeq: true,
  evil: false,
+ forin: false,
  fragment:false, 
  laxbreak:false, 
  nomen:true, 
@@ -28,7 +29,7 @@ if (EPG.debug)
   EPG.debug.alert("EPG.growl.js loaded");
 }
 
-EPG.growl = function(debug)
+EPG.growl = function(debug, translator)
 {
   // Private Variables
   var that,
@@ -36,7 +37,8 @@ EPG.growl = function(debug)
   userHasGrowlInstalled = false,
   timers = [],
   callbacks = [],
-  pathToGrowl = "/usr/local/bin/growlnotify"; 
+  pathToGrowl = "/usr/local/bin/growlnotify",
+  pathToEPGIcon = "$HOME/Library/Xmltv/grabber/Icon.png";; 
   
   // Private methods
   function growlCheck(systemCall, callback) 
@@ -97,9 +99,11 @@ EPG.growl = function(debug)
     {
       try
       {
+        
         if(window.widget)
         {
-          widget.system(pathToGrowl + " --name \"DreamEPG\" --message \"Jippie, you can use Growl together with the EPG widget :-)\"", function(systemcall){growlCheck(systemcall, callback);});
+          
+          widget.system(pathToGrowl + " --name \"DreamEPG\" --image \"" + pathToEPGIcon + "\" --message \"" + translator.translate("Jippie, you can use Growl together with the EPG widget :-)") + "\"", function(systemcall){growlCheck(systemcall, callback);});
         }
       }
       catch (error)
@@ -124,7 +128,7 @@ EPG.growl = function(debug)
             }
             else
             {
-              window.widget.system(pathToGrowl + " --name \"DreamEPG\" --message \"" + message + "\"", function(systemcall){growlFinished(systemcall);});
+              window.widget.system(pathToGrowl + " --name \"DreamEPG\" --message \"" + message + "\" --image \"" + pathToEPGIcon + "\"", function(systemcall){growlFinished(systemcall);});
             }
           }
           else if(hasNotCheckedForGrowlYet)
@@ -177,5 +181,5 @@ EPG.growl = function(debug)
       }
     } 
   };
-}(EPG.debug);
+}(EPG.debug, EPG.translator);
 EPG.growl.init();

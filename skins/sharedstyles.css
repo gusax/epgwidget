@@ -10,7 +10,7 @@
 */
 body 
 {
-	font-size:  10px;
+  font: 10px Lucida Grande;
 	margin: 	0em;
 	padding: 	0em;
 }
@@ -42,7 +42,6 @@ div
   font-size: 1em;
 }
 
-
 div.scalable div.contents
 {
   width: 100%;
@@ -52,6 +51,12 @@ div.scalable div.contents
   top:0em;
   left: 0em;
   z-index: 3;
+  overflow: hidden;
+}
+
+div.scalable div.contents div
+{
+  margin: 0em 2em 0em 1.5em; 
 }
 
 div.scalable img.background
@@ -62,4 +67,19 @@ div.scalable img.background
   top:-100%;
   left: 0em;
   z-index: 2;
+}
+
+.center
+{
+  text-align: center;
+}
+
+.justify
+{
+  text-align: justify;
+}
+
+.block
+{
+  display: block;
 }
