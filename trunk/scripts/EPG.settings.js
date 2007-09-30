@@ -38,6 +38,7 @@ EPG.settings = function(debug, growl, file)
   cachedPreferences = {},
   allChannels = {},
   channelLists = [],
+  currentChannelList,
   oneDay = 24 * 60 * 60 * 1000,
   timers = [],
   paths = {}; 
@@ -55,11 +56,14 @@ EPG.settings = function(debug, growl, file)
       {
         for(index in callbackArray)
         {
-          callback = (callbackArray[index]);
-          callback = callback[callbackMethod];
+          callback = callbackArray.shift();
           if(callback)
           {
-            callback(callbackContents);
+            callback = callback[callbackMethod];
+            if(callback)
+            {
+              callback(callbackContents);
+            }
           }
         }
       }
@@ -147,8 +151,11 @@ EPG.settings = function(debug, growl, file)
       if(!that)
       {
         that = this;
-        paths.allChannels = "/Users/gusax840/Library/Xmltv/channels/tv.jsontv.se.swedb.channels.js";
       }
+      paths.channelsFolder = "Library/Xmltv/channels/";
+      paths.scheduleFolder = "Library/Xmltv/schedules/";
+      paths.allChannels = paths.channelsFolder + "tv.jsontv.se.swedb.channels.js";
+      currentChannelList = 0;
     },
     
     isFirstInstall: function() 
@@ -222,6 +229,8 @@ EPG.settings = function(debug, growl, file)
             cachedPreferences[key] = window.widget.preferenceForKey(key);
           }
         }
+        
+        debug.alert("settings.getPreference(" + key + ") returning " + cachedPreferences[key]);
         return cachedPreferences[key];
       }
       catch (error)
@@ -285,10 +294,40 @@ EPG.settings = function(debug, growl, file)
     
     getChannelList: function (listIndex) 
     {
+      var tempList,
+      tempListOrdered,
+      tempListHashed;
       try
       {
+        listIndex = "" + listIndex;
+        debug.alert("settings.getChannelList(" + listIndex + ")");
+        
         if(listIndex)
         {
+          tempList = channelLists[listIndex];
+          if(!tempList)
+          {
+            tempListHashed = {};
+            tempListOrdered = that.getPreference("channelList" + listIndex);
+            if(tempListOrdered)
+            {
+              tempListOrdered = tempListOrdered.split(";");
+              
+              for (index in tempListOrdered)
+              {
+                if(tempListOrdered.hasOwnProperty(index))
+                {
+                  tempListHashed[tempListOrdered[index]] = index;
+                }
+              }
+              tempList = {};
+              tempList.ordered = tempListOrdered;
+              tempList.hashed = tempListHashed;
+              channelLists[listIndex] = tempList;
+            }
+            
+          }
+          debug.alert("getChannelList returning channelLists[" + listIndex + "] = " + channelLists[listIndex]);
           return channelLists[listIndex];  
         }
         else
@@ -299,6 +338,108 @@ EPG.settings = function(debug, growl, file)
       catch (error)
       {
         debug.alert("Error in settings.getChannelList: " + error);
+      }
+    },
+    
+    addChannelToList: function (channelID, channelList) 
+    {
+      var tempList;
+      try
+      {
+        debug.alert("addChannelToList(" + channelID + ", " + channelList + ")");
+        
+        if(channelID && channelList >= 0)
+        {
+          debug.alert("both channelID and channelList existed");
+          tempList = channelLists[channelList];
+          if(!tempList)
+          {
+            debug.alert("creating channelLists[" + channelList + "]");
+            tempList = {};
+            tempList.ordered = [];
+            tempList.hashed = {};
+            channelLists[channelList] = tempList;
+            tempList = channelLists[channelList]; // just to be sure...
+          }
+          
+          // Add channel to list if it's not there already
+          if(!tempList.hashed[channelID])
+          {
+            debug.alert("Adding " + channelID + " to list " + channelList);
+            tempList.hashed[channelID] = ""+tempList.ordered.length;
+            tempList.ordered.push(channelID);
+            that.saveChannelList(channelList);
+            return true;
+          }
+          else
+          {
+            that.removeChannelFromList(channelID, channelList);
+            return false;
+          }
+        }
+        else
+        {
+          return false;
+        }
+      }
+      catch (error)
+      {
+        debug.alert("Error in settings.addChannelToList: " + error);
+      }
+    },
+    
+    removeChannelFromList: function (channelID, listID) 
+    {
+      var tempList;
+      try
+      {
+        if(channelID && listID >= 0)
+        {
+          
+          tempList = channelLists[listID];
+          if(tempList && tempList.hashed[channelID])
+          {
+            debug.alert("Removing " + channelID + " from list " + listID);
+            tempList.ordered.splice(tempList.hashed[channelID], 1);
+            tempList.hashed[channelID] = null;
+            that.saveChannelList(listID);
+          }
+        }
+      }
+      catch (error)
+      {
+        debug.alert("Error in settings.removeChannelFromList: " + error);
+      }
+    },
+    
+    saveChannelList: function (channelListID) 
+    {
+      var activeList;
+      try
+      {
+        if(channelListID)
+        {
+          activeList = channelListID;
+        }
+        else
+        {
+          activeList = currentChannelList;
+        }
+        if(channelLists[activeList])
+        {
+          if(channelLists[activeList].ordered.length === 0)
+          {
+            that.deletePreference("channelList" + currentChannelList);
+          }
+          else
+          {
+            that.savePreference("channelList" + currentChannelList, channelLists[activeList].ordered.join(";"));
+          }
+        }
+      }
+      catch (error)
+      {
+        debug.alert("Error in settings.saveChannelList: " + error);
       }
     }
     

@@ -28,7 +28,7 @@ if (EPG.debug)
   EPG.debug.alert("EPG.back.js loaded");
 }
 
-EPG.back = function(debug, growl, settings, skin)
+EPG.back = function(debug, growl, settings, skin, translator)
 {
   // Private Variables
   var that,
@@ -38,9 +38,62 @@ EPG.back = function(debug, growl, settings, skin)
   frontDiv,
   currentChannelList,
   currentChannelListIndex = 0,
-  backSkin = "back";
+  channelListToScroll,
+  backSkin = "back",
+  scrollSteps = 10;
   
   // Private methods
+  
+  
+  function scrollChannelList (event, direction) 
+  {
+    var index;
+    try
+    {
+      
+      if(!channelListToScroll.topY)
+      {
+        channelListToScroll.topY = 0;
+      }
+      
+      if(direction === "up")
+      {
+        if(channelListToScroll.topY < 0)
+        {
+          channelListToScroll.topY += scrollSteps;
+        }
+        else
+        {
+          channelListToScroll.topY = -Math.round((channelListToScroll.offsetHeight - channelListToScroll.parentNode.offsetHeight)/scrollSteps);
+        }
+      }
+      else
+      {
+        if(channelListToScroll.topY > -Math.round((channelListToScroll.offsetHeight - channelListToScroll.parentNode.offsetHeight)/scrollSteps))
+        {
+          //debug.alert("channelListToScroll.offsetHeight - channelListToScroll.parentNode.offsetHeight = " + (channelListToScroll.offsetHeight - channelListToScroll.parentNode.offsetHeight));
+          //debug.alert("channelListToScroll.topY * 10 = " + (channelListToScroll.topY * 10));
+          channelListToScroll.topY -= scrollSteps;
+        }
+        else
+        {
+          channelListToScroll.topY = 0; 
+        }
+      }
+      
+      channelListToScroll.style.top = channelListToScroll.topY + "em";
+      
+      if(event.stopPropagation)
+      {
+        event.stopPropagation();
+      }
+    }
+    catch (error)
+    {
+      debug.alert("Error in back.scrollChannelList: " + error);
+    }
+  }
+  
   function createScalableContainer (className, contents, backgroundImage) 
   {
     var tempContainer,
@@ -99,9 +152,29 @@ EPG.back = function(debug, growl, settings, skin)
       
       tempElement.setAttribute("class", "text");
       tempElement.appendChild(tempTextNode.cloneNode(false));
-      tempElement.firstChild.nodeValue = "EPG - list " + (currentChannelListIndex + 1);
+      tempElement.firstChild.nodeValue = "EPG - " + translator.translate("list") + " " + (currentChannelListIndex + 1);
       
       return createScalableContainer("topbar", tempElement.cloneNode(true), "uppe.png");
+    }
+    catch (error)
+    {
+     debug.alert("Error in back.createTop: " + error);
+    }
+  }
+  
+  function createListTop (contents) 
+  {
+    var tempElement;
+    try
+    {
+      tempElement = document.createElement("div");
+      
+      tempElement.setAttribute("class", "text center");
+      if(contents)
+      {
+        tempElement.appendChild(contents);
+      }
+      return createScalableContainer("topbarlist", tempElement, "lista-uppe.png");
     }
     catch (error)
     {
@@ -125,13 +198,55 @@ EPG.back = function(debug, growl, settings, skin)
        * </div>
        */
       tempElement = document.createElement("div");
+      tempElement.setAttribute("class", "text");
+      
       tempTextNode = document.createTextNode("");
       
-      tempElement.setAttribute("class", "text");
       tempElement.appendChild(tempTextNode.cloneNode(false));
-      tempElement.firstChild.nodeValue = "bottom";
+      tempElement.firstChild.nodeValue = "Visa hjälprutor";
       
       return createScalableContainer("bottombar", tempElement.cloneNode(true), "nere.png");
+    }
+    catch (error)
+    {
+      debug.alert("Error in back.createBottom: " + error);
+    }
+  }
+  
+  function createChannelListFailure () 
+  {
+    try
+    {
+      debug.alert("Feck! Could not create channellist!");
+    }
+    catch (error)
+    {
+      debug.alert("Error in back.createChannelListFailure: " + error);
+    }
+  }
+  
+  function createListBottom (contents) 
+  {
+    var tempContainer,
+    tempElement;
+    try
+    {
+      /*
+       * <div class="scalable bottom">
+       *  <div class="contents">
+       *    <div class="text">bottom</div>
+       *  </div>
+       *  <img class="background" src="skins/back/uppe.png" />
+       * </div>
+       */
+      tempElement = document.createElement("div");
+      
+      tempElement.setAttribute("class", "text center");
+      if(contents)
+      {
+        tempElement.appendChild(contents);
+      }
+      return createScalableContainer("bottombarlist", tempElement, "lista-nere.png");
     }
     catch (error)
     {
@@ -158,12 +273,15 @@ EPG.back = function(debug, growl, settings, skin)
     tempElement,
     tempTextNode,
     parentNode,
-    orderedChannelIDs;
+    orderedChannelIDs,
+    tempCheckBox,
+    tempChannelList;
     try
     {
       if(channels.length > 0)
       {
-        
+        tempChannelList = settings.getChannelList(currentChannelListIndex);
+        channelListToScroll = targetElement;
         while(targetElement.firstChild)
         {
           targetElement.removeChild(targetElement.firstChild);
@@ -171,28 +289,40 @@ EPG.back = function(debug, growl, settings, skin)
         targetElement.setAttribute("class","channellist");
         tempElement = document.createElement("div");
         tempElement.setAttribute("class", "text");
+        tempCheckBox = document.createElement("input");
+        tempCheckBox.setAttribute("type","checkbox");
+        tempElement.appendChild(tempCheckBox);
         tempTextNode = document.createTextNode("");
         tempElement.appendChild(tempTextNode);
         //tempElement.setAttribute("class","icon");
         
         for(index in channels)
         {
-          channel = channels[index];
-          if(channel.displayName)
+          if(channels.hasOwnProperty(index))
           {
-            if(channel.displayName.sv)
+            channel = channels[index];
+            if(channel.displayName)
             {
-              tempTextNode.nodeValue = channel.displayName.sv;
-              targetElement.appendChild(tempElement.cloneNode(true));
-            }
-            else if(channel.displayName.en)
-            {
-              tempTextNode.nodeValue = channel.displayName.en;
-              targetElement.appendChild(tempElement.cloneNode(true));
-            }
-            else
-            {
-              debug.alert("Ignored channel with id " + index + " since it had no (localized) displayName :-(");
+              if(channel.displayName.sv)
+              {
+                tempTextNode.nodeValue = channel.displayName.sv;
+                if(tempChannelList && tempChannelList.hashed[index] >= 0)
+                {
+                  tempCheckBox.setAttribute("checked", "checked");
+                }
+                else
+                {
+                  tempCheckBox.removeAttribute("checked");
+                }
+                targetElement.appendChild(tempElement.cloneNode(true));
+                targetElement.lastChild.addEventListener("click", function(event){that.selectChannel(this, event);}, false);
+                targetElement.lastChild.channelID = index;
+                
+              }
+              else
+              {
+                debug.alert("Ignored channel with id " + index + " since it had no swedish displayName :-(");
+              }
             }
           }
         }
@@ -213,15 +343,48 @@ EPG.back = function(debug, growl, settings, skin)
     {
       tempContainer = document.createElement("div");
       tempContainer.setAttribute("class", "text");
-      tempTextNode = document.createTextNode("Downloading channels...");
+      tempTextNode = document.createTextNode(translator.translate("Downloading channels..."));
       tempContainer.appendChild(tempTextNode.cloneNode(false));
       settings.getAllChannels(function(channels){createChannelListSuccess(channels, tempContainer);}, createChannelListFailure);
       
-      return createScalableContainer("channels", tempContainer, "bakgrund.png");
+      return createScalableContainer("channels", tempContainer, "lista-bakgrund.png");
     }
     catch (error)
     {
       debug.alert("Error in back.createMiddle: " + error);
+    }
+  }
+  
+  function createSupportInfo () 
+  {
+    var tempContainer,
+    tempElement,
+    tempTextNode;
+    try
+    {
+      tempContainer = document.createElement("div");
+      tempContainer.setAttribute("class", "text");
+      tempElement = document.createElement("a");
+      tempElement.setAttribute("class", "block");
+      tempTextNode = document.createTextNode(translator.translate("Help & support..."));
+      tempElement.appendChild(tempTextNode.cloneNode(false));
+      tempContainer.appendChild(tempElement.cloneNode(true));
+      
+      
+      tempElement.firstChild.nodeValue = translator.translate("Report a bug...");
+      tempContainer.appendChild(tempElement.cloneNode(true));
+      
+      tempElement.firstChild.nodeValue = translator.translate("Complaints...");
+      tempContainer.appendChild(tempElement.cloneNode(true));
+      if(window.widget)
+      {
+        tempContainer.lastChild.addEventListener("click",function(){window.widget.openURL("http://www.geraldbrimacombe.com/Israel/Israel%20-%20Western%20Wall%20Vt.jpg");}, false);
+      }
+      return createScalableContainer("support", tempContainer, "lista-bakgrund.png");
+    }
+    catch (error)
+    {
+      debug.alert("Error in back.createSupportInfo: " + error);
     }
   }
   
@@ -231,10 +394,15 @@ EPG.back = function(debug, growl, settings, skin)
     tempTextNode;
     try
     {
-      tempElement = document.createElement("div");
-      tempTextNode = document.createTextNode("");
       backDiv.appendChild(createTop());
+      backDiv.appendChild(createListTop(document.createTextNode("\u25b2")));
+      backDiv.lastChild.addEventListener("mousedown", function(event){scrollChannelList(event,"up");}, false);
       backDiv.appendChild(createChannelList());
+      backDiv.appendChild(createListBottom(document.createTextNode("\u25bc")));
+      backDiv.lastChild.addEventListener("mousedown", function(event){scrollChannelList(event,"down");}, false);
+      backDiv.appendChild(createListTop());
+      backDiv.appendChild(createSupportInfo());
+      backDiv.appendChild(createListBottom());
       backDiv.appendChild(createBottom());
     }
     catch (error)
@@ -262,7 +430,7 @@ EPG.back = function(debug, growl, settings, skin)
         {
           if (window.widget) 
           {
-            window.resizeTo(270, 300);
+            window.resizeTo(270, 454);
             window.widget.prepareForTransition("ToBack");
           }
           
@@ -274,7 +442,6 @@ EPG.back = function(debug, growl, settings, skin)
             backDiv = document.getElementById("back");
             create();
           }
-          
           backDiv.style.display="block";
           visible = true;
           if(window.widget)
@@ -300,7 +467,30 @@ EPG.back = function(debug, growl, settings, skin)
       {
         debug.alert("Error in back.hide: " + error);
       }
+    },
+    
+    selectChannel: function (div, event)
+    {
+      try
+      {
+        if(div && div.channelID)
+        {
+          debug.alert(" div.firstChild = " + div.firstChild);
+          if(settings.addChannelToList(div.channelID, currentChannelListIndex))
+          {
+            div.firstChild.checked = true;
+          }
+          else
+          {
+            div.firstChild.checked = false;
+          }
+        }
+      }
+      catch (error)
+      {
+        debug.alert("Error in back.selectChannel: " + error);
+      }
     }
   };
-}(EPG.debug, EPG.growl, EPG.settings, EPG.skin);
+}(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator);
 EPG.back.init();

@@ -1,45 +1,131 @@
+#back
+{
+  -apple-dashboard-region: dashboard-region(control, rectangle, 3.9em, 2.2em, 3.9em, 2em); 
+}
+
+img.background
+{
+  opacity: 0.9; 
+}
+
+div.contents div.text
+{
+  font-size: 1.2em;
+  color: #fff;
+  font-weight: bold;
+}
+
 div.topbar
 {
   width: 27em;
   height: 3.9em;
 }
 
-div.contents div.text
+div.topbar div.contents div.text
 {
-  font-size: 1.4em;
+  margin: 1.2em 1.5em 0em 1.5em;
+  font-size: 1.6em;
+  font-weight: bold;
+  text-shadow: #ccc 0em 0em 0.2em;
+  text-align: center;
+}
+
+div.topbarlist
+{
+  position: relative;
+  top:0em;
+  left: 0em;
+  z-index: 4;
+  width: 27em;
+  height: 1.9em;
+}
+
+div.topbarlist div.contents div.text
+{
+  color: #aaa; 
+}
+
+div.topbarlist div.contents div.text:hover
+{
   color: #fff;
+  text-shadow: #fff 0em 0em 0.2em; 
 }
 
 div.channels
 {
+  position: relative;
+  top:0em;
+  left: 0em;
   width: 27em;
   height: 25em;
 }
 
 div.channellist
 {
-  height: 100%;
-  margin: 0em 2em 0em 1.5em;
-  text-align: center;
-  overflow: auto;
+  position: relative;
+  top: 0em;
+  left: 0em;
+  min-height: 100%;
+  text-align: left;
+  margin: 0em 2.8em 0em 2.4em !important; 
 }
 
-div.channellist img.icon
+div.channellist div.text
 {
-  width: 4em;
-  height: 4em;
-  padding: 0.5em;
-  opacity: 0.5;
-}
-
-div.channellist img.icon:hover
-{
-  background: #444;
-  opacity: 1;
+  margin: 0em !important;
+  padding: 0.3em 0em;
+  color: #aaa;
 }
 
 div.bottombar
 {
+  position: relative;
+  top:0em;
+  left: 0em;
+  z-index: 4;
   width: 27em;
   height: 3.9em;
+}
+
+div.bottombarlist
+{
+  width: 27em;
+  height: 1.9em;
+}
+
+div.bottombarlist div.contents div.text
+{
+  color: #aaa;
+}
+
+div.bottombarlist div.contents div.text:hover
+{
+  color: #fff;
+  text-shadow: #fff 0em 0em 0.2em; 
+}
+
+div.bottombar div.contents div.text
+{
+  text-align: left;
+}
+
+div.support
+{
+  position: relative;
+  top:0em;
+  left: 0em;
+  width: 27em;
+  height: 5em;
+  text-align: left;
+}
+
+div.support div.contents div.text
+{
+  margin: 0em 2.8em 0em 2.4em !important; 
+  color: #aaa;
+}
+
+div.support div.contents div.text a
+{
+  margin: 0.5em 0em; 
 }

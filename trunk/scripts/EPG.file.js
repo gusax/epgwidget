@@ -31,7 +31,9 @@ if (EPG.debug)
 EPG.file = function(debug, growl)
 {
   // Private Variables
-  var that;
+  var that,
+  HOME,
+  gettingPath = false;
   
   // Private methods
   function fileOpened(xhr) 
@@ -86,6 +88,40 @@ EPG.file = function(debug, growl)
     }
   }
   
+  function savePath (systemCall) 
+  {
+    try
+    {
+      if(window.widget && systemCall)
+      {
+        HOME = systemCall.outputString;
+        if(!HOME)
+        {
+          HOME = "/Users/gusax840/";
+        }
+        else
+        {
+          HOME = HOME.replace(/^\s+|\s+$/g, '') + "/";
+        }
+        
+      }
+      else if(window.widget)
+      {
+        HOME = "/Users/gusax840/";
+      }
+      else
+      {
+        HOME = "file:///Users/gusax840/";
+      }
+      
+      debug.alert("file.savePath: HOME = " + HOME);
+    }
+    catch (error)
+    {
+      debug.alert("Error in file.savePath: " + error);
+    }
+  }
+  
   // Public methods
   return {
     init: function()
@@ -101,24 +137,45 @@ EPG.file = function(debug, growl)
       var xhr;
       try
       {
-        if (path)
+        if(!HOME)
         {
-          xhr = new XMLHttpRequest();
-          xhr.path = path;
-          xhr.channelID = channelID;
-          xhr.onSuccess = onSuccess;
-          xhr.onFailure = onFailure;
-          xhr.onreadystatechange = function (){
-            fileOpened(xhr);
-          };
-          xhr.open("GET", path, true);
-          xhr.send("");
-          debug.alert("Opening file at path: " + path);
+          if(!gettingPath)
+          {
+            gettingPath = true;
+            if(window.widget)
+            {
+              window.widget.system("/bin/echo $HOME", savePath);
+            }
+            else
+            {
+              setTimeout(savePath,1);
+            }
+          }
+          debug.alert("file.open: don't have HOME-path yet. Trying again in 100ms...");
+          setTimeout(function(){that.open(path, onSuccess, onFailure, channelID);}, 100);
+        }
+        else
+        {
+          if (path)
+          {
+            path = HOME + "" + path;
+            xhr = new XMLHttpRequest();
+            xhr.path = path;
+            xhr.channelID = channelID;
+            xhr.onSuccess = onSuccess;
+            xhr.onFailure = onFailure;
+            xhr.onreadystatechange = function (){
+              fileOpened(xhr);
+            };
+            xhr.open("GET", path, true);
+            xhr.send("");
+            debug.alert("Opening file at path: " + path);
+          }
         }
       }
       catch (error)
       {
-        debug.alert("Error in open: " + error);
+        debug.alert("Error in open: " + error + "\n(path = " + path + ")");
       }
     }
   };

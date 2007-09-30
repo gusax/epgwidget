@@ -5,6 +5,7 @@
  debug:false,
  eqeqeq: true,
  evil: false,
+ forin: false,
  fragment:false, 
  laxbreak:false, 
  nomen:true, 
@@ -27,7 +28,7 @@ if (EPG.debug)
   EPG.debug.alert("EPG.widget.js loaded");
 }
 
-EPG.widget = function (front, back, debug, growl, file, settings)
+EPG.widget = function (front, back, debug, growl, file, settings, translator)
 {
 	// Private variables
 	var that,
@@ -50,15 +51,18 @@ EPG.widget = function (front, back, debug, growl, file, settings)
     var currentChannelList;
     try
     {
-      growl.notifyNow("Found " + channels.length + " channels!");
+      growl.notifyNow(translator.translate("Found") + " " + channels.length + " " + translator.translate("channels") + "!");
       currentChannelList = settings.getChannelList(currentChannelListIndex);
-      if(!currentChannelList || currentChannelList.length === 0)
+      growl.notifyNow("List with index " + currentChannelListIndex + " had " + currentChannelList.ordered.length + " channels in it.");
+        
+      if(!currentChannelList || currentChannelList.ordered.length === 0)
       {
         back.show();
       }
       else
       {
-        front.show();
+        //front.show();
+        back.show();
       }
     }
     catch (error)
@@ -90,27 +94,59 @@ EPG.widget = function (front, back, debug, growl, file, settings)
 				if (!that)
 				{
 					that = this;
+					if(window.widget)
+					{
+					  window.widget.onshow = that.onshow;
+					  window.widget.onhide = that.onhide;
+					}
 				}
+				
+				
 	 			if(settings.isFirstInstall())
 	 			{
-	 			  growl.notifyNow("EPG has NOT been installed before!");
+	 			  growl.notifyNow(translator.translate("EPG has NOT been installed before!"));
 	 			  debug.alert("This is the first time EPG has been run on this computer (by this user)");
 	 			  settings.getAllChannels(channelsLoaded);
+        
 	 			}
 	 			else
 	 			{
-	 			  growl.notifyNow("EPG has been installed before.");
+	 			  growl.notifyNow(translator.translate("EPG has been installed before."));
 	 			  debug.alert("The EPG widget has been run on this computer (by this user) before.");
-	 			  
+	 			  settings.getAllChannels(channelsLoaded);
+        
 	 			}
-				//file.open("/Users/gusax840/Library/Xmltv/schedules/svt1.svt.se_2007-09-22.xml", null);
 			}
 			catch (error)
 			{
 				debug.alert("Error in widget.init: " + error);
 			}
+		},
+		
+		onshow: function () 
+		{
+		  try
+		  {
+		    debug.alert("Onshow!");
+		  }
+		  catch (error)
+		  {
+		    debug.alert("Error in widget.onshow: " + error);
+		  }
+		},
+		
+		onhide: function () 
+		{
+		  try
+		  {
+		    debug.alert("Onhide!");
+		  }
+		  catch (error)
+		  {
+		    debug.alert("Error in widget.onhide: " + error);
+		  }
 		}
 	};
-}(EPG.front, EPG.back, EPG.debug, EPG.growl, EPG.file, EPG.settings);
+}(EPG.front, EPG.back, EPG.debug, EPG.growl, EPG.file, EPG.settings, EPG.translator);
 
 EPG.widget.init();
