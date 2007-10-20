@@ -5,6 +5,7 @@
  debug:false,
  eqeqeq: true,
  evil: false,
+ forin: false,
  fragment:false, 
  laxbreak:false, 
  nomen:true, 
@@ -40,7 +41,8 @@ EPG.back = function(debug, growl, settings, skin, translator)
   currentChannelListIndex = 0,
   channelListToScroll,
   backSkin = "back",
-  scrollSteps = 10;
+  scrollSteps = 10,
+  toFront;
   
   // Private methods
   
@@ -182,6 +184,38 @@ EPG.back = function(debug, growl, settings, skin, translator)
     }
   }
   
+  function createDoneButton () 
+  {
+    var tempContainer,
+    tempElement,
+    tempTextNode;
+    try
+    {
+      /*
+       * <div class="scalable middle">
+       *  <div class="contents">
+       *    <div class="donebutton">[the done button]</div>
+       *  </div>
+       *  <img class="background" src="skins/back/uppe.png" />
+       * </div>
+       */
+      tempElement = document.createElement("div");
+      tempElement.setAttribute("class", "center author");
+      
+      tempTextNode = document.createTextNode("");
+      
+      tempElement.appendChild(tempTextNode.cloneNode(false));
+      tempElement.firstChild.nodeValue = translator.translate("EPG by") + " Gustav Axelsson. Enjoy :-)";
+      
+      return createScalableContainer("middle", tempElement.cloneNode(true), "bakgrund.png");
+    }
+    catch (error)
+    {
+      debug.alert("Error in back.createBottom: " + error);
+    }
+  }
+  
+  
   function createBottom () 
   {
     var tempContainer,
@@ -198,12 +232,12 @@ EPG.back = function(debug, growl, settings, skin, translator)
        * </div>
        */
       tempElement = document.createElement("div");
-      tempElement.setAttribute("class", "text");
+      tempElement.setAttribute("class", "right donebutton");
       
       tempTextNode = document.createTextNode("");
       
       tempElement.appendChild(tempTextNode.cloneNode(false));
-      tempElement.firstChild.nodeValue = "Visa hjälprutor";
+      tempElement.firstChild.nodeValue = translator.translate("Done") + " \u21a9";
       
       return createScalableContainer("bottombar", tempElement.cloneNode(true), "nere.png");
     }
@@ -369,16 +403,35 @@ EPG.back = function(debug, growl, settings, skin, translator)
       tempTextNode = document.createTextNode(translator.translate("Help & support..."));
       tempElement.appendChild(tempTextNode.cloneNode(false));
       tempContainer.appendChild(tempElement.cloneNode(true));
-      
+      if(window.widget)
+      {
+        tempContainer.lastChild.addEventListener("click",function(){window.widget.openURL("http://epgwidget.googlecode.com/");}, false);
+      }
+      else
+      {
+        tempContainer.lastChild.setAttribute("href", "http://epgwidget.googlecode.com/"); 
+      }
       
       tempElement.firstChild.nodeValue = translator.translate("Report a bug...");
       tempContainer.appendChild(tempElement.cloneNode(true));
+      if(window.widget)
+      {
+        tempContainer.lastChild.addEventListener("click",function(){window.widget.openURL("http://code.google.com/p/epgwidget/issues/entry");}, false);
+      }
+      else
+      {
+        tempContainer.lastChild.setAttribute("href", "http://code.google.com/p/epgwidget/issues/entry"); 
+      }
       
       tempElement.firstChild.nodeValue = translator.translate("Complaints...");
       tempContainer.appendChild(tempElement.cloneNode(true));
       if(window.widget)
       {
         tempContainer.lastChild.addEventListener("click",function(){window.widget.openURL("http://www.geraldbrimacombe.com/Israel/Israel%20-%20Western%20Wall%20Vt.jpg");}, false);
+      }
+      else
+      {
+        tempContainer.lastChild.setAttribute("href", "http://www.geraldbrimacombe.com/Israel/Israel%20-%20Western%20Wall%20Vt.jpg"); 
       }
       return createScalableContainer("support", tempContainer, "lista-bakgrund.png");
     }
@@ -395,15 +448,17 @@ EPG.back = function(debug, growl, settings, skin, translator)
     try
     {
       backDiv.appendChild(createTop());
-      backDiv.appendChild(createListTop(document.createTextNode("\u25b2")));
+      backDiv.appendChild(createListTop(document.createTextNode("\u25b2"))); // arrow up
       backDiv.lastChild.addEventListener("mousedown", function(event){scrollChannelList(event,"up");}, false);
       backDiv.appendChild(createChannelList());
-      backDiv.appendChild(createListBottom(document.createTextNode("\u25bc")));
+      backDiv.appendChild(createListBottom(document.createTextNode("\u25bc"))); // arrow down
       backDiv.lastChild.addEventListener("mousedown", function(event){scrollChannelList(event,"down");}, false);
       backDiv.appendChild(createListTop());
       backDiv.appendChild(createSupportInfo());
       backDiv.appendChild(createListBottom());
+      backDiv.appendChild(createDoneButton());
       backDiv.appendChild(createBottom());
+      backDiv.lastChild.addEventListener("mouseup", that.goToFront, false);
     }
     catch (error)
     {
@@ -418,11 +473,10 @@ EPG.back = function(debug, growl, settings, skin, translator)
       if(!that)
       {
         that = this;
-        frontDiv = document.getElementById("front");
       }
     },
     
-    show: function () 
+    show: function (toFrontMethod) 
     {
       try
       {
@@ -430,11 +484,18 @@ EPG.back = function(debug, growl, settings, skin, translator)
         {
           if (window.widget) 
           {
-            window.resizeTo(270, 454);
+            window.resizeTo(270, 504);
             window.widget.prepareForTransition("ToBack");
           }
           
+          toFront = toFrontMethod;
+          
+          if(!frontDiv)
+          {
+            frontDiv = document.getElementById("front");
+          }
           frontDiv.style.display = "none";
+          
           skin.setSkin("back");
           
           if(!backDiv)
@@ -442,7 +503,12 @@ EPG.back = function(debug, growl, settings, skin, translator)
             backDiv = document.getElementById("back");
             create();
           }
+          else
+          {
+            //reload();
+          }
           backDiv.style.display="block";
+          
           visible = true;
           if(window.widget)
           {
@@ -466,6 +532,31 @@ EPG.back = function(debug, growl, settings, skin, translator)
       catch (error)
       {
         debug.alert("Error in back.hide: " + error);
+      }
+    },
+    
+    goToFront: function (event) 
+    {
+      try
+      {
+        if(event && event.stopPropagation)
+        {
+          event.stopPropagation();
+        }
+        
+        if(toFront)
+        {
+          that.hide();
+          toFront();
+        }
+        else
+        {
+          debug.alert("back.goToFront had no toFront method!\nCan't go to front!");
+        }
+      }
+      catch (error)
+      {
+        debug.alert("Error in back.goToFront: " + error);
       }
     },
     
