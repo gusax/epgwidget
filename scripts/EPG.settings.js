@@ -38,10 +38,10 @@ EPG.settings = function(debug, growl, file)
   cachedPreferences = {},
   allChannels = {},
   channelLists = [],
-  currentChannelList,
   oneDay = 24 * 60 * 60 * 1000,
   timers = [],
-  paths = {}; 
+  paths = {},
+  defaultSkin = "orangehc"; 
   
   // Private methods
   function alertCallbackMethods(callbackArrayName, callbackMethod, callbackContents) 
@@ -221,8 +221,7 @@ EPG.settings = function(debug, growl, file)
     {
       try
       {
-        key = "" + key;
-        if(!cachedPreferences[key] && key)
+        if(!cachedPreferences[key] && typeof(key) !== "undefined")
         {
           if(window.widget)
           {
@@ -235,7 +234,7 @@ EPG.settings = function(debug, growl, file)
       }
       catch (error)
       {
-        debug.alert("Error in settings.getPreference: " + error);
+        debug.alert("Error in settings.getPreference: " + error + "\n(key = " + key + ")");
       }
     },
     
@@ -417,29 +416,68 @@ EPG.settings = function(debug, growl, file)
       var activeList;
       try
       {
-        if(channelListID)
+        if(typeof(channelListID) !== "undefined")
         {
           activeList = channelListID;
-        }
-        else
-        {
-          activeList = currentChannelList;
-        }
-        if(channelLists[activeList])
-        {
-          if(channelLists[activeList].ordered.length === 0)
+        
+          if(channelLists[activeList])
           {
-            that.deletePreference("channelList" + currentChannelList);
-          }
-          else
-          {
-            that.savePreference("channelList" + currentChannelList, channelLists[activeList].ordered.join(";"));
+            if(channelLists[activeList].ordered.length === 0)
+            {
+              that.deletePreference("channelList" + activeList);
+            }
+            else
+            {
+              that.savePreference("channelList" + activeList, channelLists[activeList].ordered.join(";"));
+            }
           }
         }
       }
       catch (error)
       {
         debug.alert("Error in settings.saveChannelList: " + error);
+      }
+    },
+    
+    saveSkinForList: function (channelListID, skin) 
+    {
+      try
+      {
+        if(typeof(channelListID) !== "undefined" && typeof(skin) !== "undefined")
+        {
+          that.savePreference(channelListID + "skin", skin);
+        }
+      }
+      catch (error)
+      {
+        debug.alert("Error in settings.saveSkinForList: " + error);
+      }
+    },
+    
+    getSkinForList: function (channelListID) 
+    {
+      var skin;
+      try
+      {
+        if(typeof(channelListID) !== "undefined")
+        {
+          skin = that.getPreference(channelListID + "skin");
+          if(typeof(skin) === "undefined")
+          {
+            that.saveSkinForList(channelListID, defaultSkin);
+            that.getPreference(channelListID + "skin");
+          }
+          return skin;
+        }
+        else
+        {
+          debug.alert("settings.getSkinForList: channelList was undefined!\nReturning null!");
+          return null;
+        }
+      }
+      catch (error)
+      {
+        debug.alert("Error in settings.getSkinForList: " + error);
       }
     }
     

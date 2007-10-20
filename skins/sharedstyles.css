@@ -1,7 +1,8 @@
 ﻿/*
-	Common styles shared between all skins
-	Do NOT change body.font-size in your skin!
-	Do NOT use fixed width font-sizes in your skin!
+  IMPORTANT!
+	- This file contains common styles shared between all skins
+	- Do NOT use fixed width font-sizes in your skin! (Use em or %, do not use use px or pt.)
+	- Do NOT change the body font size in your skin! (But feel free to change font sizes on other elements - as long as you use em or % to do so.) 
 	
 	1 em = 10 px
 	1.1 em = 11 px (10 * 1,1)
@@ -10,7 +11,7 @@
 */
 body 
 {
-  font: 10px Lucida Grande;
+  font: 10px Lucida Grande; /* Do NOT change this font size in your skin! */
 	margin: 	0em;
 	padding: 	0em;
 }
@@ -20,7 +21,6 @@ body
 	position: absolute;
 	top: 0em;
 	left: 0em;
-	background: red;
 	width: 25.3em;
 	min-height: 7.3em;
 	overflow: hidden;
@@ -71,15 +71,41 @@ div.scalable img.background
 
 .center
 {
-  text-align: center;
+  text-align: center !important;
+}
+
+.right
+{
+  text-align: right !important; 
 }
 
 .justify
 {
-  text-align: justify;
+  text-align: justify !important;
 }
 
 .block
 {
   display: block;
+}
+
+#infobutton
+{
+  color: #fff;
+  padding: 0.3em;
+  font-size: 2em; 
+  font-family: Garamond Premier Pro;
+  font-weight: bold;
+  font-variant: semibold;
+  font-style: italic;
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
+}
+
+#infobutton:hover
+{
+  text-shadow: #fff 0em 0em 0.2em;
+  bottom: 1.05em;
+  right: 1.05em;
 }

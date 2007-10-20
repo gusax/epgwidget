@@ -1,0 +1,28 @@
+/*
+  IMPORTANT! 
+  - Use em or percent (%), DO NOT use px or pt! (The widget must be scalable)
+  - 1 em = 10 px (defined in /skins/sharedstyles.css - DO NOT CHANGE!)
+  
+  Example.
+  Wrong:
+  img.myimage
+  {
+    width: 210px;
+    height: 33px;
+  }
+  
+  Right:
+  img.myimage
+  {
+    width: 21em; 
+    height: 3.3em;
+  }
+  
+  Orange HC (High Contrast)
+  by Mathias Andersson
+*/
+
+body
+{
+  background: blue;
+}

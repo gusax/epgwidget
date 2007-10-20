@@ -53,16 +53,26 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
     {
       growl.notifyNow(translator.translate("Found") + " " + channels.length + " " + translator.translate("channels") + "!");
       currentChannelList = settings.getChannelList(currentChannelListIndex);
-      growl.notifyNow("List with index " + currentChannelListIndex + " had " + currentChannelList.ordered.length + " channels in it.");
         
-      if(!currentChannelList || currentChannelList.ordered.length === 0)
+      if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
       {
-        back.show();
+        growl.notifyNow("List with index " + currentChannelListIndex + " had " + currentChannelList.ordered.length + " channels in it.");
+        that.toFront(true);
+        //that.toBack();
       }
       else
       {
-        //front.show();
-        back.show();
+        if(!currentChannelList)
+        {
+          growl.notifyNow("List with index " + currentChannelListIndex + " did not exist! Switching to backside!");
+        }
+        else
+        {
+          growl.notifyNow("List with index " + currentChannelListIndex + " had no channels in it! Switching to backside!");
+        }
+        front.hide();
+        that.toBack();
+      
       }
     }
     catch (error)
@@ -94,6 +104,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 				if (!that)
 				{
 					that = this;
+					
 					if(window.widget)
 					{
 					  window.widget.onshow = that.onshow;
@@ -144,6 +155,30 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 		  catch (error)
 		  {
 		    debug.alert("Error in widget.onhide: " + error);
+		  }
+		},
+		
+		toFront: function (widgetJustStarted) 
+		{
+		  try
+		  {
+		    front.show(that.toBack, currentChannelListIndex, widgetJustStarted);
+		  }
+		  catch (error)
+		  {
+		    debug.alert("Error in widget.toFront: " + error);
+		  }
+		},
+		
+		toBack: function () 
+		{
+		  try
+		  {
+		    back.show(that.toFront);
+		  }
+		  catch (error)
+		  {
+		    debug.alert("Error in widget.toBack: " + error);
 		  }
 		}
 	};

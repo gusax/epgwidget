@@ -29,7 +29,7 @@ EPG.translator = function(debug)
   localizedStrings = {};
   
   localizedStrings.Default = "Swedish";
-  localizedStrings.Done = "Klart";
+  localizedStrings.Done = "Klar";
   localizedStrings["Downloading channels..."] = "Laddar ner kanaler...";
   localizedStrings.list = "lista";
   localizedStrings.Found = "Hittade";
@@ -38,7 +38,9 @@ EPG.translator = function(debug)
   localizedStrings["EPG has NOT been installed before!"] = "EPG har INTE varit installerad förut!";
   localizedStrings["EPG has been installed before."] = "EPG har varit installerad förut.";
   localizedStrings["Help & support..."] = "Hjälp & support...";
+  localizedStrings["Report a bug..."] = "Rapportera en bugg...";
   localizedStrings["Complaints..."] = "Klagomål...";
+  localizedStrings["EPG by"] = "EPG av";
   // Private methods
   
   

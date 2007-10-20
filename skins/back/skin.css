@@ -3,6 +3,20 @@
   -apple-dashboard-region: dashboard-region(control, rectangle, 3.9em, 2.2em, 3.9em, 2em); 
 }
 
+a
+{
+  text-decoration: none;
+  color: #aaa; 
+  padding: 0.1em 0em 0em 0.1em;
+}
+
+a:hover
+{
+  text-decoration: underline;
+  color: #fff;
+  text-shadow: #fff 0em 0em 0.2em;
+  padding: 0em 0.1em 0.1em 0em;
+}
 img.background
 {
   opacity: 0.9; 
@@ -32,10 +46,6 @@ div.topbar div.contents div.text
 
 div.topbarlist
 {
-  position: relative;
-  top:0em;
-  left: 0em;
-  z-index: 4;
   width: 27em;
   height: 1.9em;
 }
@@ -43,12 +53,14 @@ div.topbarlist
 div.topbarlist div.contents div.text
 {
   color: #aaa; 
+  padding: 0.1em 0em 0em 0.1em;
 }
 
 div.topbarlist div.contents div.text:hover
 {
   color: #fff;
-  text-shadow: #fff 0em 0em 0.2em; 
+  text-shadow: #fff 0em 0em 0.2em;
+  padding: 0em 0.1em 0.1em 0em; 
 }
 
 div.channels
@@ -73,16 +85,25 @@ div.channellist
 div.channellist div.text
 {
   margin: 0em !important;
-  padding: 0.3em 0em;
+  padding: 0.3em 0em 0.3em 0.1em;
   color: #aaa;
+}
+
+div.channellist div.text:hover
+{
+  color: #fff;
+  text-shadow: #fff 0em 0em 0.2em;
+  padding: 0.2em 0.1em 0.4em 0em;
+}
+
+div.middle
+{
+  width: 27em;
+  height: 2em;
 }
 
 div.bottombar
 {
-  position: relative;
-  top:0em;
-  left: 0em;
-  z-index: 4;
   width: 27em;
   height: 3.9em;
 }
@@ -96,12 +117,14 @@ div.bottombarlist
 div.bottombarlist div.contents div.text
 {
   color: #aaa;
+  padding: 0.1em 0em 0em 0.1em;
 }
 
 div.bottombarlist div.contents div.text:hover
 {
   color: #fff;
   text-shadow: #fff 0em 0em 0.2em; 
+  padding: 0em 0.1em 0.1em 0em;
 }
 
 div.bottombar div.contents div.text
@@ -115,7 +138,7 @@ div.support
   top:0em;
   left: 0em;
   width: 27em;
-  height: 5em;
+  height: 7em;
   text-align: left;
 }
 
@@ -127,5 +150,25 @@ div.support div.contents div.text
 
 div.support div.contents div.text a
 {
-  margin: 0.5em 0em; 
+  margin: 0.5em 0em;
+}
+
+div.author
+{
+  color: #555;
+}
+
+div.donebutton
+{
+  color: #fff;
+  font-size: 1.4em;
+  font-weight: bold;
+  padding: 0.1em 0em 0em 0.1em;
+}
+
+div.donebutton:hover
+{
+  color: #fff;
+  text-shadow: #fff 0em 0em 0.2em; 
+  padding: 0em 0.1em 0.1em 0em;
 }
