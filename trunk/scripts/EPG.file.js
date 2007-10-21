@@ -72,7 +72,7 @@ EPG.file = function(debug, growl)
         }
         else
         {
-          growl.notifyNow("fileOpened: Failure! Did not find " + xhr.path + " :-(");
+          growl.notifyNow("file.fileOpened: Failure! Did not find " + xhr.path + " :-(");
           if(xhr.onFailure)
           {
             xhr.onFailure(xhr.channelID);
@@ -83,7 +83,7 @@ EPG.file = function(debug, growl)
     }
     catch (error)
     {
-      debug.alert("Error in fileOpened: " + error);
+      debug.alert("Error in file.fileOpened: " + error);
       xhr = null;
     }
   }
@@ -169,13 +169,13 @@ EPG.file = function(debug, growl)
             };
             xhr.open("GET", path, true);
             xhr.send("");
-            debug.alert("Opening file at path: " + path);
+            debug.alert("file.open: Opening file at path: " + path);
           }
         }
       }
       catch (error)
       {
-        debug.alert("Error in open: " + error + "\n(path = " + path + ")");
+        debug.alert("Error in file.open: " + error + "\n(path = " + path + ")");
       }
     }
   };

@@ -113,8 +113,7 @@ EPG.front = function(debug, growl, settings, skin, translator)
           {
             debug.alert("front.show: Tried to show front without a specified channelListID!");
           }
-          
-          skin.setSkin(settings.getSkinForList(currentChannelListID));
+          skin.changeToSkinFromList(currentChannelListID);
           
           toBack = toBackMethod;
           

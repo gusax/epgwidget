@@ -42,10 +42,24 @@ EPG.back = function(debug, growl, settings, skin, translator)
   channelListToScroll,
   backSkin = "back",
   scrollSteps = 10,
-  toFront;
+  toFront,
+  channelListContainer;
   
   // Private methods
   
+  function resetChannelListScroll () 
+  {
+    try
+    {
+      debug.alert("back.resetChannelListScroll: scrolling to top");
+      channelListToScroll.topY = 0;
+      channelListToScroll.style.top = channelListToScroll.topY + "em";
+    }
+    catch (error)
+    {
+      debug.alert("Error in back.scrollChannelListToTop: " + error);
+    }
+  }
   
   function scrollChannelList (event, direction) 
   {
@@ -123,7 +137,7 @@ EPG.back = function(debug, growl, settings, skin, translator)
       
       tempElement = document.createElement("img");
       tempElement.setAttribute("class", "background");
-      tempElement.setAttribute("src", "skins/" + skin.getCurrentSkin() + "/" + backgroundImage);
+      tempElement.setAttribute("src", "skins/" + skin.getSkinForList("back") + "/" + backgroundImage);
       
       tempContainer.appendChild(tempElement.cloneNode(false));
       
@@ -309,7 +323,8 @@ EPG.back = function(debug, growl, settings, skin, translator)
     parentNode,
     orderedChannelIDs,
     tempCheckBox,
-    tempChannelList;
+    tempChannelList,
+    i = 0;
     try
     {
       if(channels.length > 0)
@@ -318,8 +333,11 @@ EPG.back = function(debug, growl, settings, skin, translator)
         channelListToScroll = targetElement;
         while(targetElement.firstChild)
         {
+          i += 1;
+          targetElement.firstChild.removeEventListener("click");
           targetElement.removeChild(targetElement.firstChild);
         }
+        //debug.alert("back.createChannelListSuccess: removed " + i + " children from list.\nGot " + channels.length + " channels to print.");
         targetElement.setAttribute("class","channellist");
         tempElement = document.createElement("div");
         tempElement.setAttribute("class", "text");
@@ -329,7 +347,7 @@ EPG.back = function(debug, growl, settings, skin, translator)
         tempTextNode = document.createTextNode("");
         tempElement.appendChild(tempTextNode);
         //tempElement.setAttribute("class","icon");
-        
+        i = 0;
         for(index in channels)
         {
           if(channels.hasOwnProperty(index))
@@ -337,6 +355,8 @@ EPG.back = function(debug, growl, settings, skin, translator)
             channel = channels[index];
             if(channel.displayName)
             {
+              i+=1;
+              //debug.alert("adding " + index);
               if(channel.displayName.sv)
               {
                 tempTextNode.nodeValue = channel.displayName.sv;
@@ -360,6 +380,7 @@ EPG.back = function(debug, growl, settings, skin, translator)
             }
           }
         }
+        //debug.alert("back.createChannelListSuccess: added " + i + " children to channelList");
       }
     }
     catch (error)
@@ -379,8 +400,9 @@ EPG.back = function(debug, growl, settings, skin, translator)
       tempContainer.setAttribute("class", "text");
       tempTextNode = document.createTextNode(translator.translate("Downloading channels..."));
       tempContainer.appendChild(tempTextNode.cloneNode(false));
-      settings.getAllChannels(function(channels){createChannelListSuccess(channels, tempContainer);}, createChannelListFailure);
       
+      settings.getAllChannels(function(channels){createChannelListSuccess(channels, tempContainer);}, createChannelListFailure);
+      channelListContainer = tempContainer;
       return createScalableContainer("channels", tempContainer, "lista-bakgrund.png");
     }
     catch (error)
@@ -496,7 +518,7 @@ EPG.back = function(debug, growl, settings, skin, translator)
           }
           frontDiv.style.display = "none";
           
-          skin.setSkin("back");
+          skin.changeToSkinFromList("back");
           
           if(!backDiv)
           {
@@ -580,6 +602,24 @@ EPG.back = function(debug, growl, settings, skin, translator)
       catch (error)
       {
         debug.alert("Error in back.selectChannel: " + error);
+      }
+    },
+    
+    reloadChannelList: function (channels) 
+    {
+      try
+      {
+        if(channels && channelListContainer)
+        {
+          debug.alert("reloading channel list with " + channels.length + " channels");
+          createChannelListSuccess(channels, channelListContainer);
+          resetChannelListScroll();
+          
+        }
+      }
+      catch (error)
+      {
+        debug.alert("Error in back.reloadChannelList: " + error);
       }
     }
   };
