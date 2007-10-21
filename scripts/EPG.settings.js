@@ -109,10 +109,8 @@ EPG.settings = function(debug, growl, file)
       {
         cachedChannels = jsonObject.channels;
         orderedChannelIDs = [];
-        if(!allChannels.channels)
-        {
-          allChannels.channels = {};
-        }
+        allChannels.channels = {};
+        
         
         for(index in cachedChannels)
         {
@@ -155,7 +153,6 @@ EPG.settings = function(debug, growl, file)
       paths.channelsFolder = "Library/Xmltv/channels/";
       paths.scheduleFolder = "Library/Xmltv/schedules/";
       paths.allChannels = paths.channelsFolder + "tv.jsontv.se.swedb.channels.js";
-      currentChannelList = 0;
     },
     
     isFirstInstall: function() 
@@ -277,11 +274,13 @@ EPG.settings = function(debug, growl, file)
         
         if(!allChannels.lastUpdate || (now - allChannels.lastUpdate) >= oneDay)
         {
-          // update channellist once per day
+          // re-import channels.js once per day (just assume that the file is there, the download itself is taken care of by the grabber)
+          debug.alert("settings.getAllChannels: Opening channels.js since it was more than one day since it was last opened.");
           file.open(paths.allChannels, updateAllChannels, updateAllChannelsCached);
         }
         else
         {
+          debug.alert("settings.getAllChannels: all channels were cached, returning cached version.");
           timers.push(setTimeout(function(){updateAllChannelsCached();},1));
         }
       }
@@ -436,48 +435,6 @@ EPG.settings = function(debug, growl, file)
       catch (error)
       {
         debug.alert("Error in settings.saveChannelList: " + error);
-      }
-    },
-    
-    saveSkinForList: function (channelListID, skin) 
-    {
-      try
-      {
-        if(typeof(channelListID) !== "undefined" && typeof(skin) !== "undefined")
-        {
-          that.savePreference(channelListID + "skin", skin);
-        }
-      }
-      catch (error)
-      {
-        debug.alert("Error in settings.saveSkinForList: " + error);
-      }
-    },
-    
-    getSkinForList: function (channelListID) 
-    {
-      var skin;
-      try
-      {
-        if(typeof(channelListID) !== "undefined")
-        {
-          skin = that.getPreference(channelListID + "skin");
-          if(typeof(skin) === "undefined")
-          {
-            that.saveSkinForList(channelListID, defaultSkin);
-            that.getPreference(channelListID + "skin");
-          }
-          return skin;
-        }
-        else
-        {
-          debug.alert("settings.getSkinForList: channelList was undefined!\nReturning null!");
-          return null;
-        }
-      }
-      catch (error)
-      {
-        debug.alert("Error in settings.getSkinForList: " + error);
       }
     }
     

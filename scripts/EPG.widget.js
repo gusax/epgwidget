@@ -33,6 +33,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 	// Private variables
 	var that,
 	internalState = "loading",
+	currentSide,
 	currentChannelListIndex = 0;
 	
 	// Private methods
@@ -51,9 +52,15 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
     var currentChannelList;
     try
     {
+      if(window.widget)
+      {
+        window.widget.onshow = that.onshow;
+        window.widget.onhide = that.onhide;
+      }
+      
       growl.notifyNow(translator.translate("Found") + " " + channels.length + " " + translator.translate("channels") + "!");
       currentChannelList = settings.getChannelList(currentChannelListIndex);
-        
+      
       if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
       {
         growl.notifyNow("List with index " + currentChannelListIndex + " had " + currentChannelList.ordered.length + " channels in it.");
@@ -94,6 +101,23 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
     }
   }
 	
+	
+	function afterOnShow (channels) 
+	{
+	  try
+	  {
+	    if(currentSide === back)
+	    {
+	      debug.alert("Reloading backside");
+	      back.reloadChannelList(channels);
+	    }
+	  }
+	  catch (error)
+	  {
+	    debug.alert("Error in widget.afterOnShow: " + error);
+	  }
+	}
+	
 	// Public methods
 	return {
 		init: function ()
@@ -104,12 +128,6 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 				if (!that)
 				{
 					that = this;
-					
-					if(window.widget)
-					{
-					  window.widget.onshow = that.onshow;
-					  window.widget.onhide = that.onhide;
-					}
 				}
 				
 				
@@ -139,6 +157,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 		  try
 		  {
 		    debug.alert("Onshow!");
+		    settings.getAllChannels(afterOnShow, channelLoadedFailed);
 		  }
 		  catch (error)
 		  {
@@ -162,6 +181,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 		{
 		  try
 		  {
+		    currentSide = front;
 		    front.show(that.toBack, currentChannelListIndex, widgetJustStarted);
 		  }
 		  catch (error)
@@ -174,6 +194,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 		{
 		  try
 		  {
+		    currentSide = back;
 		    back.show(that.toFront);
 		  }
 		  catch (error)

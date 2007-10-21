@@ -22,12 +22,19 @@ if(!EPG)
   var EPG = {};
 }
 
+if (EPG.debug)
+{
+  EPG.debug.alert("EPG.skin.js loaded");
+}
+
 EPG.skin = function(debug, growl, settings)
 {
   // Private Variables
   var that,
-  currentSkin,
-  skinElement;
+  currentSkin = {},
+  skinElement,
+  defaultSkin = "orangehc",
+  backSkin = "back";
   
   // Private methods
   
@@ -41,23 +48,25 @@ EPG.skin = function(debug, growl, settings)
         that = this;
       }
       skinElement = document.getElementById("skin");
-      currentSkin = settings.getPreference("currentSkin");
-      if(!currentSkin)
-      {
-        currentSkin = "orangehc";
-      }
-      that.setSkin(currentSkin);
     },
     
-    setSkin: function (skinFolder) 
+    changeToSkinFromList: function (listID) 
     {
+      var skin;
       try
       {
-        if(skinFolder)
+        if(typeof(listID) !== "undefined")
         {
-          currentSkin = skinFolder;
-          skinElement.setAttribute("href","skins/" + currentSkin + "/skin.css");
-          debug.alert("setSkin: Changed skin to \"" + currentSkin + "\"");
+          if(listID === "back")
+          {
+            skin = backSkin;
+          }
+          else
+          {
+            skin = that.getSkinForList(listID);
+          }
+          skinElement.setAttribute("href","skins/" + skin + "/skin.css");
+          debug.alert("skin.changeToSkinFromList: Changed skin for list " + listID + " to \"" + skin + "\"");
         }
       }
       catch (error)
@@ -66,15 +75,52 @@ EPG.skin = function(debug, growl, settings)
       }
     },
     
-    getCurrentSkin: function ()
+    saveSkinForList: function (channelListID, skin) 
     {
       try
       {
-        return currentSkin;
+        if(typeof(channelListID) !== "undefined" && skin && skin !== backSkin)
+        {
+          settings.savePreference(channelListID + "skin", skin);
+        }
       }
       catch (error)
       {
-        debug.alert("Error in skin.getCurrentSkin: " + error);
+        debug.alert("Error in skin.saveSkinForList: " + error);
+      }
+    },
+    
+    getSkinForList: function (channelListID) 
+    {
+      var skin;
+      try
+      {
+        if(typeof(channelListID) !== "undefined")
+        {
+          if(channelListID === "back")
+          {
+            skin = backSkin;
+          }
+          else
+          {
+            skin = settings.getPreference(channelListID + "skin");
+          }
+          if(typeof(skin) === "undefined")
+          {
+            that.saveSkinForList(channelListID, defaultSkin);
+            settings.getPreference(channelListID + "skin");
+          }
+          return skin;
+        }
+        else
+        {
+          debug.alert("skin.getSkinForList: channelListID was undefined!\nReturning null!");
+          return null;
+        }
+      }
+      catch (error)
+      {
+        debug.alert("Error in skin.getSkinForList: " + error);
       }
     }
   };
