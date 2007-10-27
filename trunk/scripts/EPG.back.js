@@ -29,7 +29,7 @@ if (EPG.debug)
   EPG.debug.alert("EPG.back.js loaded");
 }
 
-EPG.back = function(debug, growl, settings, skin, translator)
+EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
 {
   // Private Variables
   var that,
@@ -110,45 +110,6 @@ EPG.back = function(debug, growl, settings, skin, translator)
     }
   }
   
-  function createScalableContainer (className, contents, backgroundImage) 
-  {
-    var tempContainer,
-    tempElement,
-    tempTextNode;
-    try
-    {
-      /*
-       * <div class="top">
-       *  <div class="contents"></div>
-       *  <img class="background"/>
-       * </div>
-       */
-      tempContainer = document.createElement("div");
-      tempElement = tempContainer.cloneNode(false);
-      tempTextNode = document.createTextNode("");
-      
-      tempContainer.setAttribute("class","scalable " + className);
-      
-      tempElement.setAttribute("class","contents");
-      
-      tempContainer.appendChild(tempElement.cloneNode(false));
-      
-      tempContainer.firstChild.appendChild(contents);
-      
-      tempElement = document.createElement("img");
-      tempElement.setAttribute("class", "background");
-      tempElement.setAttribute("src", "skins/" + skin.getSkinForList("back") + "/" + backgroundImage);
-      
-      tempContainer.appendChild(tempElement.cloneNode(false));
-      
-      return tempContainer;
-    }
-    catch (error)
-    {
-      debug.alert("Error in back.createScalableContainer: " + error);
-    }
-  }
-  
   function createTop () 
   {
     var tempElement,
@@ -170,7 +131,7 @@ EPG.back = function(debug, growl, settings, skin, translator)
       tempElement.appendChild(tempTextNode.cloneNode(false));
       tempElement.firstChild.nodeValue = "EPG - " + translator.translate("list") + " " + (currentChannelListIndex + 1);
       
-      return createScalableContainer("topbar", tempElement.cloneNode(true), "uppe.png");
+      return UIcreator.createScalableContainer("topbar", tempElement.cloneNode(true), "uppe.png", "back");
     }
     catch (error)
     {
@@ -190,7 +151,7 @@ EPG.back = function(debug, growl, settings, skin, translator)
       {
         tempElement.appendChild(contents);
       }
-      return createScalableContainer("topbarlist", tempElement, "lista-uppe.png");
+      return UIcreator.createScalableContainer("topbarlist", tempElement, "lista-uppe.png", "back");
     }
     catch (error)
     {
@@ -221,7 +182,7 @@ EPG.back = function(debug, growl, settings, skin, translator)
       tempElement.appendChild(tempTextNode.cloneNode(false));
       tempElement.firstChild.nodeValue = translator.translate("EPG by") + " Gustav Axelsson. Enjoy :-)";
       
-      return createScalableContainer("middle", tempElement.cloneNode(true), "bakgrund.png");
+      return UIcreator.createScalableContainer("middle", tempElement.cloneNode(true), "bakgrund.png", "back");
     }
     catch (error)
     {
@@ -253,7 +214,7 @@ EPG.back = function(debug, growl, settings, skin, translator)
       tempElement.appendChild(tempTextNode.cloneNode(false));
       tempElement.firstChild.nodeValue = translator.translate("Done") + " \u21a9";
       
-      return createScalableContainer("bottombar", tempElement.cloneNode(true), "nere.png");
+      return UIcreator.createScalableContainer("bottombar", tempElement.cloneNode(true), "nere.png","back");
     }
     catch (error)
     {
@@ -294,7 +255,7 @@ EPG.back = function(debug, growl, settings, skin, translator)
       {
         tempElement.appendChild(contents);
       }
-      return createScalableContainer("bottombarlist", tempElement, "lista-nere.png");
+      return UIcreator.createScalableContainer("bottombarlist", tempElement, "lista-nere.png","back");
     }
     catch (error)
     {
@@ -403,7 +364,7 @@ EPG.back = function(debug, growl, settings, skin, translator)
       
       settings.getAllChannels(function(channels){createChannelListSuccess(channels, tempContainer);}, createChannelListFailure);
       channelListContainer = tempContainer;
-      return createScalableContainer("channels", tempContainer, "lista-bakgrund.png");
+      return UIcreator.createScalableContainer("channels", tempContainer, "lista-bakgrund.png", "back");
     }
     catch (error)
     {
@@ -455,7 +416,7 @@ EPG.back = function(debug, growl, settings, skin, translator)
       {
         tempContainer.lastChild.setAttribute("href", "http://www.geraldbrimacombe.com/Israel/Israel%20-%20Western%20Wall%20Vt.jpg"); 
       }
-      return createScalableContainer("support", tempContainer, "lista-bakgrund.png");
+      return UIcreator.createScalableContainer("support", tempContainer, "lista-bakgrund.png","back");
     }
     catch (error)
     {
@@ -623,5 +584,5 @@ EPG.back = function(debug, growl, settings, skin, translator)
       }
     }
   };
-}(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator);
+}(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator, EPG.UIcreator);
 EPG.back.init();
