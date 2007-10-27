@@ -467,8 +467,9 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         {
           if (window.widget) 
           {
-            window.resizeTo(270, 504);
+            settings.resizeTo(270, screen.height, true);
             window.widget.prepareForTransition("ToBack");
+            settings.resizeTo(270, 504);
           }
           
           toFront = toFrontMethod;

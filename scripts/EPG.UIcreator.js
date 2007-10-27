@@ -69,6 +69,7 @@ EPG.UIcreator = function(debug, skin)
         
         tempElement = document.createElement("img");
         tempElement.setAttribute("class", "background");
+        
         tempElement.setAttribute("src", "skins/" + skin.getSkinForList(listID) + "/" + backgroundImage);
         
         tempContainer.appendChild(tempElement.cloneNode(false));
