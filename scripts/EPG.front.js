@@ -41,6 +41,19 @@ EPG.front = function(debug, growl, settings, skin, translator)
   currentChannelListID;
   
   // Private methods
+  
+  function createTopBar () 
+  {
+    try
+    {
+      
+    }
+    catch (error)
+    {
+      debug.alert("Error in front.createTopBar: " + error);
+    }
+  }
+  
   function createInfoButton () 
   {
     
@@ -61,11 +74,25 @@ EPG.front = function(debug, growl, settings, skin, translator)
     }
   }
   
-  function create () 
+  function createBottomBar () 
   {
     try
     {
       createInfoButton();
+    }
+    catch (error)
+    {
+      debug.alert("Error in front.createBottomBar: " + error);
+    }
+  }
+  
+  function create () 
+  {
+    try
+    {
+      //createTopBar();
+      createInfoButton();
+      //createBottomBar();
     }
     catch (error)
     {
