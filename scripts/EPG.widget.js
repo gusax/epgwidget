@@ -89,11 +89,12 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
   }
   
   
-  function channelLoadedFailed() 
+  function channelsLoadedFailed() 
   {
     try
     {
       growl.notifyNow("Could not load any channels :-( - does your internet connection work?");
+      that.toFront(true);
     }
     catch (error)
     {
@@ -135,14 +136,14 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 	 			{
 	 			  growl.notifyNow(translator.translate("EPG has NOT been installed before!"));
 	 			  debug.alert("This is the first time EPG has been run on this computer (by this user)");
-	 			  settings.getAllChannels(channelsLoaded);
+	 			  settings.getAllChannels(channelsLoaded, channelsLoadedFailed);
         
 	 			}
 	 			else
 	 			{
 	 			  growl.notifyNow(translator.translate("EPG has been installed before."));
 	 			  debug.alert("The EPG widget has been run on this computer (by this user) before.");
-	 			  settings.getAllChannels(channelsLoaded);
+	 			  settings.getAllChannels(channelsLoaded, channelsLoadedFailed);
         
 	 			}
 			}
@@ -157,7 +158,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 		  try
 		  {
 		    debug.alert("Onshow!");
-		    settings.getAllChannels(afterOnShow, channelLoadedFailed);
+		    settings.getAllChannels(afterOnShow, channelsLoadedFailed);
 		  }
 		  catch (error)
 		  {
