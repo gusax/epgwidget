@@ -41,7 +41,8 @@ EPG.settings = function(debug, growl, file)
   oneDay = 24 * 60 * 60 * 1000,
   timers = [],
   paths = {},
-  defaultSkin = "orangehc"; 
+  defaultSkin = "orangehc",
+  currentSize = {}; 
   
   // Private methods
   function alertCallbackMethods(callbackArrayName, callbackMethod, callbackContents) 
@@ -139,6 +140,41 @@ EPG.settings = function(debug, growl, file)
     catch (error)
     {
       debug.alert("Error in settings.updateAllChannels: " + error);
+    }
+  }
+  
+  function resize (fake) 
+  {
+    var width,
+    height,
+    body;
+    try
+    {
+      if(window.widget && typeof(currentSize.width) !== "undefined")
+      {
+        width = Math.ceil(currentSize.width * currentSize.scale);
+        height = Math.ceil(currentSize.height * currentSize.scale);
+        if(!fake && height > screen.height)
+        {
+          debug.alert("settings.resize: The widget is to tall (height = " + height + " px) , downsizing...");
+          do
+          {
+            currentSize.scale -= 0.1;
+            width = Math.ceil(currentSize.width * currentSize.scale);
+            height = Math.ceil(currentSize.height * currentSize.scale);
+          } while (height >= screen.height && currentSize.scale > 0.3) ;
+          
+          body = document.getElementsByTagName("body")[0];
+          body.style.fontSize = body.fontSize * currentSize.scale + "px";
+        
+        }
+        window.resizeTo(width, height);
+        debug.alert("settings.resize: Resized to width " + width + ", height " + height);
+      }
+    }
+    catch (error)
+    {
+      debug.alert("Error in settings.resize: " + error);
     }
   }
   
@@ -435,6 +471,70 @@ EPG.settings = function(debug, growl, file)
       catch (error)
       {
         debug.alert("Error in settings.saveChannelList: " + error);
+      }
+    },
+    
+    resizeText: function (amount, skipResize) 
+    {
+      var body;
+      try
+      {
+        body = document.getElementsByTagName("body")[0];
+        
+        
+        if(typeof(body.fontSize) === "undefined")
+        {
+          body.fontSize = 10;
+        } 
+        if(typeof(currentSize.width) == "undefined")
+        {
+          debug.alert("settings.resizeText could not resize since currentSize.width and height are undefined!");
+        }
+        else
+        {
+          if(amount === 0)
+          {
+            currentSize.scale = 1;
+          }
+          else if(amount > 0 && currentSize.height * (currentSize.scale + 0.1) < screen.height)
+          {
+            currentSize.scale += 0.1;
+          }
+          else if(amount < 0 && currentSize.scale > 1)
+          {
+            currentSize.scale -= 0.1;
+          }
+          
+          body.style.fontSize = body.fontSize * currentSize.scale + "px";
+          debug.alert("currentSize.scale = " + currentSize.scale);
+          if(!skipResize)
+          {
+            resize();
+          }
+        }
+      }
+      catch (error)
+      {
+        debug.alert("Error in settings.resize: " + error);
+      }
+    },
+    
+    resizeTo: function (width, height, fake) 
+    {
+      try
+      {
+        currentSize.width = width;
+        currentSize.height = height;
+        if(typeof(currentSize.scale) === "undefined")
+        {
+          currentSize.scale = 1;
+        }
+        resize(fake);
+        
+      }
+      catch (error)
+      {
+        debug.alert("Error in settings.resizeTo: " + error);
       }
     }
     

@@ -28,7 +28,7 @@ if (EPG.debug)
   EPG.debug.alert("EPG.front.js loaded");
 }
 
-EPG.front = function(debug, growl, settings, skin, translator)
+EPG.front = function(debug, growl, settings, skin, translator, UIcreator)
 {
   // Private Variables
   var that,
@@ -44,9 +44,26 @@ EPG.front = function(debug, growl, settings, skin, translator)
   
   function createTopBar () 
   {
+    var tempElement,
+    tempTextNode;
     try
     {
+      /*
+       * <div class="scalable top">
+       *  <div class="contents">
+       *    <div class="text">EPG - list 1</div>
+       *  </div>
+       *  <img class="background" src="skins/back/uppe.png" />
+       * </div>
+       */
+      tempElement = document.createElement("div");
+      tempTextNode = document.createTextNode("");
       
+      tempElement.setAttribute("class", "text");
+      tempElement.appendChild(tempTextNode.cloneNode(false));
+      tempElement.firstChild.nodeValue = "EPG: " + translator.translate("overview");
+      
+      return UIcreator.createScalableContainer("topbar", tempElement.cloneNode(true), "uppe.png", currentChannelListID);
     }
     catch (error)
     {
@@ -76,9 +93,44 @@ EPG.front = function(debug, growl, settings, skin, translator)
   
   function createBottomBar () 
   {
+    var tempContainer,
+    tempElement,
+    tempDiv,
+    tempTextNode;
     try
     {
+      /*
+       * <div class="scalable bottom">
+       *  <div class="contents">
+       *    <div class="text">bottom</div>
+       *  </div>
+       *  <img class="background" src="skins/back/uppe.png" />
+       * </div>
+       */
+      tempContainer = document.createElement("div");
+      tempContainer.setAttribute("class", "container");
+      tempDiv = document.createElement("div");
+      tempDiv.setAttribute("class", "resizer");
+      
+      tempElement = document.createElement("a");
+      tempElement.setAttribute("class", "smallertext");
+      
+      tempTextNode = document.createTextNode("");
+      
+      tempElement.appendChild(tempTextNode.cloneNode(false));
+      tempElement.firstChild.nodeValue = "A";
+      tempDiv.appendChild(tempElement);
+      tempContainer.appendChild(tempDiv.cloneNode(true));
+      tempContainer.lastChild.addEventListener("click", function(){alert("smallertext");settings.resizeText(-1);}, false);
+      tempElement.setAttribute("class", "normaltext");
+      tempContainer.appendChild(tempDiv.cloneNode(true));
+      tempContainer.lastChild.addEventListener("click", function(){alert("normaltext");settings.resizeText(0);}, false);
+      tempElement.setAttribute("class", "biggertext");
+      tempContainer.appendChild(tempDiv.cloneNode(true));
+      tempContainer.lastChild.addEventListener("click", function(){alert("biggertext");settings.resizeText(1);}, false);
       createInfoButton();
+      return UIcreator.createScalableContainer("bottombar", tempContainer, "nere.png",currentChannelListID);
+    
     }
     catch (error)
     {
@@ -90,9 +142,9 @@ EPG.front = function(debug, growl, settings, skin, translator)
   {
     try
     {
-      //createTopBar();
-      createInfoButton();
-      //createBottomBar();
+      frontDiv.appendChild(createTopBar());
+      //createInfoButton();
+      frontDiv.appendChild(createBottomBar());
     }
     catch (error)
     {
@@ -125,11 +177,18 @@ EPG.front = function(debug, growl, settings, skin, translator)
           {
             if (window.widget) 
             {
-              window.resizeTo(270, 504);
+              settings.resizeTo(270, screen.height, true);
               window.widget.prepareForTransition("ToFront");
+              settings.resizeTo(270, 80);
             }
-            
             backDiv.style.display = "none";
+          }
+          else
+          {
+            if(window.widget)
+            {
+              settings.resizeTo(270, 80); // calculate how many channels there are and then resize
+            } 
           }
           
           if(typeof(channelListID) !== "undefined")
@@ -158,6 +217,7 @@ EPG.front = function(debug, growl, settings, skin, translator)
           visible = true;
           if(window.widget)
           {
+            
             setTimeout(function(){window.widget.performTransition();}, 300);
           }
         }
@@ -204,5 +264,5 @@ EPG.front = function(debug, growl, settings, skin, translator)
       }
     }
   };
-}(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator);
+}(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator, EPG.UIcreator);
 EPG.front.init();

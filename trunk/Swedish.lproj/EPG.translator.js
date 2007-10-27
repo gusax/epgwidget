@@ -41,6 +41,7 @@ EPG.translator = function(debug)
   localizedStrings["Report a bug..."] = "Rapportera en bugg...";
   localizedStrings["Complaints..."] = "Klagomål...";
   localizedStrings["EPG by"] = "EPG av";
+  localizedStrings["overview"] = "översikt";
   // Private methods
   
   

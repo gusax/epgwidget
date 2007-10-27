@@ -108,7 +108,7 @@ EPG.skin = function(debug, growl, settings)
           if(typeof(skin) === "undefined")
           {
             that.saveSkinForList(channelListID, defaultSkin);
-            settings.getPreference(channelListID + "skin");
+            skin = settings.getPreference(channelListID + "skin");
           }
           return skin;
         }
