@@ -46,6 +46,7 @@ EPG.growl = function(debug, translator)
     var index;
     try
     {
+      hasNotCheckedForGrowlYet = false;
       if(systemCall.errorString)
       {
         userHasGrowlInstalled = false;
