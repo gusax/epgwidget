@@ -177,6 +177,24 @@ EPG.file = function(debug, growl)
       {
         debug.alert("Error in file.open: " + error + "\n(path = " + path + ")");
       }
+    },
+    
+    /**
+      * @scope file
+      * @function getHomePath
+      * @description Returns the path to the users home folder.
+      * @return {string} Path to the users home folder.
+      */
+    getHomePath: function () 
+    {
+      try
+      {
+        return HOME;
+      }
+      catch (error)
+      {
+        Debug.alert("Error in file.getHomePath: " + error);
+      }
     }
   };
 }(EPG.debug, EPG.growl);
