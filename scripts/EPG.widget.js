@@ -137,7 +137,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 	 			  growl.notifyNow(translator.translate("EPG has NOT been installed before!"));
 	 			  debug.alert("This is the first time EPG has been run on this computer (by this user)");
 	 			  settings.getAllChannels(channelsLoaded, channelsLoadedFailed);
-        
+          settings.installGrabber(); // this should probably wait until the user has added one channel
 	 			}
 	 			else
 	 			{

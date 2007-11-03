@@ -50,9 +50,29 @@ div.bottombar div.contents div.container
   padding-left: 0.5em;
 }
 
+div.onechannel
+{
+  width: 27em;
+  height: 3.8em;
+  color: #fff;
+}
+
+div.onechannel img.logo
+{
+  width: 3.4em;
+  height: 3.4em;
+  margin: 0.3em 0.4em 0em 0.4em;
+  opacity: 0.8; 
+}
+
 div.resizer
 {
   padding-top: 0.2em; 
+}
+
+img.background
+{
+  opacity: 0.85; 
 }
 
 #infobutton

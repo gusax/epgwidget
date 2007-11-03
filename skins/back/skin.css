@@ -17,10 +17,6 @@ a:hover
   text-shadow: #fff 0em 0em 0.2em;
   padding: 0em 0.1em 0.1em 0em;
 }
-img.background
-{
-  opacity: 0.9; 
-}
 
 div.contents div.text
 {
@@ -171,4 +167,9 @@ div.donebutton:hover
   color: #fff;
   text-shadow: #fff 0em 0em 0.2em; 
   padding: 0em 0.1em 0.1em 0em;
+}
+
+img.background
+{
+  opacity: 0.9; 
 }
