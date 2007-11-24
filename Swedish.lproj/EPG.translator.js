@@ -42,6 +42,8 @@ EPG.translator = function(debug)
   localizedStrings["Complaints..."] = "Klagomål...";
   localizedStrings["EPG by"] = "EPG av";
   localizedStrings["overview"] = "översikt";
+  localizedStrings["No program"] = "Sändningsuppehåll";
+  localizedStrings["Click to show more programs, press and drag to move."] = "Klicka för att visa fler program, håll nere och dra för att flytta.";
   // Private methods
   
   
@@ -53,6 +55,8 @@ EPG.translator = function(debug)
       {
         that = this;
       }
+      
+      delete init;
     },
     
     translate: function (string)

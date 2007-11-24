@@ -154,11 +154,12 @@ EPG.settings = function(Debug, growl, file)
     {
       if(window.widget && typeof(currentSize.width) !== "undefined")
       {
+        
         width = Math.ceil(currentSize.width * currentSize.scale);
         height = Math.ceil(currentSize.height * currentSize.scale);
         if(!fake && height > screen.height)
         {
-          Debug.alert("settings.resize: The widget is to tall (height = " + height + " px) , downsizing...");
+          Debug.alert("settings.resize: The widget is to tall (height of widget = " + height + " px, but screen height is only " + screen.height + " px) , downsizing...");
           do
           {
             currentSize.scale -= 0.1;
@@ -167,11 +168,14 @@ EPG.settings = function(Debug, growl, file)
           } while (height >= screen.height && currentSize.scale > 0.3) ;
           
           body = document.getElementsByTagName("body")[0];
+          if(typeof(body.fontSize) !== "number")
+          {
+            body.fontSize = 10;
+          }
           body.style.fontSize = body.fontSize * currentSize.scale + "px";
-        
         }
         window.resizeTo(width, height);
-        Debug.alert("settings.resize: Resized to width " + width + ", height " + height);
+        //Debug.alert("settings.resize: Resized to width " + width + ", height " + height);
       }
     }
     catch (error)
@@ -303,6 +307,179 @@ EPG.settings = function(Debug, growl, file)
     }
   }
   
+  /**
+   * @memberOf settings
+   * @name getFileDateYYYYMMDD
+   * @function
+   * @description Takes a Date object and returns a string with the date formatted as YYYY-MM-DD (used in filenames).
+   * @private
+   * @param {object} when Date object used to construct the YYYY-MM-DD string.
+   * @return {string} The date formatted as YYYY-MM-DD
+   */
+  function getFileDateYYYYMMDD (when)
+  {
+    var year,
+    month,
+    day;
+    try
+    {
+      if(!when)
+      {
+        when = new Date(); // now
+      }
+      year = when.getFullYear();
+      month = 1 + when.getMonth(); // months are between 0 and 11 so we need to add one to whatever getMonth returns
+      day = when.getDate();
+      if(month < 10)
+      {
+        month = "0" + month;
+      }
+      if(day < 10)
+      {
+        day = "0" + day;
+      }
+      return year + "-" + month + "-" + day;
+    }
+    catch (error)
+    {
+      Debug.alert("Error in settings.getFileDateYYYYMMDD: " + error + " (when = " + when + ")");
+    }
+  }
+  
+  /**
+   * @memberOf settings
+   * @name findPrograms
+   * @function
+   * @description Finds the specified number of programs among the cached programs.
+   * @private
+   * @param {string} channelID ID of the channel that we are interested in.
+   * @param {number} numPrograms The number of programs wanted.
+   * @param {object} when Date object that is the start of the search. 
+   * @param {string} [ymd] Forces findPrograms to look only in the schedule pointed to by ymd.
+   * @return {array} An array of programs, the length of numPrograms.
+   */
+  function findPrograms (channelID, numPrograms, when, ymd)
+  {
+    var foundPrograms = [],
+    programs,
+    index = -1,
+    copyIndex = 0,
+    programStart,
+    programStop,
+    numFound = 0,
+    programsLength = 0,
+    whenTimestamp;
+    try
+    {
+      if(!when)
+      {
+        when = new Date();
+      }
+      whenTimestamp = when.getTime();
+      if(typeof(ymd) === "undefined")
+      {
+        ymd = getFileDateYYYYMMDD(when);
+      }
+      programs = cachedPrograms[channelID][ymd];
+      if(programs && programs.length > 0)
+      {
+        programsLength = programs.length;
+        while(numFound < numPrograms && index < programsLength)
+        {
+          index += 1;
+          programStart = programs[index].start * 1000;
+          programStop = programs[index].stop * 1000;
+          if(typeof(programStart) === "number" && typeof(programStop) === "number")
+          {
+            if(programStart <= whenTimestamp && whenTimestamp < programStop)
+            {
+                //Debug.alert(channelID + ": Found program " + programs[index].title.sv);
+                // This is the current program, since it has started this exact second or before, and it has not ended yet. 
+                break; // Break here and start copying from this position.
+            }
+            else if(programStart > whenTimestamp) // This program has not started yet. If we reach it without reaching the above condition first, it must mean that all the following events are in the future. No point looking at them then.
+            {
+              //Debug.alert(channelID + ": All programs are in the future, programStart " + programStart + " > whenTimestamp " + whenTimestamp +" :-(");
+              break;  // first program is either the empty program or a program from an earlier date.
+            }
+          }
+
+        }
+      }
+      //Debug.alert(channelID + ": Found program, programStart " + programStart + " <= whenTimestamp " + whenTimestamp +" < programStop " + programStop);
+      if(index > -1)
+      {     
+        copyIndex = 0;
+        while(index < programsLength && copyIndex < numPrograms)
+        {
+          foundPrograms[copyIndex] = programs[index]; // copy program from the cached list to the list we are returning
+          copyIndex += 1;
+          index += 1;
+        }
+      }
+
+      return foundPrograms;
+    }
+    catch (error)
+    {
+      Debug.alert("Error in settings.findPrograms: " + error + " (channelID = " + channelID + ", numPrograms = " + numPrograms + ", when = " + when + ", ymd = " + ymd + ")");
+    }
+  }
+  
+  /**
+   * @memberOf settings
+   * @name programsDownloadSucceeded
+   * @function
+   * @description Run if the wanted schedulefile could be opened.
+   * @private
+   * @param {function} callback Callback function that should be notified when successful.
+   * @param {object} schedule Jsontv-object containing the schedule as an array.
+   * @param {string} channelID ID of the channel that the schedule belongs to.
+   * @param {string} ymd The date of the schedule in YYYY-MM-DD format.
+   * @param {number} numPrograms The number of programs wanted.
+   * @param {object} when Date object describing the start of the search. 
+   */
+  function programsDownloadSucceeded (callback, schedule, channelID, ymd, numPrograms, when)
+  {
+    var foundPrograms;
+    try
+    {
+      // TODO: perhaps we should also be able to find programs between two dates, and not just find a number of programs.
+      if(schedule && schedule.programme)
+      {
+        cachedPrograms[channelID][ymd].loaded = true;
+        cachedPrograms[channelID][ymd] = schedule.programme;
+        
+        foundPrograms = findPrograms(channelID, numPrograms, when, ymd);
+        // check for other callbacks and run them too?
+        callback(foundPrograms);
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in settings.programsDownloadSucceeded: " + error + " (callback = " + callback + ")");
+    }
+  }
+  
+  /**
+   * @memberOf settings
+   * @name programsDownloadFailure
+   * @function
+   * @description Run if there was an error accessing the schedule file.
+   * @private
+   * @param {function} callback Callback function that should be notified of the failure.
+   */
+  function programsDownloadFailure (callback, contents, channelID, ymd)
+  {
+    try
+    {
+      callback();
+    }
+    catch (error)
+    {
+      Debug.alert("Error in settings.programsDownloadSucceeded: " + error + " (callback = " + callback + ")");
+    }
+  }
   // Public methods
   return {
     init: function()
@@ -355,7 +532,7 @@ EPG.settings = function(Debug, growl, file)
           value = "" + value;
           if(window.widget)
           {
-            Debug.alert("trying to save key " + key + " = value " + value);
+            //Debug.alert("trying to save key " + key + " = value " + value);
             window.widget.setPreferenceForKey(value, key);
           }
           cachedPreferences[key] = value;
@@ -387,7 +564,7 @@ EPG.settings = function(Debug, growl, file)
           }
         }
         
-        Debug.alert("settings.getPreference(" + key + ") returning " + cachedPreferences[key]);
+        //Debug.alert("settings.getPreference(" + key + ") returning " + cachedPreferences[key]);
         return cachedPreferences[key];
       }
       catch (error)
@@ -441,7 +618,7 @@ EPG.settings = function(Debug, growl, file)
         }
         else
         {
-          Debug.alert("settings.getAllChannels: all channels were cached, returning cached version.");
+          //Debug.alert("settings.getAllChannels: all channels were cached, returning cached version.");
           timers.push(setTimeout(function(){updateAllChannelsCached();},1));
         }
       }
@@ -510,7 +687,7 @@ EPG.settings = function(Debug, growl, file)
             }
             
           }
-          Debug.alert("getChannelList returning channelLists[" + listIndex + "] = " + channelLists[listIndex]);
+          //Debug.alert("getChannelList returning channelLists[" + listIndex + "] = " + channelLists[listIndex]);
           return channelLists[listIndex];
         }
         else
@@ -559,15 +736,15 @@ EPG.settings = function(Debug, growl, file)
       var tempList;
       try
       {
-        Debug.alert("addChannelToList(" + channelID + ", " + channelList + ")");
+        //Debug.alert("addChannelToList(" + channelID + ", " + channelList + ")");
         
         if(channelID && channelList >= 0)
         {
-          Debug.alert("both channelID and channelList existed");
+          //Debug.alert("both channelID and channelList existed");
           tempList = channelLists[channelList];
           if(!tempList)
           {
-            Debug.alert("creating channelLists[" + channelList + "]");
+            //Debug.alert("creating channelLists[" + channelList + "]");
             tempList = {};
             tempList.ordered = [];
             tempList.hashed = {};
@@ -578,7 +755,7 @@ EPG.settings = function(Debug, growl, file)
           // Add channel to list if it's not there already
           if(!tempList.hashed[channelID])
           {
-            Debug.alert("Adding " + channelID + " to list " + channelList);
+            //Debug.alert("Adding " + channelID + " to list " + channelList);
             tempList.hashed[channelID] = ""+tempList.ordered.length;
             tempList.ordered.push(channelID);
             that.saveChannelList(channelList);
@@ -657,7 +834,7 @@ EPG.settings = function(Debug, growl, file)
           }
           
           body.style.fontSize = body.fontSize * currentSize.scale + "px";
-          Debug.alert("currentSize.scale = " + currentSize.scale);
+          //Debug.alert("currentSize.scale = " + currentSize.scale);
           if(!skipResize)
           {
             resize();
@@ -725,7 +902,8 @@ EPG.settings = function(Debug, growl, file)
       var ymd,
       programsForThisChannelAreCached,
       programsForThisDateAreCached,
-      foundPrograms;
+      foundPrograms,
+      callback;
       try
       {
         if(typeof(numPrograms) === "undefined" || numPrograms < 1)
@@ -737,28 +915,30 @@ EPG.settings = function(Debug, growl, file)
           when = new Date(); // now
         }
         
-        ymd = when.getFullYear() + "" + when.getMonth() + "" + when.getDate();
+        ymd = getFileDateYYYYMMDD(when);
         programsForThisChannelAreCached = cachedPrograms[channelID];
         if(programsForThisChannelAreCached)
         {
-          programsForThisDateAreCached = cachedProgramForThisChannel[ymd];
-          if(programsForThisDateAreCached)
+          programsForThisDateAreCached = programsForThisChannelAreCached[ymd];
+          if(programsForThisDateAreCached)// && programsForThisDateAreCached.loaded)
           {
-            foundPrograms = findPrograms(programsForThisDateAreCached, numPrograms, when);
-            if(foundPrograms.length === numPrograms)
-            {
-              // open up tomorrows 
-            }
-            setTimeout(function(){onSuccess(programsForThisDateAreCached)}, 1);
+            foundPrograms = findPrograms(channelID, numPrograms, when);
+            // What happens around midnight?
+            setTimeout(function(){onSuccess(foundPrograms);}, 1);
           }
           else
           {
-            
+          	cachedPrograms[channelID][ymd] = {};
+          	cachedPrograms[channelID][ymd].loaded = false;
+            file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd, numPrograms, when);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd);});
           }
         }
         else
         {
           cachedPrograms[channelID] = {};
+          cachedPrograms[channelID][ymd] = {};
+          cachedPrograms[channelID][ymd].loaded = false;
+          file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd, numPrograms, when);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd);});
         }
        
       }

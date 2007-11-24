@@ -3,7 +3,7 @@
 	// An array of all grabbers (their filename excluding .php)
 	//$grabbers = array("tv.xmltv.se.swedb","tv.dvb.dreambox","tv.jsontv.se.swedb");
 	$grabbers = array("tv.jsontv.se.swedb");
-	$userAgent = "se.swedb.tv.widget/20071103";
+	$userAgent = "se.swedb.tv.widget/20071103J";
 	$useGrowl = false;
 
 	function fixPath($path)
@@ -37,10 +37,16 @@
 	require_once($pathToXmltvFolder."/grabber/epg.cleaner.php");
 	
 	$force = $argv[1];
+  
 	
 	$lastupdatefilename = $pathToXmltvFolder."/grabber/epg.downloader.lastupdate.txt";
 	
 	$today = date("Ymd");
+    
+  if($force)
+  {
+  	sleep(10); // sleep for 10 seconds. Used because the downloader is launched automatically by launchd when the user logs in, and the login occurs before the network (especially Airport) is up. In other words, we need to wait for an internet connection before trying to download new schedules.
+  }
 	$lastupdate = 0;
 	if(!file_exists($lastupdatefilename))
 	{
