@@ -55,14 +55,9 @@ div.scalable div.contents
   overflow: hidden;
 }
 
-div.scalable div.contents div
+div.scalable div.contents div.container
 {
   margin: 0em 2em 0em 1.5em; 
-}
-
-div.scalable div.contents div div
-{
-  margin: 0em; 
 }
 
 div.scalable img.background

@@ -2,7 +2,7 @@
  bitwise: true, 
  browser:true, 
  cap:false, 
- debug:false,
+ Debug:false,
  eqeqeq: true,
  evil: false,
  forin: false,
@@ -23,7 +23,14 @@ if(!EPG)
   var EPG = {};
 }
 
-EPG.UIcreator = function(debug, skin)
+/**
+ * @memberOf EPG
+ * @name UIcreator
+ * @static
+ * @type object
+ * @description Creates different UI-elements.
+ */
+EPG.UIcreator = function(Debug, Skin, Translator)
 {
   // Private Variables
   var that;
@@ -32,7 +39,13 @@ EPG.UIcreator = function(debug, skin)
   
   
   // Public methods
-  return {
+  return /** @scope UIcreator */ {
+  	
+  	/**
+  	 * @memberOf UIcreator
+  	 * @function init
+  	 * @description Saves "this" and initializes the UIcreator.
+  	 */
     init: function()
     {
       if(!that)
@@ -41,6 +54,18 @@ EPG.UIcreator = function(debug, skin)
       }
     },
     
+    /**
+     * @memberOf UIcreator
+     * @name createScalableContainer
+     * @function
+     * @description Takes contents and a background and returns a div-container that supports scaling of the contents and its background.
+     * @private
+     * @param {string} className Name of the css-class that should be used for this container.
+     * @param {object} contents A DOM-node (for example a div-tag) containing the stuff that should be shown in this container.
+     * @param {string} backgroundImage Name of the background image that should be used for this container.
+     * @param {number} listID ID of the channelList that this container is for.
+     * @return {object} A DOM-node representing the scalable container.
+     */
     createScalableContainer: function (className, contents, backgroundImage, listID)  
     {
       
@@ -56,6 +81,7 @@ EPG.UIcreator = function(debug, skin)
          * </div>
          */
         tempContainer = document.createElement("div");
+        tempContainer.setAttribute("class","container");
         tempElement = tempContainer.cloneNode(false);
         tempTextNode = document.createTextNode("");
         
@@ -70,18 +96,112 @@ EPG.UIcreator = function(debug, skin)
         tempElement = document.createElement("img");
         tempElement.setAttribute("class", "background");
         
-        tempElement.setAttribute("src", "skins/" + skin.getSkinForList(listID) + "/" + backgroundImage);
+        tempElement.setAttribute("src", "Skins/" + Skin.getSkinForList(listID) + "/" + backgroundImage);
         
         tempContainer.appendChild(tempElement.cloneNode(false));
-        
+        tempContainer.contents = contents;
+        tempContainer.isVisible = true;
         return tempContainer;
       }
       catch (error)
       {
-        debug.alert("Error in UIcreator.createScalableContainer: " + error);
+        Debug.alert("Error in UIcreator.createScalableContainer: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf UIcreator
+     * @function createProgramNode
+     * @description Creates a program node that displays information about a specific program.
+     * @param {object} [program] The program whos information should be displayed in this programNode. If omitted, returns a programNode with the localized text "No program".
+     * @return {object} A DOM-node representing the programNode.
+     */
+    createProgramNode: function (program) 
+    {
+    	var programNode,
+    	startNode,
+    	titleNode,
+    	tempTextNode,
+    	startDate;
+      try
+      {
+      	programNode = document.createElement("div");
+      	programNode.setAttribute("class", "program");
+      	startNode = document.createElement("div");
+      	startNode.setAttribute("class", "start");
+      	titleNode = document.createElement("div");
+      	titleNode.setAttribute("class", "title");
+        if(program && program.start && program.title)
+        {
+          startDate = new Date(program.start * 1000);
+        	tempTextNode = document.createTextNode("");
+        	if(startDate.getHours() < 10)
+        	{
+        		tempTextNode.nodeValue = "0";
+        	}
+        	tempTextNode.nodeValue += "" + startDate.getHours() + ":";
+        	if(startDate.getMinutes() < 10)
+        	{
+        		tempTextNode.nodeValue += "0";
+        	}
+        	tempTextNode.nodeValue += "" + startDate.getMinutes();
+        	startNode.appendChild(tempTextNode.cloneNode(false));
+        	
+        	tempTextNode.nodeValue = "No title :-(";
+        	for (locale in program.title)
+        	{
+        	  if(program.title.hasOwnProperty(locale))
+        	  {
+        	  	tempTextNode.nodeValue = program.title[locale]; // just pick the first translation and then break
+        	  	break;
+        	  }
+        	}
+        	titleNode.appendChild(tempTextNode.cloneNode(true));
+        	delete tempTextNode;
+        	programNode.appendChild(startNode);
+        	programNode.appendChild(titleNode);
+        	programNode.program = program;
+          programNode.startNode = startNode.firstChild;
+        	programNode.titleNode = titleNode.firstChild;
+        }
+        else
+        {
+          tempTextNode = document.createTextNode("");
+          startNode.appendChild(tempTextNode.cloneNode(false));
+          tempTextNode.nodeValue = Translator.translate("No program");
+        }
+        return programNode;
+      }
+      catch (error)
+      {
+        Debug.alert("Error in UIcreator.createProgramNode: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf UIcreator
+     * @function removeChildNodes
+     * @description Removes all child nodes from the specified element.
+     * @param {object} node The DOM node that is to be childless.
+     */
+    removeChildNodes: function (node) 
+    {
+      try
+      {
+        if(node)
+        {
+          while(node.firstChild)
+          {
+            node.removeChild(node.firstChild);
+          }
+        }
+      }
+      catch (error)
+      {
+        Debug.alert("Error in UIcreator.removeChildNodes: " + error);
       }
     }
   };
-}(EPG.debug, EPG.skin);
+}(EPG.debug, EPG.skin, EPG.translator);
 EPG.UIcreator.init();
 

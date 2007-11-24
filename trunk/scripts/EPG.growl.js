@@ -29,10 +29,12 @@ if (EPG.debug)
   EPG.debug.alert("EPG.growl.js loaded");
 }
 /**
-  * @scope EPG
-  * @static growl
-  * @description Displays growl notifications if growl (www.growl.info) with growlnotify is installed.
-  */
+ * @memberOf EPG
+ * @name growl
+ * @static
+ * @type object
+ * @description Displays growl notifications if growl (www.growl.info) with growlnotify is installed.
+ */
 EPG.growl = function(Debug, Translator)
 {
   // Private Variables
@@ -46,13 +48,14 @@ EPG.growl = function(Debug, Translator)
   
   // Private methods
   /**
-    * @scope growl
-    * @function growlCheck
-    * @description Checks if the growl notification test failed. If an error was found, growl is not installed and no further attempts will be made to send messages via growl.
-    * @private
-    * @param {object} systemCall Represents the object recieved after a system call has finished running (in the Dashboard case growlnotify was called via widget.system).
-    * @param {function} callback Function to tell weather growl is installed or not.
-    */
+   * @memberOf growl
+   * @name growlCheck
+   * @function 
+   * @description Checks if the growl notification test failed. If an error was found, growl is not installed and no further attempts will be made to send messages via growl.
+   * @private
+   * @param {object} systemCall Represents the object recieved after a system call has finished running (in the Dashboard case growlnotify was called via widget.system).
+   * @param {function} callback Function to tell weather growl is installed or not.
+   */
   function growlCheck(systemCall, callback) 
   {
     var index;
@@ -81,8 +84,9 @@ EPG.growl = function(Debug, Translator)
   }
   
   /**
-    * @scope growl
-    * @function growlFinished
+    * @memberOf growl
+    * @name growlFinished
+    * @function
     * @description Runs after a growl notification has been shown.
     * @private
     * @param {object} systemCall Represents the object recieved after a system call has finished running.
@@ -104,10 +108,10 @@ EPG.growl = function(Debug, Translator)
   }
   
   // Public methods
-  return {
+  return /** @scope growl */ {
     
     /**
-      * @scope growl
+      * @memberOf growl
       * @function init
       * @description Saves "this" and initializes the singleton.
       */
@@ -121,7 +125,7 @@ EPG.growl = function(Debug, Translator)
     },
     
     /**
-      * @scope growl
+      * @memberOf growl
       * @function checkForGrowl
       * @description Checks if growl is installed on this computer.
       * @param {function} callback Function to be run after the check has finished. Must accept a boolean as its first parameter (true if growl was installed, false if not).
@@ -144,9 +148,9 @@ EPG.growl = function(Debug, Translator)
     },
     
     /**
-      * @scope growl
+      * @memberOf growl
       * @function notifyNow
-      * @description Immedeately sends a growl notification message to the user.
+      * @description Immediately sends a growl notification message to the user.
       * @param {string} message The message to send to the user.
       * @param {string} [pathToImage] Absolute path to the image that should be used as the icon for the growl notification.
       * @param {boolean} [sticky] True if the notification should be sticky (not disappear until clicked by the user).
@@ -192,7 +196,7 @@ EPG.growl = function(Debug, Translator)
     },
     
     /**
-      * @scope growl
+      * @memberOf growl
       * @function notifyLater
       * @description Schedules a growl notification to be displayed at a certain date and time. Will of course not show notifications if the computer is asleep or turned off.
       * @param {string} message The message to send to the user.
@@ -218,7 +222,7 @@ EPG.growl = function(Debug, Translator)
     },
     
     /**
-      * @scope growl
+      * @memberOf growl
       * @function isInstalled
       * @description Returns weather growl is installed or not.
       * @return {boolean} True if growl is installed, otherwise false.

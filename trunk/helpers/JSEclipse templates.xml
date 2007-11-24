@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?><templates><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="Comment for a private function without any arguments." enabled="true" name="comment private function">
+/**
+ * @memberOf ${parentObject}
+ * @name ${name}
+ * @function
+ * @description ${description}
+ * @private
+ */</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="Comment for a private function with one parameter." enabled="true" name="comment private function one parameter">/**
+ * @memberOf ${parentObject}
+ * @name ${name}
+ * @function
+ * @description ${description}
+ * @private
+ * @param  {${type}} ${paramName} ${paramDescription}
+ */</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="Comment for a public function without any arguments." enabled="true" name="comment public function">
+/**
+ * @memberOf ${parentObject}
+ * @function ${name}
+ * @description ${description}
+ */</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="Comment for a public name : function - function with one parameter." enabled="true" name="comment public function one parameter">
+/**
+ * @memberOf ${parentObject}
+ * @function ${name}
+ * @description ${description}
+ * @param {${type}} ${paramName} ${paramDescription}${cursor}
+ */</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="A comment for a singleton" enabled="true" name="comment singleton">
+/**
+ * @memberOf ${parentObject}
+ * @name ${singletonName}
+ * @static
+ * @type object
+ * @description ${description}
+ */</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="do-while" enabled="true" id="com.interaktonline.jseclipse.templates.javascript.do" name="do">do {
+	${line_selection}${cursor}
+} while (${condition});</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="A for in loop" enabled="true" name="forin">for (${index} in ${object})
+{
+  if(${object}.hasOwnProperty(${index}))
+  {
+    ${cursor}
+  }
+}</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="A name : function - function with no parameters" enabled="true" name="function">/**
+ * @memberOf ${parentObject}
+ * @function ${name}
+ * @description ${description}
+ */
+${name}: function () 
+{
+  try
+  {
+    ${cursor}
+  }
+  catch (error)
+  {
+    Debug.alert("Error in ${parentObject}.${name}: " + error);
+  }
+}</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="Private function with no parameters" enabled="true" name="function">/**
+ * @memberOf ${parentObject}
+ * @name ${name}
+ * @function
+ * @description ${description}
+ * @private
+ */
+function ${name} () 
+{
+  try
+  {
+    ${cursor}
+  }
+  catch (error)
+  {
+    Debug.alert("Error in ${parentObject}.${name}: " + error);
+  }
+}</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="Private function with one parameter" enabled="true" id="com.interaktonline.jseclipse.templates.javascript.function" name="function">/**
+ * @memberOf ${parentObject}
+ * @name ${name}
+ * @function
+ * @description ${description}
+ * @private
+ * @param {${type}} ${paramName} ${paramDescription}
+ */
+function ${name} (${paramName})
+{
+  try
+  {
+    ${cursor}
+  }
+  catch (error)
+  {
+    Debug.alert("Error in ${parentObject}.${name}: " + error + " (${paramName} = " + ${paramName} + ")");
+  }
+}</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="if - else " enabled="true" id="com.interaktonline.jseclipse.templates.javascript.ifelse" name="ifelse">if (${condition}) {
+	${cursor}
+} else {
+	
+}
+</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="" enabled="true" name="ifthat">if(!that)
+{
+  that = this;
+}
+${cursor}</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="Preferences for JSlint" enabled="true" name="jslint">/*jslint adsafe:false, 
+ bitwise: true, 
+ browser:true, 
+ cap:false, 
+ debug:false,
+ eqeqeq: true,
+ evil: false,
+ forin: false,
+ fragment:false, 
+ laxbreak:false, 
+ nomen:true, 
+ on:false,
+ passfail:false, 
+ plusplus:true, 
+ rhino:false, 
+ undef:true, 
+ white:false, 
+ widget:false */
+
+/*extern ${cursor}*/</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="" enabled="true" name="singleton">if(!${parentObject})
+{
+  var ${parentObject} = {};
+}
+
+/**
+ * @memberOf ${parentObject}
+ * @name ${singletonName}
+ * @static
+ * @type object
+ * @description ${description}
+ */
+${parentObject}.${singletonName} = function() 
+{
+  // Private Variables
+  var that${cursor};
+  
+  // Private methods
+  
+  
+  // Public methods
+  return /** @scope ${singletonName} */ {
+    /**
+     * @memberOf ${singletonName}
+     * @description Initialization function for ${singletonName}.
+     */
+    init: function()
+    {
+      if(!that)
+      {
+        that = this;
+      }
+      delete init;
+    }
+  };
+}();
+${parentObject}.${singletonName}.init();
+</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="switch" enabled="true" id="com.interaktonline.jseclipse.templates.javascript.switch" name="switch">switch (${key}) {
+	case ${value}:
+		${cursor}
+		break;
+
+	default:
+		break;
+}
+</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="try catch" enabled="true" id="com.interaktonline.jseclipse.templates.javascript.try" name="try">try {
+	${line_selection}${cursor}
+} catch (e) {
+	// TODO: handle exception
+}</template><template autoinsert="true" context="com.interaktonline.jseclipse.template.context" deleted="false" description="while loop" enabled="true" id="com.interaktonline.jseclipse.templates.javascript.while" name="while">while (${condition}) {
+	${line_selection}${cursor}
+}</template></templates>

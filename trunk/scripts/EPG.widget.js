@@ -57,13 +57,13 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
         window.widget.onshow = that.onshow;
         window.widget.onhide = that.onhide;
       }
-      
-      growl.notifyNow(translator.translate("Found") + " " + channels.length + " " + translator.translate("channels") + "!");
+           
+      //growl.notifyNow(translator.translate("Found") + " " + channels.length + " " + translator.translate("channels") + "!");
       currentChannelList = settings.getChannelList(currentChannelListIndex);
       
       if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
       {
-        growl.notifyNow("List with index " + currentChannelListIndex + " had " + currentChannelList.ordered.length + " channels in it.");
+        //growl.notifyNow("List with index " + currentChannelListIndex + " had " + currentChannelList.ordered.length + " channels in it.");
         that.toFront(true);
         //that.toBack();
       }
@@ -109,8 +109,13 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 	  {
 	    if(currentSide === back)
 	    {
-	      debug.alert("Reloading backside");
+	      //debug.alert("Reloading backside");
 	      back.reloadChannelList(channels);
+	    }
+	    else
+	    {
+	    	front.reloadIcons();
+	    	front.reloadPrograms();
 	    }
 	  }
 	  catch (error)
@@ -134,18 +139,20 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 				
 	 			if(settings.isFirstInstall())
 	 			{
-	 			  growl.notifyNow(translator.translate("EPG has NOT been installed before!"));
+	 			  //growl.notifyNow(translator.translate("EPG has NOT been installed before!"));
 	 			  debug.alert("This is the first time EPG has been run on this computer (by this user)");
 	 			  settings.getAllChannels(channelsLoaded, channelsLoadedFailed);
           settings.installGrabber(); // this should probably wait until the user has added one channel
 	 			}
 	 			else
 	 			{
-	 			  growl.notifyNow(translator.translate("EPG has been installed before."));
-	 			  debug.alert("The EPG widget has been run on this computer (by this user) before.");
+	 			  //growl.notifyNow(translator.translate("EPG has been installed before."));
+	 			  //debug.alert("The EPG widget has been run on this computer (by this user) before.");
 	 			  settings.getAllChannels(channelsLoaded, channelsLoadedFailed);
         
 	 			}
+	 			
+	 			delete init;
 			}
 			catch (error)
 			{
@@ -170,7 +177,10 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 		{
 		  try
 		  {
+		    front.removeDragElement();
 		    debug.alert("Onhide!");
+		    // Stop all refresh-timers
+		    // Delete all old programs once every day.
 		  }
 		  catch (error)
 		  {

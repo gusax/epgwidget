@@ -175,7 +175,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
        * </div>
        */
       tempElement = document.createElement("div");
-      tempElement.setAttribute("class", "center author");
+      tempElement.setAttribute("class", "container center author");
       
       tempTextNode = document.createTextNode("");
       
@@ -388,11 +388,11 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       tempContainer.appendChild(tempElement.cloneNode(true));
       if(window.widget)
       {
-        tempContainer.lastChild.addEventListener("click",function(){window.widget.openURL("http://epgwidget.googlecode.com/");}, false);
+        tempContainer.lastChild.addEventListener("click",function(){window.widget.openURL("http://code.google.com/p/epgwidget/w/list");}, false);
       }
       else
       {
-        tempContainer.lastChild.setAttribute("href", "http://epgwidget.googlecode.com/"); 
+        tempContainer.lastChild.setAttribute("href", "http://code.google.com/p/epgwidget/w/list"); 
       }
       
       tempElement.firstChild.nodeValue = translator.translate("Report a bug...");
@@ -550,7 +550,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       {
         if(div && div.channelID)
         {
-          debug.alert(" div.firstChild = " + div.firstChild);
+          //debug.alert(" div.firstChild = " + div.firstChild);
           if(settings.addChannelToList(div.channelID, currentChannelListIndex))
           {
             div.firstChild.checked = true;

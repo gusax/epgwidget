@@ -61,15 +61,20 @@ function installCrontab($pathToXmltvFolder)
 	
 	sort($selectedMinutes);
 	
-	$minutes = $selectedMinutes[0].",".$selectedMinutes[1].",".$selectedMinutes[2];
+	//$minutes = $selectedMinutes[0].",".$selectedMinutes[1].",".$selectedMinutes[2];
 	
-	$tab = "$minutes * * * * /usr/bin/php $pathToXmltvFolder/grabber/epg.downloader.php > logger\n"; 
+	//$tab = "$minutes * * * * /usr/bin/php $pathToXmltvFolder/grabber/epg.downloader.php >/dev/null 2>&1\n"; 
 	//$tab = "* * * * * /usr/bin/php $pathToXmltvFolder/grabber/epg.downloader.php > logger\n";
-	
-	$epgCrontab = fopen("$pathToXmltvFolder/grabber/epg.crontab","w+");
+	$pathToLaunchAgents = fixPath("\$HOME/Library/LaunchAgents");
+  if(file_exists($pathToLaunchAgents) === false)
+  {
+    system("/bin/mkdir $pathToLaunchAgents");
+  }
+  $answer = exec("/bin/cp se.bizo.epgwidget.grabber.plist $pathToLaunchAgents");
+	/*$epgCrontab = fopen("$pathToXmltvFolder/grabber/epg.crontab","w+");
 	fwrite($epgCrontab,utf8_encode($tab));
 	fclose($epgCrontab);
-	$answer = exec("/usr/bin/crontab $pathToXmltvFolder/grabber/epg.crontab");
+	$answer = exec("/usr/bin/crontab $pathToXmltvFolder/grabber/epg.crontab");*/
 }
 
 function install()

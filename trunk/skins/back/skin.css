@@ -25,6 +25,11 @@ div.contents div.text
   font-weight: bold;
 }
 
+div.scalable div.contents div div
+{
+  margin: 0em; 
+}
+
 div.topbar
 {
   width: 27em;
@@ -160,6 +165,7 @@ div.donebutton
   font-size: 1.4em;
   font-weight: bold;
   padding: 0.1em 0em 0em 0.1em;
+  margin: 0em 2em 0em 1.5em; 
 }
 
 div.donebutton:hover
