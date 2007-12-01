@@ -52,6 +52,7 @@ EPG.UIcreator = function(Debug, Skin, Translator)
       {
         that = this;
       }
+      delete that.init;
     },
     
     /**

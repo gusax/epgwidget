@@ -152,7 +152,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
         
 	 			}
 	 			
-	 			delete init;
+	 			delete that.init;
 			}
 			catch (error)
 			{

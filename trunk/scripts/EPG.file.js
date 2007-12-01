@@ -158,6 +158,7 @@ EPG.file = function(debug, growl)
       {
         that = this;
       }
+      delete that.init
     },
     
     /**
