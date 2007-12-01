@@ -121,6 +121,7 @@ EPG.growl = function(Debug, Translator)
       {
         that = this;
       }
+      delete that.init;
       that.checkForGrowl();
     },
     

@@ -491,6 +491,7 @@ EPG.settings = function(Debug, growl, file)
       paths.channelsFolder = "Library/Xmltv/channels/";
       paths.scheduleFolder = "Library/Xmltv/schedules/";
       paths.allChannels = paths.channelsFolder + "tv.jsontv.se.swedb.channels.js";
+      delete that.init;
     },
     
     isFirstInstall: function() 

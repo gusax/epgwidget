@@ -423,12 +423,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
       channelNode = channelNodes[channelID];
       if(channelNode)
       {
-        Debug.alert("found channel with id " + channelID);
         return channelNode; // No need to create a node for the same channelID twice
       }
       else
       {
-        Debug.alert("Creating channelNode for " + channelID);
         channelNode = document.createElement("div");
         channelNode.setAttribute("class", "channelnode");
         channel = Settings.getChannel(channelID);
@@ -458,14 +456,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
         }
         else
         {
-          Debug.alert("Could not find " + channelID + " in channels.js :-(");
           textNode = document.createTextNode("Channel with id " + channelID + " was not found :-( It might have been renamed.");
           channelNotInChannelsJS = true;
         }
         channelNode.appendChild(textNode);
         
         tempScalableContainer = UIcreator.createScalableContainer("onechannel", channelNode, "bakgrund.png", currentChannelListID);
-        Debug.alert("created tempScalableContainer");
         if(channelNode.logo)
         {
           tempScalableContainer.logo = channelNode.logo;
@@ -660,7 +656,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
       {
         that = this;
       }
-      delete init;
+      delete that.init;
     },
     
     /**

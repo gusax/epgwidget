@@ -48,6 +48,7 @@ EPG.skin = function(debug, growl, settings)
         that = this;
       }
       skinElement = document.getElementById("skin");
+      delete that.init;
     },
     
     changeToSkinFromList: function (listID) 

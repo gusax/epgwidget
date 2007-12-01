@@ -457,6 +457,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       {
         that = this;
       }
+      delete that.init;
     },
     
     show: function (toFrontMethod) 
