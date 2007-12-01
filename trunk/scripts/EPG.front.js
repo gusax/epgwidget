@@ -565,23 +565,38 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
     start;
     try
     {
-      startDate = new Date(program.start*1000);
-      if(startDate.getHours() < 10)
+      if(program)
       {
-        programNode.startNode = "0";
-      }
-      programNode.startNode += "" + startDate.getHours() + ":";
-      if(startDate.getMinutes() < 10)
-      {
-        programNode.startNode += "0";
-      }
-      programNode.startNode += "" + startDate.getHours();
-      for (locale in program.title)
-      {
-        if(program.title.hasOwnProperty(locale))
+        programNode.program = program;
+        if(program.isTheEmptyProgram)
         {
-          programNode.titleNode = program.title[locale]; // just pick the first translation and then break
-          break;
+          programNode.startNode.nodeValue = "";
+          programNode.titleNode.nodeValue = "- " + Translator.translate("No program") + " -";
+        }
+        else
+        {
+          startDate = new Date(program.start*1000);
+          if(startDate.getHours() < 10)
+          {
+            programNode.startNode.nodeValue = "0" + startDate.getHours() + ":";
+          }
+          else
+          {
+            programNode.startNode.nodeValue = startDate.getHours() + ":";
+          }
+          if(startDate.getMinutes() < 10)
+          {
+            programNode.startNode.nodeValue += "0";
+          }
+          programNode.startNode.nodeValue += "" + startDate.getMinutes();
+          for (locale in program.title)
+          {
+            if(program.title.hasOwnProperty(locale))
+            {
+              programNode.titleNode.nodeValue = program.title[locale]; // just pick the first translation and then break
+              break;
+            }
+          }
         }
       }
     }
@@ -611,7 +626,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
       if(channelNode && programs)
       {
         channelNode = channelNode.programsNode;
-        //Debug.alert("channelNode for " + channelID + " = " + channelNode);
+        Debug.alert("channelNode for " + channelID + " has " + channelNode.childNodes.length + " channelNodes." );
         if(channelNode.childNodes.length === programs.length)
         {
           for(i = 0; i < programs.length; i += 1)
@@ -634,6 +649,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
             channelNode.firstChild.setAttribute("class", "program currentprogram");
           }
         }
+      }
+      else
+      {
+        Debug.alert(channelID + ": Can't reload programs!");
       }
    }
     catch (error)
@@ -846,6 +865,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
       	{
       		now = when;
       	}
+      	Debug.alert("reloading programs using now = " + now);
       	currentChannelList = Settings.getChannelList(currentChannelListID);
       	if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
         {

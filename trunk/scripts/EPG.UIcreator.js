@@ -159,18 +159,18 @@ EPG.UIcreator = function(Debug, Skin, Translator)
         	}
         	titleNode.appendChild(tempTextNode.cloneNode(true));
         	delete tempTextNode;
-        	programNode.appendChild(startNode);
-        	programNode.appendChild(titleNode);
-        	programNode.program = program;
-          programNode.startNode = startNode.firstChild;
-        	programNode.titleNode = titleNode.firstChild;
         }
-        else
+        else if(program && program.isTheEmptyProgram)
         {
-          tempTextNode = document.createTextNode("");
-          startNode.appendChild(tempTextNode.cloneNode(false));
-          tempTextNode.nodeValue = Translator.translate("No program");
+          startNode.appendChild(document.createTextNode(""));
+          titleNode.appendChild(document.createTextNode("- " + Translator.translate("No program") + " -"));
         }
+        programNode.appendChild(startNode);
+        programNode.appendChild(titleNode);
+        programNode.program = program;
+        programNode.startNode = startNode.firstChild;
+        programNode.titleNode = titleNode.firstChild;
+      
         return programNode;
       }
       catch (error)
