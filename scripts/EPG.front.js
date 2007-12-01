@@ -17,12 +17,6 @@
  widget:false */
 
 /*extern EPG*/
-
-if(!EPG)
-{
-  var EPG = {};
-}
-
 if (EPG.debug)
 {
   EPG.debug.alert("EPG.front.js loaded");
@@ -422,21 +416,25 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
     channelNode,
     tempScalableContainer,
     logo,
-    textNode;
+    textNode,
+    channelFound = false;
     try
     {
       channelNode = channelNodes[channelID];
       if(channelNode)
       {
+        Debug.alert("found channel with id " + channelID);
         return channelNode; // No need to create a node for the same channelID twice
       }
       else
       {
+        Debug.alert("Creating channelNode for " + channelID);
         channelNode = document.createElement("div");
         channelNode.setAttribute("class", "channelnode");
         channel = Settings.getChannel(channelID);
         if(channel)
         {
+          channelFound = true;
           //if(channel.icon)
           //{
             logo = document.createElement("img");
@@ -460,11 +458,14 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
         }
         else
         {
+          Debug.alert("Could not find " + channelID + " in channels.js :-(");
           textNode = document.createTextNode("Channel with id " + channelID + " was not found :-( It might have been renamed.");
+          channelNotInChannelsJS = true;
         }
         channelNode.appendChild(textNode);
         
         tempScalableContainer = UIcreator.createScalableContainer("onechannel", channelNode, "bakgrund.png", currentChannelListID);
+        Debug.alert("created tempScalableContainer");
         if(channelNode.logo)
         {
           tempScalableContainer.logo = channelNode.logo;
@@ -472,10 +473,17 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
         } 
         channelNodes[channelID] = tempScalableContainer;
         tempScalableContainer.channelID = channelID;
-        tempScalableContainer.programsNode = textNode;
-        logo.addEventListener("mousedown", function(event){startChannelDrag(event, tempScalableContainer);}, false);
-        tempScalableContainer.addEventListener("mouseover", function(event){continueChannelDrag(event, tempScalableContainer);}, false);
-        tempScalableContainer.addEventListener("mouseup", function(event){stopChannelDrag(event, tempScalableContainer);}, false);
+        if(channelFound)
+        {
+          tempScalableContainer.programsNode = textNode;
+          logo.addEventListener("mousedown", function(event){startChannelDrag(event, tempScalableContainer);}, false);
+          tempScalableContainer.addEventListener("mouseover", function(event){continueChannelDrag(event, tempScalableContainer);}, false);
+          tempScalableContainer.addEventListener("mouseup", function(event){stopChannelDrag(event, tempScalableContainer);}, false);
+        }
+        else
+        {
+          // Open backside?
+        }
         return channelNodes[channelID];
       }
       
@@ -848,7 +856,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
         	currentChannelList = currentChannelList.hashed;
         	for (channelID in currentChannelList)
         	{
-        	  if(currentChannelList.hasOwnProperty(channelID))
+        	  if(currentChannelList.hasOwnProperty(channelID) && Settings.getChannel(channelID)) // Only try to download programs from channels that are present in channels.js
         	  {
         	  	channelNode = channelNodes[channelID];
         	  	if(channelNode && channelNode.isVisible && channelNode.contents)

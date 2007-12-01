@@ -645,7 +645,7 @@ EPG.settings = function(Debug, growl, file)
         } 
         else
         {
-          return;
+          return false;
         }
       }
       catch (error)
