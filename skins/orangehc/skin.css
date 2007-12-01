@@ -108,6 +108,7 @@ div.programs div.program div.start
 div.programs div.program div.title
 {
   font-size: 1.1em;
+  margin-left: 3.4em;
   white-space: nowrap; 
   text-align: left;
   color: #ffc047;

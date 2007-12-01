@@ -44,7 +44,10 @@ EPG.settings = function(Debug, growl, file)
   timers = [],
   paths = {},
   defaultSkin = "orangehc",
-  currentSize = {}; 
+  currentSize = {},
+  theEmptyProgram = {
+    isTheEmptyProgram : true
+  }; 
   
   // Private methods
   function alertCallbackMethods(callbackArrayName, callbackMethod, callbackContents) 
@@ -368,7 +371,8 @@ EPG.settings = function(Debug, growl, file)
     programStop,
     numFound = 0,
     programsLength = 0,
-    whenTimestamp;
+    whenTimestamp,
+    noProgram = false;
     try
     {
       if(!when)
@@ -393,13 +397,14 @@ EPG.settings = function(Debug, growl, file)
           {
             if(programStart <= whenTimestamp && whenTimestamp < programStop)
             {
-                //Debug.alert(channelID + ": Found program " + programs[index].title.sv);
+                //Debug.alert(channelID + ": Found program " + programs[index].title.sv + " started at " + (new Date(programs[index].start * 1000)));
                 // This is the current program, since it has started this exact second or before, and it has not ended yet. 
                 break; // Break here and start copying from this position.
             }
             else if(programStart > whenTimestamp) // This program has not started yet. If we reach it without reaching the above condition first, it must mean that all the following events are in the future. No point looking at them then.
             {
               //Debug.alert(channelID + ": All programs are in the future, programStart " + programStart + " > whenTimestamp " + whenTimestamp +" :-(");
+              noProgram = true;
               break;  // first program is either the empty program or a program from an earlier date.
             }
           }
@@ -409,7 +414,15 @@ EPG.settings = function(Debug, growl, file)
       //Debug.alert(channelID + ": Found program, programStart " + programStart + " <= whenTimestamp " + whenTimestamp +" < programStop " + programStop);
       if(index > -1)
       {     
-        copyIndex = 0;
+        if(noProgram)
+        {
+          copyIndex = 1;
+          foundPrograms[0] = theEmptyProgram;
+        }
+        else
+        {
+          copyIndex = 0;
+        }
         while(index < programsLength && copyIndex < numPrograms)
         {
           foundPrograms[copyIndex] = programs[index]; // copy program from the cached list to the list we are returning
@@ -907,6 +920,7 @@ EPG.settings = function(Debug, growl, file)
       callback;
       try
       {
+        //Debug.alert(channelID + ": getting programs");
         if(typeof(numPrograms) === "undefined" || numPrograms < 1)
         {
           numPrograms = 3; // now next later
@@ -924,11 +938,13 @@ EPG.settings = function(Debug, growl, file)
           if(programsForThisDateAreCached)// && programsForThisDateAreCached.loaded)
           {
             foundPrograms = findPrograms(channelID, numPrograms, when);
+            //Debug.alert(channelID + ": " + foundPrograms.length + " programs are cached on date " + ymd);
             // What happens around midnight?
             setTimeout(function(){onSuccess(foundPrograms);}, 1);
           }
           else
           {
+            //Debug.alert(channelID + ": No programs for date " + ymd + " cached, running file.openSchedule");
           	cachedPrograms[channelID][ymd] = {};
           	cachedPrograms[channelID][ymd].loaded = false;
             file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd, numPrograms, when);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd);});
@@ -936,6 +952,7 @@ EPG.settings = function(Debug, growl, file)
         }
         else
         {
+          //Debug.alert(channelID + ": This is the first time we have seen this channel. Running file.openSchedule");
           cachedPrograms[channelID] = {};
           cachedPrograms[channelID][ymd] = {};
           cachedPrograms[channelID][ymd].loaded = false;
@@ -946,6 +963,48 @@ EPG.settings = function(Debug, growl, file)
       catch (error)
       {
         Debug.alert("Error in settings.getProgramsForChannel: " + error + " (channelID = " + channelID + ")");
+      }
+    },
+    
+    /**
+     * @memberOf settings
+     * @function removeOldPrograms
+     * @description Removes cached programs older than yesterday.
+     */
+    removeOldPrograms: function () 
+    {
+      var channelID,
+      cachedChannel,
+      today = new Date(),
+      yesterday = "0000-00-00",
+      ymd;
+      try
+      {
+        if(!cachedChannels.lastRemove || cachedChannels.lastRemove < today)
+        {
+          cachedChannels.lastRemove = today.getTime();
+          for (channelID in cachedChannels)
+          {
+            if(cachedChannels.hasOwnProperty(channelID))
+            {
+              cachedChannel = cachedChannels[index];
+              for (ymd in cachedChannel)
+              {
+                if(cachedChannel.hasOwnProperty(ymd))
+                {
+                  if(ymd < yesterday)
+                  {
+                    delete cachedChannels[ymd];
+                 }
+                }
+              }
+            }
+          }
+        }
+      }
+      catch (error)
+      {
+        Debug.alert("Error in settings.removeOldPrograms: " + error);
       }
     }
     
