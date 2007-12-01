@@ -626,7 +626,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
       if(channelNode && programs)
       {
         channelNode = channelNode.programsNode;
-        Debug.alert("channelNode for " + channelID + " has " + channelNode.childNodes.length + " channelNodes." );
         if(channelNode.childNodes.length === programs.length)
         {
           for(i = 0; i < programs.length; i += 1)
@@ -865,7 +864,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
       	{
       		now = when;
       	}
-      	Debug.alert("reloading programs using now = " + now);
+      	//Debug.alert("reloading programs using now = " + now);
       	currentChannelList = Settings.getChannelList(currentChannelListID);
       	if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
         {
