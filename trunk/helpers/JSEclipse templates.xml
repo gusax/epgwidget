@@ -148,7 +148,7 @@ ${parentObject}.${singletonName} = function()
       {
         that = this;
       }
-      delete init;
+      delete that.init;
     }
   };
 }();
