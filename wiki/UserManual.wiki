@@ -3,6 +3,7 @@
 The front side of the widget shows the schedules and logos.
 
   * *Reorder channels* : To move a channel to a different position, drag the channel logo.
+  * *Show program description* : Click the program title to open the program description window. Click the same title again to hide it. Click on another program to show its information instead. 
 
 == Back side ==
 The back side of the EPG widget handles settings.
