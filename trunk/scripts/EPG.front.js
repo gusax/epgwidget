@@ -589,13 +589,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             programNode.startNode.nodeValue += "0";
           }
           programNode.startNode.nodeValue += "" + startDate.getMinutes();
-          programNode.startNode.parentNode.removeAttribute("title");
+          programNode.titleNode.parentNode.removeAttribute("title");
           for (locale in program.title)
           {
             if(program.title.hasOwnProperty(locale))
             {
               programNode.titleNode.nodeValue = program.title[locale]; // just pick the first translation and then break
-              programNode.startNode.parentNode.setAttribute("title", program.title[locale] + ". " + Translator.translate("Click to view description."));
+              programNode.titleNode.parentNode.setAttribute("title", program.title[locale] + ". " + Translator.translate("Click to view description."));
               break;
             }
           }
