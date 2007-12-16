@@ -28,7 +28,7 @@ if (EPG.debug)
   EPG.debug.alert("EPG.widget.js loaded");
 }
 
-EPG.widget = function (front, back, debug, growl, file, settings, translator)
+EPG.widget = function (front, back, debug, growl, file, settings, translator, ProgramInfo)
 {
 	// Private variables
 	var that,
@@ -178,6 +178,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 		  try
 		  {
 		    front.removeDragElement();
+		    ProgramInfo.hide();
 		    debug.alert("Onhide!");
 		    // Stop all refresh-timers
 		    // Delete all old programs once every day.
@@ -214,6 +215,6 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator)
 		  }
 		}
 	};
-}(EPG.front, EPG.back, EPG.debug, EPG.growl, EPG.file, EPG.settings, EPG.translator);
+}(EPG.front, EPG.back, EPG.debug, EPG.growl, EPG.file, EPG.settings, EPG.translator, EPG.ProgramInfo);
 
 EPG.widget.init();

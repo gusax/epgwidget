@@ -36,7 +36,7 @@ if (EPG.debug)
   * @param {object} UIcreator EPG.UIcreator. 
   * @param {object} File EPG.file. 
   */
-EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File) 
+EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, ProgramInfo) 
 {
   // Private Variables
   var that,
@@ -48,8 +48,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
   channelNodes = {},
   infoButton,
   toBack,
-  currentChannelListID,
-  width = 270,
+  currentChannelListIndex = Settings.getCurrentChannelListIndex(),
+  width = 540,
   height = 80,
   dragElement;
   
@@ -75,7 +75,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
       tempElement.appendChild(tempTextNode.cloneNode(false));
       tempElement.firstChild.nodeValue = "EPG: " + Translator.translate("overview");
       
-      return UIcreator.createScalableContainer("topbar", tempElement.cloneNode(true), "uppe.png", currentChannelListID);
+      return UIcreator.createScalableContainer("topbar", tempElement.cloneNode(true), "uppe.png", currentChannelListIndex);
     }
     catch (error)
     {
@@ -177,7 +177,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
       tempContainer.appendChild(tempDiv.cloneNode(true));
       tempContainer.lastChild.addEventListener("click", function(){alert("biggertext");Settings.resizeText(1);}, false);
       createInfoButton();
-      return UIcreator.createScalableContainer("bottombar", tempContainer, "nere.png",currentChannelListID);
+      return UIcreator.createScalableContainer("bottombar", tempContainer, "nere.png",currentChannelListIndex);
     
     }
     catch (error)
@@ -300,11 +300,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
           }
         }
         
-        channelList = Settings.getChannelList(currentChannelListID);
+        channelList = Settings.getChannelList(currentChannelListIndex);
         if(channelList && channelList.ordered)
         {
           channelList.ordered = channelOrder;
-          Settings.saveChannelList(currentChannelListID);
+          Settings.saveChannelList(currentChannelListIndex);
         }
         
       }
@@ -456,12 +456,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
         }
         else
         {
-          textNode = document.createTextNode("Channel with id " + channelID + " was not found :-( It might have been renamed.");
+          textNode = document.createTextNode(Translator.translate("Channel with id") + " " + channelID + " " + Translator.translate("was not found :-( It might have been renamed."));
           channelNotInChannelsJS = true;
         }
         channelNode.appendChild(textNode);
         
-        tempScalableContainer = UIcreator.createScalableContainer("onechannel", channelNode, "bakgrund.png", currentChannelListID);
+        tempScalableContainer = UIcreator.createScalableContainer("onechannel", channelNode, "bakgrund.png", currentChannelListIndex);
         if(channelNode.logo)
         {
           tempScalableContainer.logo = channelNode.logo;
@@ -506,7 +506,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
     try
     {
       overviewDiv = document.createElement("div");
-      channelList = Settings.getChannelList(currentChannelListID);
+      channelList = Settings.getChannelList(currentChannelListIndex);
       if(channelList && channelList.ordered)
       {
         orderedList = channelList.ordered;
@@ -589,11 +589,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
             programNode.startNode.nodeValue += "0";
           }
           programNode.startNode.nodeValue += "" + startDate.getMinutes();
+          programNode.startNode.parentNode.removeAttribute("title");
           for (locale in program.title)
           {
             if(program.title.hasOwnProperty(locale))
             {
               programNode.titleNode.nodeValue = program.title[locale]; // just pick the first translation and then break
+              programNode.startNode.parentNode.setAttribute("title", program.title[locale] + ". " + Translator.translate("Click to view description."));
               break;
             }
           }
@@ -640,7 +642,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
           {
             if(programs.hasOwnProperty(i))
             {
-              channelNode.appendChild(UIcreator.createProgramNode(programs[i]));              
+              channelNode.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo));              
             }
           }
           if(channelNode.firstChild)
@@ -716,13 +718,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
           
           if(typeof(channelListID) !== "undefined")
           {
-            currentChannelListID = channelListID;
+            currentChannelListIndex = channelListID;
           }
           else
           {
             Debug.alert("front.show: Tried to show front without a specified channelListID!");
           }
-          Skin.changeToSkinFromList(currentChannelListID);
+          Skin.changeToSkinFromList(currentChannelListIndex);
           
           toBack = toBackMethod;
           
@@ -825,7 +827,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
       var currentChannelList;
       try
       {
-        currentChannelList = Settings.getChannelList(currentChannelListID);
+        currentChannelList = Settings.getChannelList(currentChannelListIndex);
         if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
         {
           height = 80 + currentChannelList.ordered.length * 38;
@@ -865,7 +867,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
       		now = when;
       	}
       	//Debug.alert("reloading programs using now = " + now);
-      	currentChannelList = Settings.getChannelList(currentChannelListID);
+      	currentChannelList = Settings.getChannelList(currentChannelListIndex);
       	if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
         {
         	currentChannelList = currentChannelList.hashed;
@@ -925,5 +927,5 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File)
       }
     }
   };
-}(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator, EPG.UIcreator, EPG.file);
+}(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator, EPG.UIcreator, EPG.file, EPG.ProgramInfo);
 EPG.front.init();

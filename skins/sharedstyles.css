@@ -14,6 +14,7 @@ body
   font: 10px Lucida Grande; /* Do NOT change this font size in your skin! */
 	margin: 	0em !important;
 	padding: 	0em !important;
+	width:54em;
 }
 
 #front
@@ -36,6 +37,14 @@ body
 	width: 27em;
 	min-height: 3.9em;
 	overflow: hidden;
+}
+
+#programInfo
+{
+  position: absolute;
+  z-index: 99; 
+  left:27em;
+  top: 0em;
 }
 
 div
@@ -144,4 +153,9 @@ a.normaltext
 a.biggertext
 {
   font-size: 1.5em;
+}
+
+img.logo
+{
+  cursor: move;
 }

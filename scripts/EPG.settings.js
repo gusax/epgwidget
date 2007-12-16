@@ -47,7 +47,8 @@ EPG.settings = function(Debug, growl, file)
   currentSize = {},
   theEmptyProgram = {
     isTheEmptyProgram : true
-  }; 
+  },
+  currentChannelListIndex = 0;
   
   // Private methods
   function alertCallbackMethods(callbackArrayName, callbackMethod, callbackContents) 
@@ -1005,6 +1006,24 @@ EPG.settings = function(Debug, growl, file)
       catch (error)
       {
         Debug.alert("Error in settings.removeOldPrograms: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf settings
+     * @function getCurrentChannelListID
+     * @description Returns the current channel list id.
+     * @return {number} ID of the current channel list.
+     */
+    getCurrentChannelListIndex: function () 
+    {
+      try
+      {
+        return currentChannelListIndex;
+      }
+      catch (error)
+      {
+        Debug.alert("Error in settings.getCurrentChannelListID: " + error);
       }
     }
     
