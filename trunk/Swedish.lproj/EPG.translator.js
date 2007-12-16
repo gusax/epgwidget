@@ -41,9 +41,13 @@ EPG.translator = function(debug)
   localizedStrings["Report a bug..."] = "Rapportera en bugg...";
   localizedStrings["Complaints..."] = "Klagomål...";
   localizedStrings["EPG by"] = "EPG av";
-  localizedStrings["overview"] = "översikt";
+  localizedStrings.overview = "översikt";
   localizedStrings["No program"] = "Sändningsuppehåll";
   localizedStrings["Click to show more programs, press and drag to move."] = "Klicka för att visa fler program, håll nere och dra för att flytta.";
+  localizedStrings["Channel with id"] = "Kanalen med id";
+  localizedStrings["was not found :-( It might have been renamed."] = "hittades inte :-( Den kanske har döpts om.";
+  localizedStrings["No description."] = "Beskrivning saknas."
+  localizedStrings["Click to view description."] = "Klicka för att läsa beskrivning.";
   // Private methods
   
   
@@ -56,7 +60,7 @@ EPG.translator = function(debug)
         that = this;
       }
       
-      delete init;
+      delete that.init;
     },
     
     translate: function (string)

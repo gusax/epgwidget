@@ -117,7 +117,7 @@ EPG.UIcreator = function(Debug, Skin, Translator)
      * @param {object} [program] The program whos information should be displayed in this programNode. If omitted, returns a programNode with the localized text "No program".
      * @return {object} A DOM-node representing the programNode.
      */
-    createProgramNode: function (program) 
+    createProgramNode: function (program, programInfoObject) 
     {
     	var programNode,
     	startNode,
@@ -154,6 +154,7 @@ EPG.UIcreator = function(Debug, Skin, Translator)
         	  if(program.title.hasOwnProperty(locale))
         	  {
         	  	tempTextNode.nodeValue = program.title[locale]; // just pick the first translation and then break
+        	  	titleNode.setAttribute("title", program.title[locale] + ". " + Translator.translate("Click to view description."))
         	  	break;
         	  }
         	}
@@ -165,12 +166,17 @@ EPG.UIcreator = function(Debug, Skin, Translator)
           startNode.appendChild(document.createTextNode(""));
           titleNode.appendChild(document.createTextNode("- " + Translator.translate("No program") + " -"));
         }
+        programNode.program = program;
         programNode.appendChild(startNode);
         programNode.appendChild(titleNode);
-        programNode.program = program;
+        if(programInfoObject)
+        {
+          titleNode.addEventListener("mousedown", function(){try{programInfoObject.show(programNode.program);}catch(e){Debug("Error when clicking on titleNode: " + e);}}, false);
+        }
+        
         programNode.startNode = startNode.firstChild;
         programNode.titleNode = titleNode.firstChild;
-      
+        
         return programNode;
       }
       catch (error)

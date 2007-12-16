@@ -38,7 +38,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   backDiv,
   frontDiv,
   currentChannelList,
-  currentChannelListIndex = 0,
+  currentChannelListIndex,
   channelListToScroll,
   backSkin = "back",
   scrollSteps = 10,
@@ -457,6 +457,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       {
         that = this;
       }
+      currentChannelListIndex = settings.getCurrentChannelListIndex();
       delete that.init;
     },
     
