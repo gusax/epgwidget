@@ -119,7 +119,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin)
         date = new Date(timestamp * 1000);
         if(date.getHours() < 10)
         {
-          HHMM = "0" + date.getHour() + ":";
+          HHMM = "0" + date.getHours() + ":";
         }
         else
         {
