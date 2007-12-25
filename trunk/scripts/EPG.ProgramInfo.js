@@ -39,7 +39,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin)
   programInfoNode,
   xPos = 0,
   yPos = 0,
-  currentChannelListIndex;
+  currentChannelListIndex,
+  progressbarFull;
   
   // Private methods
   /**
@@ -75,7 +76,14 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin)
       programInfoNode.startAndStopNode.lastChild.appendChild(textNode.cloneNode(false));
       programInfoNode.startNode = programInfoNode.startAndStopNode.lastChild.firstChild;
 
-      programInfoNode.appendChild(UIcreator.createScalableContainer("progressbarFull", div.cloneNode(true), "tid.png", currentChannelListIndex));
+      progressbarFull = div.cloneNode(false);
+      progressbarFull.setAttribute("class","progressbarFullContainer");
+      progressbarFull.appendChild(div.cloneNode(true));
+      progressbarFull.firstChild.style.width = "0%";
+      progressbarFull.firstChild.style.height = "100%";
+      progressbarFull.firstChild.style.overflow = "hidden";
+      progressbarFull.firstChild.appendChild(UIcreator.createScalableContainer("progressbarFull", div.cloneNode(true), "tid.png", currentChannelListIndex));
+      programInfoNode.appendChild(progressbarFull);
       programInfoNode.progressbarFullNode = programInfoNode.lastChild;
 
       programInfoNode.appendChild(UIcreator.createScalableContainer("progressbarEmpty", div.cloneNode(true), "tidtom.png", currentChannelListIndex));
@@ -89,6 +97,11 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin)
       programInfoNode.appendChild(div.cloneNode(false));
       programInfoNode.lastChild.setAttribute("class","descriptionFrame");
       programInfoNode.descriptionFrameNode = programInfoNode.lastChild;
+      
+      programInfoNode.descriptionFrameNode.appendChild(div.cloneNode(false));
+      programInfoNode.descriptionFrameNode.lastChild.setAttribute("class","duration");
+      programInfoNode.descriptionFrameNode.lastChild.appendChild(textNode.cloneNode(false));
+      programInfoNode.durationNode = programInfoNode.descriptionFrameNode.lastChild.firstChild;
       
       programInfoNode.descriptionFrameNode.appendChild(div.cloneNode(false));
       programInfoNode.descriptionFrameNode.lastChild.setAttribute("class","description");
@@ -180,7 +193,12 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin)
     show: function (program, x, y) 
     {
       var locale,
-      description;
+      description,
+      start,
+      stop,
+      now,
+      length,
+      width;
       try
       {
         if(program)
@@ -221,6 +239,51 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin)
               // Start & stop
               programInfoNode.startNode.nodeValue = getHHMM(program.start);
               programInfoNode.stopNode.nodeValue = getHHMM(program.stop);
+              
+              // progressbar
+              start = new Date(program.start * 1000)
+              stop = new Date(program.stop * 1000);
+              length = stop - start;
+              now = new Date();
+              if(start <= now && now < stop)
+              {
+                width = Math.round( ((now - start) / length) * 100);
+                progressbarFull.firstChild.style.width = width + "%";
+                progressbarFull.style.visibility = "visible";
+                programInfoNode.durationNode.nodeValue = Translator.translate("Duration") 
+                  + " " 
+                  + Math.round(length/60000) 
+                  + " " 
+                  + Translator.translate("min") 
+                  + ", " 
+                  + Math.round(((stop - now)/60000)) 
+                  + " " 
+                  + Translator.translate("min left") 
+                  + ".";
+              }
+              else
+              {
+                progressbarFull.style.visibility = "hidden";
+                programInfoNode.durationNode.nodeValue = Translator.translate("Duration") 
+                  + " " 
+                  + (Math.round(length/60000)) 
+                  + " " 
+                  + Translator.translate("min")
+                  + ".";
+                  /* 
+                  + ", " 
+                  + Translator.translate("starts in") 
+                  + " " 
+                  + (Math.round((start - now) / 60000))
+                  + " " 
+                  + Translator.translate("min") 
+                  + ".";
+                  */
+              }
+              
+              // Duration & time to/left
+              
+              
               // Category (and episode number if category = series)
               
               // Director(s)

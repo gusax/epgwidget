@@ -48,6 +48,8 @@ EPG.translator = function(debug)
   localizedStrings["was not found :-( It might have been renamed."] = "hittades inte :-( Den kanske har döpts om.";
   localizedStrings["No description."] = "Beskrivning saknas."
   localizedStrings["Click to view description."] = "Klicka för att läsa beskrivning.";
+  localizedStrings["Duration"] = "Längd";
+  localizedStrings["min left"] = "min kvar";
   // Private methods
   
   

@@ -203,13 +203,19 @@ img.background
    height: 1.4em;
 }
 
-#programInfo div.progressbarFull
+div.progressbarFullContainer
 {
-   position: absolute;
-   z-index: 2;
-   top: 4.6em;
-   left: 4.1em;
-   float: left;
+  position: absolute;
+  z-index: 2;
+  top: 4.6em;
+  left: 4.1em;
+  float: left;
+  width: 12em;
+  height: 1.4em;
+}
+
+div.progressbarFull
+{  
    width: 12em;
    height: 1.4em;
 }
@@ -235,6 +241,11 @@ img.background
 #programInfo div.descriptionFrame div.description
 {
   font-size: 1.1em;
-  margin: 0.2em 0.8em 0.2em 0.2em;
-  
+  margin: 0.8em 0.8em 0em 0.2em; 
+}
+
+#programInfo div.descriptionFrame div.duration
+{
+  font-size: 1.1em;
+  margin: 0.8em 0.8em 0em 0.2em; 
 }
