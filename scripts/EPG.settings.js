@@ -472,16 +472,17 @@ EPG.settings = function(Debug, growl, file)
   
   /**
    * @memberOf settings
-   * @name programsDownloadFailure
+   * @name programsDownloadFailed
    * @function
    * @description Run if there was an error accessing the schedule file.
    * @private
    * @param {function} callback Callback function that should be notified of the failure.
    */
-  function programsDownloadFailure (callback, contents, channelID, ymd)
+  function programsDownloadFailed (callback, contents, channelID, ymd)
   {
     try
     {
+      // Perhaps the schedule has not been downloaded yet? In that case we should perhaps force an update.
       callback();
     }
     catch (error)

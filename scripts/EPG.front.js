@@ -692,7 +692,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     try
     {
       channelNode = channelNodes[channelID];
-      Debug.inform("reloadProgramsForChannel channelID = " + channelID + " but channelNodes[channelID].channelID = " + channelNodes[channelID].channelID);
       if(channelNode && programs)
       {
         channelNode = channelNode.programsNode;
@@ -727,6 +726,30 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     catch (error)
     {
       Debug.alert("Error in front.reloadProgramsForChannel: " + error + " (channelID = " + channelID + ", programs = " + programs + ")");
+    }
+  }
+  
+  /**
+   * @memberOf front
+   * @name reloadProgramsForChannelFailed
+   * @function
+   * @description Prints a message that programs for one channel could not be loaded.
+   * @private
+   * @param {string} channelID ID of the channel that is waiting for an update.
+   */
+  function reloadProgramsForChannelFailed (channelID)
+  {
+    try
+    {
+      
+      if(typeof(channelID) !== "undefined")
+      {
+        Debug.warn("front.reloadProgramsForChannelFailed: could not reload programs for channel with id " + channelID + "!");
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in front.reloadProgramsForChannelFailed: " + error + " (channelID = " + channelID + ")");
     }
   }
   

@@ -209,6 +209,10 @@ EPG.file = function(debug, growl)
       catch (error)
       {
         debug.alert("Error in file.open: " + error + "\n(path = " + path + ")");
+        if(onFailure)
+        { 
+          setTimeout(onFailure, 1);
+        }
       }
     },
     
