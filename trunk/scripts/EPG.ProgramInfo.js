@@ -19,6 +19,11 @@
 
 /*extern EPG*/
 
+if(EPG.debug)
+{
+  EPG.debug.inform("EPG.ProgramInfo.js loaded");
+}
+
 /**
  * @memberOf EPG
  * @name ProgramInfo
@@ -70,9 +75,11 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin)
       programInfoNode.startAndStopNode.lastChild.appendChild(textNode.cloneNode(false));
       programInfoNode.startNode = programInfoNode.startAndStopNode.lastChild.firstChild;
 
-      programInfoNode.startAndStopNode.appendChild(div.cloneNode(false));
-      programInfoNode.startAndStopNode.lastChild.setAttribute("class","progressbar");
-      programInfoNode.progressbarNode = programInfoNode.startAndStopNode.lastChild;
+      programInfoNode.appendChild(UIcreator.createScalableContainer("progressbarFull", div.cloneNode(true), "tid.png", currentChannelListIndex));
+      programInfoNode.progressbarFullNode = programInfoNode.lastChild;
+
+      programInfoNode.appendChild(UIcreator.createScalableContainer("progressbarEmpty", div.cloneNode(true), "tidtom.png", currentChannelListIndex));
+      programInfoNode.progressbarEmptyNode = programInfoNode.lastChild;
       
       programInfoNode.startAndStopNode.appendChild(div.cloneNode(false));
       programInfoNode.startAndStopNode.lastChild.setAttribute("class","stop");

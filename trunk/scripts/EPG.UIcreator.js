@@ -18,9 +18,9 @@
 
 /*extern EPG*/
 
-if(!EPG)
+if(EPG.debug)
 {
-  var EPG = {};
+  EPG.debug.inform("EPG.UIcreator.js loaded");
 }
 
 /**
