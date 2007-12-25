@@ -18,14 +18,9 @@
 
 /*extern EPG*/
 
-if (!EPG)
-{
-  var EPG = {};
-}
-
 if (EPG.debug)
 {
-  EPG.debug.alert("EPG.widget.js loaded");
+  EPG.debug.inform("EPG.widget.js loaded");
 }
 
 EPG.widget = function (front, back, debug, growl, file, settings, translator, ProgramInfo)
@@ -140,7 +135,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 	 			if(settings.isFirstInstall())
 	 			{
 	 			  //growl.notifyNow(translator.translate("EPG has NOT been installed before!"));
-	 			  debug.alert("This is the first time EPG has been run on this computer (by this user)");
+	 			  debug.inform("This is the first time EPG has been run on this computer (by this user)");
 	 			  settings.getAllChannels(channelsLoaded, channelsLoadedFailed);
           settings.installGrabber(); // this should probably wait until the user has added one channel
 	 			}

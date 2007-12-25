@@ -161,7 +161,7 @@ img.background
 #programInfo
 {
   left: 25.1em;
-  top: 0.8em;
+  top: 1em;
   width: 22.3em;
   height: 26.5em;
   color: #000;
@@ -192,10 +192,26 @@ img.background
    line-height: 2em;
 }
 
-#programInfo div.startAndStop div.progressbar
+#programInfo div.progressbarEmpty
 {
+   position: absolute;
+   z-index: 1;
+   top: 4.6em;
+   left: 4.1em;
    float: left;
-   height: 100%;   
+   width: 12em;
+   height: 1.4em;
+}
+
+#programInfo div.progressbarFull
+{
+   position: absolute;
+   z-index: 2;
+   top: 4.6em;
+   left: 4.1em;
+   float: left;
+   width: 12em;
+   height: 1.4em;
 }
 
 #programInfo div.startAndStop div.stop

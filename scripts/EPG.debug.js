@@ -1,7 +1,3 @@
-if(!EPG)
-{
-	var EPG = {};
-}
 
 /**
  * @memberOf EPG
@@ -13,12 +9,34 @@ if(!EPG)
 EPG.debug = function()
 {
 	// Private variables
-	var debuggingEnabled = true;
+	var debuggingEnabled = true,
+	that;
 	
 	// Private methods
 	
 	// Public methods
 	return /** @scope debug */{
+		
+		/**
+		 * @memberOf debug
+		 * @function init
+		 * @description Initializes debug.
+		 */
+		init: function () 
+		{
+		  try
+		  {
+		    if(!that)
+		    {
+		      that = this;
+		    }
+		    delete that.init;
+		  }
+		  catch (error)
+		  {
+		    Debug.alert("Error in debug.init: " + error);
+		  }
+		},
 		
 		/**
 		 * @memberOf debug
@@ -30,8 +48,65 @@ EPG.debug = function()
 		{
 			if(debuggingEnabled)
 			{
-				alert(message);
+			  if(typeof(window.console) === "object" && window.console.error)
+        {
+          window.console.error(message);
+        }
+        else
+        { 
+				  alert(message);
+        }
 			}
+		},
+		
+		/**
+		 * @memberOf debug
+		 * @function warning
+		 * @description Send a warning message.
+		 * @param {string} message The warning message.
+		 */
+		warn: function (message) 
+		{
+		  try
+		  {
+		    if(typeof(window.console) === "object" && window.console.warn)
+		    {
+		      window.console.warn(message);
+		    }
+		    else
+		    {
+		      that.alert(message);
+		    }
+		  }
+		  catch (error)
+		  {
+		    alert("Error in debug.warning: " + error);
+		  }
+		},
+		
+		/**
+		 * @memberOf debug
+		 * @function info
+		 * @description Send a debugging message.
+		 * @param {string} message The message.
+		 */
+		inform: function (message) 
+		{
+		  try
+		  {
+		    if(typeof(window.console) === "object" && window.console.info)
+		    {
+		      window.console.info(message);
+		    }
+		    else
+		    {
+		      that.alert(message);
+		    }
+		  }
+		  catch (error)
+		  {
+		    alert("Error in debug.info: " + error);
+		  }
 		},
 		
 		/**
@@ -47,8 +122,9 @@ EPG.debug = function()
 		  }
 		  catch (error)
 		  {
-		    Debug.alert("Error in debug.enable: " + error);
+		    alert("Error in debug.enable: " + error);
 		  }
 		}
 	};
 }();
+EPG.debug.init();

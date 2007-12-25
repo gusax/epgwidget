@@ -17,14 +17,9 @@
 
 /*extern EPG*/
 
-if(!EPG)
-{
-  var EPG = {};
-}
-
 if (EPG.debug)
 {
-  EPG.debug.alert("EPG.skin.js loaded");
+  EPG.debug.inform("EPG.skin.js loaded");
 }
 
 EPG.skin = function(debug, growl, settings)
@@ -67,7 +62,7 @@ EPG.skin = function(debug, growl, settings)
             skin = that.getSkinForList(listID);
           }
           skinElement.setAttribute("href","skins/" + skin + "/skin.css");
-          debug.alert("skin.changeToSkinFromList: Changed skin for list " + listID + " to \"" + skin + "\"");
+          debug.inform("skin.changeToSkinFromList: Changed skin for list " + listID + " to \"" + skin + "\"");
         }
       }
       catch (error)
@@ -115,7 +110,7 @@ EPG.skin = function(debug, growl, settings)
         }
         else
         {
-          debug.alert("skin.getSkinForList: channelListID was undefined!\nReturning null!");
+          debug.warn("skin.getSkinForList: channelListID was undefined!\nReturning null!");
           return null;
         }
       }

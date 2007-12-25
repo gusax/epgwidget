@@ -19,14 +19,9 @@
 /*extern EPG,
  widget */
 
-if (!EPG)
-{
-  var EPG = {};
-}
-
 if (EPG.debug)
 {
-  EPG.debug.alert("EPG.growl.js loaded");
+  EPG.debug.inform("EPG.growl.js loaded");
 }
 /**
  * @memberOf EPG
@@ -65,7 +60,7 @@ EPG.growl = function(Debug, Translator)
       if(systemCall.errorString)
       {
         userHasGrowlInstalled = false;
-        Debug.alert("growlCheck: User does not have growl installed :-(");
+        Debug.warn("growlCheck: User does not have growl installed :-(");
       }
       else
       {
@@ -177,17 +172,17 @@ EPG.growl = function(Debug, Translator)
           }
           else if(hasNotCheckedForGrowlYet)
           {
-            Debug.alert("growl.notifyNow: Cannot send growl notification now, don't yet know if growl is installed. Trying again in just a moment...");
+            Debug.inform("growl.notifyNow: Cannot send growl notification now, don't yet know if growl is installed. Trying again in just a moment...");
             that.notifyLater(message, pathToImage, sticky, 100);
           }
           else
           {
-            Debug.alert("growl.notifyNow: Cannot send growl notification - growl is not installed :-(\nMessage was:\n" + message);
+            Debug.warn("growl.notifyNow: Cannot send growl notification - growl is not installed :-(\nMessage was:\n" + message);
           }
         }
         else
         {
-          Debug.alert("GROWL NOTIFICATION:\n" + message);
+          Debug.inform("GROWL NOTIFICATION:\n" + message);
         }
       }
       catch (error)

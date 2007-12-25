@@ -19,14 +19,9 @@
 /*extern EPG,
  widget*/
 
-if(!EPG)
-{
-  var EPG = {};
-}
-
 if (EPG.debug)
 {
-  EPG.debug.alert("EPG.settings.js loaded");
+  EPG.debug.inform("EPG.settings.js loaded");
 }
 
 EPG.settings = function(Debug, growl, file)
@@ -163,7 +158,7 @@ EPG.settings = function(Debug, growl, file)
         height = Math.ceil(currentSize.height * currentSize.scale);
         if(!fake && height > screen.height)
         {
-          Debug.alert("settings.resize: The widget is to tall (height of widget = " + height + " px, but screen height is only " + screen.height + " px) , downsizing...");
+          Debug.warn("settings.resize: The widget is to tall (height of widget = " + height + " px, but screen height is only " + screen.height + " px)! Downsizing...");
           do
           {
             currentSize.scale -= 0.1;
@@ -179,7 +174,7 @@ EPG.settings = function(Debug, growl, file)
           body.style.fontSize = body.fontSize * currentSize.scale + "px";
         }
         window.resizeTo(width, height);
-        //Debug.alert("settings.resize: Resized to width " + width + ", height " + height);
+        Debug.inform("settings.resize: Resized to width " + width + ", height " + height);
       }
     }
     catch (error)
@@ -207,7 +202,7 @@ EPG.settings = function(Debug, growl, file)
         }
         else
         {
-          Debug.alert("settings.channelListExported success!");
+          Debug.inform("settings.channelListExported success!");
         }
       }
       else
@@ -268,7 +263,7 @@ EPG.settings = function(Debug, growl, file)
       
       if(window.widget && window.widget.system)
       {
-        Debug.alert("settings.exportChannelList exporting...");
+        Debug.inform("settings.exportChannelList exporting...");
         widget.system("/bin/echo '" + string + "' > " + file.getHomePath() + "Library/Xmltv/channels/epg.users.channels.txt", channelListExported);
       }
     }
@@ -297,7 +292,7 @@ EPG.settings = function(Debug, growl, file)
         }
         else
         {
-          Debug.alert("settings.grabberInstalled success!");
+          Debug.inform("settings.grabberInstalled success!");
         }
       }
       else
@@ -628,7 +623,7 @@ EPG.settings = function(Debug, growl, file)
         if(!allChannels.lastUpdate || (now - allChannels.lastUpdate) >= oneDay)
         {
           // re-import channels.js once per day (just assume that the file is there, the download itself is taken care of by the grabber)
-          Debug.alert("settings.getAllChannels: Opening channels.js since it was more than one day since it was last opened.");
+          Debug.inform("settings.getAllChannels: Opening channels.js since it was more than one day since it was last opened.");
           file.open(paths.allChannels, updateAllChannels, updateAllChannelsCached);
         }
         else
@@ -707,7 +702,7 @@ EPG.settings = function(Debug, growl, file)
         }
         else
         {
-          Debug.alert("settings.getChannelList got no ID! Returning nothing!");
+          Debug.warn("settings.getChannelList got no ID! Returning nothing!");
           return;
         }    
       }
@@ -750,16 +745,13 @@ EPG.settings = function(Debug, growl, file)
     {
       var tempList;
       try
-      {
-        //Debug.alert("addChannelToList(" + channelID + ", " + channelList + ")");
-        
+      { 
         if(channelID && channelList >= 0)
         {
-          //Debug.alert("both channelID and channelList existed");
           tempList = channelLists[channelList];
           if(!tempList)
           {
-            //Debug.alert("creating channelLists[" + channelList + "]");
+            Debug.inform("creating channelLists[" + channelList + "]");
             tempList = {};
             tempList.ordered = [];
             tempList.hashed = {};
@@ -768,10 +760,10 @@ EPG.settings = function(Debug, growl, file)
           }
           
           // Add channel to list if it's not there already
-          if(!tempList.hashed[channelID])
+          if(typeof(tempList.hashed[channelID]) === "undefined")
           {
-            //Debug.alert("Adding " + channelID + " to list " + channelList);
-            tempList.hashed[channelID] = ""+tempList.ordered.length;
+            Debug.inform("Adding " + channelID + " to list " + channelList);
+            tempList.hashed[channelID] = tempList.ordered.length;
             tempList.ordered.push(channelID);
             that.saveChannelList(channelList);
             return true;
@@ -784,6 +776,7 @@ EPG.settings = function(Debug, growl, file)
         }
         else
         {
+          Debug.inform("addChannelToList returning false!\nchannelID = " + channelID + " channelList = " + channelList);
           return false;
         }
       }
@@ -802,12 +795,16 @@ EPG.settings = function(Debug, growl, file)
         {
           
           tempList = channelLists[listID];
-          if(tempList && tempList.hashed[channelID])
+          if(tempList && typeof(tempList.hashed[channelID]) === "number")
           {
-            Debug.alert("Removing " + channelID + " from list " + listID);
+            Debug.inform("Removing " + channelID + " at position " + tempList.hashed[channelID] + " from list " + listID);
             tempList.ordered.splice(tempList.hashed[channelID], 1);
             delete tempList.hashed[channelID];
             that.saveChannelList(listID);
+          }
+          else
+          {
+            Debug.warn("removeChannelFromList: Could not remove channel with id " + channelID + " from list " + listID + "!");
           }
         }
       }
@@ -831,7 +828,7 @@ EPG.settings = function(Debug, growl, file)
         } 
         if(typeof(currentSize.width) == "undefined")
         {
-          Debug.alert("settings.resizeText could not resize since currentSize.width and height are undefined!");
+          Debug.warn("settings.resizeText could not resize since currentSize.width and height are undefined!");
         }
         else
         {

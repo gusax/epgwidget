@@ -18,14 +18,9 @@
 /*extern EPG,
  widget*/
 
-if(!EPG)
-{
-  var EPG = {};
-}
-
 if (EPG.debug)
 {
-  EPG.debug.alert("EPG.file.js loaded");
+  EPG.debug.inform("EPG.file.js loaded");
 }
 
 /**
@@ -71,7 +66,7 @@ EPG.file = function(debug, growl)
             {
               if(xhr.onFailure)
               {
-                debug.alert("file.fileOpened: Opened file " + xhr.path + " but it did not contain a jsontv-object! Contents:\n" + xhr.responseText);
+                debug.warn("file.fileOpened: Opened file " + xhr.path + " but it did not contain a jsontv-object! Contents:\n" + xhr.responseText);
                 xhr.onFailure(xhr.responseText, xhr.channelID);
               }
             }
@@ -80,7 +75,7 @@ EPG.file = function(debug, growl)
           {
           	if(xhr.onFailure)
           	{
-          	  debug.alert("file.fileOpened: Opened file " + xhr.path + " but it's contents was not valid javascript:\n" + xhr.responseText);
+          	  debug.warn("file.fileOpened: Opened file " + xhr.path + " but it's contents was not valid javascript:\n" + xhr.responseText);
           	  xhr.onFailure(xhr.responseText, xhr.channelID);
           	}
           }
@@ -123,7 +118,7 @@ EPG.file = function(debug, growl)
         }
         else
         {
-          HOME = HOME.replace(/^\s+|\s+$/g, '') + "/";
+          HOME = HOME.replace(/^\s+|\s+$/g, '') + "/"; // trim response (remove spaces before and after the string) 
         }
         
       }
@@ -189,7 +184,7 @@ EPG.file = function(debug, growl)
               setTimeout(savePath,1);
             }
           }
-          //debug.alert("file.open: don't have HOME-path yet. Trying again in 100ms...");
+          //debug.inform("file.open: don't have HOME-path yet. Trying again in 100ms...");
           setTimeout(function(){that.open(path, onSuccess, onFailure, channelID);}, 100);
         }
         else
@@ -207,7 +202,7 @@ EPG.file = function(debug, growl)
             };
             xhr.open("GET", path, true);
             xhr.send("");
-            //debug.alert("file.open: Opening file at path: " + path);
+            //debug.inform("file.open: Opening file at path: " + path);
           }
         }
       }

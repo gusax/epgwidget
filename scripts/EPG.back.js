@@ -19,14 +19,9 @@
 /*extern EPG,
  widget*/
 
-if(!EPG)
-{
-  var EPG = {};
-}
-
 if (EPG.debug)
 {
-  EPG.debug.alert("EPG.back.js loaded");
+  EPG.debug.inform("EPG.back.js loaded");
 }
 
 EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
@@ -288,14 +283,21 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
     i = 0;
     try
     {
-      if(channels.length > 0)
+      if(channels.length > 0 && targetElement)
       {
         tempChannelList = settings.getChannelList(currentChannelListIndex);
         channelListToScroll = targetElement;
         while(targetElement.firstChild)
         {
           i += 1;
-          targetElement.firstChild.removeEventListener("click");
+          try
+          {
+            targetElement.firstChild.removeEventListener("click"); 
+          }
+          catch (e)
+          {
+            debug.warn("back.createChannelListSuccess: removeEventListener failed!");
+          }
           targetElement.removeChild(targetElement.firstChild);
         }
         //debug.alert("back.createChannelListSuccess: removed " + i + " children from list.\nGot " + channels.length + " channels to print.");
@@ -336,12 +338,16 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
               }
               else
               {
-                debug.alert("Ignored channel with id " + index + " since it had no swedish displayName :-(");
+                debug.warn("Ignored channel with id " + index + " since it had no swedish displayName :-(");
               }
             }
           }
         }
         //debug.alert("back.createChannelListSuccess: added " + i + " children to channelList");
+      }
+      else
+      {
+        debug.alert("back.createChannelList could not create a channel list!\nchannels = " + channels + ", targetElement = " + targetElement);
       }
     }
     catch (error)

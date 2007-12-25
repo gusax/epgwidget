@@ -19,7 +19,7 @@
 /*extern EPG*/
 if (EPG.debug)
 {
-  EPG.debug.alert("EPG.front.js loaded");
+  EPG.debug.inform("EPG.front.js loaded");
 }
 
 /**
@@ -98,6 +98,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       if(event && event.stopPropagation)
       {
         event.stopPropagation();
+        event.preventDefault();
       }
     }
     catch (error)
@@ -121,8 +122,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         infoButton = document.createElement("div");
         infoButton.setAttribute("id", "infobutton");
         infoButton.appendChild(document.createTextNode("i"));
-        frontDiv.appendChild(infoButton);
         infoButton.addEventListener("click", that.goToBack, false);
+        return infoButton;
       }
     }
     catch (error)
@@ -169,14 +170,14 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       tempElement.firstChild.nodeValue = "A";
       tempDiv.appendChild(tempElement);
       tempContainer.appendChild(tempDiv.cloneNode(true));
-      tempContainer.lastChild.addEventListener("click", function(){alert("smallertext");Settings.resizeText(-1);}, false);
+      tempContainer.lastChild.addEventListener("click", function(){Settings.resizeText(-1);}, false);
       tempElement.setAttribute("class", "normaltext");
       tempContainer.appendChild(tempDiv.cloneNode(true));
-      tempContainer.lastChild.addEventListener("click", function(){alert("normaltext");Settings.resizeText(0);}, false);
+      tempContainer.lastChild.addEventListener("click", function(){Settings.resizeText(0);}, false);
       tempElement.setAttribute("class", "biggertext");
       tempContainer.appendChild(tempDiv.cloneNode(true));
-      tempContainer.lastChild.addEventListener("click", function(){alert("biggertext");Settings.resizeText(1);}, false);
-      createInfoButton();
+      tempContainer.lastChild.addEventListener("click", function(){Settings.resizeText(1);}, false);
+      tempContainer.appendChild(createInfoButton());
       return UIcreator.createScalableContainer("bottombar", tempContainer, "nere.png",currentChannelListIndex);
     
     }
@@ -230,7 +231,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     i,
     dragElementPosition = -1,
     channelNodePosition = -1,
-    currentNode;
+    currentNode,
+    dragElementID,
+    channelNodeID;
     try
     {
       parentNode = channelNode.parentNode;
@@ -254,6 +257,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           }
         }
       }
+      // Backup channelIDs
+      channelNodeID = channelNode.channelID;
+      dragElementID = dragElement.channelID;
+      // Switch nodes
       parentNode.removeChild(dragElement);
       if(dragElementPosition < channelNodePosition)
       {
@@ -263,6 +270,14 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         parentNode.insertBefore(dragElement, channelNode);
       }
+      // Switch IDs
+      /*Debug.inform("channelNode.channelID = " + channelNode.channelID + " replaced with " + dragElementID);
+      channelNode.channelID = dragElementID;
+      Debug.inform("dragElement.channelID = " + dragElement.channelID + " replaced with " + channelNodeID);
+      dragElement.channelID = channelNodeID;
+      // Switch positions in channelNodes hash table
+      channelNodes[channelNodeID] = dragElement;
+      channelNodes[dragElementID] = channelNode;*/
     }
     catch (error)
     {
@@ -284,7 +299,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       length,
       childNodes,
       channelOrder = [],
-      channelList;
+      channelsHash = {},
+      channelList,
+      position;
       try
       {
         childNodes = overviewDiv.childNodes;
@@ -293,9 +310,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         {
           for(i = 0; i < length; i+=1)
           {
-            if(typeof(childNodes[i].channelID) !== "undefined")
+            if(typeof(childNodes[i].channelID) !== "undefined" && childNodes[i].style.display !== "none")
             {
-              channelOrder.push(childNodes[i].channelID);
+              position = channelOrder.length;
+              channelOrder[position] = childNodes[i].channelID;
+              channelsHash[channelOrder[position]] = position;
             }
           }
         }
@@ -304,6 +323,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         if(channelList && channelList.ordered)
         {
           channelList.ordered = channelOrder;
+          channelList.hashed = channelsHash;
           Settings.saveChannelList(currentChannelListIndex);
         }
         
@@ -331,6 +351,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       if(dragElement !== channelNode)
       {
         dragElement = channelNode;
+        Debug.inform("Started dragging element: " + dragElement);
       }
     }
     catch (error)
@@ -355,6 +376,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       stopEvent(event);
       if(dragElement && channelNode && dragElement !== channelNode)
       {
+        Debug.inform("Dragged over element: " + channelNode);
         dragElement.hasBeenDragged = true;
         switchChannelNodes(channelNode);
       }
@@ -428,6 +450,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       else
       {
         channelNode = document.createElement("div");
+        channelNode.channelID = channelID;
         channelNode.setAttribute("class", "channelnode");
         channel = Settings.getChannel(channelID);
         if(channel)
@@ -506,7 +529,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     try
     {
       overviewDiv = document.createElement("div");
-      channelList = Settings.getChannelList(currentChannelListIndex);
+      /*channelList = Settings.getChannelList(currentChannelListIndex);
       if(channelList && channelList.ordered)
       {
         orderedList = channelList.ordered;
@@ -517,12 +540,58 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             overviewDiv.appendChild(createChannelNode(orderedList[index]));
           }
         }
-      }
+      }*/
       return overviewDiv;
     }
     catch (error)
     {
       Debug.alert("Error in front.createChannelList: " + error);
+    }
+  }
+  
+  /**
+   * @memberOf front
+   * @name showChannelNodes
+   * @function
+   * @description Shows existing channel nodes and creates new ones (if needed) after returning from backside.
+   * @private
+   */
+  function showChannelNodes () 
+  {
+    var channelList,
+    index,
+    channelID,
+    channelNode,
+    orderedList,
+    foundChannels;
+    try
+    {
+      channelList = Settings.getChannelList(currentChannelListIndex);
+      
+      if(channelList && channelList.ordered)
+      {
+        orderedList = channelList.ordered;
+        
+        for (index in orderedList)
+        {
+          if(orderedList.hasOwnProperty(index))
+          {
+            channelID = orderedList[index];
+            channelNode = channelNodes[channelID];
+            if(!channelNode) // Channel was just added
+            {
+              //Debug.inform("Creating channelNode for channelID " + channelID);
+              channelNode = createChannelNode(channelID);
+              
+            }
+            overviewDiv.appendChild(channelNode);
+          }
+        } 
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in front.showChannelNodes: " + error);
     }
   }
   
@@ -540,8 +609,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       frontDiv.appendChild(createTopBar());
       frontDiv.appendChild(createOverview());
       frontDiv.appendChild(createBottomBar());
-      that.reloadPrograms(new Date());
-      that.resize();
     }
     catch (error)
     {
@@ -625,6 +692,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     try
     {
       channelNode = channelNodes[channelID];
+      Debug.inform("reloadProgramsForChannel channelID = " + channelID + " but channelNodes[channelID].channelID = " + channelNodes[channelID].channelID);
       if(channelNode && programs)
       {
         channelNode = channelNode.programsNode;
@@ -659,6 +727,30 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     catch (error)
     {
       Debug.alert("Error in front.reloadProgramsForChannel: " + error + " (channelID = " + channelID + ", programs = " + programs + ")");
+    }
+  }
+  
+  /**
+   * @memberOf front
+   * @name hideChannelNodes
+   * @function
+   * @description Hides all channelNodes when going to the backside, in case we add or remove a channel. (Removed channels are not actually removed from the front, they are just hidden.)
+   * @private
+   */
+  function hideChannelNodes ()
+  {
+    var i,
+    length;
+    try
+    {
+      while(overviewDiv.firstChild)
+      {
+        overviewDiv.removeChild(overviewDiv.firstChild);
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in front.hideChannelNodes: " + error);
     }
   }
   
@@ -722,7 +814,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           }
           else
           {
-            Debug.alert("front.show: Tried to show front without a specified channelListID!");
+            Debug.warn("front.show: Tried to show front without a specified channelListID!");
           }
           Skin.changeToSkinFromList(currentChannelListIndex);
           
@@ -733,10 +825,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             frontDiv = document.getElementById("front");
             create();
           }
-          else
-          {
-            //reload();
-          }
+
+          showChannelNodes();
+          that.reloadPrograms(new Date());
+          that.resize();
           
           frontDiv.style.display="block";
           visible = true;
@@ -762,6 +854,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       try
       {
         visible = false;
+        ProgramInfo.hide();
         that.removeDragElement();
       }
       catch (error)
@@ -800,15 +893,17 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         if(event && event.stopPropagation)
         {
           event.stopPropagation();
+          event.preventDefault();
         }
         if(toBack)
         {
+          hideChannelNodes();
           that.hide();
           toBack();
         }
         else
         {
-          Debug.alert("front.goToBack had no toBack method!\nCan't go to back!");
+          Debug.warn("front.goToBack had no toBack method!\nCan't go to back!");
         }
       }
       catch (error)
@@ -824,12 +919,14 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
      */
     resize: function () 
     {
-      var currentChannelList;
+      var currentChannelList,
+      i;
       try
       {
         currentChannelList = Settings.getChannelList(currentChannelListIndex);
         if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
         {
+          Debug.inform("number of channels in list " + currentChannelListIndex + ": " + currentChannelList.ordered.length);
           height = 80 + currentChannelList.ordered.length * 38;
         }
         else
@@ -866,7 +963,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       	{
       		now = when;
       	}
-      	//Debug.alert("reloading programs using now = " + now);
+      	
       	currentChannelList = Settings.getChannelList(currentChannelListIndex);
       	if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
         {
@@ -878,6 +975,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         	  	channelNode = channelNodes[channelID];
         	  	if(channelNode && channelNode.isVisible && channelNode.contents)
         	  	{
+        	  	  //Debug.inform("reloading programs for channelID " + channelID + " (but channelNode.channelID = " + channelNode.channelID + ")");
         	      Settings.getProgramsForChannel(channelID, function(theID){return function(thePrograms){reloadProgramsForChannel(theID, thePrograms);}}(channelID), function(theID){ return function(){reloadProgramsForChannelFailed(theID);}}(channelID), 3, when);
         	  	}
         	  }
