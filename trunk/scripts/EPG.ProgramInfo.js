@@ -31,7 +31,7 @@ if(EPG.debug)
  * @type object
  * @description Shows the program info.
  */
-EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin) 
+EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File) 
 {
   // Private Variables
   var that,
@@ -40,7 +40,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin)
   xPos = 0,
   yPos = 0,
   currentChannelListIndex,
-  progressbarFull;
+  progressbarFull,
+  logo;
   
   // Private methods
   /**
@@ -61,6 +62,10 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin)
       
       div = document.createElement("div");
       textNode = document.createTextNode("");
+      logo = document.createElement("img");
+      logo.setAttribute("id","backgroundlogo");
+      logo.style.visibility = "hidden";
+      programInfoNode.appendChild(logo);
       
       programInfoNode.appendChild(div.cloneNode(false));
       programInfoNode.lastChild.setAttribute("class","title");
@@ -198,7 +203,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin)
       stop,
       now,
       length,
-      width;
+      width,
+      channel;
       try
       {
         if(program)
@@ -206,98 +212,136 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin)
           if(programInfoNode.program !== program)
           {
             programInfoNode.program = program;
-            
-            // Title
-            for (locale in program.title)
+            channel = Settings.getChannel(program.channel);
+            if(channel && channel.icon)
             {
-              if(program.title.hasOwnProperty(locale))
-              {
-                programInfoNode.titleNode.nodeValue = program.title[locale];
-                break;
-              }
+              logo.setAttribute("src",File.getHomePath() + "Library/Xmltv/logos/" + program.channel + ".png");
+              logo.style.visibility = "inherit";
+            }
+            else
+            {
+              logo.style.visibility = "hidden";
             }
             
-            // Description
-            if(program.desc)
+            if(program.isTheEmptyProgram)
             {
-              if(program.desc[locale])
-              {
-                programInfoNode.descriptionNode.nodeValue = program.desc[locale];
-              }
-              else
+              programInfoNode.titleNode.nodeValue = Translator.translate("No program");
+              programInfoNode.descriptionNode.nodeValue = Translator.translate("No program") + ".";
+              programInfoNode.startNode.nodeValue = "";
+              programInfoNode.stopNode.nodeValue = "";
+              programInfoNode.durationNode.nodeValue = "";
+              progressbarFull.style.visibility = "hidden";
+            }
+            else
+            {
+              // Title
+              if(typeof(program.title) !== "undefined")
               {
                 for (locale in program.title)
                 {
-                  if(program.desc.hasOwnProperty(locale))
+                  if(program.title.hasOwnProperty(locale))
                   {
-                    programInfoNode.descriptionNode.nodeValue = program.desc[locale];
+                    programInfoNode.titleNode.nodeValue = program.title[locale];
                     break;
                   }
                 }
               }
-              
-              // Start & stop
-              programInfoNode.startNode.nodeValue = getHHMM(program.start);
-              programInfoNode.stopNode.nodeValue = getHHMM(program.stop);
-              
-              // progressbar
-              start = new Date(program.start * 1000)
-              stop = new Date(program.stop * 1000);
-              length = stop - start;
-              now = new Date();
-              if(start <= now && now < stop)
+              else
               {
-                width = Math.round( ((now - start) / length) * 100);
-                progressbarFull.firstChild.style.width = width + "%";
-                progressbarFull.style.visibility = "visible";
-                programInfoNode.durationNode.nodeValue = Translator.translate("Duration") 
-                  + " " 
-                  + Math.round(length/60000) 
-                  + " " 
-                  + Translator.translate("min") 
-                  + ", " 
-                  + Math.round(((stop - now)/60000)) 
-                  + " " 
-                  + Translator.translate("min left") 
-                  + ".";
+                
+              }
+              
+              // Description
+              if(program.desc)
+              {
+                if(program.desc[locale])
+                {
+                  programInfoNode.descriptionNode.nodeValue = program.desc[locale];
+                }
+                else
+                {
+                  for (locale in program.title)
+                  {
+                    if(program.desc.hasOwnProperty(locale))
+                    {
+                      programInfoNode.descriptionNode.nodeValue = program.desc[locale];
+                      break;
+                    }
+                  }
+                }
               }
               else
               {
+                programInfoNode.descriptionNode.nodeValue = Translator.translate("No description.");
+              }
+              
+              // Start & stop
+              if(typeof(program.start) !== "undefined")
+              {
+                programInfoNode.startNode.nodeValue = getHHMM(program.start);
+                programInfoNode.stopNode.nodeValue = getHHMM(program.stop);
+                // progressbar
+                start = new Date(program.start * 1000)
+                stop = new Date(program.stop * 1000);
+                length = stop - start;
+                now = new Date();
+                if(start <= now && now < stop)
+                {
+                  width = Math.round( ((now - start) / length) * 100);
+                  progressbarFull.firstChild.style.width = width + "%";
+                  progressbarFull.style.visibility = "inherit";
+                  programInfoNode.durationNode.nodeValue = Translator.translate("Duration") 
+                    + " " 
+                    + Math.round(length/60000) 
+                    + " " 
+                    + Translator.translate("min") 
+                    + ", " 
+                    + Math.round(((stop - now)/60000)) 
+                    + " " 
+                    + Translator.translate("min left") 
+                    + ".";
+                }
+                else
+                {
+                  progressbarFull.style.visibility = "hidden";
+                  programInfoNode.durationNode.nodeValue = Translator.translate("Duration") 
+                    + " " 
+                    + (Math.round(length/60000)) 
+                    + " " 
+                    + Translator.translate("min")
+                    + ".";
+                    /* 
+                    + ", " 
+                    + Translator.translate("starts in") 
+                    + " " 
+                    + (Math.round((start - now) / 60000))
+                    + " " 
+                    + Translator.translate("min") 
+                    + ".";
+                    */
+                }
+              }
+              else
+              {
+                programInfoNode.startNode.nodeValue = "";
+                programInfoNode.stopNode.nodeValue = "";
+                programInfoNode.durationNode.nodeValue = "";
                 progressbarFull.style.visibility = "hidden";
-                programInfoNode.durationNode.nodeValue = Translator.translate("Duration") 
-                  + " " 
-                  + (Math.round(length/60000)) 
-                  + " " 
-                  + Translator.translate("min")
-                  + ".";
-                  /* 
-                  + ", " 
-                  + Translator.translate("starts in") 
-                  + " " 
-                  + (Math.round((start - now) / 60000))
-                  + " " 
-                  + Translator.translate("min") 
-                  + ".";
-                  */
               }
               
               // Duration & time to/left
-              
               
               // Category (and episode number if category = series)
               
               // Director(s)
               
               // Actor(s)
-            }
-            else
-            {
-              programInfoNode.descriptionNode.nodeValue = Translator.translate("No description.");
-            }  
-            
-            if(scalableContainer.style.visibility !== "visible")
-            {
-              scalableContainer.style.visibility = "visible";
+              
+              
+              if(scalableContainer.style.visibility !== "visible")
+              {
+                scalableContainer.style.visibility = "visible";
+              }
             }  
           } 
           else if(scalableContainer.style.visibility !== "visible")
@@ -341,5 +385,5 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin)
       }
     }
   };
-}(EPG.debug, EPG.UIcreator, EPG.translator, EPG.settings, EPG.skin);
+}(EPG.debug, EPG.UIcreator, EPG.translator, EPG.settings, EPG.skin, EPG.file);
 EPG.ProgramInfo.init();
