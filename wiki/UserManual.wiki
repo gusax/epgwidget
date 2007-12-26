@@ -8,6 +8,6 @@ The front side of the widget shows the schedules and logos.
 == Back side ==
 The back side of the EPG widget handles settings.
 
-  * *Add a channel to a channel list* : To add a channel to the currently active channel list, click the channel name or check the checkbox next to the name.
+  * *Add a channel to a channel list* : To add a channel to the currently active channel list, click the channel name or check the checkbox next to the name. The channel will then be added at the bottom of the channel list.
 
   * *Remove a channel from a channel list* : To remove a channel from the currently active channel list, click the channel name or uncheck the checkbox next to the name.
