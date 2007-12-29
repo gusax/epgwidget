@@ -51,7 +51,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   currentChannelListIndex = Settings.getCurrentChannelListIndex(),
   width = 540,
   height = 80,
-  dragElement;
+  dragElement,
+  updateInterval;
   
   // Private methods
   /**
@@ -777,6 +778,51 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     }
   }
   
+  /**
+   * @memberOf front
+   * @name update
+   * @function
+   * @description Updates the front side (reloads programs).
+   * @private
+   */
+  function update () 
+  {
+    var now;
+    try
+    {
+      now = new Date();
+      that.reloadPrograms(now);
+      ProgramInfo.update(now);
+    }
+    catch (error)
+    {
+      Debug.alert("Error in front.update: " + error);
+    }
+  }
+  
+  /**
+   * @memberOf front
+   * @name startUpdateInterval
+   * @function
+   * @description Starts the update timer.
+   * @private
+   */
+  function startUpdateInterval () 
+  {
+    try
+    {
+      if(updateInterval)
+      {
+        clearTimeout(updateInterval);
+      }
+      updateInterval = setInterval(update, 60000);
+    }
+    catch (error)
+    {
+      Debug.alert("Error in front.startUpdateInterval: " + error);
+    }
+  }
+  
   // Public methods
   return /** @scope front */ {
     
@@ -806,6 +852,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
       try
       {
+        if(updateInterval)
+        {
+          clearInterval(updateInterval);
+        }
         if (!visible)
         {
           if(!backDiv)
@@ -857,7 +907,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           visible = true;
           if(!dontAnimate && window.widget)
           {
-            setTimeout(function(){window.widget.performTransition();}, 300);
+            setTimeout(function(){window.widget.performTransition(); startUpdateInterval();}, 300);
           }
         }
       }
@@ -877,6 +927,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       try
       {
         visible = false;
+        if(updateInterval)
+        {
+          clearInterval(updateInterval);
+        }
         ProgramInfo.hide();
         that.removeDragElement();
       }
@@ -1045,6 +1099,46 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       catch (error)
       {
         Debug.alert("Error in front.reloadIcons: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf front
+     * @function onShow
+     * @description Runs when Dashboard is shown.
+     */
+    onShow: function () 
+    {
+      try
+      {
+        that.reloadIcons();
+        that.reloadPrograms();
+        startUpdateInterval(); // should really be one interval per channel
+      }
+      catch (error)
+      {
+        Debug.alert("Error in front.onShow: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf front
+     * @function onHide
+     * @description Runs when Dashboard is hidden.
+     */
+    onHide: function () 
+    {
+      try
+      {
+        if(updateInterval)
+        {
+          clearInterval(updateInterval);
+        }
+        that.removeDragElement();
+      }
+      catch (error)
+      {
+        Debug.alert("Error in front.onHide: " + error);
       }
     }
   };

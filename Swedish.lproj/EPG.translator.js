@@ -50,6 +50,7 @@ EPG.translator = function(debug)
   localizedStrings["Click to view description."] = "Klicka för att läsa beskrivning.";
   localizedStrings["Duration"] = "Längd";
   localizedStrings["min left"] = "min kvar";
+  localizedStrings["starts in"] = "börjar om";
   // Private methods
   
   
