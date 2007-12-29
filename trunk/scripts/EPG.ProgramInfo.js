@@ -171,6 +171,61 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
     }
   }
   
+  /**
+   * @memberOf ProgramInfo
+   * @name updateProgressbar
+   * @function
+   * @description Updates progressbar and associated information.
+   * @private
+   * @param {object} start Date object that represent when the program starts.
+   * @param {object} stop Date object that represent when the program ends.
+   * @param {object} now Date object that represent what time it is now.
+   */
+  function updateProgressbar (start, stop, now)
+  {
+    var length;
+    try
+    {
+      length = stop - start;
+      if(start <= now && now < stop)
+      {
+        width = Math.round( ((now - start) / length) * 100);
+        progressbarFull.firstChild.style.width = width + "%";
+        progressbarFull.style.visibility = "inherit";
+        programInfoNode.durationNode.nodeValue = Translator.translate("Duration") 
+          + " " 
+          + Math.round(length/60000) 
+          + " " 
+          + Translator.translate("min") 
+          + ", " 
+          + Math.round(((stop - now)/60000)) 
+          + " " 
+          + Translator.translate("min left") 
+          + ".";
+      }
+      else
+      {
+        progressbarFull.style.visibility = "hidden";
+        programInfoNode.durationNode.nodeValue = Translator.translate("Duration") 
+          + " " 
+          + (Math.round(length/60000)) 
+          + " " 
+          + Translator.translate("min") 
+          + ", " 
+          + Translator.translate("starts in") 
+          + " " 
+          + (Math.round((start - now) / 60000))
+          + " " 
+          + Translator.translate("min") 
+          + ".";
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in ProgramInfo.updateProgressbar: " + error + " (start = " + start + ")");
+    }
+  }
+  
   // Public methods
   return /** @scope ProgramInfo */ {
     /**
@@ -283,43 +338,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
                 // progressbar
                 start = new Date(program.start * 1000)
                 stop = new Date(program.stop * 1000);
-                length = stop - start;
                 now = new Date();
-                if(start <= now && now < stop)
-                {
-                  width = Math.round( ((now - start) / length) * 100);
-                  progressbarFull.firstChild.style.width = width + "%";
-                  progressbarFull.style.visibility = "inherit";
-                  programInfoNode.durationNode.nodeValue = Translator.translate("Duration") 
-                    + " " 
-                    + Math.round(length/60000) 
-                    + " " 
-                    + Translator.translate("min") 
-                    + ", " 
-                    + Math.round(((stop - now)/60000)) 
-                    + " " 
-                    + Translator.translate("min left") 
-                    + ".";
-                }
-                else
-                {
-                  progressbarFull.style.visibility = "hidden";
-                  programInfoNode.durationNode.nodeValue = Translator.translate("Duration") 
-                    + " " 
-                    + (Math.round(length/60000)) 
-                    + " " 
-                    + Translator.translate("min")
-                    + ".";
-                    /* 
-                    + ", " 
-                    + Translator.translate("starts in") 
-                    + " " 
-                    + (Math.round((start - now) / 60000))
-                    + " " 
-                    + Translator.translate("min") 
-                    + ".";
-                    */
-                }
+                updateProgressbar(start, stop, now);
               }
               else
               {
@@ -382,6 +402,43 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
       catch (error)
       {
         Debug.alert("Error in ProgramInfo.hide: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf ProgramInfo
+     * @function update
+     * @description Updates the program information.
+     */
+    update: function (now) 
+    {
+      var stop,
+      start,
+      width,
+      length;
+      try
+      {
+        if(scalableContainer.style.visibility === "visible" && programInfoNode.program)
+        {
+          if(typeof(programInfoNode.program.stop) !== "undefined")
+          {
+            stop = new Date(programInfoNode.program.stop * 1000);
+            if(now < stop) // program ends some time in the future
+            {
+              start = new Date(programInfoNode.program.start * 1000);
+              updateProgressbar(start,stop,now);
+              //Debug.inform("ProgramInfo.update ran at " + now + " and changed width of progressbar.");
+            }
+            else // program has ended
+            {
+              that.hide(); // Hide program information since the program has ended.
+            }
+          } // else ignore progressbar (this might be the empty program)
+        }
+      }
+      catch (error)
+      {
+        Debug.alert("Error in ProgramInfo.update: " + error);
       }
     }
   };
