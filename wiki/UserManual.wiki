@@ -1,4 +1,5 @@
 #summary Provides an explanation of all the things you can do with the EPG widget.
+#labels Featured
 == Front side ==
 The front side of the widget shows the schedules and logos.
 
