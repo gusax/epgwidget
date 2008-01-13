@@ -68,7 +68,7 @@ div.onechannel img.logo
 {
   width: 3.4em;
   height: 3.4em;
-  margin: 0.3em 0.4em 0em 0.4em;
+  margin: 0.3em 0.2em 0em 0.6em;
   opacity: 0.8; 
   float: left;
 }
@@ -214,6 +214,11 @@ img.background
    height: 1.4em;
 }
 
+#programInfo div.contents div div.descriptionFrame div.description
+{
+  padding-bottom: 1em; 
+}
+
 div.progressbarFullContainer
 {
   position: absolute;
@@ -244,7 +249,7 @@ div.progressbarFull
 {
   margin: 0em 2em 0em 1em;
   height: 18.3em; 
-  overflow: auto;
+  overflow: hidden;
   clear: both;
   color: #fff;
 }

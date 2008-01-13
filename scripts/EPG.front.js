@@ -440,7 +440,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     tempScalableContainer,
     logo,
     textNode,
-    channelFound = false;
+    channelFound;
     try
     {
       channelNode = channelNodes[channelID];
@@ -459,30 +459,37 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           channelFound = true;
           //if(channel.icon)
           //{
-            logo = document.createElement("img");
-            logo.setAttribute("src", File.getHomePath() + "Library/Xmltv/logos/" + channelID + ".png");
-            logo.addEventListener("error", function(){couldNotFindLogo(channelID);}, false);
-            logo.setAttribute("class", "logo");
-            if(channel.displayName && channel.displayName.sv)
-            {
-              logo.setAttribute("title", channel.displayName.sv + ". " + Translator.translate("Click to show more programs, press and drag to move."));
-            }
-            channelNode.logo = logo;
-            channelNode.appendChild(logo);
+            
           /*}
           else
           {
             download icons from another source?
           }
           */
-          textNode = document.createElement("div");
-          textNode.setAttribute("class", "programs");
+          
         }
         else
         {
-          textNode = document.createTextNode(Translator.translate("Channel with id") + " " + channelID + " " + Translator.translate("was not found :-( It might have been renamed."));
-          channelNotInChannelsJS = true;
+          channelFound = false;
         }
+        
+        logo = document.createElement("img");
+        logo.setAttribute("src", File.getHomePath() + "Library/Xmltv/logos/" + channelID + ".png");
+        logo.addEventListener("error", function(){couldNotFindLogo(channelID);}, false);
+        logo.setAttribute("class", "logo");
+        if(channelFound && channel.displayName && channel.displayName.sv)
+        {
+          logo.setAttribute("title", channel.displayName.sv + ". " + Translator.translate("Click to show more programs, press and drag to move."));
+        }
+        else
+        {
+          logo.setAttribute("title", channelID + ". " + Translator.translate("Click to show more programs, press and drag to move."));
+        }
+        channelNode.logo = logo;
+        channelNode.appendChild(logo);
+        
+        textNode = document.createElement("div");
+        textNode.setAttribute("class", "programs");
         channelNode.appendChild(textNode);
         
         tempScalableContainer = UIcreator.createScalableContainer("onechannel", channelNode, "bakgrund.png", currentChannelListIndex);
@@ -493,17 +500,16 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         } 
         channelNodes[channelID] = tempScalableContainer;
         tempScalableContainer.channelID = channelID;
-        if(channelFound)
+        tempScalableContainer.programsNode = textNode;
+        logo.addEventListener("mousedown", function(event){startChannelDrag(event, tempScalableContainer);}, false);
+        tempScalableContainer.addEventListener("mouseover", function(event){continueChannelDrag(event, tempScalableContainer);}, false);
+        tempScalableContainer.addEventListener("mouseup", function(event){stopChannelDrag(event, tempScalableContainer);}, false);
+        
+        if(!channelFound)
         {
-          tempScalableContainer.programsNode = textNode;
-          logo.addEventListener("mousedown", function(event){startChannelDrag(event, tempScalableContainer);}, false);
-          tempScalableContainer.addEventListener("mouseover", function(event){continueChannelDrag(event, tempScalableContainer);}, false);
-          tempScalableContainer.addEventListener("mouseup", function(event){stopChannelDrag(event, tempScalableContainer);}, false);
+          tempScalableContainer.programsNode.appendChild(document.createTextNode(Translator.translate("Channel with id") + " " + channelID + " " + Translator.translate("was not found :-( It might have been renamed.")));
         }
-        else
-        {
-          // Open backside?
-        }
+        
         return channelNodes[channelID];
       }
       
@@ -1028,17 +1034,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
     	var currentChannelList,
     	channelID,
-    	channelNode,
-    	now;
+    	channelNode;
       try
       {
       	if(!when)
       	{
-      		now = new Date();
-      	}
-      	else
-      	{
-      		now = when;
+      		when = new Date();
       	}
       	
       	currentChannelList = Settings.getChannelList(currentChannelListIndex);
@@ -1047,14 +1048,22 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         	currentChannelList = currentChannelList.hashed;
         	for (channelID in currentChannelList)
         	{
-        	  if(currentChannelList.hasOwnProperty(channelID) && Settings.getChannel(channelID)) // Only try to download programs from channels that are present in channels.js
+        	  if(currentChannelList.hasOwnProperty(channelID)) 
         	  {
-        	  	channelNode = channelNodes[channelID];
-        	  	if(channelNode && channelNode.isVisible && channelNode.contents)
-        	  	{
-        	  	  //Debug.inform("reloading programs for channelID " + channelID + " (but channelNode.channelID = " + channelNode.channelID + ")");
-        	      Settings.getProgramsForChannel(channelID, function(theID){return function(thePrograms){reloadProgramsForChannel(theID, thePrograms);}}(channelID), function(theID){ return function(){reloadProgramsForChannelFailed(theID);}}(channelID), 3, when);
-        	  	}
+        	    channelNode = channelNodes[channelID];
+        	    if(Settings.getChannel(channelID)) // Only try to download programs from channels that are present in channels.js
+        	    {
+          	  	channelNode = channelNodes[channelID];
+          	  	if(channelNode && channelNode.isVisible && channelNode.contents)
+          	  	{
+          	  	  //Debug.inform("reloading programs for channelID " + channelID + " (but channelNode.channelID = " + channelNode.channelID + ")");
+          	      Settings.getProgramsForChannel(channelID, function(theID){return function(thePrograms){reloadProgramsForChannel(theID, thePrograms);}}(channelID), function(theID){ return function(){reloadProgramsForChannelFailed(theID);}}(channelID), 3, when);
+          	  	}
+        	    }
+        	    else
+        	    {
+        	      
+        	    }
         	  }
         	}
         }
