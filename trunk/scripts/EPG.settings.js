@@ -326,9 +326,9 @@ EPG.settings = function(Debug, growl, file)
       {
         when = new Date(); // now
       }
-      year = when.getFullYear();
-      month = 1 + when.getMonth(); // months are between 0 and 11 so we need to add one to whatever getMonth returns
-      day = when.getDate();
+      year = when.getUTCFullYear();
+      month = 1 + when.getUTCMonth(); // months are between 0 and 11 so we need to add one to whatever getMonth returns
+      day = when.getUTCDate();
       if(month < 10)
       {
         month = "0" + month;
@@ -669,7 +669,8 @@ EPG.settings = function(Debug, growl, file)
     {
       var tempList,
       tempListOrdered,
-      tempListHashed;
+      tempListHashed,
+      i;
       try
       {
         
@@ -680,16 +681,15 @@ EPG.settings = function(Debug, growl, file)
           {
             tempListHashed = {};
             tempListOrdered = that.getPreference("channelList" + listIndex);
+            Debug.inform("channelList" + listIndex + " = " + tempListOrdered);
             if(tempListOrdered)
             {
               tempListOrdered = tempListOrdered.split(";");
               
-              for (index in tempListOrdered)
+              for (i = 0; i < tempListOrdered.length; i+=1)
               {
-                if(tempListOrdered.hasOwnProperty(index))
-                {
-                  tempListHashed[tempListOrdered[index]] = index;
-                }
+                tempListHashed[tempListOrdered[i]] = i;
+                Debug.inform(i + ":" + tempListOrdered[i]);
               }
               tempList = {};
               tempList.ordered = tempListOrdered;
@@ -803,9 +803,13 @@ EPG.settings = function(Debug, growl, file)
             delete tempList.hashed[channelID];
             that.saveChannelList(listID);
           }
+          else if(tempList)
+          {
+            Debug.warn("removeChannelFromList: Could not remove channel with id " + channelID + " from list " + listID + "!\ntypeof( " + tempList.hashed[channelID] + ") = " + typeof(tempList.hashed[channelID]));
+          }
           else
           {
-            Debug.warn("removeChannelFromList: Could not remove channel with id " + channelID + " from list " + listID + "!");
+            Debug.warn("settings.removeChannelFromList: Could not remove channel with id " + channelID + " from list " + listID + "because the list didnt exist!");
           }
         }
       }
