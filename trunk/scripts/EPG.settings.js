@@ -23,7 +23,15 @@ if (EPG.debug)
 {
   EPG.debug.inform("EPG.settings.js loaded");
 }
-
+/**
+  * @name EPG.settings
+  * @static
+  * @type object
+  * @description Settings
+  * @param {object} Debug EPG.debug.
+  * @param {object} growl EPG.growl.
+  * @param {object} file EPG.file. 
+  */
 EPG.settings = function(Debug, growl, file)
 {
   // Private Variables
@@ -307,7 +315,7 @@ EPG.settings = function(Debug, growl, file)
   }
   
   /**
-   * @memberOf settings
+   * @memberOf EPG.settings
    * @name getFileDateYYYYMMDD
    * @function
    * @description Takes a Date object and returns a string with the date formatted as YYYY-MM-DD (used in filenames).
@@ -346,7 +354,7 @@ EPG.settings = function(Debug, growl, file)
   }
   
   /**
-   * @memberOf settings
+   * @memberOf EPG.settings
    * @name findPrograms
    * @function
    * @description Finds the specified number of programs among the cached programs.
@@ -436,7 +444,7 @@ EPG.settings = function(Debug, growl, file)
   }
   
   /**
-   * @memberOf settings
+   * @memberOf EPG.settings
    * @name programsDownloadSucceeded
    * @function
    * @description Run if the wanted schedulefile could be opened.
@@ -471,7 +479,7 @@ EPG.settings = function(Debug, growl, file)
   }
   
   /**
-   * @memberOf settings
+   * @memberOf EPG.settings
    * @name programsDownloadFailed
    * @function
    * @description Run if there was an error accessing the schedule file.
@@ -970,7 +978,7 @@ EPG.settings = function(Debug, growl, file)
     },
     
     /**
-     * @memberOf settings
+     * @memberOf EPG.settings
      * @function removeOldPrograms
      * @description Removes cached programs older than yesterday.
      */
@@ -1012,7 +1020,7 @@ EPG.settings = function(Debug, growl, file)
     },
     
     /**
-     * @memberOf settings
+     * @memberOf EPG.settings
      * @function getCurrentChannelListID
      * @description Returns the current channel list id.
      * @return {number} ID of the current channel list.

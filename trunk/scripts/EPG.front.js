@@ -23,8 +23,7 @@ if (EPG.debug)
 }
 
 /**
-  * @memberOf EPG 
-  * @name front
+  * @name EPG.front
   * @static
   * @type object
   * @description The front side of the widget.
@@ -40,11 +39,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
 {
   // Private Variables
   var that,
-  internalState = "loading",
+  currentView = 0, // 0 = now next later, 1 = dayview
   visible = false,
   backDiv,
   frontDiv,
+  topBar,
   overviewDiv,
+  dayViewNode,
   channelNodes = {},
   infoButton,
   toBack,
@@ -56,7 +57,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   
   // Private methods
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name createTopBar
    * @function
    * @description Creates the topmost bar on the widget.
@@ -65,18 +66,14 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    */
   function createTopBar ()  
   {
-    var tempElement,
-    tempTextNode;
     try
     {
-      tempElement = document.createElement("div");
-      tempTextNode = document.createTextNode("");
-      
-      tempElement.setAttribute("class", "text");
-      tempElement.appendChild(tempTextNode.cloneNode(false));
-      tempElement.firstChild.nodeValue = "EPG: " + Translator.translate("overview");
-      
-      return UIcreator.createScalableContainer("topbar", tempElement.cloneNode(true), "uppe.png", currentChannelListIndex);
+      topBar = document.createElement("div");
+      topBar.setAttribute("class", "text");
+      topBar.appendChild(document.createTextNode("EPG: "));
+      topBar.appendChild(document.createTextNode(Translator.translate("overview")));
+      topBar.heading = topBar.lastChild;
+      return UIcreator.createScalableContainer("topbar", topBar, "uppe.png", currentChannelListIndex);
     }
     catch (error)
     {
@@ -85,7 +82,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name stopEvent
    * @function
    * @description Stops the propagation of an event.
@@ -108,7 +105,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     }
   }
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name createInfoButton
    * @function
    * @description Creates the infobutton shown on the front of the widget.
@@ -134,7 +131,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name createBottomBar
    * @function
    * @description Creates the bar at the bottom of the widget.
@@ -143,12 +140,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    */
   function createBottomBar () 
   {
-    var tempContainer,
-    tempElement,
-    tempDiv,
-    tempTextNode;
     try
     {
+      var tempContainer,
+      tempElement,
+      tempDiv,
+      tempTextNode;
       /*
        * <div class="scalable bottom">
        *  <div class="contents">
@@ -189,7 +186,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name couldNotFindLogo
    * @function
    * @description Run if a logo could not be found (for example if it has been deleted from the harddrive)
@@ -198,10 +195,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    */
   function couldNotFindLogo (channelID)
   {
-    var channel;
     try
     {
-      Debug.alert("Could not find logo for channel with ID " + channelID + "!");
+      var channel;
+      
+      Debug.warn("Could not find logo for channel with ID " + channelID + "!");
       Settings.getChannel(channelID);
       if(channel && channel.icon)
       {
@@ -220,7 +218,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name switchChannelNodes
    * @function
    * @description Switches two channel nodes.
@@ -228,15 +226,16 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    */
   function switchChannelNodes (channelNode) 
   {
-    var parentNode,
-    i,
-    dragElementPosition = -1,
-    channelNodePosition = -1,
-    currentNode,
-    dragElementID,
-    channelNodeID;
     try
     {
+      var parentNode,
+      i,
+      dragElementPosition = -1,
+      channelNodePosition = -1,
+      currentNode,
+      dragElementID,
+      channelNodeID;
+      
       parentNode = channelNode.parentNode;
       for(i = 0; i < parentNode.childNodes.length; i += 1)
       {
@@ -287,7 +286,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-     * @memberOf front
+     * @memberOf EPG.front
      * @name saveCurrentChannelOrder
      * @function 
      * @description Creates a string with the current channel ordering.
@@ -296,15 +295,16 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
      */
     function saveCurrentChannelOrder () 
     {
-      var i,
-      length,
-      childNodes,
-      channelOrder = [],
-      channelsHash = {},
-      channelList,
-      position;
       try
       {
+        var i,
+        length,
+        childNodes,
+        channelOrder = [],
+        channelsHash = {},
+        channelList,
+        position;
+        
         childNodes = overviewDiv.childNodes;
         length = childNodes.length;
         if(length > 0)
@@ -336,7 +336,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name startChannelDrag
    * @function
    * @description Starts the drag of one channel.
@@ -362,7 +362,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name continueChannelDrag
    * @function
    * @description Continues a channel drag. Fired when the mouse pointer is beeing moved on top of a channelNode
@@ -389,7 +389,169 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
+   * @name updateTopBar
+   * @function
+   * @description Updates the text on the top bar.
+   * @private
+   * @param {string} channelID ID of active channel (in case of dayview)
+   */
+  function updateTopBar (channelID)
+  {
+    try
+    {
+      var channel;
+      
+      if(currentView === 0)
+      {
+        topBar.setAttribute("title","");
+        topBar.heading.nodeValue = Translator.translate("overview");
+      }
+      else if(currentView === 1)
+      {
+        channel = Settings.getChannel(channelID);
+        if(channel && channel.displayName)
+        {
+          if(channel.displayName.sv)
+          {
+            topBar.setAttribute("title",channel.displayName.sv);
+            topBar.heading.nodeValue = channel.displayName.sv;  
+          }
+          else if(channel.displayName.en)
+          {
+            topBar.setAttribute("title",channel.displayName.en);
+            topBar.heading.nodeValue = channel.displayName.en;
+          }
+          else
+          {
+            topBar.setAttribute("title","");
+            topBar.heading.nodeValue = Translator.translate("day view");
+          }
+        }
+        else
+        {
+          topBar.setAttribute("title","");
+          topBar.heading.nodeValue = Translator.translate("day view");
+        } 
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.updateTopBar: " + error + " (channelID = " + channelID + ")");
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
+   * @name dimChannelNode
+   * @function
+   * @description Dims a channel node.
+   * @private
+   * @param {object} channelNode Node that should be dimmed.
+   * @param {boolean} reverse True to reverse effect (make node visible again).
+   */
+  function dimChannelNode (channelNode, reverse)
+  {
+    try
+    {
+      Debug.inform("Dimmed " + channelNode.channelID);
+      if(reverse)
+      {
+        channelNode.logo.style.opacity = "0.8";
+        channelNode.programsNode.style.visibility = "inherit";
+      }
+      else
+      {
+        channelNode.logo.style.opacity = "0.15";
+        channelNode.programsNode.style.visibility = "hidden";
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.dimChannelNode: " + error + " (channelNode = " + channelNode + ")");
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
+   * @name dimAllChannelNodesExcept
+   * @function
+   * @description Dims all channel nodes except the specified one.
+   * @private
+   * @param {object} channelNode Node that should be left alone.
+   * @param {boolean} reverse True to reverse effect (make channel nodes visible again).
+   */
+  function dimAllChannelNodesExcept (channelNode, reverse)
+  {
+    try
+    {
+      var id, node;
+      
+      for (id in channelNodes)
+      {
+        if(channelNodes.hasOwnProperty(id))
+        {
+          node = channelNodes[id];
+          if(channelNode === node)
+          {
+            dayViewNode = channelNode;
+            if(reverse)
+            {
+              channelNode.logo.style.opacity = "0.8";
+              channelNode.programsNode.style.visibility = "inherit";
+            }
+            else
+            {
+              channelNode.logo.style.opacity = "0.8";
+              channelNode.programsNode.style.visibility = "hidden";
+            }
+          }
+          else
+          {
+            dimChannelNode(channelNodes[id], reverse);
+          }
+        }
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.dimAllChannelNodesExcept: " + error + " (channelID = " + channelID + ")");
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
+   * @name switchView
+   * @function
+   * @description Switches between views (currently now,next,later and dayview).
+   * @private
+   * @param {object} channelNode Node of channel that was clicked.
+   */
+  function switchView (channelNode)
+  {
+    try
+    {
+      ProgramInfo.hide();
+      if(currentView === 0 || (currentView === 1 && channelNode !== dayViewNode))
+      {
+        dimAllChannelNodesExcept(channelNode, false);
+        currentView = 1;
+      }
+      else
+      {
+        dimAllChannelNodesExcept(channelNode, true);
+        currentView = 0
+      }
+      updateTopBar(channelNode.channelID);
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.switchView: " + error + " (channelNode = " + channelNode + ")");
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
    * @name stopChannelDrag
    * @function
    * @description Stops the dragging of a channelNode.
@@ -414,9 +576,14 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           delete dragElement.hasBeenDragged;
           saveCurrentChannelOrder(); // save changes
         }
+        else
+        {
+          switchView(channelNode);
+        }
         
         dragElement = false;
       }
+      
     }
     catch (error)
     {
@@ -425,7 +592,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name createChannelNode
    * @function
    * @description Creates a container showing the logo, current program and the two upcoming programs.
@@ -435,14 +602,15 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    */
   function createChannelNode (channelID) 
   {
-    var channel,
-    channelNode,
-    tempScalableContainer,
-    logo,
-    textNode,
-    channelFound;
     try
     {
+      var channel,
+      channelNode,
+      tempScalableContainer,
+      logo,
+      textNode,
+      channelFound;
+      
       channelNode = channelNodes[channelID];
       if(channelNode)
       {
@@ -521,7 +689,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name createOverview
    * @function
    * @description Creates the list of channels shown on the front of the widget. (now next later)
@@ -530,11 +698,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    */
   function createOverview () 
   {
-    var index,
-    channelList,
-    orderedList;
     try
     {
+      var index,
+      channelList,
+      orderedList;
+      
       overviewDiv = document.createElement("div");
       /*channelList = Settings.getChannelList(currentChannelListIndex);
       if(channelList && channelList.ordered)
@@ -557,7 +726,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name showChannelNodes
    * @function
    * @description Shows existing channel nodes and creates new ones (if needed) after returning from backside.
@@ -565,14 +734,15 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    */
   function showChannelNodes () 
   {
-    var channelList,
-    index,
-    channelID,
-    channelNode,
-    orderedList,
-    foundChannels;
     try
     {
+      var channelList,
+      index,
+      channelID,
+      channelNode,
+      orderedList,
+      foundChannels;
+      
       channelList = Settings.getChannelList(currentChannelListIndex);
       
       if(channelList && channelList.ordered)
@@ -603,7 +773,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name create
    * @function 
    * @description Creates all elements and text nodes on the front side of the widget and then appends the elements to frontDiv.
@@ -624,7 +794,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name updateProgramNode
    * @function
    * @description Updates the text in a programNode.
@@ -634,11 +804,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    */
   function updateProgramNode (programNode, program)
   {
-    var i,
-    startDate,
-    start;
     try
     {
+      var i,
+      startDate,
+      start;
+      
       if(program)
       {
         programNode.program = program;
@@ -683,7 +854,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name reloadProgramsForChannel
    * @function
    * @description Reloads the visible programs for one channel.
@@ -693,11 +864,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    */
   function reloadProgramsForChannel (channelID, programs)
   {
-    var channelNode,
-    programNode,
-    title;
     try
     {
+      var channelNode,
+      programNode,
+      title;
+      
       channelNode = channelNodes[channelID];
       if(channelNode && programs)
       {
@@ -737,7 +909,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name reloadProgramsForChannelFailed
    * @function
    * @description Prints a message that programs for one channel could not be loaded.
@@ -761,7 +933,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name hideChannelNodes
    * @function
    * @description Hides all channelNodes when going to the backside, in case we add or remove a channel. (Removed channels are not actually removed from the front, they are just hidden.)
@@ -769,10 +941,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    */
   function hideChannelNodes ()
   {
-    var i,
-    length;
     try
     {
+      var i,
+      length;
+      
       while(overviewDiv.firstChild)
       {
         overviewDiv.removeChild(overviewDiv.firstChild);
@@ -785,7 +958,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name update
    * @function
    * @description Updates the front side (reloads programs).
@@ -793,9 +966,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    */
   function update () 
   {
-    var now;
     try
     {
+      var now;
       now = new Date();
       that.reloadPrograms(now);
       ProgramInfo.update(now);
@@ -807,7 +980,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
-   * @memberOf front
+   * @memberOf EPG.front
    * @name startUpdateInterval
    * @function
    * @description Starts the update timer.
@@ -833,7 +1006,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   return /** @scope front */ {
     
     /**
-     * @memberOf front
+     * @memberOf EPG.front
      * @function init
      * @description Initializes the singleton and saves the this-object.
      */
@@ -847,7 +1020,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     },
     
     /**
-     * @memberOf front
+     * @memberOf EPG.front
      * @function show
      * @description Shows the front side of the widget. Flips the widget over if it's currently on the backside.
      * @param {function} toBackMethod Function that makes the widget flip over to the backside.
@@ -924,7 +1097,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     },
     
     /**
-     * @memberOf front
+     * @memberOf EPG.front
      * @function hide
      * @description Tells the front that it should consider itself hidden. Used when Dashboard is dismissed to prevent timeouts and intervals from running in the background.
      */
@@ -947,7 +1120,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     },
     
     /**
-     * @memberOf front
+     * @memberOf EPG.front
      * @function removeDragElement
      * @description Removes the drag element if any exists.
      */
@@ -964,7 +1137,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     },
     
     /**
-     * @memberOf front
+     * @memberOf EPG.front
      * @function goToBack
      * @description Calls the function responsible for flipping the widget over to its backside.
      * @param {object} event The event that caused this function to be run. 
@@ -996,16 +1169,17 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     },
     
     /**
-     * @memberOf front
+     * @memberOf EPG.front
      * @function resize
      * @description Resizes the front side.
      */
     resize: function () 
     {
-      var currentChannelList,
-      i;
       try
       {
+        var currentChannelList,
+        i;
+        
         currentChannelList = Settings.getChannelList(currentChannelListIndex);
         if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
         {
@@ -1025,18 +1199,19 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     },
     
     /**
-     * @memberOf front
+     * @memberOf EPG.front
      * @function reloadPrograms
      * @description Reloads the programs on the front side.
      * @param {object} [when] A Date-object specifying what time it is. Use to move forwards or backwards in time.
      */
     reloadPrograms: function (when) 
     {
-    	var currentChannelList,
-    	channelID,
-    	channelNode;
       try
       {
+        var currentChannelList,
+        channelID,
+        channelNode;
+        
       	if(!when)
       	{
       		when = new Date();
@@ -1075,18 +1250,19 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     },
     
     /**
-     * @memberOf front
+     * @memberOf EPG.front
      * @function reloadIcons
      * @description Reloads all icons. Used to update icons if they are changed on, added to or removed from the harddrive
      */
     reloadIcons: function () 
     {
-    	var index,
-    	channelNode,
-    	logo,
-    	src;
       try
       {
+        var index,
+        channelNode,
+        logo,
+        src;
+        
         for (index in channelNodes)
         {
           if(channelNodes.hasOwnProperty(index))
@@ -1112,7 +1288,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     },
     
     /**
-     * @memberOf front
+     * @memberOf EPG.front
      * @function onShow
      * @description Runs when Dashboard is shown.
      */
@@ -1131,7 +1307,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     },
     
     /**
-     * @memberOf front
+     * @memberOf EPG.front
      * @function onHide
      * @description Runs when Dashboard is hidden.
      */

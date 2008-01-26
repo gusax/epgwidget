@@ -25,8 +25,7 @@ if(EPG.debug)
 }
 
 /**
- * @memberOf EPG
- * @name ProgramInfo
+ * @name EPG.ProgramInfo
  * @static
  * @type object
  * @description Shows the program info.
@@ -45,7 +44,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
   
   // Private methods
   /**
-   * @memberOf ProgramInfo
+   * @memberOf EPG.ProgramInfo
    * @name create
    * @function
    * @description Creates the necessary DOM nodes.
@@ -102,6 +101,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
       programInfoNode.appendChild(div.cloneNode(false));
       programInfoNode.lastChild.setAttribute("class","descriptionFrame");
       programInfoNode.descriptionFrameNode = programInfoNode.lastChild;
+      programInfoNode.descriptionFrameNode.setAttribute("title", Translator.translate("Use mousewheel/trackpad to scroll description") + ".");
       
       programInfoNode.descriptionFrameNode.addEventListener("DOMMouseScroll", function(event){try{that.scroll(event);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
       programInfoNode.descriptionFrameNode.addEventListener("mousewheel", function(event){try{that.scroll(event);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
@@ -134,7 +134,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
   }
   
   /**
-   * @memberOf ProgramInfo
+   * @memberOf EPG.ProgramInfo
    * @name getHHMM
    * @function
    * @description Returns a specified timestamp formatted as HH:MM.
@@ -181,7 +181,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
   }
   
   /**
-   * @memberOf ProgramInfo
+   * @memberOf EPG.ProgramInfo
    * @name updateProgressbar
    * @function
    * @description Updates progressbar and associated information.
@@ -192,16 +192,23 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
    */
   function updateProgressbar (start, stop, now)
   {
-    var length, width;
+    var length, width, timeLeft;
+    
     try
     {
       length = stop - start;
-      if(start <= now && now < stop)
+      timeLeft = Math.round(((stop - now)/60000));
+      if(timeLeft < 0)
+      {
+        progressbarFull.style.visibility = "hidden";
+        programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + " " + (Math.round(length/60000)) + " " + Translator.translate("min") + ", " + Translator.translate("ended") + " " + (-1*timeLeft) + " " + Translator.translate("min ago") + ".";
+      }
+      else if(start <= now && now < stop)
       {
         width = Math.round( ((now - start) / length) * 100);
         progressbarFull.firstChild.style.width = width + "%";
         progressbarFull.style.visibility = "inherit";
-        programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + " " + Math.round(length/60000) + " " + Translator.translate("min") + ", " + Math.round(((stop - now)/60000)) + " " + Translator.translate("min left") + ".";
+        programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + " " + Math.round(length/60000) + " " + Translator.translate("min") + ", " + timeLeft + " " + Translator.translate("min left") + ".";
       }
       else
       {
@@ -287,7 +294,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
       }
     }
   
-  /**
+    /**
      * Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing out: decelerating from zero velocity.
      *
      * @param t   Current time (in frames or seconds).
@@ -308,7 +315,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
     }
   
   /**
-   * @memberOf ProgramInfo
+   * @memberOf EPG.ProgramInfo
    * @name bounceback
    * @function
    * @description Bounces the description back if it has been scrolled too far.
@@ -347,7 +354,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
   }
   
   /**
-   * @memberOf ProgramInfo
+   * @memberOf EPG.ProgramInfo
    * @name startBounceback
    * @function
    * @description Starts the bounce back animation
@@ -375,7 +382,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
   }
   
   /**
-   * @memberOf ProgramInfo
+   * @memberOf EPG.ProgramInfo
    * @name scrollDescription
    * @function
    * @description Scrolls the description by the specified amount.
@@ -384,9 +391,10 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
    */
   function scrollDescription (amount)
   {
-    var limit;
     try
     {
+      var limit;
+      
       limit = -1*(programInfoNode.descriptionFrameNode.scrollHeight - programInfoNode.descriptionFrameNode.offsetHeight);
       if(!animationRunning)
       {
@@ -417,7 +425,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
   // Public methods
   return /** @scope ProgramInfo */ {
     /**
-     * @memberOf ProgramInfo
+     * @memberOf EPG.ProgramInfo
      * @description Initialization function for ProgramInfo.
      */
     init: function()
@@ -431,24 +439,29 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
     },
     
     /**
-     * @memberOf ProgramInfo
+     * @memberOf EPG.ProgramInfo
      * @function show
      * @description Shows the program information.
      * @param {object} program A program object.
-     * @param {number} x X coordinate of active channel title.
-     * @param {number} y Y coordinate of active channel title.
+     * @param {object} now Date object representing the current time.
      */
-    show: function (program, x, y) 
+    show: function (program, now) 
     {
-      var locale,
-      start,
-      stop,
-      now,
-      channel;
       try
       {
+        var locale,
+        start,
+        stop,
+        channel;
+        
+        if(!now)
+        {
+          now = new Date();
+        }
+                
         if(program)
         {
+
           if(programInfoNode.program !== program)
           {
             programInfoNode.durationContainer.style.top = "0px";
@@ -465,6 +478,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
               logo.style.visibility = "hidden";
             }
             
+            // Title
             if(program.isTheEmptyProgram)
             {
               programInfoNode.titleNode.nodeValue = Translator.translate("No program");
@@ -474,23 +488,19 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
               programInfoNode.durationNode.nodeValue = "";
               progressbarFull.style.visibility = "hidden";
             }
+            else if(typeof(program.title) === "undefined")
+            {
+              programInfoNode.titleNode.nodeValue = Translator.translate("Program title missing :-(");
+            } 
             else
             {
-              // Title
-              if(typeof(program.title) !== "undefined")
+              for (locale in program.title)
               {
-                for (locale in program.title)
+                if(program.title.hasOwnProperty(locale))
                 {
-                  if(program.title.hasOwnProperty(locale))
-                  {
-                    programInfoNode.titleNode.nodeValue = program.title[locale];
-                    break;
-                  }
+                  programInfoNode.titleNode.nodeValue = program.title[locale];
+                  break;
                 }
-              }
-              else
-              {
-                
               }
               
               // Description
@@ -525,7 +535,6 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
                 // progressbar
                 start = new Date(program.start * 1000);
                 stop = new Date(program.stop * 1000);
-                now = new Date();
                 updateProgressbar(start, stop, now);
               }
               else
@@ -549,7 +558,9 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
               {
                 scalableContainer.style.visibility = "visible";
               }
-            }  
+            }
+            programInfoNode.titleNode.parentNode.setAttribute("title", programInfoNode.titleNode.nodeValue);
+            
           } 
           else if(scalableContainer.style.visibility !== "visible")
           {
@@ -565,7 +576,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
         }
         else
         {
-          Debug.alert("ProgramInfo.show: Program was undefined!");
+          Debug.warn("ProgramInfo.show: Program was undefined!");
         }
       }
       catch (error)
@@ -575,7 +586,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
     },
     
     /**
-     * @memberOf ProgramInfo
+     * @memberOf EPG.ProgramInfo
      * @function hide
      * @description Hides the program information.
      */
@@ -596,16 +607,23 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
     },
     
     /**
-     * @memberOf ProgramInfo
+     * @memberOf EPG.ProgramInfo
      * @function update
      * @description Updates the program information.
+     * @param {object} now Date object representing the current time.
      */
     update: function (now) 
     {
-      var stop,
-      start;
       try
       {
+        var stop,
+        start;
+        
+        if(!now)
+        {
+          now = new Date();
+        }
+        
         if(scalableContainer.style.visibility === "visible" && programInfoNode.program)
         {
           if(typeof(programInfoNode.program.stop) !== "undefined")
@@ -631,15 +649,16 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
     },
     
     /**
-     * @memberOf ProgramInfo
+     * @memberOf EPG.ProgramInfo
      * @function scroll
      * @description Listens to and consumes scroll events if program information is visible.
      */
     scroll: function (event) 
     {
-      var amount;
       try
       {
+        var amount;
+        
         if(scalableContainer.style.visibility !== "hidden")
         {
           event.preventDefault();

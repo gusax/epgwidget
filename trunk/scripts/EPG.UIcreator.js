@@ -24,8 +24,7 @@ if(EPG.debug)
 }
 
 /**
- * @memberOf EPG
- * @name UIcreator
+ * @name EPG.UIcreator
  * @static
  * @type object
  * @description Creates different UI-elements.
@@ -42,7 +41,7 @@ EPG.UIcreator = function(Debug, Skin, Translator)
   return /** @scope UIcreator */ {
   	
   	/**
-  	 * @memberOf UIcreator
+  	 * @memberOf EPG.UIcreator
   	 * @function init
   	 * @description Saves "this" and initializes the UIcreator.
   	 */
@@ -56,7 +55,7 @@ EPG.UIcreator = function(Debug, Skin, Translator)
     },
     
     /**
-     * @memberOf UIcreator
+     * @memberOf EPG.UIcreator
      * @name createScalableContainer
      * @function
      * @description Takes contents and a background and returns a div-container that supports scaling of the contents and its background.
@@ -111,7 +110,7 @@ EPG.UIcreator = function(Debug, Skin, Translator)
     },
     
     /**
-     * @memberOf UIcreator
+     * @memberOf EPG.UIcreator
      * @function createProgramNode
      * @description Creates a program node that displays information about a specific program.
      * @param {object} [program] The program whos information should be displayed in this programNode. If omitted, returns a programNode with the localized text "No program".
@@ -154,7 +153,7 @@ EPG.UIcreator = function(Debug, Skin, Translator)
         	  if(program.title.hasOwnProperty(locale))
         	  {
         	  	tempTextNode.nodeValue = program.title[locale]; // just pick the first translation and then break
-        	  	titleNode.setAttribute("title", program.title[locale] + ". " + Translator.translate("Click to view description."))
+        	  	titleNode.setAttribute("title", program.title[locale] + ". " + Translator.translate("Click to open description, use mousewheel/trackpad to scroll description."));
         	  	break;
         	  }
         	}
@@ -188,7 +187,7 @@ EPG.UIcreator = function(Debug, Skin, Translator)
     },
     
     /**
-     * @memberOf UIcreator
+     * @memberOf EPG.UIcreator
      * @function removeChildNodes
      * @description Removes all child nodes from the specified element.
      * @param {object} node The DOM node that is to be childless.

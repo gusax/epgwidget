@@ -47,10 +47,13 @@ EPG.translator = function(debug)
   localizedStrings["Channel with id"] = "Kanalen med id";
   localizedStrings["was not found :-( It might have been renamed."] = "hittades inte :-( Den kanske har döpts om.";
   localizedStrings["No description."] = "Beskrivning saknas."
-  localizedStrings["Click to view description."] = "Klicka för att läsa beskrivning.";
+  localizedStrings["Click to open description, use mousewheel/trackpad to scroll description."] = "Klicka för att läsa beskrivning, använd scrollhjul/pekplatta för att scrolla beskrivning.";
   localizedStrings["Duration"] = "Längd";
   localizedStrings["min left"] = "min kvar";
   localizedStrings["starts in"] = "börjar om";
+  localizedStrings.ended = "slutade för";
+  localizedStrings["min ago"] = "min sedan";
+  localizedStrings["Use mousewheel/trackpad to scroll description"] = "Använd scrollhjul/pekplatta för att scrolla beskrivning";
   // Private methods
   
   

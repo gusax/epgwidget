@@ -22,7 +22,20 @@ if (EPG.debug)
 {
   EPG.debug.inform("EPG.widget.js loaded");
 }
-
+/**
+  * @name EPG.widget
+  * @static
+  * @type object
+  * @description Host?
+  * @param {object} front EPG.front.
+  * @param {object} back EPG.back.
+  * @param {object} debug EPG.debug.
+  * @param {object} growl EPG.growl.
+  * @param {object} file EPG.file.
+  * @param {object} settings EPG.settings.
+  * @param {object} translator EPG.translator.
+  * @param {object} ProgramInfo EPG.ProgramInfo.
+  */
 EPG.widget = function (front, back, debug, growl, file, settings, translator, ProgramInfo)
 {
 	// Private variables

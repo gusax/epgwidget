@@ -23,7 +23,18 @@ if (EPG.debug)
 {
   EPG.debug.inform("EPG.back.js loaded");
 }
-
+/**
+  * @name EPG.back
+  * @static
+  * @type object
+  * @description The front side of the widget.
+  * @param {object} debug EPG.debug.
+  * @param {object} growl EPG.growl.
+  * @param {object} settings EPG.settings.
+  * @param {object} skin EPG.skin.
+  * @param {object} translator EPG.translator.
+  * @param {object} UIcreator EPG.UIcreator. 
+  */
 EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
 {
   // Private Variables
@@ -58,9 +69,9 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   
   function scrollChannelList (event, direction) 
   {
-    var index;
     try
     {
+      var index;
       
       if(!channelListToScroll.topY)
       {
@@ -107,10 +118,11 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   
   function createTop () 
   {
-    var tempElement,
-    tempTextNode;
     try
     {
+      var tempElement,
+      tempTextNode;
+      
       /*
        * <div class="scalable top">
        *  <div class="contents">
@@ -136,9 +148,10 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   
   function createListTop (contents) 
   {
-    var tempElement;
     try
     {
+      var tempElement;
+      
       tempElement = document.createElement("div");
       
       tempElement.setAttribute("class", "text center");
@@ -156,11 +169,12 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   
   function createDoneButton () 
   {
-    var tempContainer,
-    tempElement,
-    tempTextNode;
     try
     {
+      var tempContainer,
+      tempElement,
+      tempTextNode;
+    
       /*
        * <div class="scalable middle">
        *  <div class="contents">
@@ -188,11 +202,12 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   
   function createBottom () 
   {
-    var tempContainer,
-    tempElement,
-    tempTextNode;
     try
     {
+      var tempContainer,
+      tempElement,
+      tempTextNode;
+    
       /*
        * <div class="scalable bottom">
        *  <div class="contents">
@@ -231,10 +246,10 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   
   function createListBottom (contents) 
   {
-    var tempContainer,
-    tempElement;
     try
     {
+      var tempContainer,
+      tempElement;
       /*
        * <div class="scalable bottom">
        *  <div class="contents">
@@ -272,17 +287,18 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   
   function createChannelListSuccess (channels, targetElement)
   {
-    var channel,
-    index,
-    tempElement,
-    tempTextNode,
-    parentNode,
-    orderedChannelIDs,
-    tempCheckBox,
-    tempChannelList,
-    i = 0;
     try
     {
+      var channel,
+      index,
+      tempElement,
+      tempTextNode,
+      parentNode,
+      orderedChannelIDs,
+      tempCheckBox,
+      tempChannelList,
+      i = 0;
+      
       if(channels.length > 0 && targetElement)
       {
         tempChannelList = settings.getChannelList(currentChannelListIndex);
@@ -358,11 +374,12 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   
   function createChannelList () 
   {
-    var tempContainer,
-    tempElement,
-    tempTextNode;
     try
     {
+      var tempContainer,
+      tempElement,
+      tempTextNode;
+      
       tempContainer = document.createElement("div");
       tempContainer.setAttribute("class", "text");
       tempTextNode = document.createTextNode(translator.translate("Downloading channels..."));
@@ -380,11 +397,12 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   
   function createSupportInfo () 
   {
-    var tempContainer,
-    tempElement,
-    tempTextNode;
     try
     {
+      var tempContainer,
+      tempElement,
+      tempTextNode;
+      
       tempContainer = document.createElement("div");
       tempContainer.setAttribute("class", "text");
       tempElement = document.createElement("a");
@@ -432,10 +450,11 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   
   function create () 
   {
-    var tempElement,
-    tempTextNode;
     try
     {
+      var tempElement,
+      tempTextNode;
+      
       backDiv.appendChild(createTop());
       backDiv.appendChild(createListTop(document.createTextNode("\u25b2"))); // arrow up
       backDiv.lastChild.addEventListener("mousedown", function(event){scrollChannelList(event,"up");}, false);
