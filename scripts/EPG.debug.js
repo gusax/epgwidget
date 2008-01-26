@@ -1,7 +1,5 @@
-
 /**
- * @memberOf EPG
- * @name debug
+ * @name EPG.debug
  * @static
  * @type object
  * @description Handles debugging messages.
@@ -18,7 +16,7 @@ EPG.debug = function()
 	return /** @scope debug */{
 		
 		/**
-		 * @memberOf debug
+		 * @memberOf EPG.debug
 		 * @function init
 		 * @description Initializes debug.
 		 */
@@ -39,7 +37,7 @@ EPG.debug = function()
 		},
 		
 		/**
-		 * @memberOf debug
+		 * @memberOf EPG.debug
 		 * @function alert
 		 * @description Prints (alerts) a debugging message debugging is enabled.
 		 * @param {string} message The message to alert.
@@ -60,7 +58,7 @@ EPG.debug = function()
 		},
 		
 		/**
-		 * @memberOf debug
+		 * @memberOf EPG.debug
 		 * @function warning
 		 * @description Send a warning message.
 		 * @param {string} message The warning message.
@@ -85,7 +83,7 @@ EPG.debug = function()
 		},
 		
 		/**
-		 * @memberOf debug
+		 * @memberOf EPG.debug
 		 * @function info
 		 * @description Send a debugging message.
 		 * @param {string} message The message.
@@ -110,7 +108,7 @@ EPG.debug = function()
 		},
 		
 		/**
-		 * @memberOf debug
+		 * @memberOf EPG.debug
 		 * @function enable
 		 * @description Enables debugging messages.
 		 */

@@ -21,7 +21,15 @@ if (EPG.debug)
 {
   EPG.debug.inform("EPG.skin.js loaded");
 }
-
+/**
+  * @name EPG.skin
+  * @static
+  * @type object
+  * @description Handles skins.
+  * @param {object} sebug EPG.debug.
+  * @param {object} growl EPG.growl.
+  * @param {object} settings EPG.settings.
+  */
 EPG.skin = function(debug, growl, settings)
 {
   // Private Variables

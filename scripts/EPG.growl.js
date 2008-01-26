@@ -24,8 +24,7 @@ if (EPG.debug)
   EPG.debug.inform("EPG.growl.js loaded");
 }
 /**
- * @memberOf EPG
- * @name growl
+ * @name EPG.growl
  * @static
  * @type object
  * @description Displays growl notifications if growl (www.growl.info) with growlnotify is installed.
@@ -43,7 +42,7 @@ EPG.growl = function(Debug, Translator)
   
   // Private methods
   /**
-   * @memberOf growl
+   * @memberOf EPG.growl
    * @name growlCheck
    * @function 
    * @description Checks if the growl notification test failed. If an error was found, growl is not installed and no further attempts will be made to send messages via growl.
@@ -79,7 +78,7 @@ EPG.growl = function(Debug, Translator)
   }
   
   /**
-    * @memberOf growl
+    * @memberOf EPG.growl
     * @name growlFinished
     * @function
     * @description Runs after a growl notification has been shown.
@@ -106,7 +105,7 @@ EPG.growl = function(Debug, Translator)
   return /** @scope growl */ {
     
     /**
-      * @memberOf growl
+      * @memberOf EPG.growl
       * @function init
       * @description Saves "this" and initializes the singleton.
       */
@@ -121,7 +120,7 @@ EPG.growl = function(Debug, Translator)
     },
     
     /**
-      * @memberOf growl
+      * @memberOf EPG.growl
       * @function checkForGrowl
       * @description Checks if growl is installed on this computer.
       * @param {function} callback Function to be run after the check has finished. Must accept a boolean as its first parameter (true if growl was installed, false if not).
@@ -144,7 +143,7 @@ EPG.growl = function(Debug, Translator)
     },
     
     /**
-      * @memberOf growl
+      * @memberOf EPG.growl
       * @function notifyNow
       * @description Immediately sends a growl notification message to the user.
       * @param {string} message The message to send to the user.
@@ -192,7 +191,7 @@ EPG.growl = function(Debug, Translator)
     },
     
     /**
-      * @memberOf growl
+      * @memberOf EPG.growl
       * @function notifyLater
       * @description Schedules a growl notification to be displayed at a certain date and time. Will of course not show notifications if the computer is asleep or turned off.
       * @param {string} message The message to send to the user.
@@ -218,7 +217,7 @@ EPG.growl = function(Debug, Translator)
     },
     
     /**
-      * @memberOf growl
+      * @memberOf EPG.growl
       * @function isInstalled
       * @description Returns weather growl is installed or not.
       * @return {boolean} True if growl is installed, otherwise false.

@@ -24,8 +24,7 @@ if (EPG.debug)
 }
 
 /**
- * @memberOf EPG
- * @name file
+ * @name EPG.file
  * @static
  * @type object
  * @description Handles interaction with the filesystem. Reads local and remote files using XMLHttpRequest.
@@ -39,7 +38,7 @@ EPG.file = function(debug, growl)
   
   // Private methods
   /**
-   * @memberOf file
+   * @memberOf EPG.file
    * @name fileOpened
    * @function
    * @description Called from XMLHttpRequest when a file has been opened. Evaluates the responseText and calls the onSuccess-method if the responseText could be evaluated to a json-object, otherwise calls the onFailure-method with an error message.
@@ -48,9 +47,10 @@ EPG.file = function(debug, growl)
    */
   function fileOpened(xhr) 
   {
-    var jsonObject;
     try
     {
+      var jsonObject;
+      
       if (xhr && xhr.readyState === 4)
       {
         if(xhr.responseText)
@@ -98,7 +98,7 @@ EPG.file = function(debug, growl)
     }
   }
   /**
-   * @memberOf file
+   * @memberOf EPG.file
    * @name savePath
    * @function
    * @description Extracts the HOME-path from the systemCall recieved
@@ -143,7 +143,7 @@ EPG.file = function(debug, growl)
   return /** @scope file */ {
   	
   	/**
-  	 * @memberOf file
+  	 * @memberOf EPG.file
   	 * @function init
   	 * @description Saves "this" and initializes the file object.
   	 */
@@ -157,7 +157,7 @@ EPG.file = function(debug, growl)
     },
     
     /**
-     * @memberOf file
+     * @memberOf EPG.file
      * @function open
      * @description Opens a file and returns its contents as a json-object to the provided onSuccess-method. In case of a failure, calls the onFailure-method.
      * @param {string} path Relative (from the users home directory) path to the file that we want to open.
@@ -167,9 +167,10 @@ EPG.file = function(debug, growl)
      */
     open: function(path, onSuccess, onFailure, channelID) 
     {
-      var xhr;
       try
       {
+        var xhr;
+        
         if(!HOME)
         {
           if(!gettingPath)
@@ -217,7 +218,7 @@ EPG.file = function(debug, growl)
     },
     
     /**
-     * @memberOf file
+     * @memberOf EPG.file
      * @function getHomePath
      * @description Returns the path to the users home folder (with a trailing slash).
      * @return {string} Path to the users home folder.
@@ -235,7 +236,7 @@ EPG.file = function(debug, growl)
     },
     
     /**
-     * @memberOf file
+     * @memberOf EPG.file
      * @function openSchedule
      * @description Opens a schedule for a specified channelID.
      * @param {string} channelID Id of the channel whos shedule we are opening.
@@ -245,9 +246,10 @@ EPG.file = function(debug, growl)
      */
     openSchedule: function (channelID, ymd, onSuccess, onFailure) 
     {
-      var schedulesPath;
       try
       {
+        var schedulesPath;
+        
         schedulesPath = "Library/Xmltv/schedules/" + channelID + "_" + ymd + ".js";
         that.open(schedulesPath, onSuccess, onFailure, channelID);
       }
