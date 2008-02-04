@@ -653,13 +653,13 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
      * @function scroll
      * @description Listens to and consumes scroll events if program information is visible.
      */
-    scroll: function (event) 
+    scroll: function (event, program) 
     {
       try
       {
         var amount;
         
-        if(scalableContainer.style.visibility !== "hidden")
+        if(scalableContainer.style.visibility !== "hidden" && program && programInfoNode.program === program)
         {
           event.preventDefault();
           event.stopPropagation();

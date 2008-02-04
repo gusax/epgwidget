@@ -334,6 +334,10 @@ EPG.settings = function(Debug, growl, file)
       {
         when = new Date(); // now
       }
+      else
+      {
+        Debug.inform("getFileDateYYYYMMDD when = " + when);
+      }
       year = when.getUTCFullYear();
       month = 1 + when.getUTCMonth(); // months are between 0 and 11 so we need to add one to whatever getMonth returns
       day = when.getUTCDate();
@@ -365,7 +369,7 @@ EPG.settings = function(Debug, growl, file)
    * @param {string} [ymd] Forces findPrograms to look only in the schedule pointed to by ymd.
    * @return {array} An array of programs, the length of numPrograms.
    */
-  function findPrograms (channelID, numPrograms, when, ymd)
+  function findPrograms (channelID, numPrograms, when, ymd, alreadyFoundPrograms, fileDate)
   {
     var foundPrograms = [],
     programs,
@@ -386,13 +390,19 @@ EPG.settings = function(Debug, growl, file)
       whenTimestamp = when.getTime();
       if(typeof(ymd) === "undefined")
       {
-        ymd = getFileDateYYYYMMDD(when);
+        ymd = getFileDateYYYYMMDD(fileDate);
       }
+      if(alreadyFoundPrograms)
+      {
+        foundPrograms = alreadyFoundPrograms;
+      }
+      
       programs = cachedPrograms[channelID][ymd];
+      
       if(programs && programs.length > 0)
       {
         programsLength = programs.length;
-        while(numFound < numPrograms && index < programsLength)
+        while(numFound < numPrograms && index < programsLength - 1)
         {
           index += 1;
           programStart = programs[index].start * 1000;
@@ -401,45 +411,69 @@ EPG.settings = function(Debug, growl, file)
           {
             if(programStart <= whenTimestamp && whenTimestamp < programStop)
             {
-                //Debug.alert(channelID + ": Found program " + programs[index].title.sv + " started at " + (new Date(programs[index].start * 1000)));
-                // This is the current program, since it has started this exact second or before, and it has not ended yet. 
-                break; // Break here and start copying from this position.
+              Debug.alert(channelID + ": " + ymd + " Found program " + programs[index].title.sv + " started at " + (new Date(programs[index].start * 1000)));
+              // This is the current program, since it has started this exact second or before, and it has not ended yet. 
+              break; // Break here and start copying from this position.
             }
             else if(programStart > whenTimestamp) // This program has not started yet. If we reach it without reaching the above condition first, it must mean that all the following events are in the future. No point looking at them then.
             {
-              //Debug.alert(channelID + ": All programs are in the future, programStart " + programStart + " > whenTimestamp " + whenTimestamp +" :-(");
+              Debug.alert(channelID + ": " + ymd + " All programs are in the future, programStart " + programStart + " > whenTimestamp " + whenTimestamp +" :-(");
               noProgram = true;
               break;  // first program is either the empty program or a program from an earlier date.
             }
           }
-
         }
       }
-      //Debug.alert(channelID + ": Found program, programStart " + programStart + " <= whenTimestamp " + whenTimestamp +" < programStop " + programStop);
-      if(index > -1)
-      {     
+      else
+      {
+        Debug.warn(channelID + " : " + ymd + " had no programs :-(");
+      }
+      
+      if(index >= 0)
+      {
         if(noProgram)
         {
-          copyIndex = 1;
-          foundPrograms[0] = theEmptyProgram;
+          if(foundPrograms.length === 0)
+          {
+            copyIndex = 1;
+            foundPrograms[0] = theEmptyProgram;
+          }
+          else
+          {
+            copyIndex = foundPrograms.length;
+            index = 0;
+          }
+        }
+        else if(whenTimestamp < programStop)
+        {
+          copyIndex = foundPrograms.length;
         }
         else
         {
-          copyIndex = 0;
+          copyIndex = -1;
         }
-        while(index < programsLength && copyIndex < numPrograms)
+        if(copyIndex >= 0)
         {
-          foundPrograms[copyIndex] = programs[index]; // copy program from the cached list to the list we are returning
-          copyIndex += 1;
-          index += 1;
+          while(index < programsLength && numPrograms >= 0)
+          {
+            Debug.inform(channelID + " : " + ymd + " copying program " + index + " to position " + copyIndex + " ( numPrograms = " + numPrograms + ")");
+            foundPrograms[copyIndex] = programs[index]; // copy program from the cached list to the list we are returning
+            copyIndex += 1;
+            index += 1;
+            numPrograms -= 1;
+          }
         }
+      }
+      else
+      {
+        Debug.inform(channelID + ": " + ymd + " Did not find a program on or after " + when);
       }
 
       return foundPrograms;
     }
     catch (error)
     {
-      Debug.alert("Error in settings.findPrograms: " + error + " (channelID = " + channelID + ", numPrograms = " + numPrograms + ", when = " + when + ", ymd = " + ymd + ")");
+      Debug.alert("Error in settings.findPrograms: " + error + " (channelID = " + channelID + ", numPrograms = " + numPrograms + ", when = " + when + ", ymd = " + ymd + ", fileDate = " + fileDate + ")");
     }
   }
   
@@ -449,14 +483,14 @@ EPG.settings = function(Debug, growl, file)
    * @function
    * @description Run if the wanted schedulefile could be opened.
    * @private
-   * @param {function} callback Callback function that should be notified when successful.
+   * @param {function} onSuccess Callback function that should be notified when successful.
    * @param {object} schedule Jsontv-object containing the schedule as an array.
    * @param {string} channelID ID of the channel that the schedule belongs to.
    * @param {string} ymd The date of the schedule in YYYY-MM-DD format.
    * @param {number} numPrograms The number of programs wanted.
-   * @param {object} when Date object describing the start of the search. 
+   * @param {object} fileDate Date object describing the start of the search. 
    */
-  function programsDownloadSucceeded (callback, schedule, channelID, ymd, numPrograms, when)
+  function programsDownloadSucceeded (onSuccess, schedule, channelID, ymd, numPrograms, fileDate, alreadyFoundPrograms, onFailure, when)
   {
     var foundPrograms;
     try
@@ -466,15 +500,15 @@ EPG.settings = function(Debug, growl, file)
       {
         cachedPrograms[channelID][ymd].loaded = true;
         cachedPrograms[channelID][ymd] = schedule.programme;
-        
-        foundPrograms = findPrograms(channelID, numPrograms, when, ymd);
+        that.getProgramsForChannel(channelID, onSuccess, onFailure, numPrograms, when, alreadyFoundPrograms, fileDate);
+        //foundPrograms = findPrograms(channelID, numPrograms, when, ymd);
         // check for other callbacks and run them too?
-        callback(foundPrograms);
+        //callback(foundPrograms);
       }
     }
     catch (error)
     {
-      Debug.alert("Error in settings.programsDownloadSucceeded: " + error + " (callback = " + callback + ")");
+      Debug.alert("Error in settings.programsDownloadSucceeded: " + error);
     }
   }
   
@@ -922,7 +956,7 @@ EPG.settings = function(Debug, growl, file)
       * @param {number} [numPrograms] Number of programs. Default is 3 (now, next, later).
       * @param {object} [when] Date object for getting program(s) at a specified date and time. Default is now (i e new Date()).
       */
-    getProgramsForChannel: function (channelID, onSuccess, onFailure, numPrograms, when) 
+    getProgramsForChannel: function (channelID, onSuccess, onFailure, numPrograms, when, alreadyFoundPrograms, fileDate) 
     {
       var ymd,
       programsForThisChannelAreCached,
@@ -932,42 +966,67 @@ EPG.settings = function(Debug, growl, file)
       try
       {
         //Debug.alert(channelID + ": getting programs");
-        if(typeof(numPrograms) === "undefined" || numPrograms < 1)
+        if(typeof(numPrograms) === "undefined")
         {
           numPrograms = 3; // now next later
         }
+        
+        if(alreadyFoundPrograms && alreadyFoundPrograms.length)
+        {
+          numPrograms -= alreadyFoundPrograms.length;
+          if(numPrograms < 0)
+          {
+            Debug.warn("getProgramsForChannel with id " + channelID + " found too many programs!\nalreadyFoundPrograms.length = " + alreadyFoundPrograms.length + ", numPrograms became " + numPrograms);
+            numPrograms = 0;
+          }
+        }
         if(!when || (when && !when.getFullYear))
         {
-          when = new Date(); // now
+          fileDate = new Date((new Date()) - 86400000); // Always start searching yesterday
+          when = new Date();
+        }
+        else if(!alreadyFoundPrograms)
+        {
+          fileDate = new Date(when - 86400000); // Start searching one day before when, just to be sure.
+          alreadyFoundPrograms = [];
         }
         
-        ymd = getFileDateYYYYMMDD(when);
+        ymd = getFileDateYYYYMMDD(fileDate);
         programsForThisChannelAreCached = cachedPrograms[channelID];
         if(programsForThisChannelAreCached)
         {
           programsForThisDateAreCached = programsForThisChannelAreCached[ymd];
           if(programsForThisDateAreCached)// && programsForThisDateAreCached.loaded)
           {
-            foundPrograms = findPrograms(channelID, numPrograms, when);
-            //Debug.alert(channelID + ": " + foundPrograms.length + " programs are cached on date " + ymd);
+            //Debug.inform(channelID + ": " + ymd + " had " + programsForThisDateAreCached.length + " programs cached.");
+            foundPrograms = findPrograms(channelID, numPrograms, when, ymd, alreadyFoundPrograms, fileDate);
+            //Debug.inform(channelID + ": " + ymd + " found " + foundPrograms.length + " programs");
             // What happens around midnight?
-            setTimeout(function(){onSuccess(foundPrograms);}, 1);
+            if(foundPrograms.length < numPrograms)
+            {
+              Debug.alert(channelID + " did not find enough programs on date " + ymd + ", trying " + new Date(fileDate.getTime() + 86400000) + "instead");
+              that.getProgramsForChannel(channelID, onSuccess, onFailure, numPrograms, when, foundPrograms, new Date(fileDate.getTime() + 86400000)); // Look for more programs tomorrow
+            }
+            else
+            {
+              setTimeout(function(){onSuccess(foundPrograms);}, 1);
+            }
           }
           else
           {
-            //Debug.alert(channelID + ": No programs for date " + ymd + " cached, running file.openSchedule");
+            //Debug.inform(channelID + ": No programs for date " + ymd + " cached, running file.openSchedule");
           	cachedPrograms[channelID][ymd] = {};
           	cachedPrograms[channelID][ymd].loaded = false;
-            file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd, numPrograms, when);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd);});
+            file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd, numPrograms, fileDate, alreadyFoundPrograms, onFailure, when);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd, alreadyFoundPrograms);});
           }
         }
         else
         {
-          //Debug.alert(channelID + ": This is the first time we have seen this channel. Running file.openSchedule");
+          //Debug.inform(channelID + ": This is the first time we have seen this channel. Running file.openSchedule");
           cachedPrograms[channelID] = {};
           cachedPrograms[channelID][ymd] = {};
           cachedPrograms[channelID][ymd].loaded = false;
-          file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd, numPrograms, when);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd);});
+          file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd, numPrograms, fileDate, alreadyFoundPrograms, onFailure, when);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd, alreadyFoundPrograms);});
         }
        
       }
@@ -986,26 +1045,27 @@ EPG.settings = function(Debug, growl, file)
     {
       var channelID,
       cachedChannel,
+      index,
       today = new Date(),
       yesterday = "0000-00-00",
       ymd;
       try
       {
-        if(!cachedChannels.lastRemove || cachedChannels.lastRemove < today)
+        if(!cachedPrograms.lastRemove || cachedPrograms.lastRemove < today)
         {
-          cachedChannels.lastRemove = today.getTime();
-          for (channelID in cachedChannels)
+          cachedPrograms.lastRemove = today.getTime();
+          for (channelID in cachedPrograms)
           {
-            if(cachedChannels.hasOwnProperty(channelID))
+            if(cachedPrograms.hasOwnProperty(channelID))
             {
-              cachedChannel = cachedChannels[index];
+              cachedChannel = cachedPrograms[channelID];
               for (ymd in cachedChannel)
               {
                 if(cachedChannel.hasOwnProperty(ymd))
                 {
                   if(ymd < yesterday)
                   {
-                    delete cachedChannels[ymd];
+                    delete cachedPrograms[ymd];
                  }
                 }
               }

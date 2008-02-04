@@ -60,6 +60,7 @@ EPG.file = function(debug, growl)
             jsonObject = eval("(" + xhr.responseText + ")");
             if(jsonObject && jsonObject.jsontv && xhr.onSuccess)
             {
+              //debug.inform("file.fileOpened: Successfully opened file " + xhr.path);
               xhr.onSuccess(jsonObject.jsontv, xhr.channelID);
             }
             else
@@ -73,9 +74,10 @@ EPG.file = function(debug, growl)
           } 
           catch (e)
           {
+            debug.warn("Error in file.fileOpened when evaluating javascript: " + e);
           	if(xhr.onFailure)
           	{
-          	  debug.warn("file.fileOpened: Opened file " + xhr.path + " but it's contents was not valid javascript:\n" + xhr.responseText);
+          	  debug.warn("file.fileOpened: Opened file " + xhr.path + " but it's contents was not valid javascript:\n");
           	  xhr.onFailure(xhr.responseText, xhr.channelID);
           	}
           }
