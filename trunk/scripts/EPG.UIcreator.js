@@ -171,8 +171,8 @@ EPG.UIcreator = function(Debug, Skin, Translator)
         if(programInfoObject)
         {
           titleNode.addEventListener("mousedown", function(){try{programInfoObject.show(programNode.program);}catch(e){Debug.alert("Error when clicking on titleNode: " + e);}}, false);
-          titleNode.addEventListener("DOMMouseScroll", function(event){try{programInfoObject.scroll(event);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
-          titleNode.addEventListener("mousewheel", function(event){try{programInfoObject.scroll(event);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
+          titleNode.addEventListener("DOMMouseScroll", function(event){try{programInfoObject.scroll(event, programNode.program);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
+          titleNode.addEventListener("mousewheel", function(event){try{programInfoObject.scroll(event, programNode.program);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
         }
         
         programNode.startNode = startNode.firstChild;
