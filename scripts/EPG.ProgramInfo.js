@@ -103,8 +103,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
       programInfoNode.descriptionFrameNode = programInfoNode.lastChild;
       programInfoNode.descriptionFrameNode.setAttribute("title", Translator.translate("Use mousewheel/trackpad to scroll description") + ".");
       
-      programInfoNode.descriptionFrameNode.addEventListener("DOMMouseScroll", function(event){try{that.scroll(event);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
-      programInfoNode.descriptionFrameNode.addEventListener("mousewheel", function(event){try{that.scroll(event);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
+      programInfoNode.descriptionFrameNode.addEventListener("DOMMouseScroll", function(event){try{that.scroll(event, programInfoNode.program);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
+      programInfoNode.descriptionFrameNode.addEventListener("mousewheel", function(event){try{that.scroll(event, programInfoNode.program);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
         
       
       programInfoNode.descriptionFrameNode.appendChild(div.cloneNode(false));
