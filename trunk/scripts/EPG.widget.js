@@ -169,7 +169,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 		{
 		  try
 		  {
-		    debug.alert("Onshow!");
+		    debug.inform("----------- Onshow! -----------");
 		    settings.getAllChannels(afterOnShow, channelsLoadedFailed);
 		  }
 		  catch (error)
@@ -184,7 +184,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 		  {
 		    front.onHide();
 		    ProgramInfo.hide();
-		    debug.alert("Onhide!");
+		    debug.inform("----------- Onhide! -----------");
 		    // Delete all old programs once every day.
 		  }
 		  catch (error)

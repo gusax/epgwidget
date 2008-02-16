@@ -11,6 +11,25 @@ EPG.debug = function()
 	that;
 	
 	// Private methods
+	/**
+	 * @memberOf EPG.debug
+	 * @name afterLogWrite
+	 * @function
+	 * @description Called after log hopefully has been written.
+	 * @private
+	 * @param {object} systemResponse System object
+	 */
+	function afterLogWrite (systemResponse)
+	{
+	  try
+	  {
+	    // do nothing
+	  }
+	  catch (error)
+	  {
+	    alert("Error in EPG.debug.afterLogWrite: " + error + " (systemResponse = " + systemResponse + ")");
+	  }
+	}
 	
 	// Public methods
 	return /** @scope debug */{
@@ -32,7 +51,7 @@ EPG.debug = function()
 		  }
 		  catch (error)
 		  {
-		    Debug.alert("Error in debug.init: " + error);
+		    alert("Error in debug.init: " + error);
 		  }
 		},
 		
@@ -46,7 +65,11 @@ EPG.debug = function()
 		{
 			if(debuggingEnabled)
 			{
-			  if(typeof(window.console) === "object" && window.console.error)
+			  if(window.widget)
+			  {
+			    window.widget.system("echo '" + (new Date()) + " ERROR " + message + "' >> error.log", afterLogWrite);
+			  }
+			  else if(typeof(window.console) === "object" && window.console.error)
         {
           window.console.error(message);
         }
@@ -67,7 +90,11 @@ EPG.debug = function()
 		{
 		  try
 		  {
-		    if(typeof(window.console) === "object" && window.console.warn)
+		    if(window.widget)
+        {
+          window.widget.system("echo '" + (new Date()) + " WARNING " + message + "' >> error.log", afterLogWrite);
+        }
+        else if(typeof(window.console) === "object" && window.console.warn)
 		    {
 		      window.console.warn(message);
 		    }
@@ -92,7 +119,11 @@ EPG.debug = function()
 		{
 		  try
 		  {
-		    if(typeof(window.console) === "object" && window.console.info)
+		    if(window.widget)
+        {
+          window.widget.system("echo '" + (new Date()) + " INFO " + message + "' >> error.log", afterLogWrite);
+        }
+        else if(typeof(window.console) === "object" && window.console.info)
 		    {
 		      window.console.info(message);
 		    }

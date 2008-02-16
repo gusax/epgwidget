@@ -45,6 +45,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   frontDiv,
   topBar,
   overviewDiv,
+  dayViewDiv,
   dayViewNode,
   channelNodes = {},
   infoButton,
@@ -454,7 +455,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   {
     try
     {
-      Debug.inform("Dimmed " + channelNode.channelID);
       if(reverse)
       {
         channelNode.logo.style.opacity = "0.8";
@@ -521,6 +521,154 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   
   /**
    * @memberOf EPG.front
+   * @name fillDayViewFailed
+   * @function
+   * @description Runs if an error happened when day view programs.
+   * @private
+   */
+  function fillDayViewFailed () 
+  {
+    try
+    {
+      Debug.alert("front.fillDayViewFailed: Could not get programs :-(");
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.fillDayViewFailed: " + error);
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
+   * @name fillDayView
+   * @function
+   * @description Fills day view with programs.
+   * @private
+   * @param {array} programs The programs for a specific date.
+   * @param {object} [when] Current date.
+   */
+  function fillDayView (programs, when)
+  {
+    try
+    {
+      var i, length, programLength, stopDate;
+      
+      if(!when)
+      {
+        when = new Date();
+      }
+      
+      //Debug.inform("front.fillDayView: got " + programs.length + " programs.");
+      if(programs && programs.length > 0)
+      {
+        if(dayViewDiv.childNodes && dayViewDiv.childNodes.length > 0)
+        {
+          // reuse child nodes
+          length = dayViewDiv.childNodes.length;
+          programsLength = programs.length;
+          if(length > programsLength)
+          {
+            for(i = 0; i < length; i += 1)
+            {
+              if(i < programsLength)
+              {
+                updateProgramNode(dayViewDiv.childNodes[i], programs[i]);
+                stopDate = new Date(programs[i].stop*1000);
+                if(stopDate < when)
+                {
+                  dayViewDiv.childNodes[i].setAttribute("class", "program");
+                }
+                else
+                {
+                  dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
+                }
+                dayViewDiv.childNodes[i].style.display = "block";
+              }
+              else
+              {
+                dayViewDiv.childNodes[i].style.display = "none";
+              }
+            }
+          }
+          else if(programsLength > length)
+          {
+            for(i = 0; i < programsLength; i += 1)
+            {
+              if(i < length)
+              {
+                updateProgramNode(dayViewDiv.childNodes[i], programs[i]);
+                stopDate = new Date(programs[i].stop*1000);
+                if(stopDate < when)
+                {
+                  dayViewDiv.childNodes[i].setAttribute("class", "program");
+                }
+                else
+                {
+                  dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
+                }
+                dayViewDiv.childNodes[i].style.display = "block";
+              }
+              else
+              {
+                dayViewDiv.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo));
+              }
+            }
+          }
+          else 
+          {
+            for(i = 0; i < length; i += 1)
+            {
+              updateProgramNode(dayViewDiv.childNodes[i], programs[i]);
+              stopDate = new Date(programs[i].stop*1000);
+              if(stopDate < when)
+              {
+                dayViewDiv.childNodes[i].setAttribute("class", "program");
+              }
+              else
+              {
+                dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
+              }
+              dayViewDiv.childNodes[i].style.display = "block";
+            }
+          }
+        }
+        else if(programs.length > 0)
+        {
+          Debug.inform("front.fillDayView: creating nodes");
+          length = programs.length;
+          for(i = 0; i < length; i += 1)
+          {
+            dayViewDiv.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo));
+            stopDate = new Date(programs[i].stop*1000);
+            if(stopDate < when)
+            {
+              dayViewDiv.childNodes[i].setAttribute("class", "program");
+            }
+            else
+            {
+              dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
+            }
+          }
+        }
+        else
+        {
+          // print error?
+        }
+      }
+      else
+      {
+        // print error
+      }
+      dayViewDiv.style.visibility = "visible";
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.fillDayView: " + error + " (programs = " + programs + ")");
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
    * @name switchView
    * @function
    * @description Switches between views (currently now,next,later and dayview).
@@ -535,12 +683,14 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       if(currentView === 0 || (currentView === 1 && channelNode !== dayViewNode))
       {
         dimAllChannelNodesExcept(channelNode, false);
-        currentView = 1;
+        currentView = 1; // Day view
+        Settings.getProgramsForDay(channelNode.channelID, fillDayView, fillDayViewFailed, (new Date()));
       }
       else
       {
+        dayViewDiv.style.visibility = "hidden";
         dimAllChannelNodesExcept(channelNode, true);
-        currentView = 0
+        currentView = 0; // now next later
       }
       updateTopBar(channelNode.channelID);
     }
@@ -705,19 +855,31 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       orderedList;
       
       overviewDiv = document.createElement("div");
-      /*channelList = Settings.getChannelList(currentChannelListIndex);
-      if(channelList && channelList.ordered)
-      {
-        orderedList = channelList.ordered;
-        for (index in orderedList)
-        {
-          if(orderedList.hasOwnProperty(index))
-          {
-            overviewDiv.appendChild(createChannelNode(orderedList[index]));
-          }
-        }
-      }*/
+      overviewDiv.appendChild(createDayView());
       return overviewDiv;
+    }
+    catch (error)
+    {
+      Debug.alert("Error in front.createChannelList: " + error);
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
+   * @name createDayView
+   * @function
+   * @description Creates a placeholder for the day view
+   * @private
+   * @return {object} An element (div tag) containing all channels.
+   */
+  function createDayView () 
+  {
+    try
+    {
+      dayViewDiv = document.createElement("div");
+      dayViewDiv.setAttribute("id", "dayView");
+      dayViewDiv.style.visibility = "hidden";
+      return dayViewDiv;
     }
     catch (error)
     {
@@ -758,8 +920,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             if(!channelNode) // Channel was just added
             {
               //Debug.inform("Creating channelNode for channelID " + channelID);
-              channelNode = createChannelNode(channelID);
-              
+              channelNode = createChannelNode(channelID); 
             }
             overviewDiv.appendChild(channelNode);
           }
