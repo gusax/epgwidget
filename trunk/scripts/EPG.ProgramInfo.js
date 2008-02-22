@@ -30,7 +30,7 @@ if(EPG.debug)
  * @type object
  * @description Shows the program info.
  */
-EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File) 
+EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, Reminder) 
 {
   // Private Variables
   var that,
@@ -79,6 +79,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
       programInfoNode.startAndStopNode.lastChild.setAttribute("class","start");
       programInfoNode.startAndStopNode.lastChild.appendChild(textNode.cloneNode(false));
       programInfoNode.startNode = programInfoNode.startAndStopNode.lastChild.firstChild;
+      programInfoNode.startAndStopNode.lastChild.addEventListener("click", function(event){Reminder.addReminder(programInfoNode.program);}, false);
 
       progressbarFull = div.cloneNode(false);
       progressbarFull.setAttribute("class","progressbarFullContainer");
@@ -681,5 +682,5 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File)
       }
     }
   };
-}(EPG.debug, EPG.UIcreator, EPG.translator, EPG.settings, EPG.skin, EPG.file);
+}(EPG.debug, EPG.UIcreator, EPG.translator, EPG.settings, EPG.skin, EPG.file, EPG.Reminder);
 EPG.ProgramInfo.init();

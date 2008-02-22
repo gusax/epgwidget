@@ -155,6 +155,7 @@ EPG.growl = function(Debug, Translator)
       
       try
       {
+        var message;
         // notify immediately (but if it is a reminder, perhaps check date first? If date has passed, there is no use filling the screen with messages.)
         if(window.widget)
         {
@@ -162,12 +163,19 @@ EPG.growl = function(Debug, Translator)
           {
             if(pathToImage)
             {
-              window.widget.system(pathToGrowl + " --name \"DreamEPG\" --message \"" + message + "\" --image \"" + pathToImage + "\"", function(systemcall){growlFinished(systemcall);});
+              message = pathToGrowl + " --name \"DreamEPG\" --message \"" + message + "\" --image \"" + pathToImage + "\"";
+              
             }
             else
             {
-              window.widget.system(pathToGrowl + " --name \"DreamEPG\" --message \"" + message + "\" --image \"" + pathToEPGIcon + "\"", function(systemcall){growlFinished(systemcall);});
+              message = pathToGrowl + " --name \"DreamEPG\" --message \"" + message + "\" --image \"" + pathToEPGIcon + "\"";
             }
+            
+            if(sticky)
+            {
+              message += " --sticky";
+            }
+            window.widget.system(message, function(systemcall){growlFinished(systemcall);});
           }
           else if(hasNotCheckedForGrowlYet)
           {
@@ -198,16 +206,25 @@ EPG.growl = function(Debug, Translator)
       * @param {string} pathToImage Absolute path to the image that should be used as the icon for the growl notification.
       * @param {boolean} sticky True if the notification should be sticky (not disappear until clicked by the user).
       * @param {object} later Date object representing at which point in time the notification should be shown to the user.
+      * @param {number} msToNotification Number of milliseconds to wait before showing the notification.
       */
-    notifyLater: function(message, pathToImage, sticky, later) 
+    notifyLater: function(message, pathToImage, sticky, later, msToNotification) 
     {
-      var msToNotification = 100;
       try
       {
-        // set a timeout that notifies at the specified date and time (when)
+        if(!msToNotification)
+        {
+          msToNotification = 100;
+        }
+        // set a timeout that notifies at the specified date and time
         if(userHasGrowlInstalled || hasNotCheckedForGrowlYet)
         {
           timers.push(setTimeout(function(){that.notifyNow(message, pathToImage, sticky);}, msToNotification));
+          return timers.length - 1;
+        }
+        else
+        {
+          return false;
         }
       }
       catch (error)
@@ -232,7 +249,28 @@ EPG.growl = function(Debug, Translator)
       {
         Debug.alert("Error in growl.isInstalled: " + error);
       }
-    } 
+    },
+    
+    /**
+     * @memberOf EPG.growl
+     * @function removeNotification
+     * @description Removes a scheduled notification.
+     */
+    removeNotification: function (index) 
+    {
+      try
+      {
+        if(timers[index])
+        {
+          clearTimeout(timers[index]);
+        }
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.growl.removeNotification: " + error);
+      }
+    }
+    
   };
 }(EPG.debug, EPG.translator);
 EPG.growl.init();

@@ -982,19 +982,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         else
         {
           startDate = new Date(program.start*1000);
-          if(startDate.getHours() < 10)
-          {
-            programNode.startNode.nodeValue = "0" + startDate.getHours() + ":";
-          }
-          else
-          {
-            programNode.startNode.nodeValue = startDate.getHours() + ":";
-          }
-          if(startDate.getMinutes() < 10)
-          {
-            programNode.startNode.nodeValue += "0";
-          }
-          programNode.startNode.nodeValue += "" + startDate.getMinutes();
+          programNode.startNode.nodeValue = Settings.getHHMM(startDate);
           programNode.titleNode.parentNode.removeAttribute("title");
           for (locale in program.title)
           {
