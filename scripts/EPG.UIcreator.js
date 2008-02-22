@@ -29,7 +29,7 @@ if(EPG.debug)
  * @type object
  * @description Creates different UI-elements.
  */
-EPG.UIcreator = function(Debug, Skin, Translator)
+EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
 {
   // Private Variables
   var that;
@@ -129,22 +129,13 @@ EPG.UIcreator = function(Debug, Skin, Translator)
       	programNode.setAttribute("class", "program");
       	startNode = document.createElement("div");
       	startNode.setAttribute("class", "start");
+      	startNode.addEventListener("click", function(event){Reminder.addReminder(programNode.program);}, false);
       	titleNode = document.createElement("div");
       	titleNode.setAttribute("class", "title");
         if(program && program.start && program.title)
         {
           startDate = new Date(program.start * 1000);
-        	tempTextNode = document.createTextNode("");
-        	if(startDate.getHours() < 10)
-        	{
-        		tempTextNode.nodeValue = "0";
-        	}
-        	tempTextNode.nodeValue += "" + startDate.getHours() + ":";
-        	if(startDate.getMinutes() < 10)
-        	{
-        		tempTextNode.nodeValue += "0";
-        	}
-        	tempTextNode.nodeValue += "" + startDate.getMinutes();
+        	tempTextNode = document.createTextNode(Settings.getHHMM(startDate));
         	startNode.appendChild(tempTextNode.cloneNode(false));
         	
         	tempTextNode.nodeValue = "No title :-(";
@@ -210,6 +201,6 @@ EPG.UIcreator = function(Debug, Skin, Translator)
       }
     }
   };
-}(EPG.debug, EPG.skin, EPG.translator);
+}(EPG.debug, EPG.skin, EPG.translator, EPG.settings, EPG.Reminder);
 EPG.UIcreator.init();
 

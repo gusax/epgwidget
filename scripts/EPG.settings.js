@@ -1153,6 +1153,66 @@ EPG.settings = function(Debug, growl, file)
       {
         Debug.alert("Error in settings.getCurrentChannelListID: " + error);
       }
+    },
+    
+    /**
+     * @memberOf EPG.settings
+     * @function getLogoPath
+     * @description Returns path to channel logo if it exists.
+     */
+    getLogoPath: function (channelID) 
+    {
+      try
+      { 
+        var channel = that.getChannel(channelID);
+        if(channel && channel.icon)
+        {
+          return file.getHomePath() + "Library/Xmltv/logos/" + channelID + ".png";
+        }
+        else
+        {
+          return false;
+        }
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.settings.getLogoPath: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf EPG.settings
+     * @function getHHMM
+     * @description Returns a date formatted as HH:MM.
+     */
+    getHHMM: function (when) 
+    {
+      try
+      {
+        var HHMM = "";
+        if(when && when.getHours)
+        {
+          if(when.getHours() < 10)
+          {
+            HHMM = "0" + when.getHours() + ":";
+          }
+          else
+          {
+            HHMM = when.getHours() + ":";
+          }
+          if(when.getMinutes() < 10)
+          {
+            HHMM += "0";
+          }
+          HHMM += "" + when.getMinutes();
+        }
+        
+        return HHMM;
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.settings.getHHMM: " + error);
+      }
     }
     
   };
