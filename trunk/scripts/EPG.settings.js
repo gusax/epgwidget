@@ -455,7 +455,7 @@ EPG.settings = function(Debug, growl, file)
         }
         if(copyIndex >= 0)
         {
-          while(index < programsLength && numPrograms >= 0)
+          while(index < programsLength && numPrograms > 0)
           {
             //Debug.inform(channelID + " : " + ymd + " copying program " + index + " to position " + copyIndex + " ( numPrograms = " + numPrograms + ")");
             foundPrograms[copyIndex] = programs[index]; // copy program from the cached list to the list we are returning
@@ -497,11 +497,12 @@ EPG.settings = function(Debug, growl, file)
     try
     {
       // TODO: perhaps we should also be able to find programs between two dates, and not just find a number of programs.
-      if(schedule && schedule.programme)
+      if(schedule && schedule.programme && schedule.programme.length >= 0)
       {
-        cachedPrograms[channelID][ymd].loaded = true;
+        cachedPrograms[channelID][ymd] = {};
         cachedPrograms[channelID][ymd] = schedule.programme;
-        if(typeof(numPrograms) === "number")
+        
+        if(numPrograms >= 0)
         {
           that.getProgramsForChannel(channelID, onSuccess, onFailure, numPrograms, when, alreadyFoundPrograms, fileDate);
         }
@@ -510,10 +511,65 @@ EPG.settings = function(Debug, growl, file)
           onSuccess(cachedPrograms[channelID][ymd]);
         }
       }
+      else if(onFailure)
+      {
+        Debug.alert("settings.programsDownloadSucceeded failed on channel with ID " + channelID);
+        onFailure();
+      }
     }
     catch (error)
     {
       Debug.alert("Error in settings.programsDownloadSucceeded: " + error);
+    }
+  }
+  
+  /**
+   * @memberOf EPG.settings
+   * @name downloadSchedules
+   * @function
+   * @description Downloads schedules and icon for a channel that has just been added. Schedules for yesterday, today and tomorrow will be downloaded.
+   * @private
+   * @param {string} channelID ID of channel that has just been added.
+   */
+  function downloadSchedules (channelID)
+  {
+    try
+    {
+      var channel, yesterday, today, tomorrow, fileDate, savePath, url;
+      
+      if(channelID)
+      {
+        channel = that.getChannel(channelID);
+        if(channel && channel.baseUrl)
+        {
+          now = new Date();
+          yesterday = new Date(now.getTime() - 86400000);
+          tomorrow = new Date(now.getTime() + 86400000);
+          
+          fileDate = getFileDateYYYYMMDD(yesterday);
+          savePath = "Library/Xmltv/schedules/" + channelID + "_" + fileDate + ".js";
+          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js";
+          file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){Debug.alert("Schedule download failure :-(");},true);
+          
+          fileDate = getFileDateYYYYMMDD(now);
+          savePath = "Library/Xmltv/schedules/" + channelID + "_" + fileDate + ".js";
+          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js";
+          file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){Debug.alert("Schedule download failure :-(");},true);
+          
+          fileDate = getFileDateYYYYMMDD(tomorrow);
+          savePath = "Library/Xmltv/schedules/" + channelID + "_" + fileDate + ".js";
+          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js";
+          file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){Debug.alert("Schedule download failure :-(");},true);
+          if(channel.icon)
+          {
+            file.downloadFile(channel.icon, "Library/Xmltv/logos/" + channelID + ".png", function(){Debug.inform("Icon download success!");}, function(){Debug.alert("Icon download failure :-(");},true);
+          }
+        }
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPGsettings.downloadSchedules: " + error + " (channelID = " + channelID + ")");
     }
   }
   
@@ -814,6 +870,7 @@ EPG.settings = function(Debug, growl, file)
             tempList.hashed[channelID] = tempList.ordered.length;
             tempList.ordered.push(channelID);
             that.saveChannelList(channelList);
+            downloadSchedules(channelID);
             return true;
           }
           else
@@ -983,16 +1040,12 @@ EPG.settings = function(Debug, growl, file)
           }
           else
           {
-            cachedPrograms[channelID][ymd] = {};
-            cachedPrograms[channelID][ymd].loaded = false;
             file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd);});
           }
         }
         else
         {
           cachedPrograms[channelID] = {};
-          cachedPrograms[channelID][ymd] = {};
-          cachedPrograms[channelID][ymd].loaded = false;
           file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd, numPrograms, fileDate, alreadyFoundPrograms, onFailure, when);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd, alreadyFoundPrograms);});
         }
       }
@@ -1022,7 +1075,7 @@ EPG.settings = function(Debug, growl, file)
       callback;
       try
       {
-        //Debug.alert(channelID + ": getting programs");
+        
         if(typeof(numPrograms) === "undefined")
         {
           Debug.warn("settings.getProgramsForChannel: numPrograms was undefined! Defaulting to 3 (now, next, later)");
@@ -1054,7 +1107,7 @@ EPG.settings = function(Debug, growl, file)
         if(programsForThisChannelAreCached)
         {
           programsForThisDateAreCached = programsForThisChannelAreCached[ymd];
-          if(programsForThisDateAreCached)// && programsForThisDateAreCached.loaded)
+          if(programsForThisDateAreCached)
           {
             //Debug.inform(channelID + ": " + ymd + " had " + programsForThisDateAreCached.length + " programs cached.");
             foundPrograms = findPrograms(channelID, numPrograms, when, ymd, alreadyFoundPrograms, fileDate);
@@ -1073,8 +1126,6 @@ EPG.settings = function(Debug, growl, file)
           else
           {
             //Debug.inform(channelID + ": No programs for date " + ymd + " cached, running file.openSchedule");
-          	cachedPrograms[channelID][ymd] = {};
-          	cachedPrograms[channelID][ymd].loaded = false;
             file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd, numPrograms, fileDate, alreadyFoundPrograms, onFailure, when);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd, alreadyFoundPrograms);});
           }
         }
@@ -1082,8 +1133,6 @@ EPG.settings = function(Debug, growl, file)
         {
           //Debug.inform(channelID + ": This is the first time we have seen this channel. Running file.openSchedule");
           cachedPrograms[channelID] = {};
-          cachedPrograms[channelID][ymd] = {};
-          cachedPrograms[channelID][ymd].loaded = false;
           file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd, numPrograms, fileDate, alreadyFoundPrograms, onFailure, when);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd, alreadyFoundPrograms);});
         }
        
