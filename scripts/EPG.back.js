@@ -57,7 +57,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   {
     try
     {
-      debug.alert("back.resetChannelListScroll: scrolling to top");
       channelListToScroll.topY = 0;
       channelListToScroll.style.top = channelListToScroll.topY + "em";
     }
@@ -600,7 +599,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       {
         if(channels && channelListContainer)
         {
-          debug.alert("reloading channel list with " + channels.length + " channels");
+          debug.inform("reloading channel list with " + channels.length + " channels");
           createChannelListSuccess(channels, channelListContainer);
           resetChannelListScroll();
           

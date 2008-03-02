@@ -2,7 +2,7 @@
  bitwise: true, 
  browser:true, 
  cap:false, 
- debug:false,
+ Debug:false,
  eqeqeq: true,
  evil: false,
  fragment:false, 
@@ -18,9 +18,9 @@
 /*extern EPG,
  widget*/
 
-if (EPG.debug)
+if (EPG.Debug)
 {
-  EPG.debug.inform("EPG.file.js loaded");
+  EPG.Debug.inform("EPG.file.js loaded");
 }
 
 /**
@@ -29,12 +29,13 @@ if (EPG.debug)
  * @type object
  * @description Handles interaction with the filesystem. Reads local and remote files using XMLHttpRequest.
  */
-EPG.file = function(debug, growl)
+EPG.file = function(Debug, growl, currentVersion)
 {
   // Private Variables
   var that,
   HOME,
-  gettingPath = false;
+  gettingPath = false,
+  userAgent;
   
   // Private methods
   /**
@@ -57,27 +58,37 @@ EPG.file = function(debug, growl)
         {
           try 
           {
-            jsonObject = eval("(" + xhr.responseText + ")");
-            if(jsonObject && jsonObject.jsontv && xhr.onSuccess)
+            if(xhr.dontEval)
             {
-              //debug.inform("file.fileOpened: Successfully opened file " + xhr.path);
-              xhr.onSuccess(jsonObject.jsontv, xhr.channelID);
+              if(xhr.onSuccess)
+              {
+                xhr.onSuccess("" + xhr.responseText);
+              }
             }
             else
             {
-              if(xhr.onFailure)
+              jsonObject = eval("(" + xhr.responseText + ")");
+              if(jsonObject && jsonObject.jsontv && xhr.onSuccess)
               {
-                debug.warn("file.fileOpened: Opened file " + xhr.path + " but it did not contain a jsontv-object! Contents:\n" + xhr.responseText);
-                xhr.onFailure(xhr.responseText, xhr.channelID);
+                //Debug.inform("file.fileOpened: Successfully opened file " + xhr.path);
+                xhr.onSuccess(jsonObject.jsontv, xhr.channelID);
+              }
+              else
+              {
+                if(xhr.onFailure)
+                {
+                  Debug.warn("file.fileOpened: Opened file " + xhr.path + " but it did not contain a jsontv-object! Contents:\n" + xhr.responseText);
+                  xhr.onFailure(xhr.responseText, xhr.channelID);
+                }
               }
             }
           } 
           catch (e)
           {
-            debug.warn("Error in file.fileOpened when evaluating javascript: " + e);
+            Debug.warn("Error in file.fileOpened when evaluating javascript: " + e);
           	if(xhr.onFailure)
           	{
-          	  debug.warn("file.fileOpened: Opened file " + xhr.path + " but it's contents was not valid javascript:\n");
+          	  Debug.warn("file.fileOpened: Opened file " + xhr.path + " but it's contents was not valid javascript:\n");
           	  xhr.onFailure(xhr.responseText, xhr.channelID);
           	}
           }
@@ -90,13 +101,13 @@ EPG.file = function(debug, growl)
             xhr.onFailure(xhr.channelID);
           }
         }
-        xhr = null;
+        xhr = false;
       }
     }
     catch (error)
     {
-      debug.alert("Error in file.fileOpened: " + error);
-      xhr = null;
+      Debug.alert("Error in file.fileOpened: " + error);
+      xhr = false;
     }
   }
   /**
@@ -133,11 +144,85 @@ EPG.file = function(debug, growl)
         HOME = "file:///Users/gusax840/";
       }
       
-      //debug.alert("file.savePath: HOME = " + HOME);
+      //Debug.alert("file.savePath: HOME = " + HOME);
     }
     catch (error)
     {
-      debug.alert("Error in file.savePath: " + error);
+      Debug.alert("Error in file.savePath: " + error);
+    }
+  }
+  
+  /**
+   * @memberOf EPG.file
+   * @name fileDownloaded
+   * @function
+   * @description Run by widget.system after a file (hopefully) has been downloaded.
+   * @private
+   * @param {object} systemCall Widget system call.
+   */
+  function fileDownloaded (systemCall, onSuccess, onFailure, url, localPath, dontEval)
+  {
+    try
+    {
+      if(systemCall)
+      {
+        if(systemCall.errorString)
+        {
+          switch(systemCall.status)
+          {
+             case 0: // status seems to always be 0...
+               Debug.inform("file.fileDownloaded: Successfully downloaded " + url + "!");
+               if(localPath && localPath.search(/(.png)+$/i) > 0) // a file that ends in .png (case insensitive)
+               {
+                 // This is an icon.
+                 if(onSuccess)
+                 {
+                   onSuccess();
+                 }
+               }
+               else
+               {
+                 that.open(localPath, onSuccess, onFailure, dontEval);
+               }
+             break;
+             case 1: // Unsupported protocol. This build of curl has no support for this protocol.
+             case 2: // Failed to initialize.
+             case 3: // URL malformat. The syntax was not correct
+             case 4: // URL user malformatted. The user-part of the URL syntax  was  not correct.
+             case 5: // Couldn't  resolve  proxy.  The  given  proxy  host  could not be resolved.
+             case 6: // Couldn't resolve host. The given remote host was not resolved.
+               // No internet connection?
+             case 7: // Failed to connect to host.
+               Debug.alert("file.fileDownloaded: error with status " + systemCall.status + ". errorString = \n" + systemCall.errorString + "\nwhen trying to download " + url);
+               if(onFailure)
+               {
+                 onFailure();
+               }
+             break;
+             default:
+               Debug.alert("file.fileDownloaded: error with status " + systemCall.status + ". errorString = \n" + systemCall.errorString + "\nwhen trying to download " + url);
+               if(onFailure)
+               {
+                 onFailure();
+               }
+             break;
+          }
+        }
+        else
+        {
+          Debug.inform("file.fileDownloaded: Successfully downloaded " + url + "!");
+          that.open(localPath, onSuccess, onFailure, dontEval);
+        }
+        systemCall.close();
+      }
+      else 
+      {
+        Debug.alert("file.fileDownloaded: Error when trying to download " + url);
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.file.fileDownloaded: " + error + " (systemCall = " + systemCall + ")");
     }
   }
   
@@ -154,6 +239,14 @@ EPG.file = function(debug, growl)
       if(!that)
       {
         that = this;
+        if(typeof(currentVersion) !== "undefined")
+        {
+          userAgent = "se.swedb.tv.widget/" + currentVersion + "W";
+        }
+        else
+        {
+          userAgent = "se.swedb.tv.widget/W";
+        }
       }
       delete that.init
     },
@@ -166,8 +259,9 @@ EPG.file = function(debug, growl)
      * @param {function} onSuccess Method to call if the file was found. Must accept a json-object as its first argument.
      * @param {function} onFailure Method to call if the file could not be found, or if another error occured. Must accept an error object as its first argument.
      * @param {string} channelID ID of the channel that the file (schedule) belongs to.
+     * @param {boolean} dontEval True to skip json evaluation at the end.
      */
-    open: function(path, onSuccess, onFailure, channelID) 
+    open: function(path, onSuccess, onFailure, channelID, dontEval) 
     {
       try
       {
@@ -187,7 +281,7 @@ EPG.file = function(debug, growl)
               setTimeout(savePath,1);
             }
           }
-          //debug.inform("file.open: don't have HOME-path yet. Trying again in 100ms...");
+          //Debug.inform("file.open: don't have HOME-path yet. Trying again in 100ms...");
           setTimeout(function(){that.open(path, onSuccess, onFailure, channelID);}, 100);
         }
         else
@@ -200,18 +294,19 @@ EPG.file = function(debug, growl)
             xhr.channelID = channelID;
             xhr.onSuccess = onSuccess;
             xhr.onFailure = onFailure;
+            xhr.dontEval = dontEval;
             xhr.onreadystatechange = function (){
               fileOpened(xhr);
             };
             xhr.open("GET", path, true);
             xhr.send("");
-            //debug.inform("file.open: Opening file at path: " + path);
+            //Debug.inform("file.open: Opening file at path: " + path);
           }
         }
       }
       catch (error)
       {
-        debug.alert("Error in file.open: " + error + "\n(path = " + path + ")");
+        Debug.alert("Error in file.open: " + error + "\n(path = " + path + ")");
         if(onFailure)
         { 
           setTimeout(onFailure, 1);
@@ -250,16 +345,43 @@ EPG.file = function(debug, growl)
     {
       try
       {
-        var schedulesPath;
-        
-        schedulesPath = "Library/Xmltv/schedules/" + channelID + "_" + ymd + ".js";
+        var schedulesPath = "Library/Xmltv/schedules/" + channelID + "_" + ymd + ".js";
         that.open(schedulesPath, onSuccess, onFailure, channelID);
       }
       catch (error)
       {
         Debug.alert("Error in file.openSchedule: " + error + " (channelID = " + channelID + ", ymd = " + ymd + ")");
       }
+    },
+    
+    /**
+     * @memberOf EPG.file
+     * @function downloadFile
+     * @description Downloads a file.
+     */
+    downloadFile: function (url, savePath, onSuccess, onFailure, dontEval) 
+    {
+      try
+      {
+        var systemCall;
+        if(widget.system)
+        {
+          if(url && savePath)
+          {
+            Debug.inform('file.downloadFile running command /usr/bin/curl -S -R --user-agent '+userAgent+' --compressed ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath);
+            systemCall = widget.system('/usr/bin/curl -S -R --user-agent '+userAgent+' --compressed ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath , function(response){fileDownloaded(response, onSuccess, onFailure, url, savePath, dontEval);});
+          }
+          else if(onFailure)
+          {
+            setTimeout(onFailure,1);
+          }
+        }
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.file.downloadFile: " + error);
+      }
     }
   };
-}(EPG.debug, EPG.growl);
+}(EPG.debug, EPG.growl, EPG.currentVersion);
 EPG.file.init();
