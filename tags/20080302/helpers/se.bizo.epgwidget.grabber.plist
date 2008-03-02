@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+  <plist version="1.0">
+  <dict>  
+    <key>Label</key>
+    <string>EPGwidget automatic downloading of schedules</string>
+    <key>ProgramArguments</key>
+    <array> 
+      <string>/usr/bin/php</string>
+      <string>epg.downloader.php</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>/Users/gusax840/Library/Xmltv/grabber</string>
+    <key>StandardOutPath</key>
+    <string>messages.log</string>
+    <key>StandardErrorPath</key>
+    <string>errors.log</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>LowPriorityIO</key>
+    <true/>
+    <key>StartInterval</key>
+    <integer>3600</integer>
+    <key>TimeOut</key>
+    <integer>120</integer>
+    <key>ExitTimeOut</key>
+    <integer>120</integer>
+  </dict>
+  </plist>
