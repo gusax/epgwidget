@@ -680,19 +680,29 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     try
     {
       ProgramInfo.hide();
-      if(currentView === 0 || (currentView === 1 && channelNode !== dayViewNode))
+      if(channelNode)
       {
-        dimAllChannelNodesExcept(channelNode, false);
-        currentView = 1; // Day view
-        Settings.getProgramsForDay(channelNode.channelID, fillDayView, fillDayViewFailed, (new Date()));
+        if(currentView === 0 || (currentView === 1 && channelNode !== dayViewNode))
+        {
+          dimAllChannelNodesExcept(channelNode, false);
+          currentView = 1; // Day view
+          Settings.getProgramsForDay(channelNode.channelID, fillDayView, fillDayViewFailed, (new Date()));
+        }
+        else
+        {
+          dayViewDiv.style.visibility = "hidden";
+          dimAllChannelNodesExcept(channelNode, true);
+          currentView = 0; // now next later
+        }
+        updateTopBar(channelNode.channelID);
       }
-      else
+      else if(currentView !== 0) // current view is not now next later
       {
         dayViewDiv.style.visibility = "hidden";
         dimAllChannelNodesExcept(channelNode, true);
         currentView = 0; // now next later
+        updateTopBar();
       }
-      updateTopBar(channelNode.channelID);
     }
     catch (error)
     {
@@ -856,6 +866,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       
       overviewDiv = document.createElement("div");
       overviewDiv.appendChild(createDayView());
+      overviewDiv.dayViewNode = overviewDiv.lastChild;
+      
       return overviewDiv;
     }
     catch (error)
@@ -1085,7 +1097,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @memberOf EPG.front
    * @name hideChannelNodes
    * @function
-   * @description Hides all channelNodes when going to the backside, in case we add or remove a channel. (Removed channels are not actually removed from the front, they are just hidden.)
+   * @description Hides all channelNodes when going to the backside, in case we add or remove a channel.
    * @private
    */
   function hideChannelNodes ()
@@ -1095,9 +1107,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       var i,
       length;
       
-      while(overviewDiv.firstChild)
+      while(overviewDiv.lastChild && overviewDiv.lastChild !== overviewDiv.dayViewNode)
       {
-        overviewDiv.removeChild(overviewDiv.firstChild);
+        overviewDiv.removeChild(overviewDiv.lastChild);
       }
     }
     catch (error)
@@ -1295,13 +1307,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
       try
       {
-        if(event && event.stopPropagation)
-        {
-          event.stopPropagation();
-          event.preventDefault();
-        }
+        stopEvent(event);
         if(toBack)
         {
+          switchView(); // in case we are in day view, switch back to now next later.
           hideChannelNodes();
           that.hide();
           toBack();
