@@ -14,6 +14,6 @@ På framsidan kan du:
 == Baksidan ==
 På baksidan kan du:
 
-  * *Lägga till en kanal i kanallistan* : För att lägga till en kanal i den aktiva kanallistan, klicka på kanalnamnet. Kanalen läggs då till sist i kanallistan. (Sortera sedan kanalerna i den ordning du vill ha dem på framsidan.)
+  * *Lägga till en kanal i kanallistan* : För att lägga till en kanal i den aktiva kanallistan, klicka på kanalnamnet. Kanalen läggs då till sist i kanallistan. (På framsidan kan du sedan sortera kanalerna i rätt ordning.)
  
   * *Ta bort en kanal ur kanallistan* : För att ta bort en kanal ur den aktiva kanallistan, klicka på kanalnamnet för att bocka bort den.
