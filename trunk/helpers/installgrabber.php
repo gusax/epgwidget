@@ -73,7 +73,7 @@ function installCrontab($pathToXmltvFolder)
   if(file_exists("se.bizo.epgwidget.grabber.plist"))
   {
   	$plistContents = utf8_decode(file_get_contents("se.bizo.epgwidget.grabber.plist")); // Open template plist
-    $plistContents = utf8_encode(str_replace("$PATHTOGRABBER$", $pathToXmltvFolder . "/grabber", $plistContents)); // replace PATHTOGRABBER with real path to grabber 
+    $plistContents = utf8_encode(str_replace('$PATHTOGRABBER$', $pathToXmltvFolder . "/grabber", $plistContents)); // replace PATHTOGRABBER with real path to grabber 
     $launchAgentPlist = fopen($pathToLaunchAgents . "/se.bizo.epgwidget.grabber.plist", "w+"); // create launchAgent plist file
     if(fwrite($launchAgentPlist, $plistContents) === FALSE)
     {
