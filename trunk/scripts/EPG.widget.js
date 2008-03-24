@@ -42,7 +42,8 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 	var that,
 	internalState = "loading",
 	currentSide,
-	currentChannelListIndex = 0;
+	currentChannelListIndex = 0,
+	downloadingChannels = false;
 	
 	// Private methods
 	function createObject(oldObject)
@@ -60,6 +61,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
     var currentChannelList;
     try
     {
+      downloadingChannels = false;
       if(window.widget)
       {
         window.widget.onshow = that.onshow;
@@ -102,7 +104,17 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
     try
     {
       growl.notifyNow("Could not load any channels :-( - does your internet connection work?");
-      that.toFront(true);
+      debug.alert("Could not load any channels :-( - does your internet connection work?");
+      
+      if(!downloadingChannels)
+      {
+        downloadingChannels = true;
+        settings.downloadChannelList(channelsLoaded, channelsLoadedFailed);
+      }
+      else
+      {
+        that.toFront(true);
+      }
     }
     catch (error)
     {

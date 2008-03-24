@@ -47,6 +47,7 @@ EPG.settings = function(Debug, growl, file)
   timers = [],
   paths = {},
   defaultSkin = "orangehc",
+  defaultPathToServer = "http://xmltv.tvsajten.com/json",
   currentSize = {},
   theEmptyProgram = 
   {
@@ -1275,8 +1276,23 @@ EPG.settings = function(Debug, growl, file)
       {
         Debug.alert("Error in EPG.settings.getHHMM: " + error);
       }
+    },
+    /**
+     * @memberOf EPG.settings
+     * @function downloadChannelList
+     * @description Downloads a list of channels from the server, in case the grabber has failed to do so.
+     */
+    downloadChannelList: function (onSuccess, onFailure) 
+    {
+      try
+      {
+        file.downloadFile(defaultPathToServer + "/channels.js", paths.allChannels, onSuccess, onFailure);
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.settings.downloadChannels: " + error);
+      }
     }
-    
   };
 }(EPG.debug, EPG.growl, EPG.file);
 EPG.settings.init();
