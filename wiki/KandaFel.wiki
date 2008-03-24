@@ -1,0 +1,11 @@
+#summary Kända fel i aktuell version, om sådana finnes.
+#labels Featured
+
+= Kända fel =
+ * *Nedladdning av tablåer* : Man verkar vara tvungen att logga ut & logga in igen inom två dagar från att EPG-widgeten har installerats första gången, annars går inte bakgrundsnedladdningen igång och man tappar tablåerna.
+ 
+ * *Heldagsvyn* : Man kan inte byta dag i heldagsvyn.
+
+ * *Versionsnummer* : Det står inget versionsnummer på baksidan av widgeten.
+
+ * *Scrollbars* : Scrollbars fattas, så man kan inte scrolla texten om man bara har enknappsmus/pekplatta utan tvåfingerscroll.
