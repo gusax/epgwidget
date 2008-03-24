@@ -1,4 +1,4 @@
-#summary Innehåller förklaringar för de saker du kan göra med EPG-widgeten.
+#summary Innehåller en lista av saker du kan göra med EPG-widgeten.
 #labels Featured
 == Framsidan ==
 Framsidan visar program och kanalernas logotyper.
