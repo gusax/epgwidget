@@ -57,11 +57,12 @@ EPG.settings = function(Debug, growl, file)
   // Private methods
   function alertCallbackMethods(callbackArrayName, callbackMethod, callbackContents) 
   {
-    var index,
-    callbackArray,
-    callback;
     try
     {
+      var index,
+      callbackArray,
+      callback;
+      
       callbackArray = callbacks[callbackArrayName];
       if(callbackArray && callbackMethod)
       {
@@ -110,12 +111,13 @@ EPG.settings = function(Debug, growl, file)
   
   function updateAllChannels(jsonObject) 
   {
-    var index,
-    reversedIndex,
-    cachedChannels,
-    orderedChannelIDs;
     try
     {
+      var index,
+      reversedIndex,
+      cachedChannels,
+      orderedChannelIDs;
+      
       if(jsonObject && jsonObject.channels)
       {
         cachedChannels = jsonObject.channels;
@@ -155,11 +157,12 @@ EPG.settings = function(Debug, growl, file)
   
   function resize (fake) 
   {
-    var width,
-    height,
-    body;
     try
     {
+      var width,
+      height,
+      body;
+    
       if(window.widget && typeof(currentSize.width) !== "undefined")
       {
         
@@ -234,13 +237,14 @@ EPG.settings = function(Debug, growl, file)
     */
   function exportChannelList () 
   {
-    var channelid,
-    listid,
-    list,
-    foundChannels = [],
-    string;
     try
     {
+      var channelid,
+      listid,
+      list,
+      foundChannels = [],
+      string;
+    
       for (listid in channelLists)
       {
         if(channelLists.hasOwnProperty(listid))
@@ -326,11 +330,12 @@ EPG.settings = function(Debug, growl, file)
    */
   function getFileDateYYYYMMDD (when)
   {
-    var year,
-    month,
-    day;
     try
     {
+      var year,
+      month,
+      day;
+    
       if(!when)
       {
         when = new Date(); // now
@@ -372,18 +377,19 @@ EPG.settings = function(Debug, growl, file)
    */
   function findPrograms (channelID, numPrograms, when, ymd, alreadyFoundPrograms, fileDate)
   {
-    var foundPrograms = [],
-    programs,
-    index = -1,
-    copyIndex = 0,
-    programStart,
-    programStop,
-    numFound = 0,
-    programsLength = 0,
-    whenTimestamp,
-    noProgram = false;
     try
     {
+      var foundPrograms = [],
+      programs,
+      index = -1,
+      copyIndex = 0,
+      programStart,
+      programStop,
+      numFound = 0,
+      programsLength = 0,
+      whenTimestamp,
+      noProgram = false;
+      
       if(!when)
       {
         when = new Date();
@@ -493,9 +499,9 @@ EPG.settings = function(Debug, growl, file)
    */
   function programsDownloadSucceeded (onSuccess, schedule, channelID, ymd, numPrograms, fileDate, alreadyFoundPrograms, onFailure, when)
   {
-    var foundPrograms;
     try
     {
+      var foundPrograms;
       // TODO: perhaps we should also be able to find programs between two dates, and not just find a number of programs.
       if(schedule && schedule.programme && schedule.programme.length >= 0)
       {
@@ -712,10 +718,11 @@ EPG.settings = function(Debug, growl, file)
     
     getAllChannels: function(onSuccess, onFailure) 
     {
-      var now = new Date(),
-      callback = {};
       try
       {
+        var now = new Date(),
+        callback = {};
+      
         callback.onSuccess = onSuccess;
         callback.onFailure = onFailure;
         if(!callbacks.allChannels)
@@ -750,9 +757,10 @@ EPG.settings = function(Debug, growl, file)
       */
     getChannel: function (channelID) 
     {
-      var channel;
       try
       {
+        var channel;
+        
         if(typeof(channelID) !== "undefined" && allChannels && allChannels.channels)
         {
           return allChannels.channels[channelID];
@@ -770,12 +778,12 @@ EPG.settings = function(Debug, growl, file)
     
     getChannelList: function (listIndex) 
     {
-      var tempList,
-      tempListOrdered,
-      tempListHashed,
-      i;
       try
       {
+        var tempList,
+        tempListOrdered,
+        tempListHashed,
+        i;
         
         if(typeof(listIndex) !== "undefined")
         {
@@ -818,9 +826,10 @@ EPG.settings = function(Debug, growl, file)
     
     saveChannelList: function (channelListID) 
     {
-      var activeList;
       try
       {
+        var activeList;
+        
         if(typeof(channelListID) !== "undefined")
         {
           activeList = channelListID;
@@ -847,9 +856,10 @@ EPG.settings = function(Debug, growl, file)
     
     addChannelToList: function (channelID, channelList) 
     {
-      var tempList;
       try
       { 
+        var tempList;
+        
         if(channelID && channelList >= 0)
         {
           tempList = channelLists[channelList];
@@ -893,9 +903,10 @@ EPG.settings = function(Debug, growl, file)
     
     removeChannelFromList: function (channelID, listID) 
     {
-      var tempList;
       try
       {
+        var tempList;
+        
         if(channelID && listID >= 0)
         {
           
@@ -925,9 +936,10 @@ EPG.settings = function(Debug, growl, file)
     
     resizeText: function (amount, skipResize) 
     {
-      var body;
       try
       {
+        var body;
+        
         body = document.getElementsByTagName("body")[0];
         
         
@@ -1068,13 +1080,13 @@ EPG.settings = function(Debug, growl, file)
       */
     getProgramsForChannel: function (channelID, onSuccess, onFailure, numPrograms, when, alreadyFoundPrograms, fileDate) 
     {
-      var ymd,
-      programsForThisChannelAreCached,
-      programsForThisDateAreCached,
-      foundPrograms,
-      callback;
       try
       {
+        var ymd,
+        programsForThisChannelAreCached,
+        programsForThisDateAreCached,
+        foundPrograms,
+        callback;
         
         if(typeof(numPrograms) === "undefined")
         {
@@ -1150,14 +1162,15 @@ EPG.settings = function(Debug, growl, file)
      */
     removeOldPrograms: function () 
     {
-      var channelID,
-      cachedChannel,
-      index,
-      today = new Date(),
-      yesterday = "0000-00-00",
-      ymd;
       try
       {
+        var channelID,
+        cachedChannel,
+        index,
+        today = new Date(),
+        yesterday = "0000-00-00",
+        ymd;
+        
         if(!cachedPrograms.lastRemove || cachedPrograms.lastRemove < today)
         {
           cachedPrograms.lastRemove = today.getTime();
