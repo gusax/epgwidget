@@ -11,7 +11,7 @@
       <string>epg.downloader.php</string>
     </array>
     <key>WorkingDirectory</key>
-    <string>/Users/gusax840/Library/Xmltv/grabber</string>
+    <string>$PATHTOGRABBER$</string>
     <key>StandardOutPath</key>
     <string>messages.log</string>
     <key>StandardErrorPath</key>
