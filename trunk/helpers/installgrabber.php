@@ -70,7 +70,19 @@ function installCrontab($pathToXmltvFolder)
   {
     system("/bin/mkdir $pathToLaunchAgents");
   }
-  $answer = exec("/bin/cp se.bizo.epgwidget.grabber.plist $pathToLaunchAgents");
+  if(file_exists("se.bizo.epgwidget.grabber.plist"))
+  {
+  	$plistContents = utf8_decode(file_get_contents("se.bizo.epgwidget.grabber.plist")); // Open template plist
+    $plistContents = utf8_encode(str_replace("$PATHTOGRABBER$", $pathToXmltvFolder . "/grabber", $plistContents)); // replace PATHTOGRABBER with real path to grabber 
+    $launchAgentPlist = fopen($pathToLaunchAgents . "/se.bizo.epgwidget.grabber.plist", "w+"); // create launchAgent plist file
+    if(fwrite($launchAgentPlist, $plistContents) === FALSE)
+    {
+    	// could not write to file :-(
+    }
+    fclose($launchAgentPlist);
+    
+  }
+  //$answer = exec("/bin/cp se.bizo.epgwidget.grabber.plist $pathToLaunchAgents");
 	/*$epgCrontab = fopen("$pathToXmltvFolder/grabber/epg.crontab","w+");
 	fwrite($epgCrontab,utf8_encode($tab));
 	fclose($epgCrontab);
