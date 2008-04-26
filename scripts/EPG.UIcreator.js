@@ -127,11 +127,20 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
       {
       	programNode = document.createElement("div");
       	programNode.setAttribute("class", "program");
+      	that.setPosition(programNode, "0.2em", "0.3em", "23.8em", "1.2em", false, "relative");
       	startNode = document.createElement("div");
       	startNode.setAttribute("class", "start");
+      	startNode.style.fontSize = "1.1em";
       	startNode.addEventListener("click", function(event){Reminder.addReminder(programNode.program);}, false);
       	titleNode = document.createElement("div");
-      	titleNode.setAttribute("class", "title");
+      	titleNode.style.fontSize = "1.1em";
+      	titleNode.style.whiteSpace = "nowrap";
+      	titleNode.style.overflow = "hidden";
+      	titleNode.appendChild(document.createElement("div"));
+      	titleNode.firstChild.setAttribute("class", "title");
+      	that.setPosition(titleNode.firstChild, "0em", "0em", false, false, false, "absolute");
+      	titleNode.firstChild.style.display = "inline";
+      	
         if(program && program.start && program.title)
         {
           startDate = new Date(program.start * 1000);
@@ -148,28 +157,65 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         	  	break;
         	  }
         	}
-        	titleNode.appendChild(tempTextNode.cloneNode(true));
+        	titleNode.firstChild.appendChild(tempTextNode.cloneNode(true));
         	delete tempTextNode;
         }
         else if(program && program.isTheEmptyProgram)
         {
           startNode.appendChild(document.createTextNode(""));
-          titleNode.appendChild(document.createTextNode("- " + Translator.translate("No program") + " -"));
+          titleNode.firstChild.appendChild(document.createTextNode("- " + Translator.translate("No program") + " -"));
         }
         programNode.program = program;
         programNode.appendChild(startNode);
         programNode.appendChild(titleNode);
+        that.setPosition(startNode, "0em", "0em", "3.4em", "1.3em", false, "absolute");
+        that.setPosition(titleNode, "3.4em", "0em", "14em", "1.3em", false, "absolute");
+        
         if(programInfoObject)
         {
           titleNode.addEventListener("mousedown", function(){try{programInfoObject.show(programNode.program);}catch(e){Debug.alert("Error when clicking on titleNode: " + e);}}, false);
           titleNode.addEventListener("DOMMouseScroll", function(event){try{programInfoObject.scroll(event, programNode.program);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
           titleNode.addEventListener("mousewheel", function(event){try{programInfoObject.scroll(event, programNode.program);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
         }
+        
+        programNode.startNode = startNode.firstChild;
+        programNode.titleNode = titleNode.firstChild.firstChild;
+        
         titleNode.addEventListener("mouseover", function()
         {
           try
           {
-            
+            if(!this.firstChild.isAnimating && this.firstChild.offsetWidth + 5 > this.offsetWidth)
+            {
+              this.firstChild.xPos = 0;
+              this.firstChild.style.left = "0px";
+              this.firstChild.animationType = "interval";
+              this.firstChild.isAnimating = setInterval(function(title, maxScroll)
+                                            {
+                                              return function ()
+                                              {
+                                                if(title.xPos < maxScroll)
+                                                {
+                                                  title.xPos += 1;
+                                                  title.style.left = "-" + title.xPos + "px";
+                                                }
+                                                else
+                                                {
+                                                  clearInterval(title.isAnimating);
+                                                  title.animationType = "timeout";
+                                                  title.isAnimating = setTimeout(function()
+                                                                                 {
+                                                                                   title.xPos = 0; 
+                                                                                   title.style.left = "0px";
+                                                                                   delete title.animationType; 
+                                                                                   title.isAnimating = false;
+                                                                                 }, 
+                                                                                 5000);
+                                                }
+                                              }
+                                            }(this.firstChild, this.firstChild.offsetWidth - this.offsetWidth + 5),
+                                            60);
+            }
           }
           catch (e)
           {
@@ -177,8 +223,7 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
           }
         });
         
-        programNode.startNode = startNode.firstChild;
-        programNode.titleNode = titleNode.firstChild;
+        
         
         return programNode;
       }
@@ -226,10 +271,22 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         {
           style.position = position;
         }
-        style.left = x;
-        style.top = y;
-        style.width = w;
-        style.height = h;
+        if(x)
+        {
+          style.left = x;
+        }
+        if(y)
+        {
+          style.top = y;
+        }
+        if(w)
+        {
+          style.width = w;
+        }
+        if(h)
+        {
+          style.height = h;
+        }
         if(z)
         {
           style.zIndex = z;
