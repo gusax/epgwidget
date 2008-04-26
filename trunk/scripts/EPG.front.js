@@ -983,8 +983,23 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       startDate,
       start;
       
-      if(program)
+      if(program && program !== programNode.program)
       {
+        if(programNode.titleNode.parentNode.isAnimating)
+        {
+          if(programNode.titleNode.parentNode.animationType === "interval")
+          {
+            clearInterval(programNode.titleNode.parentNode.isAnimating);
+          }
+          else if(programNode.titleNode.parentNode.animationType === "timeout")
+          {
+            clearTimeout(programNode.titleNode.visAnimating);
+          }
+          programNode.titleNode.parentNode.isAnimating = false;
+          delete programNode.titleNode.parentNode.animationType;
+          programNode.titleNode.parentNode.xPos = 0;
+          programNode.titleNode.parentNode.style.left = "0px";
+        }
         programNode.program = program;
         if(program.isTheEmptyProgram)
         {
@@ -1010,7 +1025,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     }
     catch (error)
     {
-      Debug.alert("Error in front.updateProgramsNode: " + error + " (programsNode = " + programsNode + ")");
+      Debug.alert("Error in front.updateProgramsNode: " + error + " (programNode = " + programNode + ")");
     }
   }
   

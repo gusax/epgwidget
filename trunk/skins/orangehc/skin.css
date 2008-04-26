@@ -105,9 +105,6 @@ div.programs div.currentprogram
 
 div.program div.start
 {
-  width: 3.4em; 
-  font-size: 1.1em;
-  float: left;
   text-align: center;
   color: #d5d5d5;
   text-shadow: #000000 0 0 0.2em;
@@ -115,8 +112,6 @@ div.program div.start
 
 div.program div.title
 {
-  font-size: 1.1em;
-  margin-left: 3.4em;
   white-space: nowrap; 
   text-align: left;
   color: #ffc047;
