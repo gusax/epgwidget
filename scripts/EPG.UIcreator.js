@@ -199,6 +199,60 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
       {
         Debug.alert("Error in UIcreator.removeChildNodes: " + error);
       }
+    },
+    
+    /**
+     * @memberOf EPG.UIcreator
+     * @function setPosition
+     * @description Positions a node at the specified position, optionally adding it to a parent node.
+     */
+    setPosition: function (childNode, x, y, w, h, z, position, parentNode) 
+    {
+      try
+      {
+        var style = childNode.style;
+        if(position)
+        {
+          style.position = position;
+        }
+        style.left = x;
+        style.top = y;
+        style.width = w;
+        style.height = h;
+        if(z)
+        {
+          style.zIndex = z;
+        }
+        if(parentNode)
+        {
+          parentNode.appendChild(childNode);
+        }
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.UIcreator.setPosition: " + error + "\nx = " + x + ", y = " + y + ", w = " + w + ", h = " + h + ", z = " + z + ", relative = " + relative + ", parentNode = " + parentNode);
+      }
+    },
+    
+    /**
+     * @memberOf EPG.UIcreator
+     * @function createScrollbar
+     * @description Creates a scrollbar
+     */
+    createScrollbar: function (x, y, w, h, z, position) 
+    {
+      try
+      {
+        var scrollbarBackground, scrollbar;
+        
+        scrollbarBackground = document.createElement("div")
+        
+        
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.UIcreator.createScrollbar: " + error);
+      }
     }
   };
 }(EPG.debug, EPG.skin, EPG.translator, EPG.settings, EPG.Reminder);

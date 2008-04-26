@@ -45,97 +45,6 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
   // Private methods
   /**
    * @memberOf EPG.ProgramInfo
-   * @name create
-   * @function
-   * @description Creates the necessary DOM nodes.
-   * @private
-   */
-  function create ()
-  {
-    var div,
-    textNode;
-    try
-    {
-      currentChannelListIndex = Settings.getCurrentChannelListIndex();
-      programInfoNode = document.createElement("div");
-      
-      div = document.createElement("div");
-      textNode = document.createTextNode("");
-      logo = document.createElement("img");
-      logo.setAttribute("id","backgroundlogo");
-      logo.style.visibility = "hidden";
-      programInfoNode.appendChild(logo);
-      
-      programInfoNode.appendChild(div.cloneNode(false));
-      programInfoNode.lastChild.setAttribute("class","title");
-      programInfoNode.lastChild.appendChild(textNode.cloneNode(false));
-      programInfoNode.titleNode = programInfoNode.lastChild.firstChild;
-      
-      programInfoNode.appendChild(div.cloneNode(false));
-      programInfoNode.lastChild.setAttribute("class","startAndStop");
-      programInfoNode.startAndStopNode = programInfoNode.lastChild;
-      
-      programInfoNode.startAndStopNode.appendChild(div.cloneNode(false));
-      programInfoNode.startAndStopNode.lastChild.setAttribute("class","start");
-      programInfoNode.startAndStopNode.lastChild.appendChild(textNode.cloneNode(false));
-      programInfoNode.startNode = programInfoNode.startAndStopNode.lastChild.firstChild;
-      programInfoNode.startAndStopNode.lastChild.addEventListener("click", function(event){Reminder.addReminder(programInfoNode.program);}, false);
-
-      progressbarFull = div.cloneNode(false);
-      progressbarFull.setAttribute("class","progressbarFullContainer");
-      progressbarFull.appendChild(div.cloneNode(true));
-      progressbarFull.firstChild.style.width = "0%";
-      progressbarFull.firstChild.style.height = "100%";
-      progressbarFull.firstChild.style.overflow = "hidden";
-      progressbarFull.firstChild.appendChild(UIcreator.createScalableContainer("progressbarFull", div.cloneNode(true), "tid.png", currentChannelListIndex));
-      programInfoNode.appendChild(progressbarFull);
-      programInfoNode.progressbarFullNode = programInfoNode.lastChild;
-
-      programInfoNode.appendChild(UIcreator.createScalableContainer("progressbarEmpty", div.cloneNode(true), "tidtom.png", currentChannelListIndex));
-      programInfoNode.progressbarEmptyNode = programInfoNode.lastChild;
-      
-      programInfoNode.startAndStopNode.appendChild(div.cloneNode(false));
-      programInfoNode.startAndStopNode.lastChild.setAttribute("class","stop");
-      programInfoNode.startAndStopNode.lastChild.appendChild(textNode.cloneNode(false));
-      programInfoNode.stopNode = programInfoNode.startAndStopNode.lastChild.firstChild;
-      
-      programInfoNode.appendChild(div.cloneNode(false));
-      programInfoNode.lastChild.setAttribute("class","descriptionFrame");
-      programInfoNode.descriptionFrameNode = programInfoNode.lastChild;
-      programInfoNode.descriptionFrameNode.setAttribute("title", Translator.translate("Use mousewheel/trackpad to scroll description") + ".");
-      
-      programInfoNode.descriptionFrameNode.addEventListener("DOMMouseScroll", function(event){try{that.scroll(event, programInfoNode.program);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
-      programInfoNode.descriptionFrameNode.addEventListener("mousewheel", function(event){try{that.scroll(event, programInfoNode.program);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
-        
-      
-      programInfoNode.descriptionFrameNode.appendChild(div.cloneNode(false));
-      programInfoNode.descriptionFrameNode.lastChild.setAttribute("class","duration");
-      programInfoNode.descriptionFrameNode.lastChild.appendChild(textNode.cloneNode(false));
-      programInfoNode.durationNode = programInfoNode.descriptionFrameNode.lastChild.firstChild;
-      programInfoNode.durationContainer = programInfoNode.descriptionFrameNode.lastChild; 
-      programInfoNode.durationContainer.style.position="relative";
-      
-      programInfoNode.descriptionFrameNode.appendChild(div.cloneNode(false));
-      programInfoNode.descriptionFrameNode.lastChild.setAttribute("class","description");
-      programInfoNode.descriptionFrameNode.lastChild.appendChild(textNode.cloneNode(false));
-      programInfoNode.descriptionNode = programInfoNode.descriptionFrameNode.lastChild.firstChild;
-      programInfoNode.descriptionContainer = programInfoNode.descriptionFrameNode.lastChild;
-      programInfoNode.descriptionContainer.topY = 0;
-      programInfoNode.descriptionContainer.style.position="relative";
-      
-      scalableContainer = UIcreator.createScalableContainer("programInfo", programInfoNode, "infobakgrund.png", currentChannelListIndex);
-      scalableContainer.setAttribute("id","programInfo");
-      scalableContainer.style.visibility = "hidden";
-      document.getElementsByTagName("body")[0].appendChild(scalableContainer);
-    }
-    catch (error)
-    {
-      Debug.alert("Error in ProgramInfo.create: " + error);
-    }
-  }
-  
-  /**
-   * @memberOf EPG.ProgramInfo
    * @name getHHMM
    * @function
    * @description Returns a specified timestamp formatted as HH:MM.
@@ -431,12 +340,147 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
      */
     init: function()
     {
-      if(!that)
+      try
       {
-        that = this;
+        var div,
+        textNode;
+        
+        if(!that)
+        {
+          that = this;
+        }
+        
+        currentChannelListIndex = Settings.getCurrentChannelListIndex();
+        programInfoNode = document.createElement("div");
+        
+        div = document.createElement("div");
+        textNode = document.createTextNode("");
+        logo = document.createElement("img");
+        logo.setAttribute("id","backgroundlogo");
+        logo.style.visibility = "hidden";
+        programInfoNode.appendChild(logo);
+        
+        programInfoNode.appendChild(div.cloneNode(false));
+        programInfoNode.lastChild.setAttribute("class","title");
+        programInfoNode.lastChild.style.margin = "2.5em 2.7em 0em 0.9em";
+        programInfoNode.lastChild.style.height = "1.3em";
+        programInfoNode.lastChild.style.overflow = "hidden";
+        programInfoNode.lastChild.style.fontSize = "1.1em";
+        programInfoNode.lastChild.appendChild(textNode.cloneNode(false));
+        programInfoNode.titleNode = programInfoNode.lastChild.firstChild;
+        
+        
+        programInfoNode.appendChild(div.cloneNode(false));
+        programInfoNode.lastChild.setAttribute("class","startAndStop");
+        programInfoNode.startAndStopNode = programInfoNode.lastChild;
+        programInfoNode.startAndStopNode.style.margin = "0.1em 2.7em 0.2em 0.9em";
+        programInfoNode.startAndStopNode.style.fontSize = "1.1em";
+        programInfoNode.startAndStopNode.style.height = "2em";
+        programInfoNode.startAndStopNode.style.overflow = "hidden";
+        
+        programInfoNode.startAndStopNode.appendChild(div.cloneNode(false));
+        programInfoNode.startAndStopNode.lastChild.setAttribute("class","start");
+        UIcreator.setPosition(programInfoNode.startAndStopNode.lastChild, "0.7em", "3.9em", "3.2em", "1.4em", false, "absolute");
+        programInfoNode.startAndStopNode.lastChild.style.lineHeight = "2em";
+        programInfoNode.startAndStopNode.lastChild.appendChild(textNode.cloneNode(false));
+        programInfoNode.startNode = programInfoNode.startAndStopNode.lastChild.firstChild;
+        programInfoNode.startAndStopNode.lastChild.addEventListener("click", function(event){Reminder.addReminder(programInfoNode.program);}, false);
+  
+        progressbarFull = div.cloneNode(false);
+        progressbarFull.setAttribute("class","progressbarFullContainer");
+        UIcreator.setPosition(progressbarFull, "4.1em", "4.6em", "12em", "1.4em", 2, "absolute");
+        progressbarFull.appendChild(div.cloneNode(true));
+        progressbarFull.firstChild.style.width = "0%";
+        progressbarFull.firstChild.style.height = "100%";
+        progressbarFull.firstChild.style.overflow = "hidden";
+        progressbarFull.firstChild.appendChild(UIcreator.createScalableContainer("progressbarFull", div.cloneNode(true), "tid.png", currentChannelListIndex));
+        progressbarFull.firstChild.firstChild.style.width = "12em";
+        progressbarFull.firstChild.firstChild.style.height = "1.4em";
+        programInfoNode.appendChild(progressbarFull);
+        programInfoNode.progressbarFullNode = programInfoNode.lastChild;
+  
+        programInfoNode.appendChild(UIcreator.createScalableContainer("progressbarEmpty", div.cloneNode(true), "tidtom.png", currentChannelListIndex));
+        programInfoNode.progressbarEmptyNode = programInfoNode.lastChild;
+        UIcreator.setPosition(programInfoNode.progressbarEmptyNode, "4.1em", "4.6em", "12em", "1.4em", 1, "absolute");
+        
+        programInfoNode.startAndStopNode.appendChild(div.cloneNode(false));
+        programInfoNode.startAndStopNode.lastChild.setAttribute("class","stop");
+        UIcreator.setPosition(programInfoNode.startAndStopNode.lastChild, "14.9em", "3.9em", "3.2em", "1.4em", false, "absolute");
+        programInfoNode.startAndStopNode.lastChild.style.lineHeight = "2em";
+        
+        programInfoNode.startAndStopNode.lastChild.appendChild(textNode.cloneNode(false));
+        programInfoNode.stopNode = programInfoNode.startAndStopNode.lastChild.firstChild;
+        
+        // Scrollbar
+        programInfoNode.appendChild(div.cloneNode(false));
+        programInfoNode.lastChild.setAttribute("class","programInfoScrollButton");
+        programInfoNode.scrollUpButton = programInfoNode.lastChild;
+        programInfoNode.scrollUpButton.appendChild(document.createTextNode("\u25b2")); // Arrow up
+        UIcreator.setPosition(programInfoNode.scrollUpButton, "18.6em", "21.7em", "1.2em", "1.2em", 1, "absolute");
+        programInfoNode.scrollUpButton.style.border = "0.1em solid transparent";
+        programInfoNode.scrollUpButton.style.lineHeight = "1.2em";
+        programInfoNode.scrollUpButton.style.textAlign = "center";
+        programInfoNode.scrollUpButton.addEventListener("mousedown", function(event){try{that.scroll(event, programInfoNode.program, 10);}catch(e){Debug.alert("Error when clicking on scrollUpButton: " + e);}}, false);
+        
+        
+        programInfoNode.appendChild(div.cloneNode(false));
+        programInfoNode.lastChild.setAttribute("class","programInfoScrollButton");
+        programInfoNode.scrollDownButton = programInfoNode.lastChild;
+        programInfoNode.scrollDownButton.appendChild(document.createTextNode("\u25bc")); // Arrow down
+        UIcreator.setPosition(programInfoNode.scrollDownButton, "18.6em", "23.3em", "1.2em", "1.2em", 1, "absolute");
+        programInfoNode.scrollDownButton.style.border = "0.1em solid transparent";
+        programInfoNode.scrollDownButton.style.lineHeight = "1.4em";
+        programInfoNode.scrollDownButton.style.textAlign = "center";
+        programInfoNode.scrollDownButton.addEventListener("mousedown", function(event){try{that.scroll(event, programInfoNode.program, -10);}catch(e){Debug.alert("Error when clicking on scrollUpButton: " + e);}}, false);
+        
+        // Description frame
+        programInfoNode.appendChild(div.cloneNode(false));
+        programInfoNode.lastChild.setAttribute("class","descriptionFrame");
+        programInfoNode.descriptionFrameNode = programInfoNode.lastChild;
+        programInfoNode.descriptionFrameNode.setAttribute("title", Translator.translate("Use mousewheel/trackpad to scroll description") + ".");
+        UIcreator.setPosition(programInfoNode.descriptionFrameNode, "0em", "6.6em", "18em", "18.3em", false, "absolute");
+        programInfoNode.descriptionFrameNode.style.margin = "0em 2em 0em 1em";
+        programInfoNode.descriptionFrameNode.style.overflow = "hidden";
+        programInfoNode.descriptionFrameNode.style.clear = "both";
+        
+        programInfoNode.descriptionFrameNode.addEventListener("DOMMouseScroll", function(event){try{that.scroll(event, programInfoNode.program);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
+        programInfoNode.descriptionFrameNode.addEventListener("mousewheel", function(event){try{that.scroll(event, programInfoNode.program);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
+          
+        // Duration and time left
+        programInfoNode.descriptionFrameNode.appendChild(div.cloneNode(false));
+        programInfoNode.descriptionFrameNode.lastChild.setAttribute("class","duration");
+        programInfoNode.descriptionFrameNode.lastChild.style.fontSize = "1.1em";
+        programInfoNode.descriptionFrameNode.lastChild.style.margin = "0.8em 0.8em 0em 0.2em"; 
+        programInfoNode.descriptionFrameNode.lastChild.appendChild(textNode.cloneNode(false));
+        programInfoNode.durationNode = programInfoNode.descriptionFrameNode.lastChild.firstChild;
+        programInfoNode.durationContainer = programInfoNode.descriptionFrameNode.lastChild; 
+        programInfoNode.durationContainer.style.position="relative";
+        
+        // Description
+        programInfoNode.descriptionFrameNode.appendChild(div.cloneNode(false));
+        programInfoNode.descriptionFrameNode.lastChild.setAttribute("class","description");
+        programInfoNode.descriptionFrameNode.lastChild.style.paddingBottom = "1em";
+        programInfoNode.descriptionFrameNode.lastChild.style.fontSize = "1.1em";
+        programInfoNode.descriptionFrameNode.lastChild.style.margin = "0.8em 0.8em 0em 0.2em";
+        programInfoNode.descriptionFrameNode.lastChild.appendChild(textNode.cloneNode(false));
+        programInfoNode.descriptionNode = programInfoNode.descriptionFrameNode.lastChild.firstChild;
+        programInfoNode.descriptionContainer = programInfoNode.descriptionFrameNode.lastChild;
+        programInfoNode.descriptionContainer.topY = 0;
+        programInfoNode.descriptionContainer.style.position="relative";
+        
+        scalableContainer = UIcreator.createScalableContainer("programInfo", programInfoNode, "infobakgrund.png", currentChannelListIndex);
+        scalableContainer.setAttribute("id","programInfo");
+        UIcreator.setPosition(scalableContainer, "25.1em", "1em", "22.3em", "26.5em", 10, "absolute");
+        scalableContainer.style.fontWeight = "bold";
+        scalableContainer.style.visibility = "hidden";
+        document.getElementsByTagName("body")[0].appendChild(scalableContainer);
+        
+        delete that.init;
       }
-      create();
-      delete that.init;
+      catch (error)
+      {
+        Debug.alert("Error in ProgramInfo.init: " + error);
+      }
     },
     
     /**
@@ -554,6 +598,16 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
               
               // Actor(s)
               
+              if(programInfoNode.descriptionFrameNode.scrollHeight - programInfoNode.descriptionFrameNode.offsetHeight > 0)
+              {
+                programInfoNode.scrollUpButton.style.visibility = "inherit";
+                programInfoNode.scrollDownButton.style.visibility = "inherit";
+              }
+              else
+              {
+                programInfoNode.scrollUpButton.style.visibility = "hidden";
+                programInfoNode.scrollDownButton.style.visibility = "hidden";
+              }
               
               if(scalableContainer.style.visibility !== "visible")
               {
@@ -654,26 +708,32 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
      * @function scroll
      * @description Listens to and consumes scroll events if program information is visible.
      */
-    scroll: function (event, program) 
+    scroll: function (event, program, amount) 
     {
       try
       {
-        var amount;
-        
         if(scalableContainer.style.visibility !== "hidden" && program && programInfoNode.program === program)
         {
-          event.preventDefault();
-          event.stopPropagation();
-        
-          if(event.detail)
+          if(!amount)
           {
-            amount = event.detail * -1;
+            event.preventDefault();
+            event.stopPropagation();
+          
+            if(event.detail)
+            {
+              amount = event.detail * -1;
+            }
+            else
+            {
+              amount = event.wheelDelta / 40;
+            }
+            scrollDescription(amount);
           }
           else
           {
-            amount = event.wheelDelta / 40;
+            scrollDescription(amount);
           }
-          scrollDescription(amount);
+          
         }
       }
       catch (error)
