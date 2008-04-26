@@ -229,86 +229,64 @@ img.background
 
 #programInfo
 {
-  left: 25.1em;
-  top: 1em;
-  width: 22.3em;
-  height: 26.5em;
   color: #000;
-  font-weight: bold;
+}
+
+div.programInfoScrollButton
+{
+  background: #fdc54d;
+  opacity: 0.7;
+  -webkit-border-radius: 0.3em;
+}
+
+div.programInfoScrollButton:hover
+{
+  text-shadow: #000 0em 0em 0.2em;
+  opacity: 1;  
 }
 
 #programInfo div.title
 {
-  margin: 2.5em 2.7em 0em 0.9em;
-  height: 1.3em;
-  overflow: hidden;
-  font-size: 1.1em;
+  
 }
 
 #programInfo div.startAndStop
 {
-  margin: 0.1em 2.7em 0.2em 0.9em;
-  font-size: 1.1em;
-  height: 2em;
-  overflow: hidden; 
+   
 }
 
 #programInfo div.startAndStop div.start
 {
-   float: left;
-   width: 3.2em;
-   height: 100%;
-   line-height: 2em;
+   
 }
 
 #programInfo div.progressbarEmpty
 {
-   position: absolute;
-   z-index: 1;
-   top: 4.6em;
-   left: 4.1em;
-   float: left;
-   width: 12em;
-   height: 1.4em;
+   
 }
 
 #programInfo div.contents div div.descriptionFrame div.description
 {
-  padding-bottom: 1em; 
+  
 }
 
 div.progressbarFullContainer
 {
-  position: absolute;
-  z-index: 2;
-  top: 4.6em;
-  left: 4.1em;
-  float: left;
-  width: 12em;
-  height: 1.4em;
+  
 }
 
 div.progressbarFull
 {  
-   width: 12em;
-   height: 1.4em;
+  
 }
 
 #programInfo div.startAndStop div.stop
 {
-   float: right;
-   width: 3.2em;
-   height: 100%;
-   text-align: right;
-   line-height: 2em;
+   
 }
 
 #programInfo div.descriptionFrame
 {
-  margin: 0em 2em 0em 1em;
-  height: 18.3em; 
-  overflow: hidden;
-  clear: both;
   color: #fff;
 }
 

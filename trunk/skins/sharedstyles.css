@@ -39,14 +39,6 @@ body
 	overflow: hidden;
 }
 
-#programInfo
-{
-  position: absolute;
-  z-index: 99; 
-  left:27em;
-  top: 0em;
-}
-
 div
 {
   font-size: 1em;
