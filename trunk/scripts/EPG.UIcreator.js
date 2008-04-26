@@ -144,7 +144,7 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         	  if(program.title.hasOwnProperty(locale))
         	  {
         	  	tempTextNode.nodeValue = program.title[locale]; // just pick the first translation and then break
-        	  	titleNode.setAttribute("title", program.title[locale] + ". " + Translator.translate("Click to open description, use mousewheel/trackpad to scroll description."));
+        	  	titleNode.setAttribute("title", Translator.translate("Click to open description."));
         	  	break;
         	  }
         	}
@@ -165,6 +165,17 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
           titleNode.addEventListener("DOMMouseScroll", function(event){try{programInfoObject.scroll(event, programNode.program);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
           titleNode.addEventListener("mousewheel", function(event){try{programInfoObject.scroll(event, programNode.program);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
         }
+        titleNode.addEventListener("mouseover", function()
+        {
+          try
+          {
+            
+          }
+          catch (e)
+          {
+            Debug.alert("Error when hovering over a titleNode: " + e);
+          }
+        });
         
         programNode.startNode = startNode.firstChild;
         programNode.titleNode = titleNode.firstChild;

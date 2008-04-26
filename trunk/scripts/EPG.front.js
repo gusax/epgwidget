@@ -1001,7 +1001,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             if(program.title.hasOwnProperty(locale))
             {
               programNode.titleNode.nodeValue = program.title[locale]; // just pick the first translation and then break
-              programNode.titleNode.parentNode.setAttribute("title", program.title[locale] + ". " + Translator.translate("Click to open description, use mousewheel/trackpad to scroll description."));
+              programNode.titleNode.parentNode.setAttribute("title", Translator.translate("Click to open description."));
               break;
             }
           }
