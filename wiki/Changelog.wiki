@@ -7,6 +7,11 @@ Läs så här:
 
 Senaste ändringarna ligger alltid överst.
 
+== Nästa version ==
+ * Framsidan: Det går nu att hoppa upp till 24 timmar framåt i tiden genom att skriva in klockslaget med fyra siffror (1945 för att hoppa till 19:45, 0600 för 06:00 osv).
+ * Framsidan: Uppdateringen är nu synkad med klockan, så framsidan ska rita om sig så fort minuten på klockan ändrar sig. Tidigare var uppdateringens styrd av när man tog fram dashboard senast.
+ * Inforutan: Det går nu att använda piltangenterna (upp och ner) för att scrolla texten upp och ner.
+
 == 20080426 ==
  * Inforutan: Flyttade positioneringen från CSS till javascript.
 
