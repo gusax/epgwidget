@@ -55,6 +55,7 @@ EPG.translator = function(debug)
   localizedStrings.ended = "slutade för";
   localizedStrings["min ago"] = "min sedan";
   localizedStrings["Use mousewheel/trackpad to scroll description"] = "Använd scrollhjul/pekplatta för att scrolla beskrivning";
+  localizedStrings.tomorrow = "i morgon";
   // Private methods
   
   

@@ -364,17 +364,21 @@ EPG.file = function(Debug, growl, currentVersion)
       try
       {
         var systemCall;
-        if(widget.system)
+        if(window.widget && window.widget.system)
         {
           if(url && savePath)
           {
             Debug.inform('file.downloadFile running command /usr/bin/curl -S -R --user-agent '+userAgent+' --compressed ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath);
-            systemCall = widget.system('/usr/bin/curl -S -R --user-agent '+userAgent+' --compressed ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath , function(response){fileDownloaded(response, onSuccess, onFailure, url, savePath, dontEval);});
+            systemCall = window.widget.system('/usr/bin/curl -S -R --user-agent '+userAgent+' --compressed ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath , function(response){fileDownloaded(response, onSuccess, onFailure, url, savePath, dontEval);});
           }
           else if(onFailure)
           {
             setTimeout(onFailure,1);
           }
+        } 
+        else if(onFailure)
+        {
+          setTimeout(onFailure,1);
         }
       }
       catch (error)

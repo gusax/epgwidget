@@ -54,7 +54,21 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   width = 540,
   height = 80,
   dragElement,
-  updateInterval;
+  updateInterval,
+  key = {};
+  
+  key.ARROW_UP = 38;
+  key.ARROW_DOWN = 40;
+  key.ZERO = 48;
+  key.ONE = 49;
+  key.TWO = 50;
+  key.THREE = 51;
+  key.FOUR = 52;
+  key.FIVE = 53;
+  key.SIX = 54;
+  key.SEVEN = 55;
+  key.EIGHT = 56;
+  key.NINE = 57;
   
   // Private methods
   /**
@@ -406,7 +420,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       if(currentView === 0)
       {
         topBar.setAttribute("title","");
-        topBar.heading.nodeValue = Translator.translate("overview");
+        topBar.heading.nodeValue = topBar.heading.overview;
       }
       else if(currentView === 1)
       {
@@ -947,6 +961,166 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   
   /**
    * @memberOf EPG.front
+   * @name updateClock
+   * @function
+   * @description Updates the clock.
+   * @private
+   * @param {string} time The time to print at the top bar.
+   */
+  function updateClock (time)
+  {
+    try
+    {
+      Debug.inform("Front.updateClock: time = " + time);
+      if(typeof(time) === "string")
+      {
+        topBar.heading.overview = time;
+      }
+      else if(typeof(time) === "object" && time.getHours)
+      {
+        topBar.heading.overview = Settings.getHHMM(time);
+      }
+      else
+      {
+        topBar.heading.overview = Translator.translate("overview");
+      }
+      if(currentView === 0)
+      {
+        topBar.heading.nodeValue = topBar.heading.overview;
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.updateClock: " + error + " (time = " + time + ")");
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
+   * @name addKeyToHistory
+   * @function
+   * @description Adds currently pressed key to key history.
+   * @private
+   * @param {number} number Number on the key pressed.
+   */
+  function addKeyToHistory (number)
+  {
+    try
+    {
+      var num, time, hour, minute;
+      
+      if(typeof(key.firstKey) !== "number" && number < 3) // first number, must be 0, 1 or 2
+      {
+        key.firstKey = number;
+        updateClock(key.firstKey + "_:__");
+      }
+      else if(key.firstKey >= 0)
+      {
+        if(typeof(key.secondKey) !== "number")
+        {
+          key.secondKey = number;
+          num = (key.firstKey + "" + key.secondKey) * 1;
+          if(num > 24)
+          {
+            delete key.secondKey;
+          }
+          else 
+          {
+            if (num === 24) // replace 24 with 00
+            {
+              key.firstKey = 0;
+              key.secondKey = 0;
+            }
+            updateClock(key.firstKey + "" + key.secondKey + ":__");
+          }
+        }
+        else if(key.secondKey >= 0)
+        {
+          if(typeof(key.thirdKey) !== "number" && number < 6)
+          {
+            key.thirdKey = number;
+            updateClock(key.firstKey + "" + key.secondKey + ":" + key.thirdKey + "_")
+          }
+          else if(key.thirdKey >= 0 && typeof(key.forthKey) !== "number")
+          {
+            key.forthKey = number;
+            time = new Date();
+            time = new Date(time.getFullYear(), time.getMonth(), time.getDate(), (key.firstKey + "" + key.secondKey) * 1, (key.thirdKey + "" + key.forthKey) * 1); // To to specified time
+            
+            if(time < (new Date()))
+            {
+              time = new Date((new Date()).getTime() + 86400000); // jump to tomorrow 
+              time = new Date(time.getFullYear(), time.getMonth(), time.getDate(), (key.firstKey + "" + key.secondKey) * 1, (key.thirdKey + "" + key.forthKey) * 1); // To to specified time
+              updateClock(key.firstKey + "" + key.secondKey + ":" + key.thirdKey + "" + key.thirdKey + " " + Translator.translate("tomorrow"));
+            }
+            else
+            {
+              updateClock(key.firstKey + "" + key.secondKey + ":" + key.thirdKey + "" + key.thirdKey);
+            }
+            Debug.inform("time = " + time);
+            that.reloadPrograms(time, true);
+            delete key.firstKey;
+            delete key.secondKey;
+            delete key.thirdKey;
+            delete key.forthKey;
+          }
+        }
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.addKeyToHistory: " + error + " (number = " + number + ")");
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
+   * @name keyHandler
+   * @function
+   * @description Handles keypresses.
+   * @private
+   * @param {object} event Keypress event.
+   */
+  function keyHandler (event)
+  {
+    try
+    {
+      if(event)
+      {
+        switch (event.keyCode) {
+        	case key.ZERO:
+          case key.ONE:
+          case key.TWO:
+          case key.THREE:
+          case key.FOUR:
+          case key.FIVE:
+          case key.SIX:
+          case key.SEVEN:
+          case key.EIGHT:
+          case key.NINE:
+            addKeyToHistory(event.keyCode - key.ZERO);
+            
+          break;
+          case key.ARROW_UP:
+            ProgramInfo.scroll(false, false, 10);
+          break;
+          case key.ARROW_DOWN:
+            ProgramInfo.scroll(false, false, -10);
+          break;
+        	default:
+        	  Debug.inform("Front.keyHandler: event.keyCode = " + event.keyCode);
+          break;
+        }
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.keyHandler: " + error + " (event = " + event + ")");
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
    * @name create
    * @function 
    * @description Creates all elements and text nodes on the front side of the widget and then appends the elements to frontDiv.
@@ -959,6 +1133,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       frontDiv.appendChild(createTopBar());
       frontDiv.appendChild(createOverview());
       frontDiv.appendChild(createBottomBar());
+      document.getElementsByTagName("body")[0].addEventListener("keyup", keyHandler, false);
     }
     catch (error)
     {
@@ -993,7 +1168,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           }
           else if(programNode.titleNode.parentNode.animationType === "timeout")
           {
-            clearTimeout(programNode.titleNode.visAnimating);
+            clearTimeout(programNode.titleNode.isAnimating);
           }
           programNode.titleNode.parentNode.isAnimating = false;
           delete programNode.titleNode.parentNode.animationType;
@@ -1166,11 +1341,20 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   {
     try
     {
+      var millisecondsLeftToFullMinute;
       if(updateInterval)
       {
         clearTimeout(updateInterval);
       }
-      updateInterval = setInterval(update, 60000);
+      millisecondsLeftToFullMinute = new Date();
+      millisecondsLeftToFullMinute = 61000 - (millisecondsLeftToFullMinute.getSeconds()*1000 + millisecondsLeftToFullMinute.getMilliseconds());
+      Debug.inform("startUpdateInterval in " + millisecondsLeftToFullMinute);
+      updateInterval = setTimeout(function()
+        {
+          updateInterval = setInterval(update, 60000);
+          update();
+        },
+        millisecondsLeftToFullMinute);
     }
     catch (error)
     {
@@ -1256,6 +1440,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
 
           showChannelNodes();
           that.reloadPrograms(new Date());
+          updateClock(new Date());
           that.resize();
           
           frontDiv.style.display="block";
@@ -1377,7 +1562,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
      * @description Reloads the programs on the front side.
      * @param {object} [when] A Date-object specifying what time it is. Use to move forwards or backwards in time.
      */
-    reloadPrograms: function (when) 
+    reloadPrograms: function (when, skipUpdate) 
     {
       try
       {
@@ -1388,6 +1573,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       	if(!when)
       	{
       		when = new Date();
+      	}
+      	if(!skipUpdate)
+      	{
+      	  updateClock(when);
       	}
       	
       	currentChannelList = Settings.getChannelList(currentChannelListIndex);
