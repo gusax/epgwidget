@@ -712,7 +712,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
     {
       try
       {
-        if(scalableContainer.style.visibility !== "hidden" && program && programInfoNode.program === program)
+        if(scalableContainer.style.visibility !== "hidden" && (program && programInfoNode.program === program) || (!program && programInfoNode.program))
         {
           if(!amount)
           {
