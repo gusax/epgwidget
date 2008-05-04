@@ -8,18 +8,19 @@ Läs så här:
 Senaste ändringarna ligger alltid överst.
 
 == Nästa version ==
-=== Nya funktioner ===
+=== _Nya funktioner_ ===
  * Framsidan: Det går nu att hoppa upp till 24 timmar framåt i tiden genom att skriva in klockslaget med fyra siffror (1945 för att hoppa till 19:45, 0600 för 06:00 osv).
+
+ * Framsidan: Uppdateringen är nu synkad med klockan, så framsidan ska rita om sig så fort minuten på klockan ändrar sig. Tidigare var uppdateringens styrd av när man tog fram dashboard senast.
 
  * Inforutan: Det går nu att använda piltangenterna (upp och ner) för att scrolla texten upp och ner.
 
-=== Rättade buggar ===
- * Framsidan: Uppdateringen är nu synkad med klockan, så framsidan ska rita om sig så fort minuten på klockan ändrar sig. Tidigare var uppdateringens styrd av när man tog fram dashboard senast.
-
+=== _Rättade buggar_ ===
  * Inforutan: Positionen på texten ska nu alltid återställas, istället för att som tidigare börja på det stället dit man scrollade sist. (33)
 
+
 == 20080426 ==
-=== Nya funktioner ===
+=== _Nya funktioner_ ===
  * Inforutan: Flyttade positioneringen från CSS till javascript.
 
  * Inforutan: Konstruktorn tar nu bort sig själv. Sparar minne.
@@ -30,20 +31,21 @@ Senaste ändringarna ligger alltid överst.
 
  * Framsidan: Långa programtitlar scrollas nu i programlistan om man pekar på dem.
 
-=== Rättade buggar ===
+=== _Rättade buggar_ ===
  * Inga.
+
 
 == 20080324 ==
-
-=== Nya funktioner ===
+=== _Nya funktioner_ ===
  * Inga.
 
-=== Rättade buggar ===
+=== _Rättade buggar_ ===
  * Nedladdning av listan med kanaler från servern sker nu automatiskt vid första uppstart om listan saknas.
 
  * Grabbern kräver nu inte längre att användarnamnet är gusax840 för att funka :-)
 
  * Grabbern installeras nu när man startar widgeten för första gången. (31)
+
 
 == 20080302 ==
  * Första versionen
