@@ -509,6 +509,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
 
           if(programInfoNode.program !== program)
           {
+            programInfoNode.descriptionContainer.topY = 0;
             programInfoNode.durationContainer.style.top = "0px";
             programInfoNode.descriptionContainer.style.top = "0px";
             programInfoNode.program = program;
