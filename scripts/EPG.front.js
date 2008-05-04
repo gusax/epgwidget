@@ -1051,11 +1051,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             {
               time = new Date((new Date()).getTime() + 86400000); // jump to tomorrow 
               time = new Date(time.getFullYear(), time.getMonth(), time.getDate(), (key.firstKey + "" + key.secondKey) * 1, (key.thirdKey + "" + key.forthKey) * 1); // To to specified time
-              updateClock(key.firstKey + "" + key.secondKey + ":" + key.thirdKey + "" + key.thirdKey + " " + Translator.translate("tomorrow"));
+              updateClock(key.firstKey + "" + key.secondKey + ":" + key.thirdKey + "" + key.forthKey + " " + Translator.translate("tomorrow"));
             }
             else
             {
-              updateClock(key.firstKey + "" + key.secondKey + ":" + key.thirdKey + "" + key.thirdKey);
+              updateClock(key.firstKey + "" + key.secondKey + ":" + key.thirdKey + "" + key.forthKey);
             }
             Debug.inform("time = " + time);
             that.reloadPrograms(time, true);
