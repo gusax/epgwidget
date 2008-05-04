@@ -1,5 +1,6 @@
 #summary Provides an explanation of all the things you can do with the EPG widget.
-#labels Featured
+Note that the english page might lag behind the swedish equivalent in updates, therefore it is not featured on the front page.
+
 == Front side ==
 On the front side, you can:
 
