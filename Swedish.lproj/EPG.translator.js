@@ -56,6 +56,8 @@ EPG.translator = function(debug)
   localizedStrings["min ago"] = "min sedan";
   localizedStrings["Use mousewheel/trackpad to scroll description"] = "Använd scrollhjul/pekplatta för att scrolla beskrivning";
   localizedStrings.tomorrow = "i morgon";
+  localizedStrings.today = "idag";
+  localizedStrings["Type four numbers to jump forward up to 24 hours, backspace returns current time. (Examples: 2030 for 20:30, 0615 for 06:15.)"] = "Knappra in fyra siffror för att hoppa upp till 24 tim framåt. Suddtangenten återställer klockan. (Exempel: 2030 för 20:30, 0615 för 06:15).";
   // Private methods
   
   

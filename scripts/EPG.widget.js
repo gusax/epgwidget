@@ -194,8 +194,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 		{
 		  try
 		  {
-		    front.onHide();
-		    ProgramInfo.hide();
+		    front.hide();
 		    debug.inform("----------- Onhide! -----------");
 		    // Delete all old programs once every day.
 		  }

@@ -59,6 +59,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   
   key.ARROW_UP = 38;
   key.ARROW_DOWN = 40;
+  key.BACKSPACE = 8;
+  
   key.ZERO = 48;
   key.ONE = 49;
   key.TWO = 50;
@@ -85,6 +87,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
       topBar = document.createElement("div");
       topBar.setAttribute("class", "text");
+      topBar.setAttribute("title", Translator.translate("Type four numbers to jump forward up to 24 hours, backspace returns current time. (Examples: 2030 for 20:30, 0615 for 06:15.)"));
       topBar.appendChild(document.createTextNode("EPG: "));
       topBar.appendChild(document.createTextNode(Translator.translate("overview")));
       topBar.heading = topBar.lastChild;
@@ -529,7 +532,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     }
     catch (error)
     {
-      Debug.alert("Error in EPG.front.dimAllChannelNodesExcept: " + error + " (channelID = " + channelID + ")");
+      Debug.alert("Error in EPG.front.dimAllChannelNodesExcept: " + error);
     }
   }
   
@@ -554,6 +557,70 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   
   /**
    * @memberOf EPG.front
+   * @name updateProgramNode
+   * @function
+   * @description Updates the text in a programNode.
+   * @private
+   * @param {object} programsNode The programsNode.
+   * @param {object} program The program containing the new info.
+   */
+  function updateProgramNode (programNode, program)
+  {
+    try
+    {
+      var i,
+      startDate,
+      start,
+      locale;
+      
+      if(program && program !== programNode.program)
+      {
+        if(programNode.titleNode.parentNode.isAnimating)
+        {
+          if(programNode.titleNode.parentNode.animationType === "interval")
+          {
+            clearInterval(programNode.titleNode.parentNode.isAnimating);
+          }
+          else if(programNode.titleNode.parentNode.animationType === "timeout")
+          {
+            clearTimeout(programNode.titleNode.isAnimating);
+          }
+          programNode.titleNode.parentNode.isAnimating = false;
+          delete programNode.titleNode.parentNode.animationType;
+          programNode.titleNode.parentNode.xPos = 0;
+          programNode.titleNode.parentNode.style.left = "0px";
+        }
+        programNode.program = program;
+        if(program.isTheEmptyProgram)
+        {
+          programNode.startNode.nodeValue = "";
+          programNode.titleNode.nodeValue = "- " + Translator.translate("No program") + " -";
+        }
+        else
+        {
+          startDate = new Date(program.start*1000);
+          programNode.startNode.nodeValue = Settings.getHHMM(startDate);
+          programNode.titleNode.parentNode.removeAttribute("title");
+          for (locale in program.title)
+          {
+            if(program.title.hasOwnProperty(locale))
+            {
+              programNode.titleNode.nodeValue = program.title[locale]; // just pick the first translation and then break
+              programNode.titleNode.parentNode.setAttribute("title", Translator.translate("Click to open description."));
+              break;
+            }
+          }
+        }
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in front.updateProgramsNode: " + error + " (programNode = " + programNode + ")");
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
    * @name fillDayView
    * @function
    * @description Fills day view with programs.
@@ -565,7 +632,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   {
     try
     {
-      var i, length, programLength, stopDate;
+      var i, length, programsLength, stopDate;
       
       if(!when)
       {
@@ -861,6 +928,29 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       Debug.alert("Error in front.createChannelNode: " + error + " (channelID = " + channelID + ")");
     }
   }
+   
+   /**
+   * @memberOf EPG.front
+   * @name createDayView
+   * @function
+   * @description Creates a placeholder for the day view
+   * @private
+   * @return {object} An element (div tag) containing all channels.
+   */
+  function createDayView () 
+  {
+    try
+    {
+      dayViewDiv = document.createElement("div");
+      dayViewDiv.setAttribute("id", "dayView");
+      dayViewDiv.style.visibility = "hidden";
+      return dayViewDiv;
+    }
+    catch (error)
+    {
+      Debug.alert("Error in front.createChannelList: " + error);
+    }
+  }
   
   /**
    * @memberOf EPG.front
@@ -883,29 +973,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       overviewDiv.dayViewNode = overviewDiv.lastChild;
       
       return overviewDiv;
-    }
-    catch (error)
-    {
-      Debug.alert("Error in front.createChannelList: " + error);
-    }
-  }
-  
-  /**
-   * @memberOf EPG.front
-   * @name createDayView
-   * @function
-   * @description Creates a placeholder for the day view
-   * @private
-   * @return {object} An element (div tag) containing all channels.
-   */
-  function createDayView () 
-  {
-    try
-    {
-      dayViewDiv = document.createElement("div");
-      dayViewDiv.setAttribute("id", "dayView");
-      dayViewDiv.style.visibility = "hidden";
-      return dayViewDiv;
     }
     catch (error)
     {
@@ -997,6 +1064,36 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   
   /**
    * @memberOf EPG.front
+   * @name stopUpdateInterval
+   * @function
+   * @description Stops the update interval.
+   * @private
+   */
+  function stopUpdateInterval ()
+  {
+    try
+    {
+      if(updateInterval)
+      {
+        if(updateInterval.type === "timeout")
+        {
+          clearTimeout(updateInterval.timeout);
+        }
+        else
+        {
+          clearInterval(updateInterval.interval);
+        }
+        updateInterval = false;
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.stopUpdateInterval: " + error);
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
    * @name addKeyToHistory
    * @function
    * @description Adds currently pressed key to key history.
@@ -1039,7 +1136,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           if(typeof(key.thirdKey) !== "number" && number < 6)
           {
             key.thirdKey = number;
-            updateClock(key.firstKey + "" + key.secondKey + ":" + key.thirdKey + "_")
+            updateClock(key.firstKey + "" + key.secondKey + ":" + key.thirdKey + "_");
           }
           else if(key.thirdKey >= 0 && typeof(key.forthKey) !== "number")
           {
@@ -1055,14 +1152,16 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             }
             else
             {
-              updateClock(key.firstKey + "" + key.secondKey + ":" + key.thirdKey + "" + key.forthKey);
+              updateClock(key.firstKey + "" + key.secondKey + ":" + key.thirdKey + "" + key.forthKey + " " + Translator.translate("today"));
             }
             Debug.inform("time = " + time);
+            stopUpdateInterval();
             that.reloadPrograms(time, true);
             delete key.firstKey;
             delete key.secondKey;
             delete key.thirdKey;
             delete key.forthKey;
+            
           }
         }
       }
@@ -1099,7 +1198,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           case key.EIGHT:
           case key.NINE:
             addKeyToHistory(event.keyCode - key.ZERO);
-            
+          break;
+          case key.BACKSPACE:
+            if(!updateInterval)
+            {
+              update();
+              startUpdateInterval();
+            }
           break;
           case key.ARROW_UP:
             ProgramInfo.scroll(false, false, 10);
@@ -1141,68 +1246,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     }
   }
   
-  /**
-   * @memberOf EPG.front
-   * @name updateProgramNode
-   * @function
-   * @description Updates the text in a programNode.
-   * @private
-   * @param {object} programsNode The programsNode.
-   * @param {object} program The program containing the new info.
-   */
-  function updateProgramNode (programNode, program)
-  {
-    try
-    {
-      var i,
-      startDate,
-      start;
-      
-      if(program && program !== programNode.program)
-      {
-        if(programNode.titleNode.parentNode.isAnimating)
-        {
-          if(programNode.titleNode.parentNode.animationType === "interval")
-          {
-            clearInterval(programNode.titleNode.parentNode.isAnimating);
-          }
-          else if(programNode.titleNode.parentNode.animationType === "timeout")
-          {
-            clearTimeout(programNode.titleNode.isAnimating);
-          }
-          programNode.titleNode.parentNode.isAnimating = false;
-          delete programNode.titleNode.parentNode.animationType;
-          programNode.titleNode.parentNode.xPos = 0;
-          programNode.titleNode.parentNode.style.left = "0px";
-        }
-        programNode.program = program;
-        if(program.isTheEmptyProgram)
-        {
-          programNode.startNode.nodeValue = "";
-          programNode.titleNode.nodeValue = "- " + Translator.translate("No program") + " -";
-        }
-        else
-        {
-          startDate = new Date(program.start*1000);
-          programNode.startNode.nodeValue = Settings.getHHMM(startDate);
-          programNode.titleNode.parentNode.removeAttribute("title");
-          for (locale in program.title)
-          {
-            if(program.title.hasOwnProperty(locale))
-            {
-              programNode.titleNode.nodeValue = program.title[locale]; // just pick the first translation and then break
-              programNode.titleNode.parentNode.setAttribute("title", Translator.translate("Click to open description."));
-              break;
-            }
-          }
-        }
-      }
-    }
-    catch (error)
-    {
-      Debug.alert("Error in front.updateProgramsNode: " + error + " (programNode = " + programNode + ")");
-    }
-  }
   
   /**
    * @memberOf EPG.front
@@ -1219,7 +1262,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
       var channelNode,
       programNode,
-      title;
+      title,
+      i;
       
       channelNode = channelNodes[channelID];
       if(channelNode && programs)
@@ -1344,15 +1388,19 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       var millisecondsLeftToFullMinute;
       if(updateInterval)
       {
-        clearTimeout(updateInterval);
+        stopUpdateInterval();
       }
+      updateInterval = {};
+      
       millisecondsLeftToFullMinute = new Date();
       millisecondsLeftToFullMinute = 61000 - (millisecondsLeftToFullMinute.getSeconds()*1000 + millisecondsLeftToFullMinute.getMilliseconds());
-      Debug.inform("startUpdateInterval in " + millisecondsLeftToFullMinute);
-      updateInterval = setTimeout(function()
+      updateInterval.type = "timeout";
+      updateInterval.timeout = setTimeout(function()
         {
-          updateInterval = setInterval(update, 60000);
+          updateInterval.type = "interval";
+          updateInterval.interval = setInterval(update, 60000);
           update();
+          delete updateInterval.timeout;
         },
         millisecondsLeftToFullMinute);
     }
@@ -1391,10 +1439,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
       try
       {
-        if(updateInterval)
-        {
-          clearInterval(updateInterval);
-        }
+        stopUpdateInterval();
         if (!visible)
         {
           if(!backDiv)
@@ -1466,11 +1511,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
       try
       {
+        Debug.inform("Front.hide");
         visible = false;
-        if(updateInterval)
-        {
-          clearInterval(updateInterval);
-        }
+        stopUpdateInterval();
         ProgramInfo.hide();
         that.removeDragElement();
       }
@@ -1594,7 +1637,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           	  	if(channelNode && channelNode.isVisible && channelNode.contents)
           	  	{
           	  	  //Debug.inform("reloading programs for channelID " + channelID + " (but channelNode.channelID = " + channelNode.channelID + ")");
-          	      Settings.getProgramsForChannel(channelID, function(theID){return function(thePrograms){reloadProgramsForChannel(theID, thePrograms);}}(channelID), function(theID){ return function(){reloadProgramsForChannelFailed(theID);}}(channelID), 3, when);
+          	      Settings.getProgramsForChannel(channelID, function(theID){return function(thePrograms){reloadProgramsForChannel(theID, thePrograms);};}(channelID), function(theID){ return function(){reloadProgramsForChannelFailed(theID);};}(channelID), 3, when);
           	  	}
         	    }
         	    else
@@ -1665,27 +1708,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       catch (error)
       {
         Debug.alert("Error in front.onShow: " + error);
-      }
-    },
-    
-    /**
-     * @memberOf EPG.front
-     * @function onHide
-     * @description Runs when Dashboard is hidden.
-     */
-    onHide: function () 
-    {
-      try
-      {
-        if(updateInterval)
-        {
-          clearInterval(updateInterval);
-        }
-        that.removeDragElement();
-      }
-      catch (error)
-      {
-        Debug.alert("Error in front.onHide: " + error);
       }
     }
   };
