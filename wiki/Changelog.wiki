@@ -17,6 +17,8 @@ Senaste ändringarna ligger alltid överst.
 
  * Inforutan: Det går nu att använda piltangenterna (upp och ner) för att scrolla texten upp och ner.
 
+ * Baksidan: Klar-texten nere till höger tänds nu upp när man pekar på den, för att indikera att man kan klicka på texten.
+
 === _Rättade buggar_ ===
  * Inforutan: Positionen på texten ska nu alltid återställas, istället för att som tidigare börja på det stället dit man scrollade sist. (33)
 
