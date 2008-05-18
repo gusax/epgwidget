@@ -21,6 +21,10 @@ Senaste ändringarna ligger alltid överst.
 
  * Baksidan: Länkar till [http://epgwidget.googlecode.com hemsidan] och [http://epgwidget.blogspot.com bloggen] på baksidan.
 
+ * Baksidan: Versionsnumret skrivs nu ut överst på baksidan.
+
+ * Övrigt: Versionsnumret står även i info.plist, så förhoppningsvis står det "vill du ersätta EPG med en nyare version" när man installerar ny version i Dashboard i fortsättningen.
+
 === _Rättade buggar_ ===
  * Inforutan: Positionen på texten ska nu alltid återställas, istället för att som tidigare börja på det stället dit man scrollade sist. (33)
 
