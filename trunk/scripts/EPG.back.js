@@ -49,7 +49,9 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   backSkin = "back",
   scrollSteps = 10,
   toFront,
-  channelListContainer;
+  channelListContainer,
+  topY = 0,
+  scrollHeight = 0;
   
   // Private methods
   
@@ -57,8 +59,9 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   {
     try
     {
-      channelListToScroll.topY = 0;
-      channelListToScroll.style.top = channelListToScroll.topY + "em";
+      topY = 0;
+      channelListToScroll.listFrame.style.top = topY + "px";
+      scrollHeight = channelListToScroll.scrollHeight;
     }
     catch (error)
     {
@@ -70,40 +73,40 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   {
     try
     {
-      var index;
+      var limit, amount;
       
-      if(!channelListToScroll.topY)
+      if(topY === 0)
       {
-        channelListToScroll.topY = 0;
+        scrollHeight = channelListToScroll.scrollHeight;
       }
-      
-      if(direction === "up")
+      limit = -1*(scrollHeight - channelListToScroll.offsetHeight);
+      debug.inform("channelListToScroll.scrollHeight = " + channelListToScroll.scrollHeight);
+      debug.inform("scrollHeight = " + scrollHeight);
+      debug.inform("limit = " + limit);
+      if(limit < 0)
       {
-        if(channelListToScroll.topY < 0)
+        if(direction === "up")
         {
-          channelListToScroll.topY += scrollSteps;
+          amount = -105;
         }
         else
         {
-          channelListToScroll.topY = -Math.round((channelListToScroll.offsetHeight - channelListToScroll.parentNode.offsetHeight)/scrollSteps);
+          amount = 105;
         }
-      }
-      else
-      {
-        if(channelListToScroll.topY > -Math.round((channelListToScroll.offsetHeight - channelListToScroll.parentNode.offsetHeight)/scrollSteps))
+        topY += amount;
+        
+        if(topY > 0)
         {
-          //debug.alert("channelListToScroll.offsetHeight - channelListToScroll.parentNode.offsetHeight = " + (channelListToScroll.offsetHeight - channelListToScroll.parentNode.offsetHeight));
-          //debug.alert("channelListToScroll.topY * 10 = " + (channelListToScroll.topY * 10));
-          channelListToScroll.topY -= scrollSteps;
+          topY = 0;
         }
-        else
+        else if(topY < limit)
         {
-          channelListToScroll.topY = 0; 
+          topY = limit;
         }
+        
+        channelListToScroll.listFrame.style.top = topY + "px";
+        
       }
-      
-      channelListToScroll.style.top = channelListToScroll.topY + "em";
-      
       if(event.stopPropagation)
       {
         event.stopPropagation();
@@ -135,7 +138,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       
       tempElement.setAttribute("class", "text");
       tempElement.appendChild(tempTextNode.cloneNode(false));
-      tempElement.firstChild.nodeValue = "EPG - " + translator.translate("list") + " " + (currentChannelListIndex + 1);
+      tempElement.firstChild.nodeValue = "EPG version " + EPG.currentVersion;
       
       return UIcreator.createScalableContainer("topbar", tempElement.cloneNode(true), "uppe.png", "back");
     }
@@ -272,18 +275,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
     }
   }
   
-  function createChannelListFailure () 
-  {
-    try
-    {
-      debug.alert("Feck! Could not create channellist!");
-    }
-    catch (error)
-    {
-      debug.alert("Error in back.createChannelListFailure: " + error);
-    }
-  }
-  
   function createChannelListSuccess (channels, targetElement)
   {
     try
@@ -302,21 +293,24 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       {
         tempChannelList = settings.getChannelList(currentChannelListIndex);
         channelListToScroll = targetElement;
-        while(targetElement.firstChild)
+        while(channelListToScroll.firstChild)
         {
           i += 1;
           try
           {
-            targetElement.firstChild.removeEventListener("click"); 
+            channelListToScroll.firstChild.removeEventListener("click"); 
           }
           catch (e)
           {
             debug.warn("back.createChannelListSuccess: removeEventListener failed!");
           }
-          targetElement.removeChild(targetElement.firstChild);
+          channelListToScroll.removeChild(channelListToScroll.firstChild);
         }
         //debug.alert("back.createChannelListSuccess: removed " + i + " children from list.\nGot " + channels.length + " channels to print.");
-        targetElement.setAttribute("class","channellist");
+        channelListToScroll.setAttribute("class","channellist");
+        channelListToScroll.appendChild(document.createElement("div"));
+        channelListToScroll.listFrame = channelListToScroll.lastChild;
+        channelListToScroll.listFrame.style.position = "absolute";
         tempElement = document.createElement("div");
         tempElement.setAttribute("class", "text");
         tempCheckBox = document.createElement("input");
@@ -346,9 +340,9 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
                 {
                   tempCheckBox.removeAttribute("checked");
                 }
-                targetElement.appendChild(tempElement.cloneNode(true));
-                targetElement.lastChild.addEventListener("click", function(event){that.selectChannel(this, event);}, false);
-                targetElement.lastChild.channelID = index;
+                channelListToScroll.listFrame.appendChild(tempElement.cloneNode(true));
+                channelListToScroll.listFrame.lastChild.addEventListener("click", function(){return function(event){that.selectChannel(this, event);};}(), false);
+                channelListToScroll.listFrame.lastChild.channelID = index;
                 
               }
               else
@@ -358,6 +352,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
             }
           }
         }
+        scrollHeight = channelListToScroll.scrollHeight;
         //debug.alert("back.createChannelListSuccess: added " + i + " children to channelList");
       }
       else
@@ -406,8 +401,30 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       tempContainer.setAttribute("class", "text");
       tempElement = document.createElement("a");
       tempElement.setAttribute("class", "block");
-      tempTextNode = document.createTextNode(translator.translate("Help & support..."));
+      tempTextNode = document.createTextNode(translator.translate("http://epgwidget.googlecode.com"));
       tempElement.appendChild(tempTextNode.cloneNode(false));
+      tempContainer.appendChild(tempElement.cloneNode(true));
+      if(window.widget)
+      {
+        tempContainer.lastChild.addEventListener("click",function(){window.widget.openURL("http://epgwidget.googlecode.com");}, false);
+      }
+      else
+      {
+        tempContainer.lastChild.setAttribute("href", "http://epgwidget.googlecode.com"); 
+      }
+      
+      tempElement.firstChild.nodeValue = translator.translate("http://epgwidget.blogspot.com");
+      tempContainer.appendChild(tempElement.cloneNode(true));
+      if(window.widget)
+      {
+        tempContainer.lastChild.addEventListener("click",function(){window.widget.openURL("http://epgwidget.blogger.com");}, false);
+      }
+      else
+      {
+        tempContainer.lastChild.setAttribute("href", "http://epgwidget.blogspot.com"); 
+      }
+      
+      tempElement.firstChild.nodeValue = translator.translate("Help & support...");
       tempContainer.appendChild(tempElement.cloneNode(true));
       if(window.widget)
       {
@@ -456,10 +473,11 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       
       backDiv.appendChild(createTop());
       backDiv.appendChild(createListTop(document.createTextNode("\u25b2"))); // arrow up
-      backDiv.lastChild.addEventListener("mousedown", function(event){scrollChannelList(event,"up");}, false);
-      backDiv.appendChild(createChannelList());
-      backDiv.appendChild(createListBottom(document.createTextNode("\u25bc"))); // arrow down
       backDiv.lastChild.addEventListener("mousedown", function(event){scrollChannelList(event,"down");}, false);
+      backDiv.appendChild(createChannelList());
+      backDiv.channelList = backDiv.lastChild;
+      backDiv.appendChild(createListBottom(document.createTextNode("\u25bc"))); // arrow down
+      backDiv.lastChild.addEventListener("mousedown", function(event){scrollChannelList(event,"up");}, false);
       backDiv.appendChild(createListTop());
       backDiv.appendChild(createSupportInfo());
       backDiv.appendChild(createListBottom());
@@ -495,7 +513,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
           {
             settings.resizeTo(270, screen.height, true);
             window.widget.prepareForTransition("ToBack");
-            settings.resizeTo(270, 504);
+            settings.resizeTo(270, 544);
           }
           
           toFront = toFrontMethod;

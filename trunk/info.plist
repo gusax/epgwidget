@@ -5,7 +5,7 @@
 	<key>AllowFileAccessOutsideOfWidget</key>
 	<true/>
 	<key>AllowMultipleInstances</key>
-	<true/>
+	<false/>
 	<key>AllowNetworkAccess</key>
 	<true/>
 	<key>AllowSystem</key>
@@ -17,7 +17,7 @@
 	<key>CFBundleName</key>
 	<string>epgwidget</string>
 	<key>CFBundleVersion</key>
-	<string>3.0</string>
+	<string>20080518</string>
 	<key>CloseBoxInsetX</key>
 	<integer>12</integer>
 	<key>CloseBoxInsetY</key>
