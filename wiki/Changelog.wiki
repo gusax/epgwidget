@@ -13,6 +13,8 @@ Senaste ändringarna ligger alltid överst.
 
  * Framsidan: Uppdateringen är nu synkad med klockan, så framsidan ska rita om sig så fort minuten på klockan ändrar sig. Tidigare var uppdateringens styrd av när man tog fram dashboard senast. (16)
 
+ * Framsidan: Tog bort hjälpbubblorna från programtitlarna i listan. De var jämt ivägen ändå, lade sig ovanpå titlarna man försökte läsa, täckte inforutan, osv.
+
  * Inforutan: Det går nu att använda piltangenterna (upp och ner) för att scrolla texten upp och ner.
 
 === _Rättade buggar_ ===
