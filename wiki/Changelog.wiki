@@ -19,8 +19,14 @@ Senaste ändringarna ligger alltid överst.
 
  * Baksidan: Klar-texten nere till höger tänds nu upp när man pekar på den, för att indikera att man kan klicka på texten.
 
+ * Baksidan: Länkar till [http://epgwidget.googlecode.com hemsidan] och [http://epgwidget.blogspot.com bloggen] på baksidan.
+
 === _Rättade buggar_ ===
  * Inforutan: Positionen på texten ska nu alltid återställas, istället för att som tidigare börja på det stället dit man scrollade sist. (33)
+
+ * Baksidan: Kanallistan scrollar nu inte längre förbi sista platsen utan stannar när sista kanalen dykt upp.
+
+ * Baksidan: Bytte håll på pilarna i kanallistan, de gick åt fel håll jämfört med inforutan innan.
 
 
 == 20080426 ==
