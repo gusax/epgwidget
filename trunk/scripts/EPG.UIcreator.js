@@ -153,7 +153,7 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         	  if(program.title.hasOwnProperty(locale))
         	  {
         	  	tempTextNode.nodeValue = program.title[locale]; // just pick the first translation and then break
-        	  	titleNode.setAttribute("title", Translator.translate("Click to open description."));
+        	  	//titleNode.setAttribute("title", Translator.translate("Click to open description."));
         	  	break;
         	  }
         	}
