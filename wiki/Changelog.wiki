@@ -33,6 +33,8 @@ Senaste ändringarna ligger alltid överst.
  * Baksidan: Bytte håll på pilarna i kanallistan, de gick åt fel håll jämfört med inforutan innan.
 
 
+
+
 == 20080426 ==
 === _Nya funktioner_ ===
  * Inforutan: Flyttade positioneringen från CSS till javascript.
@@ -49,6 +51,8 @@ Senaste ändringarna ligger alltid överst.
  * Inga.
 
 
+
+
 == 20080324 ==
 === _Nya funktioner_ ===
  * Inga.
@@ -61,5 +65,7 @@ Senaste ändringarna ligger alltid överst.
  * Grabbern installeras nu när man startar widgeten för första gången. (31)
 
 
+
+
 == 20080302 ==
- * Första versionen
+ * Första versionen (som gick att ladda ner som zipfil)
