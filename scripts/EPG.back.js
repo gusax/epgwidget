@@ -417,7 +417,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       tempContainer.appendChild(tempElement.cloneNode(true));
       if(window.widget)
       {
-        tempContainer.lastChild.addEventListener("click",function(){window.widget.openURL("http://epgwidget.blogger.com");}, false);
+        tempContainer.lastChild.addEventListener("click",function(){window.widget.openURL("http://epgwidget.blogspot.com");}, false);
       }
       else
       {
