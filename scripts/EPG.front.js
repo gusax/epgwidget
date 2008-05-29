@@ -72,6 +72,17 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   key.EIGHT = 56;
   key.NINE = 57;
   
+  key.N_ZERO = 96;
+  key.N_ONE = 97;
+  key.N_TWO = 98;
+  key.N_THREE = 99;
+  key.N_FOUR = 100;
+  key.N_FIVE = 101;
+  key.N_SIX = 102;
+  key.N_SEVEN = 103;
+  key.N_EIGHT = 104;
+  key.N_NINE = 105;
+  
   // Private methods
   /**
    * @memberOf EPG.front
@@ -1105,7 +1116,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     try
     {
       var num, time, hour, minute;
-      
+      Debug.inform("number " + number);
       if(typeof(key.firstKey) !== "number" && number < 3) // first number, must be 0, 1 or 2
       {
         key.firstKey = number;
@@ -1198,6 +1209,18 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           case key.EIGHT:
           case key.NINE:
             addKeyToHistory(event.keyCode - key.ZERO);
+          break;
+          case key.N_ZERO:
+          case key.N_ONE:
+          case key.N_TWO:
+          case key.N_THREE:
+          case key.N_FOUR:
+          case key.N_FIVE:
+          case key.N_SIX:
+          case key.N_SEVEN:
+          case key.N_EIGHT:
+          case key.N_NINE:
+            addKeyToHistory(event.keyCode - key.N_ZERO);
           break;
           case key.BACKSPACE:
             if(!updateInterval)
