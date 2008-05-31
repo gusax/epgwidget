@@ -32,7 +32,8 @@ if(EPG.debug)
 EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
 {
   // Private Variables
-  var that;
+  var that,
+  transparentElements = [];
   
   // Private methods
   
@@ -99,6 +100,8 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         tempElement.setAttribute("src", "Skins/" + Skin.getSkinForList(listID) + "/" + backgroundImage);
         
         tempContainer.appendChild(tempElement.cloneNode(false));
+        tempContainer.lastChild.style.opacity = Settings.getTransparency();
+        transparentElements[transparentElements.length] = tempContainer.lastChild; 
         tempContainer.contents = contents;
         tempContainer.isVisible = true;
         return tempContainer;
@@ -320,6 +323,27 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
       catch (error)
       {
         Debug.alert("Error in EPG.UIcreator.createScrollbar: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf Epg.UIcreator
+     * @function applyTransparency
+     * @description Applies transparency on relevant elements.
+     */
+    applyTransparency: function (transparency) 
+    {
+      try
+      {
+        var i;
+        for (i = 0; i < transparentElements.length; i += 1)
+        {
+          transparentElements[i].style.opacity = transparency;
+        }
+      }
+      catch (error)
+      {
+        Debug.alert("Error in Epg.UIcreator.applyTransparency: " + error);
       }
     }
   };

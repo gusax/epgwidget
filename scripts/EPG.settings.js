@@ -53,7 +53,8 @@ EPG.settings = function(Debug, growl, file)
   {
     isTheEmptyProgram : true
   },
-  currentChannelListIndex = 0;
+  currentChannelListIndex = 0,
+  transparencyValue = 0.8;
   
   // Private methods
   function alertCallbackMethods(callbackArrayName, callbackMethod, callbackContents) 
@@ -1291,6 +1292,23 @@ EPG.settings = function(Debug, growl, file)
       catch (error)
       {
         Debug.alert("Error in EPG.settings.downloadChannels: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf Epg.settings
+     * @function getTransparency
+     * @description Returns current transparency value.
+     */
+    getTransparency: function () 
+    {
+      try
+      {
+        return transparencyValue;
+      }
+      catch (error)
+      {
+        Debug.alert("Error in Epg.settings.getTransparency: " + error);
       }
     }
   };

@@ -60,6 +60,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   key.ARROW_UP = 38;
   key.ARROW_DOWN = 40;
   key.BACKSPACE = 8;
+  key.COMMA = 188;
   
   key.ZERO = 48;
   key.ONE = 49;
@@ -148,6 +149,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         infoButton = document.createElement("div");
         infoButton.setAttribute("id", "infobutton");
+        infoButton.setAttribute("title", Translator.translate("Click (or press \u2318-,) to flip to backside."));
         infoButton.appendChild(document.createTextNode("i"));
         infoButton.addEventListener("click", that.goToBack, false);
         return infoButton;
@@ -1235,6 +1237,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           case key.ARROW_DOWN:
             ProgramInfo.scroll(false, false, -10);
           break;
+          case key.COMMA:
+            if(visible && event.metaKey)
+            {
+              that.goToBack(event);
+            }
+          break;
         	default:
         	  Debug.inform("Front.keyHandler: event.keyCode = " + event.keyCode);
           break;
@@ -1617,6 +1625,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           hideChannelNodes();
           that.hide();
           toBack();
+          UIcreator.applyTransparency(1);
         }
         else
         {
