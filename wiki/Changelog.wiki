@@ -10,9 +10,10 @@ Senaste ändringarna ligger alltid överst.
 == Nästa version ==
 
 === _Nya funktioner_ ===
+ * Inforutan: Det går nu att hålla ner piltangenterna för att scrolla texten i inforutan.
 
 === _Rättade buggar_ ===
- * Framsidan: Det går nu att hoppa framåt i tiden även med det numeriska tangentbordet. ([http://code.google.com/p/epgwidget/issues/detail?id=44 44])
+ * Framsidan: Även det numeriska tangentbordet accepteras när man matar in klockslag. ([http://code.google.com/p/epgwidget/issues/detail?id=44 44])
 
  * Baksidan: Bloglänken korrigerad ([http://code.google.com/p/epgwidget/issues/detail?id=42 42])
 
