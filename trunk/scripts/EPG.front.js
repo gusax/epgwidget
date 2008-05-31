@@ -1248,6 +1248,42 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   }
   
   /**
+   * @memberOf Epg.front
+   * @name repeatKeyHandler
+   * @function
+   * @description Handles repeating keys.
+   * @private
+   * @param {object} event Key event.
+   */
+  function repeatKeyHandler (event)
+  {
+    try
+    {
+      if(event)
+      {
+        switch(event.keyCode)
+        {
+          case 63232:
+            event.keyCode = key.ARROW_UP;
+            keyhandler(event);
+          break;
+          case 63233:
+            event.keyCode = key.ARROW_DOWN;
+            keyhandler(event);
+          break;
+          default:
+           // ignore
+          break;
+        }
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in Epg.front.repeatKeyHandler: " + error + " (event = " + event + ")");
+    }
+  }
+  
+  /**
    * @memberOf EPG.front
    * @name create
    * @function 
@@ -1261,7 +1297,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       frontDiv.appendChild(createTopBar());
       frontDiv.appendChild(createOverview());
       frontDiv.appendChild(createBottomBar());
-      document.getElementsByTagName("body")[0].addEventListener("keyup", keyHandler, false);
+      document.getElementsByTagName("body")[0].addEventListener("keydown", keyHandler, false);
+      document.getElementsByTagName("body")[0].addEventListener("keypress", repeatKeyHandler, false);
     }
     catch (error)
     {
