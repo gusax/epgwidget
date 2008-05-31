@@ -9,7 +9,7 @@ Senaste ändringarna ligger alltid överst.
 
 == Nästa version ==
 
-=== _Nya funktioner_ ===
+_Nya funktioner_
  * Framsidan: Snabbknapp för att öppna baksidan: [ ⌘-, ].
 
  * Inforutan: Det går nu att hålla ner piltangenterna för att scrolla texten i inforutan (man slipper pumpa på knappen).
@@ -20,14 +20,14 @@ Senaste ändringarna ligger alltid överst.
 
  * Orange HC (skin) : Transparensen flyttad från css till javascript (så att man ska kunna justera den själv i en kommande version.) 
 
-=== _Rättade buggar_ ===
+_Rättade buggar_
  * Framsidan: Även det numeriska tangentbordet accepteras när man matar in klockslag. ([http://code.google.com/p/epgwidget/issues/detail?id=44 44])
 
  * Baksidan: Bloglänken korrigerad ([http://code.google.com/p/epgwidget/issues/detail?id=42 42])
 
 
 == 20080518 ==
-=== _Nya funktioner_ ===
+_Nya funktioner_
  * Framsidan: Det går nu att hoppa upp till 24 timmar framåt i tiden genom att skriva in klockslaget med fyra siffror (1945 för att hoppa till 19:45, 0600 för 06:00 osv). Suddtangenten, backspace, återställer klockan (eller så kan man ta bort och ta fram Dashboard igen).
 
  * Framsidan: Uppdateringen är nu synkad med klockan, så framsidan ska rita om sig så fort minuten på klockan ändrar sig. Tidigare var uppdateringens styrd av när man tog fram dashboard senast. ([http://code.google.com/p/epgwidget/issues/detail?id=16 16])
@@ -44,7 +44,7 @@ Senaste ändringarna ligger alltid överst.
 
  * Övrigt: Versionsnumret står även i info.plist, så förhoppningsvis står det "vill du ersätta EPG med en nyare version" när man installerar ny version i Dashboard i fortsättningen.
 
-=== _Rättade buggar_ ===
+_Rättade buggar_
  * Inforutan: Positionen på texten ska nu alltid återställas, istället för att som tidigare börja på det stället dit man scrollade sist. (33)
 
  * Baksidan: Kanallistan scrollar nu inte längre förbi sista platsen utan stannar när sista kanalen dykt upp.
@@ -55,7 +55,7 @@ Senaste ändringarna ligger alltid överst.
 
 
 == 20080426 ==
-=== _Nya funktioner_ ===
+_Nya funktioner_
  * Inforutan: Flyttade positioneringen från CSS till javascript.
 
  * Inforutan: Konstruktorn tar nu bort sig själv. Sparar minne.
@@ -66,17 +66,17 @@ Senaste ändringarna ligger alltid överst.
 
  * Framsidan: Långa programtitlar scrollas nu i programlistan om man pekar på dem.
 
-=== _Rättade buggar_ ===
+_Rättade buggar_
  * Inga.
 
 
 
 
 == 20080324 ==
-=== _Nya funktioner_ ===
+_Nya funktioner_
  * Inga.
 
-=== _Rättade buggar_ ===
+_Rättade buggar_
  * Nedladdning av listan med kanaler från servern sker nu automatiskt vid första uppstart om listan saknas.
 
  * Grabbern kräver nu inte längre att användarnamnet är gusax840 för att funka :-)
