@@ -10,6 +10,8 @@ Senaste ändringarna ligger alltid överst.
 == Nästa version ==
 
 _Nya funktioner_
+ * Framsidan: Framsidan är nu mindre genomskinlig än den var innan (för ökad läsbarhet).
+
  * Framsidan: Snabbknapp för att öppna baksidan: [ ⌘-, ].
 
  * Inforutan: Det går nu att hålla ner piltangenterna för att scrolla texten i inforutan (man slipper pumpa på knappen).
