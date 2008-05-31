@@ -225,6 +225,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       
       tempElement.appendChild(tempTextNode.cloneNode(false));
       tempElement.firstChild.nodeValue = translator.translate("Done") + " \u21a9";
+      tempElement.setAttribute("title", translator.translate("Click (or press Enter \u21a9) to flip to front."));
       
       return UIcreator.createScalableContainer("bottombar", tempElement.cloneNode(true), "nere.png","back");
     }
@@ -500,6 +501,14 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         that = this;
       }
       currentChannelListIndex = settings.getCurrentChannelListIndex();
+      document.getElementsByTagName("body")[0].addEventListener("keyup", 
+        function(event)
+        {
+          if(visible && event && event.keyCode === 13)
+          {
+            that.goToFront(event);
+          }
+        }, false);
       delete that.init;
     },
     
@@ -576,6 +585,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         {
           that.hide();
           toFront();
+          UIcreator.applyTransparency(settings.getTransparency());
         }
         else
         {
