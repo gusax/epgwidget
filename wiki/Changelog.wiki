@@ -10,7 +10,15 @@ Senaste ändringarna ligger alltid överst.
 == Nästa version ==
 
 === _Nya funktioner_ ===
- * Inforutan: Det går nu att hålla ner piltangenterna för att scrolla texten i inforutan.
+ * Framsidan: Snabbknapp för att öppna baksidan: [ ⌘-, ].
+
+ * Inforutan: Det går nu att hålla ner piltangenterna för att scrolla texten i inforutan (man slipper pumpa på knappen).
+
+ * Baksidan: Snabbknapp för att öppna framsidan: [ Enter ].
+
+ * Baksidan: Baksidan är inte längre transparent. Enbart framsidan påverkas av transparensinställningarna.
+
+ * Orange HC (skin) : Transparensen flyttad från css till javascript (så att man ska kunna justera den själv i en kommande version.) 
 
 === _Rättade buggar_ ===
  * Framsidan: Även det numeriska tangentbordet accepteras när man matar in klockslag. ([http://code.google.com/p/epgwidget/issues/detail?id=44 44])
