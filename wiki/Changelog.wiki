@@ -7,7 +7,7 @@ Läs så här:
 
 Senaste ändringarna ligger alltid överst.
 
-== Nästa version ==
+== 20080601 ==
 
 _Nya funktioner_
  * Framsidan: Framsidan är nu mindre genomskinlig än den var innan (för ökad läsbarhet).
