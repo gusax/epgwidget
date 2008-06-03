@@ -3,7 +3,7 @@
 	// An array of all grabbers (their filename excluding .php)
 	//$grabbers = array("tv.xmltv.se.swedb","tv.dvb.dreambox","tv.jsontv.se.swedb");
 	$grabbers = array("tv.jsontv.se.swedb");
-	$userAgent = "se.swedb.tv.widget/20071103J";
+	$userAgent = "se.swedb.tv.widget/20080603J";
 	$useGrowl = false;
 
 	function fixPath($path)
