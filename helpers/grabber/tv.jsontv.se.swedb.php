@@ -182,7 +182,7 @@ function downloadJsontv($links,$userAgent,$pathToTargetFolder)
 		$start = strrpos($link,"/")+1;
 		$target = $pathToTargetFolder."".substr($link,$start);
 		//echo "\nTrying to download ".substr($link,$start);
-		system("/usr/bin/curl -s -R --user-agent $userAgent --compressed $link -o $target -z $target");
+		system("/usr/bin/curl -s -R --user-agent $userAgent --compressed $link.gz -o $target -z $target");
 	}
 }
 
