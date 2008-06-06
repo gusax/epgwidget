@@ -307,6 +307,7 @@ EPG.settings = function(Debug, growl, file)
         }
         else
         {
+          that.savePreference("grabberVersion", EPG.grabberVersion);
           Debug.inform("settings.grabberInstalled success!");
         }
       }
@@ -1018,6 +1019,32 @@ EPG.settings = function(Debug, growl, file)
       catch (error)
       {
         Debug.alert("Error in settings.installGrabber: " + error);
+      }
+    },
+    
+    /**
+      * @scope settings
+      * @function updateGrabber
+      * @description Installs the grabber service as a cronjob.
+      */
+    updateGrabber: function (force) 
+    {
+      try
+      {
+        var installedGrabberVersion = that.getPreference("grabberVersion");
+        if(!installedGrabberVersion || installedGrabberVersion < EPG.grabberVersion || force)
+        {
+          Debug.inform("Updating grabber");
+          that.installGrabber();
+        }
+        else
+        {
+          Debug.inform("Grabber was up to date");
+        }
+      }
+      catch (error)
+      {
+        Debug.alert("Error in settings.updateGrabber: " + error);
       }
     },
     
