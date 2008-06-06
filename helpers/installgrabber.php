@@ -74,13 +74,15 @@ function installCrontab($pathToXmltvFolder)
   {
   	$plistContents = utf8_decode(file_get_contents("se.bizo.epgwidget.grabber.plist")); // Open template plist
     $plistContents = utf8_encode(str_replace('$PATHTOGRABBER$', $pathToXmltvFolder . "/grabber", $plistContents)); // replace PATHTOGRABBER with real path to grabber 
-    $launchAgentPlist = fopen($pathToLaunchAgents . "/se.bizo.epgwidget.grabber.plist", "w+"); // create launchAgent plist file
-    if(fwrite($launchAgentPlist, $plistContents) === FALSE)
+    if(!file_exists($pathToLaunchAgents . "/se.bizo.epgwidget.grabber.plist"))
     {
-    	// could not write to file :-(
+      $launchAgentPlist = fopen($pathToLaunchAgents . "/se.bizo.epgwidget.grabber.plist", "w+"); // create launchAgent plist file
+      if(fwrite($launchAgentPlist, $plistContents) === FALSE)
+      {
+    	  // could not write to file :-(
+      }
+      fclose($launchAgentPlist);
     }
-    fclose($launchAgentPlist);
-    
   }
   //$answer = exec("/bin/cp se.bizo.epgwidget.grabber.plist $pathToLaunchAgents");
 	/*$epgCrontab = fopen("$pathToXmltvFolder/grabber/epg.crontab","w+");
@@ -97,6 +99,10 @@ function install()
 	{
 		installCrontab($pathToXmltvFolder);
 	}
+  if(file_exists($pathToXmltvFolder. "/grabber/epg.downloader.lastupdate.txt"))
+  {
+  	unlink($pathToXmltvFolder. "/grabber/epg.downloader.lastupdate.txt");
+  }
 }
 
 install();
