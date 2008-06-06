@@ -166,6 +166,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 	 			{
 	 			  //growl.notifyNow(translator.translate("EPG has been installed before."));
 	 			  //debug.alert("The EPG widget has been run on this computer (by this user) before.");
+	 			  settings.updateGrabber();
 	 			  settings.getAllChannels(channelsLoaded, channelsLoadedFailed);
 	 			}
 	 			

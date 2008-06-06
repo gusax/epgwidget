@@ -17,7 +17,7 @@
 	<key>CFBundleName</key>
 	<string>epgwidget</string>
 	<key>CFBundleVersion</key>
-	<string>20080601</string>
+	<string>20080606</string>
 	<key>CloseBoxInsetX</key>
 	<integer>12</integer>
 	<key>CloseBoxInsetY</key>
