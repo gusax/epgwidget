@@ -9,12 +9,19 @@ Senaste ändringarna ligger alltid överst.
 == Nästa version ==
 
 _Nya funktioner_
- * Grabbern (scriptet som laddar ner tablåer i bakgrunden) tar nu bort korrupta tablåer och korrupta loggor (jippi!) innan den försöker uppdatera filerna. 
+ * Framsidan: Det går nu att tvinga fram en nedladdning av nya tablåer genom att trycka på T-tangenten (T för Tablåer). Det finns dock än så länge ingen indikering i guit på att så sker - så vänta 10 sek (exakt tid beror på vad för internetuppkoppling du har), ta bort dashboard och ta fram det igen så ska förhoppningsvis de flesta tablåer vara på plats. Saknas några så vänta nån sekund till, göm dashboard och ta fram det igen. Du behöver inte trycka T en gång till. (Och ja, det kommer visas nån laddningssymbol i en senare version.)
 
- * Uppdatering av grabbern skall passera obemärkt förbi (förutsatt att man inte haft problem innan, då kanske det kan bli märkbart).
+ * Grabbern (scriptet som laddar ner tablåer i bakgrunden): tar nu bort korrupta tablåer och korrupta loggor (jippi!) innan den försöker uppdatera filerna. Funkar även om man trycker på T.
+
+ * Grabbern: Uppdatering av grabbern skall passera obemärkt förbi (förutsatt att man inte haft problem innan, då kanske det kan bli märkbart).
 
 _Rättade buggar_
- * Grabbern lägger nu på .gz på tablåfilsnamnet så att tablånedladdningen inte längre upphör ifall man råkar hamna på den tredje tablåservern. Den tredje tablåservern måste ha tablånamn.js.gz nämligen, det räcker inte med bara tablånamn.js. ([http://code.google.com/p/epgwidget/issues/detail?id=46 46])
+ * Framsidan: Kortkommandot [ ⌘-, ] för att öppna baksidan funkar nu utan att man behöver vända på widgeten genom att klicka på i-et en gång först.
+
+ * Grabbern: Grabbern lägger nu på .gz på tablåfilsnamnet så att tablånedladdningen inte längre upphör ifall man råkar hamna på den tredje tablåservern. Den tredje tablåservern måste ha tablånamn.js.gz nämligen, det räcker inte med bara tablånamn.js. ([http://code.google.com/p/epgwidget/issues/detail?id=46 46])
+
+ * Grabbern: Den automatiska nedladdningen av tablåer har nu 10 sekunders fördröjning (så att airport ska hinna koppla upp innan nedladdningen påbörjas). Denna fördröjning satt av misstag på den manuella nedladdningen tidigare.
+
 
 == 20080601 ==
 
