@@ -43,7 +43,7 @@
 	
 	$today = date("Ymd");
     
-  if($force)
+  if($force != "1")
   {
   	sleep(10); // sleep for 10 seconds. Used because the downloader is launched automatically by launchd when the user logs in, and the login occurs before the network (especially Airport) is up. In other words, we need to wait for an internet connection before trying to download new schedules.
   }
