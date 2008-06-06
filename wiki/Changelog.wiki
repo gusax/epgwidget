@@ -6,7 +6,7 @@ Läs så här:
  * Beskrivning av gjord ändring (buggnummer om sådant finnes)
 
 Senaste ändringarna ligger alltid överst.
-== Nästa version ==
+== 20080606 ==
 
 _Nya funktioner_
  * Framsidan: Det går nu att tvinga fram en nedladdning av nya tablåer genom att trycka på T-tangenten (T för Tablåer). Det finns dock än så länge ingen indikering i guit på att så sker - så vänta 10 sek (exakt tid beror på vad för internetuppkoppling du har), ta bort dashboard och ta fram det igen så ska förhoppningsvis de flesta tablåer vara på plats. Saknas några så vänta nån sekund till, göm dashboard och ta fram det igen. Du behöver inte trycka T en gång till. (Och ja, det kommer visas nån laddningssymbol i en senare version.)
