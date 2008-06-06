@@ -6,6 +6,15 @@ Läs så här:
  * Beskrivning av gjord ändring (buggnummer om sådant finnes)
 
 Senaste ändringarna ligger alltid överst.
+== Nästa version ==
+
+_Nya funktioner_
+ * Grabbern (scriptet som laddar ner tablåer i bakgrunden) tar nu bort korrupta tablåer och korrupta loggor (jippi!) innan den försöker uppdatera filerna. 
+
+ * Uppdatering av grabbern skall passera obemärkt förbi (förutsatt att man inte haft problem innan, då kanske det kan bli märkbart).
+
+_Rättade buggar_
+ * Grabbern lägger nu på .gz på tablåfilsnamnet så att tablånedladdningen inte längre upphör ifall man råkar hamna på den tredje tablåservern. Den tredje tablåservern måste ha tablånamn.js.gz nämligen, det räcker inte med bara tablånamn.js. ([http://code.google.com/p/epgwidget/issues/detail?id=46 46])
 
 == 20080601 ==
 
