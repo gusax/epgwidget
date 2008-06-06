@@ -1,5 +1,9 @@
 #summary Innehåller en lista av saker du kan göra med EPG-widgeten.
 #labels Featured
+
+*Observera att dessa instruktioner gäller den senast släppta versionen*
+(Funkar inte någon av instruktionerna, vänligen vänd på widgeten och jämför versionsnumret högst upp med den senaste version som finns att ladda ner här.)
+
 == Framsidan ==
 På framsidan kan du:
 
@@ -12,6 +16,8 @@ På framsidan kan du:
   * *Förstora widgeten* : Nederst i vänsterkant finns tre A. Genom att trycka på det största av dem kan du, förutsatt att widgeten inte blir högre än skärmen, förstora widgeten för ökad läsbarhet. För att göra mindre, tryck på det minsta A-et. För att återgå till standardstorlek, tryck på det mellersta A-et.
 
  * *Hoppa framåt i tiden* : Genom att skriva in ett klockslag med 4 siffror (2030 för 20:30, 0615 för 06:15 osv) är det möjligt att hoppa upp till 24 tim framåt i tiden. Suddtangenten, backspace, återgår till realtid.
+
+ * *Tvinga nedladdning av tablåer* : Tryck på tangenten T så tvingas widgeten att försöka ladda ner tablåer. Vänta i 10 sek (exakt tid beror på hur snabb internetuppkoppling du har), göm dashboard och ta fram det igen så ska tablåerna dyka upp. (För närvarande visas ingen indikering i widgeten på att tablåerna verkligen laddas ner, det ska det ska fixas i en framtida version.)
 
 == Baksidan ==
 På baksidan kan du:
