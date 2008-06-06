@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>EPG - Electronic Program Guide</title>
+  <link rel="stylesheet" rev="stylesheet" href="skins/sharedstyles.css" charset="utf-8" />
+  <link id="skin" rel="stylesheet" rev="stylesheet" charset="utf-8" />
+  <script type="text/javascript">
+    /**
+	 * @description Container for all objects.
+	 * @static
+	 * @name EPG
+	 */
+	 var EPG = {};
+	 EPG.currentVersion = "20080606";
+	 EPG.grabberVersion = "20080606";
+  </script>
+</head>
+<body>
+  <div id="front"></div>
+  <div id="back"></div>
+  <script src="scripts/EPG.debug.js" onload="EPG.debug.inform('******** EPG starting ********');"></script>
+  <script src="Swedish.lproj/EPG.translator.js"></script>
+  <script src="scripts/EPG.growl.js"></script>
+  <script src="scripts/EPG.file.js"></script>
+  <script src="scripts/EPG.settings.js"></script>
+  <script src="scripts/EPG.skin.js"></script>
+  <script src="scripts/EPG.Reminder.js"></script>
+  <script src="scripts/EPG.UIcreator.js"></script>
+  <script src="scripts/EPG.back.js"></script>
+  <script src="scripts/EPG.ProgramInfo.js"></script>
+  <script src="scripts/EPG.front.js"></script>
+  <script src="scripts/EPG.widget.js"></script>
+</body>
+</html>
