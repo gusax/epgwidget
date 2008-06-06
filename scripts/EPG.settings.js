@@ -323,6 +323,75 @@ EPG.settings = function(Debug, growl, file)
   }
   
   /**
+    * @scope settings
+    * @function grabberUpdated
+    * @description Run by widget.system after the grabber has been updated.
+    * @private
+    * @param {object} systemResponse Response from widget.system.
+    */
+  function grabberUpdated (systemResponse) 
+  {
+    try
+    {
+      if(systemResponse)
+      {
+        if(systemResponse.errorString)
+        {
+          Debug.alert("settings.grabberUpdated: Error when trying to update grabber! Message was " + systemResponse.errorString);
+        }
+        else
+        {
+          that.savePreference("grabberVersion", EPG.grabberVersion);
+          Debug.inform("settings.grabberUpdated success!");
+          that.runGrabber(true);
+        }
+      }
+      else
+      {
+        Debug.alert("settings.grabberUpdated got no response!");
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in settings.grabberUpdated: " + error + " (systemResponse = " + systemResponse + ")");
+    }
+  }
+  
+  
+  /**
+    * @scope settings
+    * @function ranGrabber
+    * @description Run by widget.system after the grabber has been updated.
+    * @private
+    * @param {object} systemResponse Response from widget.system.
+    */
+  function ranGrabber (systemResponse, onSuccess, onFailure) 
+  {
+    try
+    {
+      if(systemResponse)
+      {
+        if(systemResponse.errorString)
+        {
+          Debug.alert("settings.ranGrabber: Error when trying to run grabber! Message was " + systemResponse.errorString);
+        }
+        else
+        {
+          Debug.inform("settings.ranGrabber success!");
+        }
+      }
+      else
+      {
+        Debug.alert("settings.ranGrabber got no response!");
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in settings.ranGrabber: " + error + " (systemResponse = " + systemResponse + ")");
+    }
+  }
+  
+  /**
    * @memberOf EPG.settings
    * @name getFileDateYYYYMMDD
    * @function
@@ -1035,7 +1104,10 @@ EPG.settings = function(Debug, growl, file)
         if(!installedGrabberVersion || installedGrabberVersion < EPG.grabberVersion || force)
         {
           Debug.inform("Updating grabber");
-          that.installGrabber();
+          if(window.widget && window.widget.system)
+          {
+            window.widget.system("cd helpers && /usr/bin/php installgrabber.php", grabberUpdated);
+          }
         }
         else
         {
@@ -1336,6 +1408,32 @@ EPG.settings = function(Debug, growl, file)
       catch (error)
       {
         Debug.alert("Error in Epg.settings.getTransparency: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf Epg.settings
+     * @function runGrabber
+     * @description Runs the grabber.
+     */
+    runGrabber: function (force)
+    {
+      try
+      {
+        var command = "cd " + file.getHomePath() + "Library/Xmltv/grabber && /usr/bin/php epg.downloader.php";
+        if(force)
+        {
+          command += " 1";
+        }
+        Debug.inform("runGrabber command = " + command);
+        if(window.widget && window.widget.system)
+        {
+          window.widget.system(command, ranGrabber);
+        }
+      }
+      catch (error)
+      {
+        Debug.alert("Error in Epg.settings.runGrabber: " + error);
       }
     }
   };

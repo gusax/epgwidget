@@ -84,6 +84,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   key.N_EIGHT = 104;
   key.N_NINE = 105;
   
+  key.T = 84;
+  
   // Private methods
   /**
    * @memberOf EPG.front
@@ -1243,6 +1245,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
               that.goToBack(event);
             }
           break;
+          case key.T:
+            {
+              if(visible)
+              {
+                Settings.runGrabber(true);
+              }
+            }
         	default:
         	  Debug.inform("Front.keyHandler: event.keyCode = " + event.keyCode);
           break;
@@ -1773,6 +1782,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         that.reloadIcons();
         that.reloadPrograms();
         startUpdateInterval(); // should really be one interval per channel
+        visible = true;
       }
       catch (error)
       {
