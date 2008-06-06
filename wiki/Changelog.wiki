@@ -18,6 +18,8 @@ _Nya funktioner_
 _Rättade buggar_
  * Framsidan: Kortkommandot [ ⌘-, ] för att öppna baksidan funkar nu utan att man behöver vända på widgeten genom att klicka på i-et en gång först.
 
+ * Baksidan: Texten "Laddar ner kanaler..." hamnar inte längre utanför baksidan. ([http://code.google.com/p/epgwidget/issues/detail?id=45 45])
+
  * Grabbern: Grabbern lägger nu på .gz på tablåfilsnamnet så att tablånedladdningen inte längre upphör ifall man råkar hamna på den tredje tablåservern. Den tredje tablåservern måste ha tablånamn.js.gz nämligen, det räcker inte med bara tablånamn.js. ([http://code.google.com/p/epgwidget/issues/detail?id=46 46])
 
  * Grabbern: Den automatiska nedladdningen av tablåer har nu 10 sekunders fördröjning (så att airport ska hinna koppla upp innan nedladdningen påbörjas). Denna fördröjning satt av misstag på den manuella nedladdningen tidigare.
