@@ -626,17 +626,17 @@ EPG.settings = function(Debug, growl, file)
           
           fileDate = getFileDateYYYYMMDD(yesterday);
           savePath = "Library/Xmltv/schedules/" + channelID + "_" + fileDate + ".js";
-          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js";
+          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js.gz";
           file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){Debug.alert("Schedule download failure :-(");},true);
           
           fileDate = getFileDateYYYYMMDD(now);
           savePath = "Library/Xmltv/schedules/" + channelID + "_" + fileDate + ".js";
-          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js";
+          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js.gz";
           file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){Debug.alert("Schedule download failure :-(");},true);
           
           fileDate = getFileDateYYYYMMDD(tomorrow);
           savePath = "Library/Xmltv/schedules/" + channelID + "_" + fileDate + ".js";
-          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js";
+          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js.gz";
           file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){Debug.alert("Schedule download failure :-(");},true);
           if(channel.icon)
           {
@@ -1386,7 +1386,7 @@ EPG.settings = function(Debug, growl, file)
     {
       try
       {
-        file.downloadFile(defaultPathToServer + "/channels.js", paths.allChannels, onSuccess, onFailure);
+        file.downloadFile(defaultPathToServer + "/channels.js.gz", paths.allChannels, onSuccess, onFailure);
       }
       catch (error)
       {
