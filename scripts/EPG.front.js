@@ -51,7 +51,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   infoButton,
   toBack,
   currentChannelListIndex = Settings.getCurrentChannelListIndex(),
-  width = 540,
+  width = 270, // program info is 223 but placed 19 px into list, so total width is 474 when program info is visible 
   height = 80,
   dragElement,
   updateInterval,
