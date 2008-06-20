@@ -6,6 +6,14 @@ Läs så här:
  * Beskrivning av gjord ändring (buggnummer om sådant finnes)
 
 Senaste ändringarna ligger alltid överst.
+== Nästa version ==
+_Nya funktioner_
+
+_Rättade buggar_
+ * Baksidan: Lade till bortglömda .gz-filändelser som glömdes bort i förra versiones rättning. Felet kunde leda till att man (om man aldrig haft widgeten installerad tidigare) fastnade på "laddar ner kanaler" på baksidan. ([http://code.google.com/p/epgwidget/issues/detail?id=47 47])
+
+ * Inforutan: Widgeten reserverar inte längre allt utrymme under inforutan om inforutan inte är synlig. Det gör i sin tur att det nu fungerar mycket bättre att svepa in från höger med muspekaren och att EPG inte stjäl fokus från närliggande widgets. (Det blir dock fortfarande lite skumt om man har inforutan framme.) 
+
 == 20080606 ==
 
 _Nya funktioner_
