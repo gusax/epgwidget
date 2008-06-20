@@ -613,20 +613,22 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
               if(scalableContainer.style.visibility !== "visible")
               {
                 scalableContainer.style.visibility = "visible";
+                Settings.resizeTo(474);
               }
             }
             programInfoNode.titleNode.parentNode.setAttribute("title", programInfoNode.titleNode.nodeValue);
-            
           } 
           else if(scalableContainer.style.visibility !== "visible")
           {
             programInfoNode.durationContainer.style.top = "0px";
             programInfoNode.descriptionContainer.style.top = "0px";
             scalableContainer.style.visibility = "visible";
+            Settings.resizeTo(474);
           }
           else if(scalableContainer.style.visibility !== "hidden")
           {
             scalableContainer.style.visibility = "hidden";
+            Settings.resizeTo(270);
           }
           
         }
@@ -655,6 +657,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         {
           scalableContainer.style.visibility = "hidden";
           delete programInfoNode.program;
+          Settings.resizeTo(270);
         }
       }
       catch (error)

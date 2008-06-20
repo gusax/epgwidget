@@ -150,7 +150,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 		  
 			try
 			{
-				if (!that)
+			  if (!that)
 				{
 					that = this;
 				}

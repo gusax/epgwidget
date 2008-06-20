@@ -1056,8 +1056,14 @@ EPG.settings = function(Debug, growl, file)
     {
       try
       {
-        currentSize.width = width;
-        currentSize.height = height;
+        if(width)
+        {
+          currentSize.width = width;
+        }
+        if(height)
+        {
+          currentSize.height = height;
+        }
         if(typeof(currentSize.scale) === "undefined")
         {
           currentSize.scale = 1;
