@@ -13,6 +13,15 @@ function downloadChannelsXmlJsontv($channelsXmlUrl,$pathToChannelsXml,$pathToCha
 			unlink($pathToChannelsXml);
 		}
 	}
+  if(file_exists($pathToChannelsJs))
+  {
+    $channelsJsContents = file_get_contents($pathToChannelsJs);
+    if(strpos($newChannelsJsContents,"jsontv") === false)
+    {
+      // file exists but is corrupt. Delete it.
+      unlink($pathToChannelsJs);
+    }
+  }
 	// download new channels.xml as channels.temp.xml
 	system("/usr/bin/curl -s -R --user-agent $userAgent --compressed http://tv.swedb.se/xmltv/channels.xml.gz -o $pathToChannelsXmlTemp -z $pathToChannelsXml");
 	system("/usr/bin/curl -s -R --user-agent $userAgent --compressed http://xmltv.tvsajten.com/json/channels.js.gz -o $pathToChannelsJsTemp -z $pathToChannelsJs");	
