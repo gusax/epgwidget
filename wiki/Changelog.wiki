@@ -8,8 +8,13 @@ Läs så här:
 Senaste ändringarna ligger alltid överst.
 == Nästa version ==
 _Nya funktioner_
+ * Framsidan & baksidan: En laddningssymbol (ett timglas) visas nu när tablåer öppnas, kanaler läggs till samt om man trycker på T för att tvinga fram en nedladdning av tablåer.  Obs: med en tillräckligt rapp dator kommer det förmodligen knappt hinna visas innan det försvinner.
+
+ * Grabbern: Om filen med alla kanalerna i blir korrupt bör grabbern nu kunna kasta denna, så att den inte av misstag hindrar en ny och korrekt fil från att laddas ner.
 
 _Rättade buggar_
+ * Framsidan: Lade till tredje argumentet false till addEventListener, så nu fungerar tablåerna på framsidan i Firefox igen. Bra för testning.
+
  * Baksidan: Lade till bortglömda .gz-filändelser som glömdes bort i förra versiones rättning. Felet kunde leda till att man (om man aldrig haft widgeten installerad tidigare) fastnade på "laddar ner kanaler" på baksidan. ([http://code.google.com/p/epgwidget/issues/detail?id=47 47])
 
  * Inforutan: Widgeten reserverar inte längre allt utrymme under inforutan om inforutan inte är synlig. Det gör i sin tur att det nu fungerar mycket bättre att svepa in från höger med muspekaren och att EPG inte stjäl fokus från närliggande widgets. (Det blir dock fortfarande lite skumt om man har inforutan framme.) 
