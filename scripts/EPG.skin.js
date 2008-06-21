@@ -30,7 +30,7 @@ if (EPG.debug)
   * @param {object} growl EPG.growl.
   * @param {object} settings EPG.settings.
   */
-EPG.skin = function(debug, growl, settings)
+EPG.skin = function(debug, growl, settings, File)
 {
   // Private Variables
   var that,
@@ -127,5 +127,5 @@ EPG.skin = function(debug, growl, settings)
       }
     }
   };
-}(EPG.debug, EPG.growl, EPG.settings);
+}(EPG.debug, EPG.growl, EPG.settings, EPG.file);
 EPG.skin.init();
