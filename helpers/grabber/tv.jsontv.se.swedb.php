@@ -13,15 +13,6 @@ function downloadChannelsXmlJsontv($channelsXmlUrl,$pathToChannelsXml,$pathToCha
 			unlink($pathToChannelsXml);
 		}
 	}
-  if(file_exists($pathToChannelsJs))
-  {
-    $channelsJsContents = file_get_contents($pathToChannelsJs);
-    if(strpos($newChannelsJsContents,"jsontv") === false)
-    {
-      // file exists but is corrupt. Delete it.
-      unlink($pathToChannelsJs);
-    }
-  }
 	// download new channels.xml as channels.temp.xml
 	system("/usr/bin/curl -s -R --user-agent $userAgent --compressed http://tv.swedb.se/xmltv/channels.xml.gz -o $pathToChannelsXmlTemp -z $pathToChannelsXml");
 	system("/usr/bin/curl -s -R --user-agent $userAgent --compressed http://xmltv.tvsajten.com/json/channels.js.gz -o $pathToChannelsJsTemp -z $pathToChannelsJs");	
@@ -190,32 +181,6 @@ function downloadJsontv($links,$userAgent,$pathToTargetFolder)
 		// copy the filename from the end of the link by searching for the last / in the link
 		$start = strrpos($link,"/")+1;
 		$target = $pathToTargetFolder."".substr($link,$start);
-    if(strrpos($link, ".js") === (strlen($link) - 3))
-    {
-      $link .= ".gz";
-      if(file_exists($target))
-      {
-        $filecontents = file_get_contents($target);
-        if(substr($filecontents,0,1) != "{")
-        {
-        	unlink($target); // delete file, it contains garbage
-          echo "\nDeleted $target, it contained garbage.";
-        }
-      }
-    }
-    else if(strrpos($link, ".png") === (strlen($link) - 4))
-    {
-    	if(file_exists($target))
-      {
-        $filecontents = file_get_contents($target);
-        //echo "\n" . utf8_encode($target) . " first char: " . substr($filecontents,0,1);
-        if(substr($filecontents,0,1) == "<")
-        {
-          unlink($target); // delete file, it contains garbage
-          //echo "\nDeleted $target, it contained garbage.";
-        }
-      }
-    }
 		//echo "\nTrying to download ".substr($link,$start);
 		system("/usr/bin/curl -s -R --user-agent $userAgent --compressed $link -o $target -z $target");
 	}

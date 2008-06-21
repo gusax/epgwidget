@@ -208,7 +208,6 @@ EPG.settings = function(Debug, growl, file)
   {
     try
     {
-      file.hideLoadingImage();
       if(systemResponse)
       {
         if(systemResponse.errorString)
@@ -279,7 +278,6 @@ EPG.settings = function(Debug, growl, file)
       
       if(window.widget && window.widget.system)
       {
-        file.showLoadingImage();
         Debug.inform("settings.exportChannelList exporting...");
         widget.system("/bin/echo '" + string + "' > " + file.getHomePath() + "Library/Xmltv/channels/epg.users.channels.txt", channelListExported);
       }
@@ -301,7 +299,6 @@ EPG.settings = function(Debug, growl, file)
   {
     try
     {
-      file.hideLoadingImage();
       if(systemResponse)
       {
         if(systemResponse.errorString)
@@ -310,7 +307,6 @@ EPG.settings = function(Debug, growl, file)
         }
         else
         {
-          that.savePreference("grabberVersion", EPG.grabberVersion);
           Debug.inform("settings.grabberInstalled success!");
         }
       }
@@ -322,77 +318,6 @@ EPG.settings = function(Debug, growl, file)
     catch (error)
     {
       Debug.alert("Error in settings.grabberInstalled: " + error + " (systemResponse = " + systemResponse + ")");
-    }
-  }
-  
-  /**
-    * @scope settings
-    * @function grabberUpdated
-    * @description Run by widget.system after the grabber has been updated.
-    * @private
-    * @param {object} systemResponse Response from widget.system.
-    */
-  function grabberUpdated (systemResponse) 
-  {
-    try
-    {
-      file.hideLoadingImage();
-      if(systemResponse)
-      {
-        if(systemResponse.errorString)
-        {
-          Debug.alert("settings.grabberUpdated: Error when trying to update grabber! Message was " + systemResponse.errorString);
-        }
-        else
-        {
-          that.savePreference("grabberVersion", EPG.grabberVersion);
-          Debug.inform("settings.grabberUpdated success!");
-          that.runGrabber(true);
-        }
-      }
-      else
-      {
-        Debug.alert("settings.grabberUpdated got no response!");
-      }
-    }
-    catch (error)
-    {
-      Debug.alert("Error in settings.grabberUpdated: " + error + " (systemResponse = " + systemResponse + ")");
-    }
-  }
-  
-  
-  /**
-    * @scope settings
-    * @function ranGrabber
-    * @description Run by widget.system after the grabber has been updated.
-    * @private
-    * @param {object} systemResponse Response from widget.system.
-    */
-  function ranGrabber (systemResponse, onSuccess, onFailure) 
-  {
-    try
-    {
-      file.hideLoadingImage();
-      if(systemResponse)
-      {
-        if(systemResponse.errorString)
-        {
-          Debug.alert("settings.ranGrabber: Error when trying to run grabber! Message was " + systemResponse.errorString);
-        }
-        else
-        {
-          Debug.inform("settings.ranGrabber success!");
-        }
-      }
-      else
-      {
-        Debug.alert("settings.ranGrabber got no response!");
-      }
-    }
-    catch (error)
-    {
-      Debug.alert("Error in settings.ranGrabber: " + error + " (systemResponse = " + systemResponse + ")");
     }
   }
   
@@ -631,17 +556,17 @@ EPG.settings = function(Debug, growl, file)
           
           fileDate = getFileDateYYYYMMDD(yesterday);
           savePath = "Library/Xmltv/schedules/" + channelID + "_" + fileDate + ".js";
-          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js.gz";
+          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js";
           file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){Debug.alert("Schedule download failure :-(");},true);
           
           fileDate = getFileDateYYYYMMDD(now);
           savePath = "Library/Xmltv/schedules/" + channelID + "_" + fileDate + ".js";
-          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js.gz";
+          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js";
           file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){Debug.alert("Schedule download failure :-(");},true);
           
           fileDate = getFileDateYYYYMMDD(tomorrow);
           savePath = "Library/Xmltv/schedules/" + channelID + "_" + fileDate + ".js";
-          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js.gz";
+          url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js";
           file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){Debug.alert("Schedule download failure :-(");},true);
           if(channel.icon)
           {
@@ -1061,14 +986,8 @@ EPG.settings = function(Debug, growl, file)
     {
       try
       {
-        if(width)
-        {
-          currentSize.width = width;
-        }
-        if(height)
-        {
-          currentSize.height = height;
-        }
+        currentSize.width = width;
+        currentSize.height = height;
         if(typeof(currentSize.scale) === "undefined")
         {
           currentSize.scale = 1;
@@ -1093,45 +1012,12 @@ EPG.settings = function(Debug, growl, file)
       {
         if(window.widget && window.widget.system)
         {
-          file.showLoadingImage();
           window.widget.system("cd helpers && /usr/bin/php installgrabber.php", grabberInstalled);
         }
       }
       catch (error)
       {
-        file.hideLoadingImage();
         Debug.alert("Error in settings.installGrabber: " + error);
-      }
-    },
-    
-    /**
-      * @scope settings
-      * @function updateGrabber
-      * @description Installs the grabber service as a cronjob.
-      */
-    updateGrabber: function (force) 
-    {
-      try
-      {
-        var installedGrabberVersion = that.getPreference("grabberVersion");
-        if(!installedGrabberVersion || installedGrabberVersion < EPG.grabberVersion || force)
-        {
-          Debug.inform("Updating grabber");
-          if(window.widget && window.widget.system)
-          {
-            file.showLoadingImage();
-            window.widget.system("cd helpers && /usr/bin/php installgrabber.php", grabberUpdated);
-          }
-        }
-        else
-        {
-          Debug.inform("Grabber was up to date");
-        }
-      }
-      catch (error)
-      {
-        file.hideLoadingImage();
-        Debug.alert("Error in settings.updateGrabber: " + error);
       }
     },
     
@@ -1401,7 +1287,7 @@ EPG.settings = function(Debug, growl, file)
     {
       try
       {
-        file.downloadFile(defaultPathToServer + "/channels.js.gz", paths.allChannels, onSuccess, onFailure);
+        file.downloadFile(defaultPathToServer + "/channels.js", paths.allChannels, onSuccess, onFailure);
       }
       catch (error)
       {
@@ -1423,33 +1309,6 @@ EPG.settings = function(Debug, growl, file)
       catch (error)
       {
         Debug.alert("Error in Epg.settings.getTransparency: " + error);
-      }
-    },
-    
-    /**
-     * @memberOf Epg.settings
-     * @function runGrabber
-     * @description Runs the grabber.
-     */
-    runGrabber: function (force)
-    {
-      try
-      {
-        var command = "cd " + file.getHomePath() + "Library/Xmltv/grabber && /usr/bin/php epg.downloader.php";
-        if(force)
-        {
-          command += " 1";
-        }
-        Debug.inform("runGrabber command = " + command);
-        if(window.widget && window.widget.system)
-        {
-          file.showLoadingImage();
-          window.widget.system(command, ranGrabber);
-        }
-      }
-      catch (error)
-      {
-        Debug.alert("Error in Epg.settings.runGrabber: " + error);
       }
     }
   };

@@ -3,7 +3,7 @@
 	// An array of all grabbers (their filename excluding .php)
 	//$grabbers = array("tv.xmltv.se.swedb","tv.dvb.dreambox","tv.jsontv.se.swedb");
 	$grabbers = array("tv.jsontv.se.swedb");
-	$userAgent = "se.swedb.tv.widget/20080620J";
+	$userAgent = "se.swedb.tv.widget/20071103J";
 	$useGrowl = false;
 
 	function fixPath($path)
@@ -43,7 +43,7 @@
 	
 	$today = date("Ymd");
     
-  if($force != "1")
+  if($force)
   {
   	sleep(10); // sleep for 10 seconds. Used because the downloader is launched automatically by launchd when the user logs in, and the login occurs before the network (especially Airport) is up. In other words, we need to wait for an internet connection before trying to download new schedules.
   }
@@ -60,30 +60,28 @@
 	}
 	
 	// Download schedules if we haven't downloaded today
-	
-  if($force == 1 || $today > (int) $lastupdate)
-  {
-	  foreach($grabbers as $key => $grabber)
-	  {
-		  // download new schedules
-		  if(file_exists(utf8_encode($pathToXmltvFolder."/grabber/".$grabber.".settings.php")) && file_exists(utf8_encode($pathToXmltvFolder."/grabber/".$grabber.".php")))
-  		{
-	  		include($pathToXmltvFolder."/grabber/".$grabber.".settings.php");
-		  	include($pathToXmltvFolder."/grabber/".$grabber.".php");
-			  /*$logfile = fopen(utf8_encode($pathToXmltvFolder."/grabber/epg.downloader.log.php"),"a");
-			  fwrite($logfile,"\n" . utf8_encode(date("Ymd") ." ".date("H:m")." opened grabber " . $grabber));
-		  	fclose($logfile);*/
-  		}
-  	}
+	if($force == 1 || $today > (int) $lastupdate)
+	{
+		foreach($grabbers as $key => $grabber)
+		{
+			// download new schedules
+			if(file_exists(utf8_encode($pathToXmltvFolder."/grabber/".$grabber.".settings.php")) && file_exists(utf8_encode($pathToXmltvFolder."/grabber/".$grabber.".php")))
+			{
+				include($pathToXmltvFolder."/grabber/".$grabber.".settings.php");
+				include($pathToXmltvFolder."/grabber/".$grabber.".php");
+				/*$logfile = fopen(utf8_encode($pathToXmltvFolder."/grabber/epg.downloader.log.php"),"a");
+				fwrite($logfile,"\n" . utf8_encode(date("Ymd") ." ".date("H:m")." opened grabber " . $grabber));
+				fclose($logfile);*/
+			}
+		}
 		
-	  // remove schedules older than yesterday
-  	removeOldSchedules($pathToXmltvFolder);
-	
-  	// update lastupdatefile
-	  $lastupdatefile = fopen($lastupdatefilename, "w+");
-  	fwrite($lastupdatefile, utf8_encode($today));
-    fclose($lastupdatefile);
-    
+		// remove schedules older than yesterday
+		removeOldSchedules($pathToXmltvFolder);
+		
+		// update lastupdatefile
+		$lastupdatefile = fopen($lastupdatefilename, "w+");
+		fwrite($lastupdatefile, utf8_encode($today));
+		fclose($lastupdatefile);
 		/*if($useGrowl === true)
 		{
 			$answer = exec("/usr/local/bin/growlnotify --name \"DreamEPG\" --message \"DreamEPG:\nLaddade ner dagens tv-tablåer.\" --image \"$pathToXmltvFolder/grabber/Icon.png\"");

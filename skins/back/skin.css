@@ -1,9 +1,3 @@
-#loadingImage
-{
-  color: #fff;
-  font-size: 3em; 
-}
-
 #back
 {
   -apple-dashboard-region: dashboard-region(control, rectangle, 3.9em, 2.2em, 3.9em, 2em); 

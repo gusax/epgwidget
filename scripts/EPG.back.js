@@ -377,10 +377,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       
       tempContainer = document.createElement("div");
       tempContainer.setAttribute("class", "text");
-      tempContainer.appendChild(document.createElement("div"));
-      tempContainer.lastChild.style.textAlign = "center";
       tempTextNode = document.createTextNode(translator.translate("Downloading channels..."));
-      tempContainer.lastChild.appendChild(tempTextNode.cloneNode(false));
+      tempContainer.appendChild(tempTextNode.cloneNode(false));
       
       settings.getAllChannels(function(channels){createChannelListSuccess(channels, tempContainer);}, createChannelListFailure);
       channelListContainer = tempContainer;
