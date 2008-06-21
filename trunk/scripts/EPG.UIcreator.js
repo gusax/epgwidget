@@ -224,9 +224,7 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
           {
             Debug.alert("Error when hovering over a titleNode: " + e);
           }
-        });
-        
-        
+        }, false);
         
         return programNode;
       }
