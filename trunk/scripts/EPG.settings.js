@@ -208,6 +208,7 @@ EPG.settings = function(Debug, growl, file)
   {
     try
     {
+      file.hideLoadingImage();
       if(systemResponse)
       {
         if(systemResponse.errorString)
@@ -278,6 +279,7 @@ EPG.settings = function(Debug, growl, file)
       
       if(window.widget && window.widget.system)
       {
+        file.showLoadingImage();
         Debug.inform("settings.exportChannelList exporting...");
         widget.system("/bin/echo '" + string + "' > " + file.getHomePath() + "Library/Xmltv/channels/epg.users.channels.txt", channelListExported);
       }
@@ -299,6 +301,7 @@ EPG.settings = function(Debug, growl, file)
   {
     try
     {
+      file.hideLoadingImage();
       if(systemResponse)
       {
         if(systemResponse.errorString)
@@ -333,6 +336,7 @@ EPG.settings = function(Debug, growl, file)
   {
     try
     {
+      file.hideLoadingImage();
       if(systemResponse)
       {
         if(systemResponse.errorString)
@@ -369,6 +373,7 @@ EPG.settings = function(Debug, growl, file)
   {
     try
     {
+      file.hideLoadingImage();
       if(systemResponse)
       {
         if(systemResponse.errorString)
@@ -1088,11 +1093,13 @@ EPG.settings = function(Debug, growl, file)
       {
         if(window.widget && window.widget.system)
         {
+          file.showLoadingImage();
           window.widget.system("cd helpers && /usr/bin/php installgrabber.php", grabberInstalled);
         }
       }
       catch (error)
       {
+        file.hideLoadingImage();
         Debug.alert("Error in settings.installGrabber: " + error);
       }
     },
@@ -1112,6 +1119,7 @@ EPG.settings = function(Debug, growl, file)
           Debug.inform("Updating grabber");
           if(window.widget && window.widget.system)
           {
+            file.showLoadingImage();
             window.widget.system("cd helpers && /usr/bin/php installgrabber.php", grabberUpdated);
           }
         }
@@ -1122,6 +1130,7 @@ EPG.settings = function(Debug, growl, file)
       }
       catch (error)
       {
+        file.hideLoadingImage();
         Debug.alert("Error in settings.updateGrabber: " + error);
       }
     },
@@ -1434,6 +1443,7 @@ EPG.settings = function(Debug, growl, file)
         Debug.inform("runGrabber command = " + command);
         if(window.widget && window.widget.system)
         {
+          file.showLoadingImage();
           window.widget.system(command, ranGrabber);
         }
       }

@@ -35,9 +35,11 @@ EPG.file = function(Debug, growl, currentVersion)
   var that,
   HOME,
   gettingPath = false,
-  userAgent;
+  userAgent,
+  loadingImage;
   
   // Private methods
+  
   /**
    * @memberOf EPG.file
    * @name fileOpened
@@ -103,11 +105,13 @@ EPG.file = function(Debug, growl, currentVersion)
         }
         xhr = false;
       }
+      that.hideLoadingImage();
     }
     catch (error)
     {
       Debug.alert("Error in file.fileOpened: " + error);
       xhr = false;
+      that.hideLoadingImage();
     }
   }
   /**
@@ -143,11 +147,12 @@ EPG.file = function(Debug, growl, currentVersion)
       {
         HOME = "file:///Users/gusax840/";
       }
-      
+      that.hideLoadingImage();
       //Debug.alert("file.savePath: HOME = " + HOME);
     }
     catch (error)
     {
+      that.hideLoadingImage();
       Debug.alert("Error in file.savePath: " + error);
     }
   }
@@ -219,9 +224,11 @@ EPG.file = function(Debug, growl, currentVersion)
       {
         Debug.alert("file.fileDownloaded: Error when trying to download " + url);
       }
+      that.hideLoadingImage();
     }
     catch (error)
     {
+      that.hideLoadingImage();
       Debug.alert("Error in EPG.file.fileDownloaded: " + error + " (systemCall = " + systemCall + ")");
     }
   }
@@ -247,8 +254,68 @@ EPG.file = function(Debug, growl, currentVersion)
         {
           userAgent = "se.swedb.tv.widget/W";
         }
+        
+        loadingImage = document.createElement("div");
+        loadingImage.style.position = "absolute";
+        loadingImage.style.left = "23.2em";
+        loadingImage.style.top = "0.6em";
+        loadingImage.style.visibility = "visible";
+        loadingImage.style.zIndex = "999";
+        loadingImage.style.fontSize = "1em";
+        loadingImage.showCount = 0;
+        loadingImage.appendChild(document.createElement("span"));
+        loadingImage.lastChild.setAttribute("id", "loadingImage");
+        loadingImage.lastChild.appendChild(document.createTextNode("\u231B"));
+        document.getElementsByTagName("body")[0].appendChild(loadingImage);
       }
       delete that.init
+    },    
+   
+   /**
+     * @memberOf EPG.file
+     * @name showLoadingImage
+     * @function
+     * @description Shows loading image and increments loading image counter.
+     * @private
+     */
+    showLoadingImage: function () 
+    {
+      try
+      {
+        loadingImage.showCount += 1;
+        if(loadingImage.showCount === 1)
+        {
+          loadingImage.style.visibility = "visible";
+        }
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.file.showLoadingImage: " + error);
+      }
+    },
+  
+    /**
+     * @memberOf EPG.file
+     * @name hideLoadingImage
+     * @function
+     * @description Hides the loading image if loading image counter is 0.
+     * @private
+     */
+    hideLoadingImage: function() 
+    {
+      try
+      {
+        loadingImage.showCount -= 1;
+        if(loadingImage.showCount <= 0)
+        {
+          loadingImage.showCount = 0;
+          loadingImage.style.visibility = "hidden";
+        }
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.file.hideLoadingImage: " + error);
+      }
     },
     
     /**
@@ -266,7 +333,7 @@ EPG.file = function(Debug, growl, currentVersion)
       try
       {
         var xhr;
-        
+        that.showLoadingImage();
         if(!HOME)
         {
           if(!gettingPath)
@@ -309,6 +376,7 @@ EPG.file = function(Debug, growl, currentVersion)
         Debug.alert("Error in file.open: " + error + "\n(path = " + path + ")");
         if(onFailure)
         { 
+          that.hideLoadingImage();
           setTimeout(onFailure, 1);
         }
       }
@@ -368,6 +436,7 @@ EPG.file = function(Debug, growl, currentVersion)
         {
           if(url && savePath)
           {
+            that.showLoadingImage();
             Debug.inform('file.downloadFile running command /usr/bin/curl -S -R --user-agent '+userAgent+' --compressed ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath);
             systemCall = window.widget.system('/usr/bin/curl -S -R --user-agent '+userAgent+' --compressed ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath , function(response){fileDownloaded(response, onSuccess, onFailure, url, savePath, dontEval);});
           }
@@ -383,7 +452,26 @@ EPG.file = function(Debug, growl, currentVersion)
       }
       catch (error)
       {
+        that.hideLoadingImage();
         Debug.alert("Error in EPG.file.downloadFile: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf EPG.file
+     * @function setLoadingImage
+     * @description Sets the loading image src.
+     */
+    setLoadingImage: function (src) 
+    {
+      try
+      {
+        loadingImage.setAttribute("src", src);
+        Debug.alert("loadingImage.src = " + src);
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.file.setLoadingImage: " + error);
       }
     }
   };
