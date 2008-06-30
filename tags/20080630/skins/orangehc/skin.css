@@ -1,0 +1,304 @@
+/*
+  IMPORTANT! 
+  - Use em or percent (%), DO NOT use px or pt! (The widget must be scalable)
+  - 1 em = 10 px (defined in /skins/sharedstyles.css - DO NOT CHANGE!)
+  
+  Example.
+  Wrong:
+  img.myimage
+  {
+    width: 210px;
+    height: 33px;
+  }
+  
+  Right:
+  img.myimage
+  {
+    width: 21em; 
+    height: 3.3em;
+  }
+  
+  Orange HC (High Contrast)
+  by Mathias Andersson
+*/
+
+#loadingImage
+{
+  color: #000; 
+  font-size: 3em;
+}
+
+div.topbar
+{
+  width: 27em;
+  height: 4.8em;
+  overflow: hidden;
+}
+
+div.topbar div.contents div.text
+{
+  color: #222;
+  margin: 1.2em 1.5em 0em 1.5em;
+  height: 1.2em;
+  overflow: hidden;
+  font-size: 1.6em;
+  font-weight: bold;
+  text-shadow: #222 0em 0em 0.2em;
+  text-align: center;
+}
+
+div.bottombar
+{
+  width: 27em;
+  height: 3.2em;
+}
+
+div.bottombar div.contents div.container
+{
+  text-align: left;
+  padding-left: 0.5em;
+}
+
+div.channelnode
+{
+  margin: 0em 2em 0em 1.5em;  
+}
+
+div.onechannel
+{
+  width: 27em;
+  height: 3.8em;
+  overflow: hidden;
+  color: #fff;
+  -apple-dashboard-region: dashboard-region(control, rectangle, 0em, 0.5em, 0em, 0.5em); 
+}
+
+div.onechannel img.logo
+{
+  width: 3.4em;
+  height: 3.4em;
+  margin: 0.3em 0.2em 0em 0.6em;
+  opacity: 0.8; 
+  float: left;
+}
+
+div.onechannel img.logo:hover
+{
+  opacity: 1 !important;
+}
+
+div.programs
+{
+  margin-left: 4.2em;
+  color: #fff;
+}
+
+div.programs div.program
+{ 
+  position: relative;
+  top: 0.4em;
+  margin-right: 0.2em;
+  line-height: 1.1em;
+  overflow: hidden;
+  font-weight: bold;
+  font-style: italic;
+}
+
+div.programs div.currentprogram
+{
+  font-style: normal; 
+}
+
+div.program div.start
+{
+  text-align: center;
+  color: #d5d5d5;
+  text-shadow: #000000 0 0 0.2em;
+}
+
+div.program div.title
+{
+  white-space: nowrap; 
+  text-align: left;
+  color: #ffc047;
+}
+
+div.program div.title:hover
+{
+  text-decoration: underline; 
+}
+
+div.currentprogram div.title
+{
+  color: #fff; 
+}
+
+div.currentprogram div.title:hover
+{
+  text-decoration: underline;
+}
+
+div.resizer
+{
+  padding-top: 0.2em; 
+}
+
+img.background
+{
+  
+}
+
+#front
+{
+  font-family: sans-serif; 
+}
+
+#infobutton
+{
+  color: #000;
+  bottom: 0.2em;
+  right: 1.2em;
+}
+
+#infobutton:hover
+{
+  text-shadow: #000 0em 0em 0.2em;
+  bottom: 0.25em;
+  right: 1.25em;
+}
+
+#backgroundlogo
+{
+  position: absolute;
+  z-index: -1;
+  width: 10em;
+  height: 10em;
+  bottom: 4em;
+  left: 4em;
+  opacity: 0.1; 
+}
+
+#dayView
+{
+  position: absolute;
+  top: 5.1em;
+  left: 5.7em;
+  width: 19.3em;
+  z-index: 4;
+}
+
+#dayView div.program
+{ 
+  position: relative;
+  top: 0em;
+  margin-right: 0.2em;
+  line-height: 1.1em;
+  overflow: hidden;
+  font-weight: bold;
+}
+
+#dayView div.program
+{ 
+  position: relative;
+  top: 0em;
+  margin-right: 0.2em;
+  line-height: 1.3em;
+  overflow: hidden;
+  font-weight: bold;
+  color: #ccc;
+}
+
+#dayView div.program div.title
+{
+  color: inherit;
+}
+
+#dayView div.program div.start
+{
+  color: inherit;
+}
+
+#dayView div.upcomingprogram div.title
+{
+  color: #fff;
+}
+
+#dayView div.upcomingprogram div.start
+{
+  color: #fff;
+}
+
+#programInfo
+{
+  color: #000;
+}
+
+div.programInfoScrollButton
+{
+  background: #fdc54d;
+  opacity: 0.7;
+  -webkit-border-radius: 0.3em;
+}
+
+div.programInfoScrollButton:hover
+{
+  text-shadow: #000 0em 0em 0.2em;
+  opacity: 1;  
+}
+
+#programInfo div.title
+{
+  
+}
+
+#programInfo div.startAndStop
+{
+   
+}
+
+#programInfo div.startAndStop div.start
+{
+   
+}
+
+#programInfo div.progressbarEmpty
+{
+   
+}
+
+#programInfo div.contents div div.descriptionFrame div.description
+{
+  
+}
+
+div.progressbarFullContainer
+{
+  
+}
+
+div.progressbarFull
+{  
+  
+}
+
+#programInfo div.startAndStop div.stop
+{
+   
+}
+
+#programInfo div.descriptionFrame
+{
+  color: #fff;
+}
+
+#programInfo div.descriptionFrame div.description
+{
+  font-size: 1.1em;
+  margin: 0.8em 0.8em 0em 0.2em; 
+}
+
+#programInfo div.descriptionFrame div.duration
+{
+  font-size: 1.1em;
+  margin: 0.8em 0.8em 0em 0.2em; 
+}
