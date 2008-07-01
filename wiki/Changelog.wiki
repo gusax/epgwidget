@@ -6,6 +6,13 @@ Läs så här:
  * Beskrivning av gjord ändring (buggnummer om sådant finnes)
 
 Senaste ändringarna ligger alltid överst.
+== Nästa version ==
+_Nya funktioner_
+ * Framsidan: Indikator i procent på hur lång tid som ett program pågått.
+
+_Rättade buggar_
+
+
 == 20080630 ==
 _Nya funktioner_
  * Framsidan & baksidan: En laddningssymbol (ett timglas) visas nu när tablåer öppnas, kanaler läggs till samt om man trycker på T för att tvinga fram en nedladdning av tablåer.  Obs: med en tillräckligt rapp dator kommer det förmodligen knappt hinna visas innan det försvinner.
