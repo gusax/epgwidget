@@ -673,16 +673,19 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                 if(stopDate < when)
                 {
                   dayViewDiv.childNodes[i].setAttribute("class", "program");
+                  dayViewDiv.childNodes[i].durationNode.nodeValue = "";
                 }
                 else
                 {
                   dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
+                  dayViewDiv.childNodes[i].durationNode.nodeValue = "";
                 }
                 dayViewDiv.childNodes[i].style.display = "block";
               }
               else
               {
                 dayViewDiv.childNodes[i].style.display = "none";
+                dayViewDiv.childNodes[i].durationNode.nodeValue = "";
               }
             }
           }
@@ -693,20 +696,24 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
               if(i < length)
               {
                 updateProgramNode(dayViewDiv.childNodes[i], programs[i]);
+                dayViewDiv.childNodes[i].style.display = "block";
                 stopDate = new Date(programs[i].stop*1000);
                 if(stopDate < when)
                 {
                   dayViewDiv.childNodes[i].setAttribute("class", "program");
+                  dayViewDiv.childNodes[i].durationNode.nodeValue = "";
+                  
                 }
                 else
                 {
                   dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
+                  dayViewDiv.childNodes[i].durationNode.nodeValue = "";
                 }
-                dayViewDiv.childNodes[i].style.display = "block";
               }
               else
               {
                 dayViewDiv.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo));
+                dayViewDiv.childNodes[i].durationNode.nodeValue = "";
               }
             }
           }
@@ -719,10 +726,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
               if(stopDate < when)
               {
                 dayViewDiv.childNodes[i].setAttribute("class", "program");
+                dayViewDiv.childNodes[i].durationNode.nodeValue = "";
               }
               else
               {
                 dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
+                dayViewDiv.childNodes[i].durationNode.nodeValue = "";
               }
               dayViewDiv.childNodes[i].style.display = "block";
             }
@@ -739,10 +748,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             if(stopDate < when)
             {
               dayViewDiv.childNodes[i].setAttribute("class", "program");
+              dayViewDiv.childNodes[i].durationNode.nodeValue = "";
             }
             else
             {
               dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
+              dayViewDiv.childNodes[i].durationNode.nodeValue = "";
             }
           }
         }
@@ -1333,14 +1344,18 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @param {string} channelID ID of the channel that should reload programs.
    * @param {array} programs The programs that are to be shown.
    */
-  function reloadProgramsForChannel (channelID, programs)
+  function reloadProgramsForChannel (channelID, programs, when)
   {
     try
     {
       var channelNode,
       programNode,
       title,
-      i;
+      i,
+      program,
+      start,
+      stop, 
+      duration;
       
       channelNode = channelNodes[channelID];
       if(channelNode && programs)
@@ -1350,17 +1365,42 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         {
           for(i = 0; i < programs.length; i += 1)
           {
-            updateProgramNode(channelNode.childNodes[i], programs[i]);
+            program = programs[i];
+            updateProgramNode(channelNode.childNodes[i], program);
+            if(i === 0)
+            {
+              if(program.isTheEmptyProgram)
+              {
+                channelNode.childNodes[i].durationNode.nodeValue = "";
+              }
+              else
+              {
+                start = new Date(program.start * 1000);
+                stop = new Date(program.stop * 1000);
+                channelNode.childNodes[i].durationNode.nodeValue = (100 - Math.round(((stop - when) / (stop - start)) * 100)) + "% ";
+              }
+            }
           }
         }
         else
         {
           UIcreator.removeChildNodes(channelNode);
-          for (i in programs)
+          for(i = 0; i < programs.length; i += 1)
           {
-            if(programs.hasOwnProperty(i))
+            program = programs[i];
+            channelNode.appendChild(UIcreator.createProgramNode(program, ProgramInfo));              
+            if(i === 0)
             {
-              channelNode.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo));              
+              if(program.isTheEmptyProgram)
+              {
+                channelNode.childNodes[i].durationNode.nodeValue = "";
+              }
+              else
+              {
+                start = new Date(program.start * 1000);
+                stop = new Date(program.stop * 1000);
+                channelNode.childNodes[i].durationNode.nodeValue = (100 - Math.round(((stop - when) / (stop - start)) * 100)) + "% ";
+              }
             }
           }
           if(channelNode.firstChild)
@@ -1715,7 +1755,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           	  	if(channelNode && channelNode.isVisible && channelNode.contents)
           	  	{
           	  	  //Debug.inform("reloading programs for channelID " + channelID + " (but channelNode.channelID = " + channelNode.channelID + ")");
-          	      Settings.getProgramsForChannel(channelID, function(theID){return function(thePrograms){reloadProgramsForChannel(theID, thePrograms);};}(channelID), function(theID){ return function(){reloadProgramsForChannelFailed(theID);};}(channelID), 3, when);
+          	      Settings.getProgramsForChannel(channelID, function(theID, when){return function(thePrograms){reloadProgramsForChannel(theID, thePrograms, when);};}(channelID, when), function(theID){ return function(){reloadProgramsForChannelFailed(theID);};}(channelID), 3, when);
           	  	}
         	    }
         	    else
