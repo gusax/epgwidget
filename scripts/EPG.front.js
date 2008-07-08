@@ -724,6 +724,15 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
               {
                 dayViewDiv.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo));
                 dayViewDiv.childNodes[i].durationNode.nodeValue = "";
+                stopDate = new Date(programs[i].stop * 1000);
+                if(stopDate < when)
+                {
+                  dayViewDiv.childNodes[i].setAttribute("class", "program");
+                }
+                else
+                {
+                  dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
+                }
               }
             }
           }
