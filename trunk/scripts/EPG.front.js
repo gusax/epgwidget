@@ -44,6 +44,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   backDiv,
   frontDiv,
   topBar,
+  bottomBarContainer,
   overviewDiv,
   dayViewDiv,
   dayViewNode,
@@ -99,13 +100,19 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   {
     try
     {
+      var scalableContainer;
       topBar = document.createElement("div");
       topBar.setAttribute("class", "text");
+      topBar.setAttribute("id", "topbarText");
       topBar.setAttribute("title", Translator.translate("Type four numbers to jump forward up to 24 hours, backspace returns current time. (Examples: 2030 for 20:30, 0615 for 06:15.)"));
+      
       topBar.appendChild(document.createTextNode("EPG: "));
       topBar.appendChild(document.createTextNode(Translator.translate("overview")));
       topBar.heading = topBar.lastChild;
-      return UIcreator.createScalableContainer("topbar", topBar, "uppe.png", currentChannelListIndex);
+      scalableContainer = UIcreator.createScalableContainer("topbar", topBar, "uppe.png", currentChannelListIndex);
+      UIcreator.setPosition(scalableContainer, "0em", "0em", "27em", "4.8em", 99, "absolute");
+      scalableContainer.style.overflow = "hidden";
+      return scalableContainer;
     }
     catch (error)
     {
@@ -189,6 +196,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
        */
       tempContainer = document.createElement("div");
       tempContainer.setAttribute("class", "container");
+      tempContainer.setAttribute("id", "bottombarText");
       tempDiv = document.createElement("div");
       tempDiv.setAttribute("class", "resizer");
       
@@ -209,7 +217,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       tempContainer.appendChild(tempDiv.cloneNode(true));
       tempContainer.lastChild.addEventListener("click", function(){Settings.resizeText(1);}, false);
       tempContainer.appendChild(createInfoButton());
-      return UIcreator.createScalableContainer("bottombar", tempContainer, "nere.png",currentChannelListIndex);
+      bottomBarContainer =  UIcreator.createScalableContainer("bottombar", tempContainer, "nere.png",currentChannelListIndex);
+      UIcreator.setPosition(bottomBarContainer, "0em", "4.8em", "27em", "3.2em", 99, "absolute")
+      return bottomBarContainer;
     
     }
     catch (error)
@@ -969,6 +979,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
       dayViewDiv = document.createElement("div");
       dayViewDiv.setAttribute("id", "dayView");
+      UIcreator.setPosition(dayViewDiv, "5.7em", "0em", "19.3em", false, 4, "absolute");
       dayViewDiv.style.visibility = "hidden";
       return dayViewDiv;
     }
@@ -995,6 +1006,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       orderedList;
       
       overviewDiv = document.createElement("div");
+      overviewDiv.setAttribute("id", "overview");
+      UIcreator.setPosition(overviewDiv, "0em", "4.8em", "27em", "0em", 1, "absolute");
+      overviewDiv.style.overflow = "hidden";
       overviewDiv.appendChild(createDayView());
       overviewDiv.dayViewNode = overviewDiv.lastChild;
       
@@ -1697,18 +1711,35 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       try
       {
         var currentChannelList,
-        i;
+        i,
+        channelListHeight;
         
         currentChannelList = Settings.getChannelList(currentChannelListIndex);
         if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
         {
           Debug.inform("number of channels in list " + currentChannelListIndex + ": " + currentChannelList.ordered.length);
           height = 80 + currentChannelList.ordered.length * 38;
+          channelListHeight = height;
+          while (channelListHeight > screen.height)
+          {
+            channelListHeight -= 19;
+          }
+          channelListHeight -= 80;
+          channelListHeight = channelListHeight / 10;
+          Debug.inform("channelListHeight = " + channelListHeight);
+          if(channelListHeight < 0)
+          {
+            channelListHeight = 0;
+          }
         }
         else
         {
           height = 80;
+          channelListHeight = 0;
         }
+        overviewDiv.style.height = channelListHeight + "em";
+        bottomBarContainer.style.top = (4.8 + channelListHeight) + "em";
+        height = 80 + channelListHeight * 10;
         Settings.resizeTo(width, height);
       }
       catch (error)

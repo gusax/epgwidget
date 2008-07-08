@@ -28,14 +28,7 @@
   font-size: 3em;
 }
 
-div.topbar
-{
-  width: 27em;
-  height: 4.8em;
-  overflow: hidden;
-}
-
-div.topbar div.contents div.text
+#topbarText
 {
   color: #222;
   margin: 1.2em 1.5em 0em 1.5em;
@@ -47,13 +40,7 @@ div.topbar div.contents div.text
   text-align: center;
 }
 
-div.bottombar
-{
-  width: 27em;
-  height: 3.2em;
-}
-
-div.bottombar div.contents div.container
+#bottombarText
 {
   text-align: left;
   padding-left: 0.5em;
@@ -178,14 +165,6 @@ img.background
   opacity: 0.1; 
 }
 
-#dayView
-{
-  position: absolute;
-  top: 5.1em;
-  left: 5.7em;
-  width: 19.3em;
-  z-index: 4;
-}
 
 #dayView div.program
 { 
