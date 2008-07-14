@@ -15,7 +15,7 @@ _Nya funktioner_
 _Rättade buggar_
  * Framsidan: Det ska i heldagsvyn inte längre vara möjligt att få fram framtida program som ser ut som att de redan har slutat (tidigare kunde man få fram först gråa, sen vita och sen gråa programnamn en gång till).
 
- * Filnamn osv: Inkonsekventa skiftlägen på filnamn och mappar fixade. Widgeten går nu att installera även på ett skiftlägeskänsligt filsystem, tidigare startade den inte ens. ([http://code.google.com/p/epgwidget/issues/detail?id=50 50]) 
+ * Filnamn osv: Inkonsekventa skiftlägen på filnamn och mappar fixade. Widgeten går nu att installera även på ett skiftlägeskänsligt filsystem, tidigare startade den inte ens. ([http://code.google.com/p/epgwidget/issues/detail?id=50 50], tack till Johan Backlund) 
 
 
 == 20080630 ==
