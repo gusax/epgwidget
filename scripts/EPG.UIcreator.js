@@ -97,7 +97,7 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         tempElement = document.createElement("img");
         tempElement.setAttribute("class", "background");
         
-        tempElement.setAttribute("src", "Skins/" + Skin.getSkinForList(listID) + "/" + backgroundImage);
+        tempElement.setAttribute("src", "skins/" + Skin.getSkinForList(listID) + "/" + backgroundImage);
         
         tempContainer.appendChild(tempElement.cloneNode(false));
         tempContainer.lastChild.style.opacity = Settings.getTransparency();
