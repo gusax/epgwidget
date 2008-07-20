@@ -720,10 +720,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         if(scalableContainer.style.visibility !== "hidden" && (program && programInfoNode.program === program) || (!program && programInfoNode.program))
         {
           if(!amount)
-          {
-            event.preventDefault();
-            event.stopPropagation();
-          
+          {          
             if(event.detail)
             {
               amount = event.detail * -1;
@@ -738,7 +735,9 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
           {
             scrollDescription(amount);
           }
-          
+          event.preventDefault();
+          event.stopPropagation();
+          return false;
         }
       }
       catch (error)
