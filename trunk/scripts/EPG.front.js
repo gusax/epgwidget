@@ -56,7 +56,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   height = 80,
   dragElement,
   updateInterval,
-  key = {};
+  key = {},
+  scrollFrame;
   
   key.ARROW_UP = 38;
   key.ARROW_DOWN = 40;
@@ -1015,8 +1016,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       orderedList;
       
       overviewDiv = document.createElement("div");
+      overviewDiv.topY = 0;
       overviewDiv.setAttribute("id", "overview");
-      UIcreator.setPosition(overviewDiv, "0em", "4.8em", "27em", "0em", 1, "absolute");
+      UIcreator.setPosition(overviewDiv, "0em", "0em", false, false, false, "relative");
       overviewDiv.style.overflow = "hidden";
       overviewDiv.appendChild(createDayView());
       overviewDiv.dayViewNode = overviewDiv.lastChild;
@@ -1336,6 +1338,55 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   
   /**
    * @memberOf EPG.front
+   * @name scrollFront
+   * @function
+   * @description Scrolls front side.
+   * @private
+   */
+  function scrollFront(event) 
+  {
+    try
+    {
+      var limit, amount = 0;
+      
+      if(event.detail)
+      {
+        amount = event.detail * -1;
+      }
+      else
+      {
+        amount = event.wheelDelta / 40;
+      }
+      
+      limit = -1*(scrollFrame.scrollHeight - scrollFrame.offsetHeight);
+      Debug.inform("limit = " + limit + " amount = " + amount);
+      if(limit < 0)
+      {
+        overviewDiv.topY = overviewDiv.topY + amount;
+        if(overviewDiv.topY > 0)
+        {
+          //startBounceback(amount, 0);
+          overviewDiv.topY = 0;
+        }
+        else if(overviewDiv.topY < limit)
+        {
+          //startBounceback(amount, limit);
+          overviewDiv.topY = limit;
+        }
+        overviewDiv.style.top = overviewDiv.topY + "px";
+        overviewDiv.style.top = overviewDiv.topY + "px";
+      }
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.scrollFront: " + error);
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
    * @name create
    * @function 
    * @description Creates all elements and text nodes on the front side of the widget and then appends the elements to frontDiv.
@@ -1346,10 +1397,16 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     try
     {
       frontDiv.appendChild(createTopBar());
-      frontDiv.appendChild(createOverview());
+      frontDiv.appendChild(document.createElement("div"));
+      scrollFrame = frontDiv.lastChild
+      UIcreator.setPosition(scrollFrame, "0em", "4.8em", "27em", "0em", 1, "absolute");
+      scrollFrame.style.overflow = "hidden";
+      scrollFrame.appendChild(createOverview());
       frontDiv.appendChild(createBottomBar());
       document.getElementsByTagName("body")[0].addEventListener("keydown", keyHandler, false);
       document.getElementsByTagName("body")[0].addEventListener("keypress", repeatKeyHandler, false);
+      frontDiv.addEventListener("DOMMouseScroll", scrollFront, false);
+      frontDiv.addEventListener("mousewheel", scrollFront, false);
     }
     catch (error)
     {
@@ -1729,6 +1786,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           Debug.inform("number of channels in list " + currentChannelListIndex + ": " + currentChannelList.ordered.length);
           height = 80 + currentChannelList.ordered.length * 38;
           channelListHeight = height;
+          overviewDiv.style.height = ((channelListHeight/10) - 8) + "em";
           while (channelListHeight > screen.height)
           {
             channelListHeight -= 19;
@@ -1746,7 +1804,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           height = 80;
           channelListHeight = 0;
         }
-        overviewDiv.style.height = channelListHeight + "em";
+        scrollFrame.style.height = channelListHeight + "em";
         bottomBarContainer.style.top = (4.8 + channelListHeight) + "em";
         height = 80 + channelListHeight * 10;
         Settings.resizeTo(width, height);
