@@ -1270,10 +1270,24 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             }
           break;
           case key.ARROW_UP:
-            ProgramInfo.scroll(false, false, 10);
+            if (ProgramInfo.isVisible())
+            {
+              ProgramInfo.scroll(false, false, 10);
+            }
+            else
+            {
+              scrollFront(event, 10);
+            }
           break;
           case key.ARROW_DOWN:
-            ProgramInfo.scroll(false, false, -10);
+            if (ProgramInfo.isVisible())
+            {
+              ProgramInfo.scroll(false, false, -10);
+            }
+            else
+            {
+              scrollFront(event, -10);
+            }
           break;
           case key.COMMA:
             if(visible && event.metaKey)
@@ -1343,23 +1357,28 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @description Scrolls front side.
    * @private
    */
-  function scrollFront(event) 
+  function scrollFront(event, amount) 
   {
     try
     {
-      var limit, amount = 0;
-      
-      if(event.detail)
+      var limit;
+      if(typeof(amount) === "undefined")
       {
-        amount = event.detail * -1;
+        if(event.detail)
+        {
+          amount = event.detail * -1;
+        }
+        else if(event.wheelDelta)
+        {
+          amount = event.wheelDelta / 40;
+        }
+        else
+        {
+          amount = 0;
+        }
       }
-      else
-      {
-        amount = event.wheelDelta / 40;
-      }
-      
+            
       limit = -1*(scrollFrame.scrollHeight - scrollFrame.offsetHeight);
-      Debug.inform("limit = " + limit + " amount = " + amount);
       if(limit < 0)
       {
         overviewDiv.topY = overviewDiv.topY + amount;

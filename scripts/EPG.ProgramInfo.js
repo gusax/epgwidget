@@ -744,6 +744,23 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
       {
         Debug.alert("Error in ProgramInfo.scroll: " + error);
       }
+    },
+    
+    /**
+     * @memberOf EPG.ProgramInfo
+     * @function isVisible
+     * @description Returns true if ProgramInfo is visible
+     */
+    isVisible: function () 
+    {
+      try
+      {
+        return scalableContainer.style.visibility != "hidden";
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.ProgramInfo.isVisible: " + error);
+      }
     }
   };
 }(EPG.debug, EPG.UIcreator, EPG.translator, EPG.settings, EPG.skin, EPG.file, EPG.Reminder);
