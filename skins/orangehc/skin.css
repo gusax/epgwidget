@@ -165,22 +165,8 @@ img.background
   opacity: 0.1; 
 }
 
-
 #dayView div.program
 { 
-  position: relative;
-  top: 0em;
-  margin-right: 0.2em;
-  line-height: 1.1em;
-  overflow: hidden;
-  font-weight: bold;
-}
-
-#dayView div.program
-{ 
-  position: relative;
-  top: 0em;
-  margin-right: 0.2em;
   line-height: 1.3em;
   overflow: hidden;
   font-weight: bold;

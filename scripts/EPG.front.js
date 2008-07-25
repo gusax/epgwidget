@@ -787,6 +787,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         // print error
       }
       dayViewDiv.style.visibility = "visible";
+      dayViewDiv.style.display = "block";
     }
     catch (error)
     {
@@ -813,11 +814,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         {
           dimAllChannelNodesExcept(channelNode, false);
           currentView = 1; // Day view
+          scrollFrame.dayView.topY = 0;
+          scrollFrame.dayView.style.top = scrollFrame.dayView.topY + "px";
           Settings.getProgramsForDay(channelNode.channelID, fillDayView, fillDayViewFailed, (new Date()));
         }
         else
         {
-          dayViewDiv.style.visibility = "hidden";
+          dayViewDiv.style.display = "none";
           dimAllChannelNodesExcept(channelNode, true);
           currentView = 0; // now next later
         }
@@ -825,7 +828,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       }
       else if(currentView !== 0) // current view is not now next later
       {
-        dayViewDiv.style.visibility = "hidden";
+        dayViewDiv.style.display = "block";
         dimAllChannelNodesExcept(channelNode, true);
         currentView = 0; // now next later
         updateTopBar();
@@ -1020,8 +1023,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       overviewDiv.setAttribute("id", "overview");
       UIcreator.setPosition(overviewDiv, "0em", "0em", false, false, false, "relative");
       overviewDiv.style.overflow = "hidden";
-      overviewDiv.appendChild(createDayView());
-      overviewDiv.dayViewNode = overviewDiv.lastChild;
       
       return overviewDiv;
     }
@@ -1352,6 +1353,67 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   
   /**
    * @memberOf EPG.front
+   * @name scrollDayView
+   * @function
+   * @description Scrolls front side.
+   * @private
+   */
+  function scrollDayView(event, amount) 
+  {
+    try
+    {
+      var limit;
+      if (currentView === 1)
+      {
+        Debug.inform("scrollDayView");
+        if(typeof(amount) === "undefined")
+        {
+          if(event.detail)
+          {
+            amount = event.detail * -1;
+          }
+          else if(event.wheelDelta)
+          {
+            amount = event.wheelDelta / 40;
+          }
+          else
+          {
+            amount = 0;
+          }
+        }
+        Debug.inform("scrollFrame.scrollHeight = " + scrollFrame.scrollHeight);
+        Debug.inform("scrollFrame.offsetHeight = " + scrollFrame.offsetHeight);
+        Debug.inform("scrollFrame.dayView.scrollHeight = " + scrollFrame.dayView.scrollHeight);
+        Debug.inform("scrollFrame.dayView.offsetHeight = " + scrollFrame.dayView.offsetHeight);
+        limit = -1*(scrollFrame.dayView.scrollHeight - scrollFrame.offsetHeight);
+        Debug.inform("limit = " + limit);
+        if(limit < 0)
+        {
+          scrollFrame.dayView.topY = scrollFrame.dayView.topY + amount;
+          if(scrollFrame.dayView.topY > 0)
+          {
+            //startBounceback(amount, 0);
+            scrollFrame.dayView.topY = 0;
+          }
+          else if(scrollFrame.dayView.topY < limit)
+          {
+            //startBounceback(amount, limit);
+            scrollFrame.dayView.topY = limit;
+          }
+          scrollFrame.dayView.style.top = scrollFrame.dayView.topY + "px";
+        }
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.scrollDayView: " + error);
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
    * @name scrollFront
    * @function
    * @description Scrolls front side.
@@ -1362,41 +1424,49 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     try
     {
       var limit;
-      if(typeof(amount) === "undefined")
+      Debug.inform("scrollFront");
+      if(currentView === 0)
       {
-        if(event.detail)
+        if(typeof(amount) === "undefined")
         {
-          amount = event.detail * -1;
+          if(event.detail)
+          {
+            amount = event.detail * -1;
+          }
+          else if(event.wheelDelta)
+          {
+            amount = event.wheelDelta / 40;
+          }
+          else
+          {
+            amount = 0;
+          }
         }
-        else if(event.wheelDelta)
+              
+        limit = -1*(scrollFrame.scrollHeight - scrollFrame.offsetHeight);
+        if(limit < 0)
         {
-          amount = event.wheelDelta / 40;
+          overviewDiv.topY = overviewDiv.topY + amount;
+          if(overviewDiv.topY > 0)
+          {
+            //startBounceback(amount, 0);
+            overviewDiv.topY = 0;
+          }
+          else if(overviewDiv.topY < limit)
+          {
+            //startBounceback(amount, limit);
+            overviewDiv.topY = limit;
+          }
+          overviewDiv.style.top = overviewDiv.topY + "px";
+          overviewDiv.style.top = overviewDiv.topY + "px";
         }
-        else
-        {
-          amount = 0;
-        }
+        event.preventDefault();
+        event.stopPropagation();
       }
-            
-      limit = -1*(scrollFrame.scrollHeight - scrollFrame.offsetHeight);
-      if(limit < 0)
+      else if(currentView === 1)
       {
-        overviewDiv.topY = overviewDiv.topY + amount;
-        if(overviewDiv.topY > 0)
-        {
-          //startBounceback(amount, 0);
-          overviewDiv.topY = 0;
-        }
-        else if(overviewDiv.topY < limit)
-        {
-          //startBounceback(amount, limit);
-          overviewDiv.topY = limit;
-        }
-        overviewDiv.style.top = overviewDiv.topY + "px";
-        overviewDiv.style.top = overviewDiv.topY + "px";
+        scrollDayView(event, amount);
       }
-      event.preventDefault();
-      event.stopPropagation();
     }
     catch (error)
     {
@@ -1422,8 +1492,15 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       scrollFrame.style.overflow = "hidden";
       scrollFrame.appendChild(createOverview());
       frontDiv.appendChild(createBottomBar());
+      scrollFrame.appendChild(createDayView());
+      scrollFrame.dayView = overviewDiv.dayViewNode = scrollFrame.lastChild;
+      scrollFrame.dayView.topY = 0;
+      UIcreator.setPosition(scrollFrame.dayView, "5.7em", "0em", false, false, 3, "absolute");
+      scrollFrame.dayView.style.backgroundColor = "red";
       document.getElementsByTagName("body")[0].addEventListener("keydown", keyHandler, false);
       document.getElementsByTagName("body")[0].addEventListener("keypress", repeatKeyHandler, false);
+      scrollFrame.dayView.addEventListener("DOMMouseScroll", scrollDayView, false);
+      //frontDiv.addEventListener("mousewheel", scrollDayView, false);
       frontDiv.addEventListener("DOMMouseScroll", scrollFront, false);
       frontDiv.addEventListener("mousewheel", scrollFront, false);
     }
