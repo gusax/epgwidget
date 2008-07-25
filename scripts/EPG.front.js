@@ -1365,7 +1365,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       var limit;
       if (currentView === 1)
       {
-        Debug.inform("scrollDayView");
         if(typeof(amount) === "undefined")
         {
           if(event.detail)
@@ -1381,12 +1380,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             amount = 0;
           }
         }
-        Debug.inform("scrollFrame.scrollHeight = " + scrollFrame.scrollHeight);
-        Debug.inform("scrollFrame.offsetHeight = " + scrollFrame.offsetHeight);
-        Debug.inform("scrollFrame.dayView.scrollHeight = " + scrollFrame.dayView.scrollHeight);
-        Debug.inform("scrollFrame.dayView.offsetHeight = " + scrollFrame.dayView.offsetHeight);
-        limit = -1*(scrollFrame.dayView.scrollHeight - scrollFrame.offsetHeight);
-        Debug.inform("limit = " + limit);
+        limit = -1*(scrollFrame.dayView.scrollHeight - scrollFrame.offsetHeight) - 5;
         if(limit < 0)
         {
           scrollFrame.dayView.topY = scrollFrame.dayView.topY + amount;
@@ -1424,7 +1418,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     try
     {
       var limit;
-      Debug.inform("scrollFront");
       if(currentView === 0)
       {
         if(typeof(amount) === "undefined")
