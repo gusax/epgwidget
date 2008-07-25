@@ -1489,7 +1489,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       scrollFrame.dayView = overviewDiv.dayViewNode = scrollFrame.lastChild;
       scrollFrame.dayView.topY = 0;
       UIcreator.setPosition(scrollFrame.dayView, "5.7em", "0em", false, false, 3, "absolute");
-      scrollFrame.dayView.style.backgroundColor = "red";
       document.getElementsByTagName("body")[0].addEventListener("keydown", keyHandler, false);
       document.getElementsByTagName("body")[0].addEventListener("keypress", repeatKeyHandler, false);
       scrollFrame.dayView.addEventListener("DOMMouseScroll", scrollDayView, false);
