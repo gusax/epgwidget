@@ -12,6 +12,8 @@ _Nya funktioner_
  
  * Framsidan: Kanalerna på framsidan går nu att scrolla igenom ifall de blir för många. Man kan därför ha hur många kanaler man vill utan att widgeten blir jätteliten. Det antal kanaler som går att se på skärmen samtidigt beror dock fortfarande på hur hög upplösning skärmen har på höjden. (På en macbook får tex 18 och en halv kanal plats på höjden.) Använd pekplattan, scrollhjulet på musen eller pil upp och ner för att scrolla. Om inforutan är öppen så scrollar pilarna den istället. Om inforutan är öppen och man pekar på programmet som beskrivs så scrollar pekplattan och mushjulet den istället.
 
+ * Framsidan: Heldagsvyn (samtliga program för en kanal) går också att scrolla nu. I heldagsvyn går det pga nån konstig bugg i Safari inte att scrolla kanalerna vid sidan av programmen, vet inte vad som är fel. Det funkar i Firefox :-/ ([http://code.google.com/p/epgwidget/issues/detail?id=48 48])
+
 _Rättade buggar_
  * Framsidan: Det ska i heldagsvyn inte längre vara möjligt att få fram framtida program som ser ut som att de redan har slutat (tidigare kunde man få fram först gråa, sen vita och sen gråa programnamn en gång till).
 
