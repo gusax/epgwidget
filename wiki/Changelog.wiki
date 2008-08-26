@@ -6,7 +6,7 @@ Läs så här:
  * Beskrivning av gjord ändring (buggnummer om sådant finnes)
 
 Senaste ändringarna ligger alltid överst.
-== Nästa version ==
+== 20080826 ==
 _Nya funktioner_
  * Framsidan: Indikator i procent på hur lång tid som ett program pågått.
  
@@ -15,6 +15,8 @@ _Nya funktioner_
  * Framsidan: Heldagsvyn (samtliga program för en kanal) går också att scrolla nu. I heldagsvyn går det pga nån konstig bugg i Safari inte att scrolla kanalerna vid sidan av programmen, vet inte vad som är fel. Det funkar i Firefox :-/ ([http://code.google.com/p/epgwidget/issues/detail?id=48 48])
 
 _Rättade buggar_
+ * Framsidan: Kanaler som försvinner eller döps om går nu att ta bort från framsidan. Tidigare fick man bara ett meddelande om att kanalen försvunnit, men det gick inte att ta bort kanalen.
+
  * Framsidan: Det ska i heldagsvyn inte längre vara möjligt att få fram framtida program som ser ut som att de redan har slutat (tidigare kunde man få fram först gråa, sen vita och sen gråa programnamn en gång till).
 
  * Filnamn osv: Inkonsekventa skiftlägen på filnamn och mappar fixade. Widgeten går nu att installera även på ett skiftlägeskänsligt filsystem, tidigare startade den inte ens. ([http://code.google.com/p/epgwidget/issues/detail?id=50 50], tack till Johan Backlund) 
