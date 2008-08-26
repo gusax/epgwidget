@@ -8,8 +8,6 @@
  
  * *Heldagsvyn* : Man kan inte byta dag i heldagsvyn.
 
- * *Versionsnummer* : Det står inget versionsnummer på baksidan av widgeten.
-
- * *Scrollbars* : Scrollbars fattas, så man kan inte scrolla texten om man bara har enknappsmus/pekplatta utan tvåfingerscroll.
+ * *Scrollbars* : Scrollbars fattas här och var.
 
  * *Uppdatering slutar fungera* : Om man laddar om widgeten så kan uppdateringen ibland sluta fungera. Detta märks speciellt om man har inforutan öppen. Normalt sett ska inforutan stängas när man tar bort Dashboard, men om uppdateringen slutar funka så kommer inforutan vara kvar när man tar fram Dashboard igen. Stäng av widgeten och öppna den igen för att åtgärda (det brukar inte hjälpa att bara ladda om den med äpple-R)
