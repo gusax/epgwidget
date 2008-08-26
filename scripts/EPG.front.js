@@ -883,6 +883,30 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   
   /**
    * @memberOf EPG.front
+   * @name deletePhantomChannel
+   * @function
+   * @description Deletes a phantom channel (a channel that has been renamed for example) from the front side.
+   * @private
+   * @param {string} channelID ID of channel that should be deleted.
+   */
+  function deletePhantomChannel(channelID)
+  {
+    try
+    {
+      var channelListIndex = Settings.getCurrentChannelListIndex(), 
+      channelNode = channelNodes[channelID];
+      channelNode.parentNode.removeChild(channelNode);
+      Settings.removeChannelFromList(channelID, channelListIndex);
+      that.resize();
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.deletePhantomChannel: " + error + " (channelID = " + channelID + ")");
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
    * @name createChannelNode
    * @function
    * @description Creates a container showing the logo, current program and the two upcoming programs.
@@ -966,6 +990,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         if(!channelFound)
         {
           tempScalableContainer.programsNode.appendChild(document.createTextNode(Translator.translate("Channel with id") + " " + channelID + " " + Translator.translate("was not found :-( It might have been renamed.")));
+          tempScalableContainer.programsNode.appendChild(document.createElement("span"));
+          tempScalableContainer.programsNode.lastChild.setAttribute("class", "phantomChannelWarning");
+          tempScalableContainer.programsNode.lastChild.style.textDecoration = "underline !important";
+          tempScalableContainer.programsNode.lastChild.addEventListener("click", function() { deletePhantomChannel(channelID); }, false);
+          tempScalableContainer.programsNode.lastChild.appendChild(document.createTextNode(" " + Translator.translate("Click to remove.")));
         }
         
         return channelNodes[channelID];
@@ -1451,7 +1480,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             overviewDiv.topY = limit;
           }
           overviewDiv.style.top = overviewDiv.topY + "px";
-          overviewDiv.style.top = overviewDiv.topY + "px";
         }
         event.preventDefault();
         event.stopPropagation();
@@ -1480,7 +1508,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
       frontDiv.appendChild(createTopBar());
       frontDiv.appendChild(document.createElement("div"));
-      scrollFrame = frontDiv.lastChild
+      scrollFrame = frontDiv.lastChild;
       UIcreator.setPosition(scrollFrame, "0em", "4.8em", "27em", "0em", 1, "absolute");
       scrollFrame.style.overflow = "hidden";
       scrollFrame.appendChild(createOverview());
@@ -1895,6 +1923,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         scrollFrame.style.height = channelListHeight + "em";
         bottomBarContainer.style.top = (4.8 + channelListHeight) + "em";
         height = 80 + channelListHeight * 10;
+        overviewDiv.topY = 0;
+        overviewDiv.style.top = overviewDiv.topY + "px";
         Settings.resizeTo(width, height);
       }
       catch (error)
