@@ -57,7 +57,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   dragElement,
   updateInterval,
   key = {},
-  scrollFrame;
+  scrollFrame,
+  hideDuration = false;
   
   key.ARROW_UP = 38;
   key.ARROW_DOWN = 40;
@@ -1080,6 +1081,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       foundChannels;
       
       channelList = Settings.getChannelList(currentChannelListIndex);
+      hideDuration = (Settings.getPreference("hideDuration") === "yes");
       
       if(channelList && channelList.ordered)
       {
@@ -1565,7 +1567,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             updateProgramNode(channelNode.childNodes[i], program);
             if(i === 0)
             {
-              if(program.isTheEmptyProgram)
+              if(program.isTheEmptyProgram || hideDuration)
               {
                 channelNode.childNodes[i].durationNode.nodeValue = "";
               }
@@ -1587,7 +1589,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             channelNode.appendChild(UIcreator.createProgramNode(program, ProgramInfo));              
             if(i === 0)
             {
-              if(program.isTheEmptyProgram)
+              if(program.isTheEmptyProgram || hideDuration)
               {
                 channelNode.childNodes[i].durationNode.nodeValue = "";
               }

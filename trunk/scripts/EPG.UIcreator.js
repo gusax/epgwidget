@@ -150,7 +150,10 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         	tempTextNode = document.createTextNode(Settings.getHHMM(startDate));
         	startNode.appendChild(tempTextNode.cloneNode(false));
         	tempTextNode.nodeValue = "";
-          titleNode.firstChild.appendChild(tempTextNode.cloneNode(true));
+          titleNode.firstChild.appendChild(document.createElement("span"));
+          titleNode.firstChild.firstChild.setAttribute("class", "currentProgramDuration");
+          titleNode.firstChild.firstChild.appendChild(tempTextNode.cloneNode(true));
+          
         	tempTextNode.nodeValue = "No title :-(";
         	for (locale in program.title)
         	{
@@ -168,6 +171,9 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         {
           startNode.appendChild(document.createTextNode(""));
           tempTextNode = document.createTextNode("");
+          titleNode.firstChild.appendChild(document.createElement("span"));
+          titleNode.firstChild.firstChild.setAttribute("class", "currentProgramDuration");
+          titleNode.firstChild.firstChild.appendChild(tempTextNode.cloneNode(true));
           titleNode.firstChild.appendChild(tempTextNode.cloneNode(true));
           tempTextNode.nodeValue = "- " + Translator.translate("No program") + " -";
           titleNode.firstChild.appendChild(tempTextNode.cloneNode(true));
@@ -187,7 +193,7 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         
         programNode.startNode = startNode.firstChild;
         programNode.titleNode = titleNode.firstChild.lastChild;
-        programNode.durationNode = titleNode.firstChild.firstChild;
+        programNode.durationNode = titleNode.firstChild.firstChild.firstChild;
         
         titleNode.addEventListener("mouseover", function()
         {
