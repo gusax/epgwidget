@@ -10,8 +10,10 @@ Senaste ändringarna ligger alltid överst.
 _Nya funktioner_
  * Baksidan: Det går nu att bocka bort %-visningen av avverkad tid om man inte vill se den informationen. 
 
+ * Inforutan: Delar nu upp tid kvar av ett program / tid fram till ett program startar i timmar och minuter (dvs istället för börjar om 130 min så står det nu börjar om 2 tim 10 min).
+
 _Rättade buggar_
- * Inga
+ * Inforutan: Tid fram till ett program startar räknas nu ut ordentligt. Tidigare räknades fel tid ut, så tiden som stod där var inte tid tills programmet började utan tiden tills programmet slutade.
 
 
 == 20080826 ==
