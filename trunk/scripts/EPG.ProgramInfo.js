@@ -108,10 +108,10 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
     {
       length = stop - start;
       timeLeft = Math.round(((stop - now)/60000));
-      hoursLeft = Math.floor(timeLeft / 60);
-      minLeft = timeLeft - hoursLeft * 60;
       if(timeLeft < 0)
       {
+        hoursLeft = Math.floor(timeLeft / 60);
+        minLeft = timeLeft - hoursLeft * 60;
         progressbarFull.style.visibility = "hidden";
         programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + "\u00A0" + (Math.round(length/60000)) + " " + Translator.translate("min") + ", " + Translator.translate("ended") + " ";
         minWording = "\u00A0ago";
@@ -120,6 +120,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
       }
       else if(start <= now && now < stop)
       {
+        hoursLeft = Math.floor(timeLeft / 60);
+        minLeft = timeLeft - hoursLeft * 60;
         width = Math.round( ((now - start) / length) * 100);
         progressbarFull.firstChild.style.width = width + "%";
         progressbarFull.style.visibility = "inherit";
@@ -128,6 +130,9 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
       }
       else
       {
+        timeLeft = Math.round(((start - now)/60000));
+        hoursLeft = Math.floor(timeLeft / 60);
+        minLeft = timeLeft - hoursLeft * 60;
         progressbarFull.style.visibility = "hidden";
         minWording = "";
         programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + " " + (Math.round(length/60000)) + "\u00A0" + Translator.translate("min") + ", " + Translator.translate("starts\u00A0in") + "\u00A0";
