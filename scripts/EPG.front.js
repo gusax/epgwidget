@@ -1660,6 +1660,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         overviewDiv.removeChild(overviewDiv.lastChild);
       }
+      
+      bottomBarContainer.style.top = "4.8em";
     }
     catch (error)
     {
