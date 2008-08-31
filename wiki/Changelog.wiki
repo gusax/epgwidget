@@ -6,6 +6,14 @@ Läs så här:
  * Beskrivning av gjord ändring (buggnummer om sådant finnes)
 
 Senaste ändringarna ligger alltid överst.
+== Nästa version ==
+_Nya funktioner_
+ * Baksidan: Det går nu att bocka bort %-visningen av avverkad tid om man inte vill se den informationen. 
+
+_Rättade buggar_
+ * Inga
+
+
 == 20080826 ==
 _Nya funktioner_
  * Framsidan: Indikator i procent på hur lång tid som ett program pågått.
@@ -124,6 +132,8 @@ _Rättade buggar_
 == 20080324 ==
 _Nya funktioner_
  * Inga.
+
+
 
 _Rättade buggar_
  * Nedladdning av listan med kanaler från servern sker nu automatiskt vid första uppstart om listan saknas.
