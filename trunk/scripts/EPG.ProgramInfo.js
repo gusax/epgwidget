@@ -102,28 +102,60 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
    */
   function updateProgressbar (start, stop, now)
   {
-    var length, width, timeLeft;
+    var length, width, timeLeft, hoursLeft, minLeft, minWording;
     
     try
     {
       length = stop - start;
       timeLeft = Math.round(((stop - now)/60000));
+      hoursLeft = Math.floor(timeLeft / 60);
+      minLeft = timeLeft - hoursLeft * 60;
       if(timeLeft < 0)
       {
         progressbarFull.style.visibility = "hidden";
-        programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + " " + (Math.round(length/60000)) + " " + Translator.translate("min") + ", " + Translator.translate("ended") + " " + (-1*timeLeft) + " " + Translator.translate("min ago") + ".";
+        programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + "\u00A0" + (Math.round(length/60000)) + " " + Translator.translate("min") + ", " + Translator.translate("ended") + " ";
+        minWording = "\u00A0ago";
+        hoursLeft = -1*hoursLeft;
+        minLeft = 1*minLeft;
       }
       else if(start <= now && now < stop)
       {
         width = Math.round( ((now - start) / length) * 100);
         progressbarFull.firstChild.style.width = width + "%";
         progressbarFull.style.visibility = "inherit";
-        programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + " " + Math.round(length/60000) + " " + Translator.translate("min") + ", " + timeLeft + " " + Translator.translate("min left") + ".";
+        minWording = "\u00A0left";
+        programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + " " + Math.round(length/60000) + "\u00A0" + Translator.translate("min") + ", ";
       }
       else
       {
         progressbarFull.style.visibility = "hidden";
-        programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + " " + (Math.round(length/60000)) + " " + Translator.translate("min") + ", " + Translator.translate("starts in") + " " + (Math.round((start - now) / 60000))+ " " + Translator.translate("min") + ".";
+        minWording = "";
+        programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + " " + (Math.round(length/60000)) + "\u00A0" + Translator.translate("min") + ", " + Translator.translate("starts\u00A0in") + "\u00A0";
+      }
+      
+      if (hoursLeft !== 0)
+      {
+        if (hoursLeft === 1)
+        {
+          programInfoNode.durationNode.nodeValue += hoursLeft + "\u00A0" + Translator.translate("hr");
+        }
+        else
+        {
+          programInfoNode.durationNode.nodeValue += hoursLeft + "\u00A0" + Translator.translate("hrs");
+        }
+        
+        if (minLeft > 0)
+        {
+          programInfoNode.durationNode.nodeValue += "\u00A0" + minLeft + "\u00A0" + Translator.translate("min") + "" + Translator.translate(minWording) + ".";
+        }
+        else
+        {
+          programInfoNode.durationNode.nodeValue += ".";
+        }
+      }
+      else
+      {
+        programInfoNode.durationNode.nodeValue += minLeft + "\u00A0" + Translator.translate("min") + "" + Translator.translate(minWording) + ".";
       }
     }
     catch (error)

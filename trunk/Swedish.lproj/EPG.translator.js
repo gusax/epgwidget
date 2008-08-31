@@ -50,10 +50,10 @@ EPG.translator = function(debug)
   localizedStrings["Click to open description."] = "Klicka för att öppna beskrivning.";
   localizedStrings["Click to open description, use mousewheel/trackpad to scroll description."] = "Klicka för att läsa beskrivning, använd scrollhjul/pekplatta för att scrolla beskrivning.";
   localizedStrings["Duration"] = "Längd";
-  localizedStrings["min left"] = "min kvar";
-  localizedStrings["starts in"] = "börjar om";
-  localizedStrings.ended = "slutade för";
-  localizedStrings["min ago"] = "min sedan";
+  localizedStrings["\u00A0left"] = "\u00A0kvar";
+  localizedStrings["starts\u00A0in"] = "börjar\u00A0om";
+  localizedStrings.ended = "slutade\u00A0för";
+  localizedStrings["\u00A0ago"] = "\u00A0sedan";
   localizedStrings["Use mousewheel/trackpad to scroll description"] = "Använd scrollhjul/pekplatta för att scrolla beskrivning";
   localizedStrings.tomorrow = "i morgon";
   localizedStrings.today = "idag";
@@ -61,6 +61,7 @@ EPG.translator = function(debug)
   localizedStrings["Click (or press Enter \u21a9) to flip to front."] = "Klicka (eller tryck Enter \u21a9) för att återgå till framsidan.";
   localizedStrings["Click (or press \u2318-,) to flip to backside."] = "Klicka (eller tryck \u2318-,) för att gå till baksidan.";
   localizedStrings["Hide duration % on front"] = "Göm avverkad % på framsidan";
+  localizedStrings.hr = localizedStrings.hrs = "tim";
   // Private methods
   
   
