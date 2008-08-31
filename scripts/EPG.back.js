@@ -467,6 +467,113 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
     }
   }
   
+  /**
+   * @memberOf EPG.back
+   * @name saveSetting
+   * @function
+   * @description Saves a setting.
+   * @private
+   * @param {object} container The settings container holding the setting to save.
+   */
+  function saveSetting(container)
+  {
+    try
+    {
+      if (container.checkBox)
+      {
+        if (container.checkBox.checked)
+        {
+          settings.savePreference(container.setting.prefName, container.setting.checkedValue);
+        }
+        else
+        {
+          settings.savePreference(container.setting.prefName, container.setting.uncheckedValue);
+        }
+      }
+    }
+    catch (error)
+    {
+      debug.alert("Error in EPG.back.saveSetting: " + error + " (container = " + container + ")");
+    }
+  }
+  
+  function createSettingsList () 
+  {
+    try
+    {
+      var tempContainer,
+      tempElement,
+      tempCheckBox,
+      tempTextNode,
+      settingsArray = [],
+      settingsObj;
+      
+      tempContainer = document.createElement("div");
+      tempContainer.setAttribute("class", "settingsList");
+      tempElement = document.createElement("div");
+      tempElement.setAttribute("class", "text");
+      tempCheckBox = document.createElement("input");
+      tempCheckBox.setAttribute("type","checkbox");
+      tempElement.appendChild(tempCheckBox);
+      tempTextNode = document.createTextNode("");
+      tempElement.appendChild(tempTextNode);
+      
+      settingsObj = settingsArray[settingsArray.length] = {};
+      settingsObj.prefName = "hideDuration";
+      settingsObj.checkedValue = "yes";
+      settingsObj.uncheckedValue = "no";
+      settingsObj.title = "Hide duration % on front";
+      
+      for (i = 0; i < settingsArray.length; i += 1)
+      {
+        tempContainer.appendChild(tempElement.cloneNode(true));
+        tempContainer.lastChild.checkBox = tempContainer.lastChild.firstChild; 
+        settingsArray[i].value = settings.getPreference(settingsArray[i].prefName);
+        tempContainer.lastChild.setting = settingsArray[i];
+        if (tempContainer.lastChild.setting.value === tempContainer.lastChild.setting.checkedValue)
+        {
+          tempContainer.lastChild.firstChild.setAttribute("checked", "checked");
+          tempContainer.lastChild.firstChild.checked = true;
+        }
+        else
+        {
+          tempContainer.lastChild.firstChild.removeAttribute("checked");
+          tempContainer.lastChild.firstChild.checked = false;
+        }
+        tempContainer.lastChild.lastChild.nodeValue = translator.translate(tempContainer.lastChild.setting.title);
+        
+        tempContainer.lastChild.checkBox.addEventListener("click", 
+        function (container) 
+        { 
+          return function (event)
+          {
+            saveSetting (container);
+            event.stopPropagation();
+            return false;
+          };
+        }(tempContainer.lastChild), 
+        false);
+        
+        tempContainer.lastChild.addEventListener("click", 
+        function (container) 
+        { 
+          return function ()
+          {
+            tempContainer.lastChild.firstChild.checked = !tempContainer.lastChild.firstChild.checked;
+            saveSetting (container);
+          };
+        }(tempContainer.lastChild), 
+        false);
+      }
+      
+      return UIcreator.createScalableContainer("settingsList", tempContainer, "lista-bakgrund.png","back");
+    }
+    catch (error)
+    {
+      debug.alert("Error in back.createSettingsList: " + error);
+    }
+  }
+  
   function create () 
   {
     try
@@ -481,6 +588,9 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       backDiv.channelList = backDiv.lastChild;
       backDiv.appendChild(createListBottom(document.createTextNode("\u25bc"))); // arrow down
       backDiv.lastChild.addEventListener("mousedown", function(event){scrollChannelList(event,"up");}, false);
+      backDiv.appendChild(createListTop());
+      backDiv.appendChild(createSettingsList());
+      backDiv.appendChild(createListBottom());
       backDiv.appendChild(createListTop());
       backDiv.appendChild(createSupportInfo());
       backDiv.appendChild(createListBottom());
@@ -524,7 +634,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
           {
             settings.resizeTo(270, screen.height, true);
             window.widget.prepareForTransition("ToBack");
-            settings.resizeTo(270, 544);
+            settings.resizeTo(270, document.getElementById("back").offsetHeight);
           }
           
           toFront = toFrontMethod;
