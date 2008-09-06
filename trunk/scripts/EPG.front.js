@@ -58,7 +58,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   updateInterval,
   key = {},
   scrollFrame,
-  hideDuration = false;
+  hideDuration = false,
+  updateAvailable;
   
   key.ARROW_UP = 38;
   key.ARROW_DOWN = 40;
@@ -145,6 +146,60 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       Debug.alert("Error in front.stopEvent: " + error + " (event = " + event + ")");
     }
   }
+  
+  /**
+   * @memberOf EPG.front
+   * @name newVersionAvailable
+   * @function
+   * @description Runs whenever a new version is available.
+   * @private
+   * @param {object} updateInfo Information about the update.
+   */
+  function newVersionAvailable(updateInfo)
+  {
+    try
+    {
+      if (updateInfo && updateAvailable)
+      {
+        updateAvailable.style.display = "block";
+        if (!updateAvailable.hasEventListener)
+        {
+          updateAvailable.hasEventListener = true;
+          updateAvailable.updateInfo = updateInfo;
+          updateAvailable.addEventListener("click", 
+          function (event)
+          {
+            if (window.widget)
+            {
+              if (event.altKey)
+              {
+                window.widget.openURL(updateAvailable.updateInfo.stable.fileUrl);
+              }
+              else
+              {
+                window.widget.openURL(updateAvailable.updateInfo.stable.blogUrl);
+              }
+            }
+            else if (event.altKey)
+            {
+              window.location = updateAvailable.updateInfo.stable.fileUrl;
+            }
+            else
+            {
+              window.location = updateAvailable.updateInfo.stable.blogUrl;
+            }
+            return stopEvent(event);
+          },
+          false);
+        }
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.newVersionAvailable: " + error + " (updateInfo = " + updateInfo + ")");
+    }
+  }
+  
   /**
    * @memberOf EPG.front
    * @name createInfoButton
@@ -218,6 +273,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       tempElement.setAttribute("class", "biggertext");
       tempContainer.appendChild(tempDiv.cloneNode(true));
       tempContainer.lastChild.addEventListener("click", function(){Settings.resizeText(1);}, false);
+      tempContainer.appendChild(tempDiv.cloneNode(false));
+      updateAvailable = tempContainer.lastChild;
+      updateAvailable.appendChild(document.createTextNode("\u27a0 " + Translator.translate("Update available!")));
+      updateAvailable.setAttribute("id", "updateAvailable");
+      updateAvailable.style.fontSize = "1.3em";
+      updateAvailable.style.display = "none";
+      UIcreator.setPosition(updateAvailable, "4em", "-0.1em", "13em", "1.1em", 1, "absolute");
       tempContainer.appendChild(createInfoButton());
       bottomBarContainer =  UIcreator.createScalableContainer("bottombar", tempContainer, "nere.png",currentChannelListIndex);
       UIcreator.setPosition(bottomBarContainer, "0em", "4.8em", "27em", "3.2em", 99, "absolute")
@@ -2039,9 +2101,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
       try
       {
+        Debug.inform("front.onShow");
         that.reloadIcons();
         that.reloadPrograms();
         startUpdateInterval(); // should really be one interval per channel
+        Settings.checkForNewVersion(newVersionAvailable);
         visible = true;
       }
       catch (error)

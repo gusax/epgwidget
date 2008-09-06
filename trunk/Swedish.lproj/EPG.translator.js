@@ -62,6 +62,7 @@ EPG.translator = function(debug)
   localizedStrings["Click (or press \u2318-,) to flip to backside."] = "Klicka (eller tryck \u2318-,) för att gå till baksidan.";
   localizedStrings["Hide duration % on front"] = "Göm avverkad % på framsidan";
   localizedStrings.hr = localizedStrings.hrs = "tim";
+  localizedStrings["Update available!"] = "Uppdatering tillgänglig!";
   // Private methods
   
   
