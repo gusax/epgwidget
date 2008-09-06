@@ -2,6 +2,8 @@
 #labels Featured
 
 = Kända fel =
+ * *Problem i Tiger (Mac OS 10.4)* : Widgeten funkar mycket dåligt i Tiger. Felsökning pågår.
+
  * *Nedladdning av tablåer* : Man verkar vara tvungen att logga ut & logga in igen inom två dagar från att EPG-widgeten har installerats första gången, annars går inte bakgrundsnedladdningen igång och man tappar tablåerna.
 
  * *Intensivt hårddiskrassel* : Bakgrundsnedladdningen rensar även upp gamla tablåer från Xmltv-widgeten, så om Xmltvwidgeten varit installerad en lång tid kan det rassla rätt bra i hårddisken första gången den automatiska nedladdningen tömmer tablåmappen.
