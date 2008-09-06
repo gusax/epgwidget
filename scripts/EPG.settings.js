@@ -54,7 +54,9 @@ EPG.settings = function(Debug, growl, file)
     isTheEmptyProgram : true
   },
   currentChannelListIndex = 0,
-  transparencyValue = 0.8;
+  transparencyValue = 0.8,
+  lastVersionCheck = -1,
+  upgradeInfoUrl = "http://epgwidget.googlecode.com/svn/trunk/updateInfo.js";
   
   // Private methods
   function alertCallbackMethods(callbackArrayName, callbackMethod, callbackContents) 
@@ -676,6 +678,44 @@ EPG.settings = function(Debug, growl, file)
       Debug.alert("Error in settings.programsDownloadSucceeded: " + error + " (callback = " + callback + ")");
     }
   }
+  
+  /**
+   * @memberOf EPG.Settings
+   * @name isUpdateAvailable
+   * @function
+   * @description Checks updateInfo for a new version.
+   * @private
+   * @param {string} response The contents of updateInfo.
+   */
+  function isUpdateAvailable(response, callback)
+  {
+    try
+    {
+      var jsonObj, now;
+      try
+      {
+        jsonObj = eval("(" + response + ")");
+        if (jsonObj && jsonObj.updateInfo)
+        {
+          now = (new Date()).getTime();
+          lastVersionCheck = now + 86400000; // check again tomorrow
+          if (jsonObj.updateInfo.stable && jsonObj.updateInfo.stable.version > EPG.currentVersion)
+          {
+            callback(jsonObj.updateInfo);
+          }
+        }
+      }
+      catch (jsonError)
+      {
+        // fail silently.
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.Settings.isUpdateAvailable: " + error + " (response = " + response + ")");
+    }
+  }
+  
   // Public methods
   return {
     init: function()
@@ -1450,6 +1490,37 @@ EPG.settings = function(Debug, growl, file)
       catch (error)
       {
         Debug.alert("Error in Epg.settings.runGrabber: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf EPG.Settings
+     * @function checkForNewVersion
+     * @description Checks if there is a new version available.
+     * @param {function} callback Callback function to run if there is a new version available.
+     */
+    checkForNewVersion: function (callback) 
+    {
+      try
+      {
+        var now = (new Date()).getTime();
+        if (now >= lastVersionCheck)
+        {
+          file.open(upgradeInfoUrl, 
+          function (callback)
+          {
+            return function (response)
+            {
+              isUpdateAvailable(response, callback);
+            };
+          }(callback), 
+          function () {},
+          false, true, true);
+        }
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.Settings.checkForNewVersion: " + error);
       }
     }
   };

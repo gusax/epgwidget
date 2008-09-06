@@ -64,7 +64,7 @@ EPG.file = function(Debug, growl, currentVersion)
             {
               if(xhr.onSuccess)
               {
-                xhr.onSuccess("" + xhr.responseText);
+                xhr.onSuccess(xhr.responseText);
               }
             }
             else
@@ -328,7 +328,7 @@ EPG.file = function(Debug, growl, currentVersion)
      * @param {string} channelID ID of the channel that the file (schedule) belongs to.
      * @param {boolean} dontEval True to skip json evaluation at the end.
      */
-    open: function(path, onSuccess, onFailure, channelID, dontEval) 
+    open: function(path, onSuccess, onFailure, channelID, dontEval, isUrl) 
     {
       try
       {
@@ -355,7 +355,10 @@ EPG.file = function(Debug, growl, currentVersion)
         {
           if (path)
           {
-            path = HOME + "" + path;
+            if (!isUrl)
+            {
+              path = HOME + "" + path;
+            }
             xhr = new XMLHttpRequest();
             xhr.path = path;
             xhr.channelID = channelID;
