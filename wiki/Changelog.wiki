@@ -17,6 +17,8 @@ _Nya funktioner_
 _Rättade buggar_
  * Inforutan: Tid fram till ett program startar räknas nu ut ordentligt. Tidigare räknades fel tid ut, så tiden som stod där var inte tid tills programmet började utan tiden tills programmet slutade.
 
+ * Inforutan: Inforutans text är inte längre osynlig i Tiger. ([http://code.google.com/p/epgwidget/issues/detail?id=52 52])
+
 
 == 20080826 ==
 _Nya funktioner_
