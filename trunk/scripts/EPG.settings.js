@@ -1161,7 +1161,7 @@ EPG.settings = function(Debug, growl, file)
       try
       {
         var installedGrabberVersion = that.getPreference("grabberVersion");
-        if (!installedGrabberVersion || installedGrabberVersion < EPG.grabberVersion || force)
+        if (!installedGrabberVersion || installedGrabberVersion < EPG.grabberVersion || force)
         {
           Debug.inform("Updating grabber");
           if (window.widget && window.widget.system)
@@ -1266,7 +1266,7 @@ EPG.settings = function(Debug, growl, file)
             numPrograms = 0;
           }
         }
-        if (!when || (when && !when.getFullYear))
+        if (!when || (when && !when.getFullYear))
         {
           fileDate = new Date(new Date() - 86400000); // Always start searching yesterday
           when = new Date();
@@ -1533,3 +1533,4 @@ EPG.settings = function(Debug, growl, file)
   };
 }(EPG.debug, EPG.growl, EPG.file);
 EPG.settings.init();
+EPG.PreLoader.resume();

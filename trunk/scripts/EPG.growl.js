@@ -217,7 +217,7 @@ EPG.growl = function(Debug, Translator)
           msToNotification = 100;
         }
         // set a timeout that notifies at the specified date and time
-        if(userHasGrowlInstalled || hasNotCheckedForGrowlYet)
+        if(userHasGrowlInstalled || hasNotCheckedForGrowlYet)
         {
           timers.push(setTimeout(function(){that.notifyNow(message, pathToImage, sticky);}, msToNotification));
           return timers.length - 1;
@@ -274,3 +274,4 @@ EPG.growl = function(Debug, Translator)
   };
 }(EPG.debug, EPG.translator);
 EPG.growl.init();
+EPG.PreLoader.resume();

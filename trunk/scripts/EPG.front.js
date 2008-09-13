@@ -1629,7 +1629,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             updateProgramNode(channelNode.childNodes[i], program);
             if(i === 0)
             {
-              if(program.isTheEmptyProgram || hideDuration)
+              if(program.isTheEmptyProgram || hideDuration)
               {
                 channelNode.childNodes[i].durationNode.nodeValue = "";
               }
@@ -1655,7 +1655,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             channelNode.appendChild(UIcreator.createProgramNode(program, ProgramInfo));              
             if(i === 0)
             {
-              if(program.isTheEmptyProgram || hideDuration)
+              if(program.isTheEmptyProgram || hideDuration)
               {
                 channelNode.childNodes[i].durationNode.nodeValue = "";
               }
@@ -2124,3 +2124,4 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   };
 }(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator, EPG.UIcreator, EPG.file, EPG.ProgramInfo);
 EPG.front.init();
+EPG.PreLoader.resume();
