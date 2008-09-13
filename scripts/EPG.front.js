@@ -1640,6 +1640,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                 channelNode.childNodes[i].durationNode.nodeValue = (100 - Math.round(((stop - when) / (stop - start)) * 100)) + "% ";
               }
             }
+            else
+            {
+              channelNode.childNodes[i].durationNode.nodeValue = "";
+            }
           }
         }
         else
@@ -1661,6 +1665,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                 stop = new Date(program.stop * 1000);
                 channelNode.childNodes[i].durationNode.nodeValue = (100 - Math.round(((stop - when) / (stop - start)) * 100)) + "% ";
               }
+            }
+            else
+            {
+              channelNode.childNodes[i].durationNode.nodeValue = "";
             }
           }
           if(channelNode.firstChild)
