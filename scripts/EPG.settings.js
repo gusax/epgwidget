@@ -4,7 +4,7 @@
  cap:false, 
  debug:false,
  eqeqeq: true,
- evil: false,
+ evil: true,
  forin: false,
  fragment:false, 
  laxbreak:false, 
@@ -36,7 +36,6 @@ EPG.settings = function(Debug, growl, file)
 {
   // Private Variables
   var that,
-  currentUser = {},
   callbacks = {},
   hasBeenInstalledBefore,
   cachedPreferences = {},
@@ -46,7 +45,6 @@ EPG.settings = function(Debug, growl, file)
   oneDay = 24 * 60 * 60 * 1000,
   timers = [],
   paths = {},
-  defaultSkin = "orangehc",
   defaultPathToServer = "http://xmltv.tvsajten.com/json",
   currentSize = {},
   theEmptyProgram = 
@@ -68,17 +66,20 @@ EPG.settings = function(Debug, growl, file)
       callback;
       
       callbackArray = callbacks[callbackArrayName];
-      if(callbackArray && callbackMethod)
+      if (callbackArray && callbackMethod)
       {
-        for(index in callbackArray)
+        for (index in callbackArray)
         {
-          callback = callbackArray.shift();
-          if(callback)
+          if (callbackArray.hasOwnProperty(index))
           {
-            callback = callback[callbackMethod];
-            if(callback)
+            callback = callbackArray.shift();
+            if (callback)
             {
-              callback(callbackContents);
+              callback = callback[callbackMethod];
+              if (callback)
+              {
+                callback(callbackContents);
+              }
             }
           }
         }
@@ -96,7 +97,7 @@ EPG.settings = function(Debug, growl, file)
     {
       // File did not exist!
       // Try downloading it again?
-      if(allChannels.channels)
+      if (allChannels.channels)
       {
         // If we already have channels, return them.
         alertCallbackMethods("allChannels","onSuccess", allChannels.channels);
@@ -122,25 +123,31 @@ EPG.settings = function(Debug, growl, file)
       cachedChannels,
       orderedChannelIDs;
       
-      if(jsonObject && jsonObject.channels)
+      if (jsonObject && jsonObject.channels)
       {
         cachedChannels = jsonObject.channels;
         orderedChannelIDs = [];
         allChannels.channels = {};
         
         
-        for(index in cachedChannels)
+        for (index in cachedChannels)
         {
-          reversedIndex = index.split(".").reverse().join(".");
-          orderedChannelIDs.push(reversedIndex);
+          if (cachedChannels.hasOwnProperty(index))
+          {
+            reversedIndex = index.split(".").reverse().join(".");
+            orderedChannelIDs.push(reversedIndex);
+          }
         }
         orderedChannelIDs.sort();
-        for(reversedIndex in orderedChannelIDs)
+        for (reversedIndex in orderedChannelIDs)
         {
-          index = orderedChannelIDs[reversedIndex];
-          index = index.split(".").reverse().join(".");
-          //Debug.alert("Storing allChannels.channels[" + index + "]");
-          allChannels.channels[index] = cachedChannels[index];
+          if (orderedChannelIDs.hasOwnProperty(reversedIndex))
+          {
+            index = orderedChannelIDs[reversedIndex];
+            index = index.split(".").reverse().join(".");
+            //Debug.alert("Storing allChannels.channels[" + index + "]");
+            allChannels.channels[index] = cachedChannels[index];
+          }
         }
         allChannels.channels.orderedChannelIDs = orderedChannelIDs;
         allChannels.channels.length = orderedChannelIDs.length;
@@ -167,12 +174,12 @@ EPG.settings = function(Debug, growl, file)
       height,
       body;
     
-      if(window.widget && typeof(currentSize.width) !== "undefined")
+      if (window.widget && typeof currentSize.width !== "undefined")
       {
         
         width = Math.ceil(currentSize.width * currentSize.scale);
         height = Math.ceil(currentSize.height * currentSize.scale);
-        if(!fake && height > screen.height)
+        if (!fake && height > screen.height)
         {
           Debug.warn("settings.resize: The widget is to tall (height of widget = " + height + " px, but screen height is only " + screen.height + " px)! Downsizing...");
           do
@@ -183,7 +190,7 @@ EPG.settings = function(Debug, growl, file)
           } while (height >= screen.height && currentSize.scale > 0.3) ;
           
           body = document.getElementsByTagName("body")[0];
-          if(typeof(body.fontSize) !== "number")
+          if (typeof body.fontSize !== "number")
           {
             body.fontSize = 10;
           }
@@ -211,9 +218,9 @@ EPG.settings = function(Debug, growl, file)
     try
     {
       file.hideLoadingImage();
-      if(systemResponse)
+      if (systemResponse)
       {
-        if(systemResponse.errorString)
+        if (systemResponse.errorString)
         {
           Debug.alert("settings.channelListExported failed with message " + systemResponse.errorString);
         }
@@ -252,12 +259,12 @@ EPG.settings = function(Debug, growl, file)
     
       for (listid in channelLists)
       {
-        if(channelLists.hasOwnProperty(listid))
+        if (channelLists.hasOwnProperty(listid))
         {
           list = channelLists[listid].hashed;
           for (channelid in list)
           {
-            if(list.hasOwnProperty(channelid))
+            if (list.hasOwnProperty(channelid))
             {
               foundChannels[channelid] = true;
             }
@@ -266,9 +273,9 @@ EPG.settings = function(Debug, growl, file)
       }
       for (channelid in foundChannels)
       {
-        if(foundChannels.hasOwnProperty(channelid))
+        if (foundChannels.hasOwnProperty(channelid))
         {
-          if(!string)
+          if (!string)
           {
             string = channelid + ";";
           }
@@ -279,7 +286,7 @@ EPG.settings = function(Debug, growl, file)
         }
       }
       
-      if(window.widget && window.widget.system)
+      if (window.widget && window.widget.system)
       {
         file.showLoadingImage();
         Debug.inform("settings.exportChannelList exporting...");
@@ -304,9 +311,9 @@ EPG.settings = function(Debug, growl, file)
     try
     {
       file.hideLoadingImage();
-      if(systemResponse)
+      if (systemResponse)
       {
-        if(systemResponse.errorString)
+        if (systemResponse.errorString)
         {
           Debug.alert("settings.grabberInstalled: Error when trying to install grabber! Message was " + systemResponse.errorString);
         }
@@ -339,9 +346,9 @@ EPG.settings = function(Debug, growl, file)
     try
     {
       file.hideLoadingImage();
-      if(systemResponse)
+      if (systemResponse)
       {
-        if(systemResponse.errorString)
+        if (systemResponse.errorString)
         {
           Debug.alert("settings.grabberUpdated: Error when trying to update grabber! Message was " + systemResponse.errorString);
         }
@@ -376,9 +383,9 @@ EPG.settings = function(Debug, growl, file)
     try
     {
       file.hideLoadingImage();
-      if(systemResponse)
+      if (systemResponse)
       {
-        if(systemResponse.errorString)
+        if (systemResponse.errorString)
         {
           Debug.alert("settings.ranGrabber: Error when trying to run grabber! Message was " + systemResponse.errorString);
         }
@@ -415,7 +422,7 @@ EPG.settings = function(Debug, growl, file)
       month,
       day;
     
-      if(!when)
+      if (!when)
       {
         when = new Date(); // now
       }
@@ -426,11 +433,11 @@ EPG.settings = function(Debug, growl, file)
       year = when.getUTCFullYear();
       month = 1 + when.getUTCMonth(); // months are between 0 and 11 so we need to add one to whatever getMonth returns
       day = when.getUTCDate();
-      if(month < 10)
+      if (month < 10)
       {
         month = "0" + month;
       }
-      if(day < 10)
+      if (day < 10)
       {
         day = "0" + day;
       }
@@ -469,23 +476,23 @@ EPG.settings = function(Debug, growl, file)
       whenTimestamp,
       noProgram = false;
       
-      if(!when)
+      if (!when)
       {
         when = new Date();
       }
       whenTimestamp = when.getTime();
-      if(typeof(ymd) === "undefined")
+      if (typeof(ymd) === "undefined")
       {
         ymd = getFileDateYYYYMMDD(fileDate);
       }
-      if(alreadyFoundPrograms)
+      if (alreadyFoundPrograms)
       {
         foundPrograms = alreadyFoundPrograms;
       }
       
       programs = cachedPrograms[channelID][ymd];
       
-      if(programs && programs.length > 0)
+      if (programs && programs.length > 0)
       {
         programsLength = programs.length;
         while(numFound < numPrograms && index < programsLength - 1)
@@ -493,15 +500,15 @@ EPG.settings = function(Debug, growl, file)
           index += 1;
           programStart = programs[index].start * 1000;
           programStop = programs[index].stop * 1000;
-          if(typeof(programStart) === "number" && typeof(programStop) === "number")
+          if (typeof(programStart) === "number" && typeof(programStop) === "number")
           {
-            if(programStart <= whenTimestamp && whenTimestamp < programStop)
+            if (programStart <= whenTimestamp && whenTimestamp < programStop)
             {
               //Debug.alert(channelID + ": " + ymd + " Found program " + programs[index].title.sv + " started at " + (new Date(programs[index].start * 1000)));
               // This is the current program, since it has started this exact second or before, and it has not ended yet. 
               break; // Break here and start copying from this position.
             }
-            else if(programStart > whenTimestamp) // This program has not started yet. If we reach it without reaching the above condition first, it must mean that all the following events are in the future. No point looking at them then.
+            else if (programStart > whenTimestamp) // This program has not started yet. If we reach it without reaching the above condition first, it must mean that all the following events are in the future. No point looking at them then.
             {
               //Debug.alert(channelID + ": " + ymd + " All programs are in the future, programStart " + programStart + " > whenTimestamp " + whenTimestamp +" :-(");
               noProgram = true;
@@ -515,11 +522,11 @@ EPG.settings = function(Debug, growl, file)
         Debug.warn(channelID + " : " + ymd + " had no programs :-(");
       }
       
-      if(index >= 0)
+      if (index >= 0)
       {
-        if(noProgram)
+        if (noProgram)
         {
-          if(foundPrograms.length === 0)
+          if (foundPrograms.length === 0)
           {
             copyIndex = 1;
             foundPrograms[0] = theEmptyProgram;
@@ -530,7 +537,7 @@ EPG.settings = function(Debug, growl, file)
             index = 0;
           }
         }
-        else if(whenTimestamp < programStop)
+        else if (whenTimestamp < programStop)
         {
           copyIndex = foundPrograms.length;
         }
@@ -538,7 +545,7 @@ EPG.settings = function(Debug, growl, file)
         {
           copyIndex = -1;
         }
-        if(copyIndex >= 0)
+        if (copyIndex >= 0)
         {
           while(index < programsLength && numPrograms > 0)
           {
@@ -582,12 +589,12 @@ EPG.settings = function(Debug, growl, file)
     {
       var foundPrograms;
       // TODO: perhaps we should also be able to find programs between two dates, and not just find a number of programs.
-      if(schedule && schedule.programme && schedule.programme.length >= 0)
+      if (schedule && schedule.programme && schedule.programme.length >= 0)
       {
         cachedPrograms[channelID][ymd] = {};
         cachedPrograms[channelID][ymd] = schedule.programme;
         
-        if(numPrograms >= 0)
+        if (numPrograms >= 0)
         {
           that.getProgramsForChannel(channelID, onSuccess, onFailure, numPrograms, when, alreadyFoundPrograms, fileDate);
         }
@@ -596,7 +603,7 @@ EPG.settings = function(Debug, growl, file)
           onSuccess(cachedPrograms[channelID][ymd]);
         }
       }
-      else if(onFailure)
+      else if (onFailure)
       {
         Debug.alert("settings.programsDownloadSucceeded failed on channel with ID " + channelID);
         onFailure();
@@ -620,12 +627,12 @@ EPG.settings = function(Debug, growl, file)
   {
     try
     {
-      var channel, yesterday, today, tomorrow, fileDate, savePath, url;
+      var channel, yesterday, today, tomorrow, fileDate, savePath, url, now;
       
-      if(channelID)
+      if (channelID)
       {
         channel = that.getChannel(channelID);
-        if(channel && channel.baseUrl)
+        if (channel && channel.baseUrl)
         {
           now = new Date();
           yesterday = new Date(now.getTime() - 86400000);
@@ -645,7 +652,7 @@ EPG.settings = function(Debug, growl, file)
           savePath = "Library/Xmltv/schedules/" + channelID + "_" + fileDate + ".js";
           url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js.gz";
           file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){Debug.alert("Schedule download failure :-(");},true);
-          if(channel.icon)
+          if (channel.icon)
           {
             file.downloadFile(channel.icon, "Library/Xmltv/logos/" + channelID + ".png", function(){Debug.inform("Icon download success!");}, function(){Debug.alert("Icon download failure :-(");},true);
           }
@@ -697,7 +704,7 @@ EPG.settings = function(Debug, growl, file)
         jsonObj = eval("(" + response + ")");
         if (jsonObj && jsonObj.updateInfo)
         {
-          now = (new Date()).getTime();
+          now = new Date().getTime();
           lastVersionCheck = now + 86400000; // check again tomorrow
           if (jsonObj.updateInfo.stable && jsonObj.updateInfo.stable.version > EPG.currentVersion)
           {
@@ -720,7 +727,7 @@ EPG.settings = function(Debug, growl, file)
   return {
     init: function()
     {
-      if(!that)
+      if (!that)
       {
         that = this;
       }
@@ -734,9 +741,9 @@ EPG.settings = function(Debug, growl, file)
     {
       try
       {
-        if(window.widget)
+        if (window.widget)
         {
-          if(!window.widget.preferenceForKey("hasBeenInstalledBefore"))
+          if (!window.widget.preferenceForKey("hasBeenInstalledBefore"))
           {
             hasBeenInstalledBefore = false;
           }
@@ -763,20 +770,20 @@ EPG.settings = function(Debug, growl, file)
     {
       try
       {
-        if(value)
+        if (value)
         {
           key = "" + key;
           value = "" + value;
-          if(window.widget)
+          if (window.widget)
           {
             //Debug.alert("trying to save key " + key + " = value " + value);
             window.widget.setPreferenceForKey(value, key);
           }
           cachedPreferences[key] = value;
-          if(!hasBeenInstalledBefore)
+          if (!hasBeenInstalledBefore)
           {
             hasBeenInstalledBefore = true;
-            if(window.widget)
+            if (window.widget)
             {
               window.widget.setPreferenceForKey("true", "hasBeenInstalledBefore");
             }
@@ -793,9 +800,9 @@ EPG.settings = function(Debug, growl, file)
     {
       try
       {
-        if(!cachedPreferences[key] && typeof(key) !== "undefined")
+        if (!cachedPreferences[key] && typeof(key) !== "undefined")
         {
-          if(window.widget)
+          if (window.widget)
           {
             cachedPreferences[key] = window.widget.preferenceForKey(key);
           }
@@ -814,14 +821,14 @@ EPG.settings = function(Debug, growl, file)
     {
       try
       {
-        if(key)
+        if (key)
         {
           key = "" + key;
-          if(window.widget)
+          if (window.widget)
           {
             window.widget.setPreferenceForKey(null, key);
           }
-          if(cachedPreferences[key])
+          if (cachedPreferences[key])
           {
             delete cachedPreferences[key];
           }
@@ -842,13 +849,13 @@ EPG.settings = function(Debug, growl, file)
       
         callback.onSuccess = onSuccess;
         callback.onFailure = onFailure;
-        if(!callbacks.allChannels)
+        if (!callbacks.allChannels)
         {
           callbacks.allChannels = [];
         }
         callbacks.allChannels.push(callback);
         
-        if(!allChannels.lastUpdate || (now - allChannels.lastUpdate) >= oneDay)
+        if (!allChannels.lastUpdate || (now - allChannels.lastUpdate) >= oneDay)
         {
           // re-import channels.js once per day (just assume that the file is there, the download itself is taken care of by the grabber)
           //Debug.inform("settings.getAllChannels: Opening channels.js since it was more than one day since it was last opened.");
@@ -878,7 +885,7 @@ EPG.settings = function(Debug, growl, file)
       {
         var channel;
         
-        if(typeof(channelID) !== "undefined" && allChannels && allChannels.channels)
+        if (typeof(channelID) !== "undefined" && allChannels && allChannels.channels)
         {
           return allChannels.channels[channelID];
         } 
@@ -902,15 +909,15 @@ EPG.settings = function(Debug, growl, file)
         tempListHashed,
         i;
         
-        if(typeof(listIndex) !== "undefined")
+        if (typeof(listIndex) !== "undefined")
         {
           tempList = channelLists[listIndex];
-          if(!tempList)
+          if (!tempList)
           {
             tempListHashed = {};
             tempListOrdered = that.getPreference("channelList" + listIndex);
             Debug.inform("channelList" + listIndex + " = " + tempListOrdered);
-            if(tempListOrdered)
+            if (tempListOrdered)
             {
               tempListOrdered = tempListOrdered.split(";");
               
@@ -947,13 +954,13 @@ EPG.settings = function(Debug, growl, file)
       {
         var activeList;
         
-        if(typeof(channelListID) !== "undefined")
+        if (typeof(channelListID) !== "undefined")
         {
           activeList = channelListID;
         
-          if(channelLists[activeList])
+          if (channelLists[activeList])
           {
-            if(channelLists[activeList].ordered.length === 0)
+            if (channelLists[activeList].ordered.length === 0)
             {
               that.deletePreference("channelList" + activeList);
             }
@@ -977,10 +984,10 @@ EPG.settings = function(Debug, growl, file)
       { 
         var tempList;
         
-        if(channelID && channelList >= 0)
+        if (channelID && channelList >= 0)
         {
           tempList = channelLists[channelList];
-          if(!tempList)
+          if (!tempList)
           {
             Debug.inform("creating channelLists[" + channelList + "]");
             tempList = {};
@@ -991,7 +998,7 @@ EPG.settings = function(Debug, growl, file)
           }
           
           // Add channel to list if it's not there already
-          if(typeof(tempList.hashed[channelID]) === "undefined")
+          if (typeof tempList.hashed[channelID] === "undefined")
           {
             Debug.inform("Adding " + channelID + " to list " + channelList);
             tempList.hashed[channelID] = tempList.ordered.length;
@@ -1024,20 +1031,20 @@ EPG.settings = function(Debug, growl, file)
       {
         var tempList;
         
-        if(channelID && listID >= 0)
+        if (channelID && listID >= 0)
         {
           
           tempList = channelLists[listID];
-          if(tempList && typeof(tempList.hashed[channelID]) === "number")
+          if (tempList && typeof tempList.hashed[channelID] === "number")
           {
             Debug.inform("Removing " + channelID + " at position " + tempList.hashed[channelID] + " from list " + listID);
             tempList.ordered.splice(tempList.hashed[channelID], 1);
             delete tempList.hashed[channelID];
             that.saveChannelList(listID);
           }
-          else if(tempList)
+          else if (tempList)
           {
-            Debug.warn("removeChannelFromList: Could not remove channel with id " + channelID + " from list " + listID + "!\ntypeof( " + tempList.hashed[channelID] + ") = " + typeof(tempList.hashed[channelID]));
+            Debug.warn("removeChannelFromList: Could not remove channel with id " + channelID + " from list " + listID + "!\ntypeof( " + tempList.hashed[channelID] + ") = " + typeof tempList.hashed[channelID]);
           }
           else
           {
@@ -1060,32 +1067,32 @@ EPG.settings = function(Debug, growl, file)
         body = document.getElementsByTagName("body")[0];
         
         
-        if(typeof(body.fontSize) === "undefined")
+        if (typeof body.fontSize === "undefined")
         {
           body.fontSize = 10;
         } 
-        if(typeof(currentSize.width) == "undefined")
+        if (typeof currentSize.width === "undefined")
         {
           Debug.warn("settings.resizeText could not resize since currentSize.width and height are undefined!");
         }
         else
         {
-          if(amount === 0)
+          if (amount === 0)
           {
             currentSize.scale = 1;
           }
-          else if(amount > 0 && currentSize.height * (currentSize.scale + 0.1) < screen.height)
+          else if (amount > 0 && currentSize.height * (currentSize.scale + 0.1) < screen.height)
           {
             currentSize.scale += 0.1;
           }
-          else if(amount < 0 && currentSize.scale > 1)
+          else if (amount < 0 && currentSize.scale > 1)
           {
             currentSize.scale -= 0.1;
           }
           
           body.style.fontSize = body.fontSize * currentSize.scale + "px";
           //Debug.alert("currentSize.scale = " + currentSize.scale);
-          if(!skipResize)
+          if (!skipResize)
           {
             resize();
           }
@@ -1101,15 +1108,15 @@ EPG.settings = function(Debug, growl, file)
     {
       try
       {
-        if(width)
+        if (width)
         {
           currentSize.width = width;
         }
-        if(height)
+        if (height)
         {
           currentSize.height = height;
         }
-        if(typeof(currentSize.scale) === "undefined")
+        if (typeof currentSize.scale === "undefined")
         {
           currentSize.scale = 1;
         }
@@ -1131,7 +1138,7 @@ EPG.settings = function(Debug, growl, file)
     {
       try
       {
-        if(window.widget && window.widget.system)
+        if (window.widget && window.widget.system)
         {
           file.showLoadingImage();
           window.widget.system("cd helpers && /usr/bin/php installgrabber.php", grabberInstalled);
@@ -1154,10 +1161,10 @@ EPG.settings = function(Debug, growl, file)
       try
       {
         var installedGrabberVersion = that.getPreference("grabberVersion");
-        if(!installedGrabberVersion || installedGrabberVersion < EPG.grabberVersion || force)
+        if (!installedGrabberVersion || installedGrabberVersion < EPG.grabberVersion || force)
         {
           Debug.inform("Updating grabber");
-          if(window.widget && window.widget.system)
+          if (window.widget && window.widget.system)
           {
             file.showLoadingImage();
             window.widget.system("cd helpers && /usr/bin/php installgrabber.php", grabberUpdated);
@@ -1192,17 +1199,17 @@ EPG.settings = function(Debug, growl, file)
         programsForThisChannelAreCached,
         programsForThisDateAreCached;
         
-        if(!when)
+        if (!when)
         {
           when = new Date();
         }
         
         ymd = getFileDateYYYYMMDD(when);
         programsForThisChannelAreCached = cachedPrograms[channelID];
-        if(programsForThisChannelAreCached)
+        if (programsForThisChannelAreCached)
         {
           programsForThisDateAreCached = programsForThisChannelAreCached[ymd];
-          if(programsForThisDateAreCached)
+          if (programsForThisDateAreCached)
           {
             setTimeout(function(){onSuccess(programsForThisDateAreCached);}, 1);
           }
@@ -1214,7 +1221,7 @@ EPG.settings = function(Debug, growl, file)
         else
         {
           cachedPrograms[channelID] = {};
-          file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd, numPrograms, fileDate, alreadyFoundPrograms, onFailure, when);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd, alreadyFoundPrograms);});
+          file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd, false, false, false, onFailure, when);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd, false);});
         }
       }
       catch (error)
@@ -1244,27 +1251,27 @@ EPG.settings = function(Debug, growl, file)
         foundPrograms,
         callback;
         
-        if(typeof(numPrograms) === "undefined")
+        if (typeof(numPrograms) === "undefined")
         {
           Debug.warn("settings.getProgramsForChannel: numPrograms was undefined! Defaulting to 3 (now, next, later)");
           numPrograms = 3; // now next later
         }
         
-        if(alreadyFoundPrograms && alreadyFoundPrograms.length)
+        if (alreadyFoundPrograms && alreadyFoundPrograms.length)
         {
           //numPrograms -= alreadyFoundPrograms.length;
-          if(numPrograms < 0)
+          if (numPrograms < 0)
           {
             Debug.warn("getProgramsForChannel with id " + channelID + " found too many programs!\nalreadyFoundPrograms.length = " + alreadyFoundPrograms.length + ", numPrograms became " + numPrograms);
             numPrograms = 0;
           }
         }
-        if(!when || (when && !when.getFullYear))
+        if (!when || (when && !when.getFullYear))
         {
-          fileDate = new Date((new Date()) - 86400000); // Always start searching yesterday
+          fileDate = new Date(new Date() - 86400000); // Always start searching yesterday
           when = new Date();
         }
-        else if(!alreadyFoundPrograms)
+        else if (!alreadyFoundPrograms)
         {
           fileDate = new Date(when - 86400000); // Start searching one day before when, just to be sure.
           alreadyFoundPrograms = [];
@@ -1272,16 +1279,16 @@ EPG.settings = function(Debug, growl, file)
         
         ymd = getFileDateYYYYMMDD(fileDate);
         programsForThisChannelAreCached = cachedPrograms[channelID];
-        if(programsForThisChannelAreCached)
+        if (programsForThisChannelAreCached)
         {
           programsForThisDateAreCached = programsForThisChannelAreCached[ymd];
-          if(programsForThisDateAreCached)
+          if (programsForThisDateAreCached)
           {
             //Debug.inform(channelID + ": " + ymd + " had " + programsForThisDateAreCached.length + " programs cached.");
             foundPrograms = findPrograms(channelID, numPrograms, when, ymd, alreadyFoundPrograms, fileDate);
             //Debug.inform(channelID + ": " + ymd + " found " + foundPrograms.length + " programs");
             // What happens around midnight?
-            if(foundPrograms.length < numPrograms)
+            if (foundPrograms.length < numPrograms)
             {
               //Debug.warn(channelID + " did not find enough programs on date " + ymd + " (wanted " + numPrograms + " but found only " + (foundPrograms.length) + ".) Trying next day.");
               that.getProgramsForChannel(channelID, onSuccess, onFailure, numPrograms, when, foundPrograms, new Date(fileDate.getTime() + 86400000)); // Look for more programs tomorrow
@@ -1327,19 +1334,19 @@ EPG.settings = function(Debug, growl, file)
         yesterday = "0000-00-00",
         ymd;
         
-        if(!cachedPrograms.lastRemove || cachedPrograms.lastRemove < today)
+        if (!cachedPrograms.lastRemove || cachedPrograms.lastRemove < today)
         {
           cachedPrograms.lastRemove = today.getTime();
           for (channelID in cachedPrograms)
           {
-            if(cachedPrograms.hasOwnProperty(channelID))
+            if (cachedPrograms.hasOwnProperty(channelID))
             {
               cachedChannel = cachedPrograms[channelID];
               for (ymd in cachedChannel)
               {
-                if(cachedChannel.hasOwnProperty(ymd))
+                if (cachedChannel.hasOwnProperty(ymd))
                 {
-                  if(ymd < yesterday)
+                  if (ymd < yesterday)
                   {
                     delete cachedPrograms[ymd];
                  }
@@ -1383,7 +1390,7 @@ EPG.settings = function(Debug, growl, file)
       try
       { 
         var channel = that.getChannel(channelID);
-        if(channel && channel.icon)
+        if (channel && channel.icon)
         {
           return file.getHomePath() + "Library/Xmltv/logos/" + channelID + ".png";
         }
@@ -1408,9 +1415,9 @@ EPG.settings = function(Debug, growl, file)
       try
       {
         var HHMM = "";
-        if(when && when.getHours)
+        if (when && when.getHours)
         {
-          if(when.getHours() < 10)
+          if (when.getHours() < 10)
           {
             HHMM = "0" + when.getHours() + ":";
           }
@@ -1418,7 +1425,7 @@ EPG.settings = function(Debug, growl, file)
           {
             HHMM = when.getHours() + ":";
           }
-          if(when.getMinutes() < 10)
+          if (when.getMinutes() < 10)
           {
             HHMM += "0";
           }
@@ -1476,12 +1483,12 @@ EPG.settings = function(Debug, growl, file)
       try
       {
         var command = "cd " + file.getHomePath() + "Library/Xmltv/grabber && /usr/bin/php epg.downloader.php";
-        if(force)
+        if (force)
         {
           command += " 1";
         }
         Debug.inform("runGrabber command = " + command);
-        if(window.widget && window.widget.system)
+        if (window.widget && window.widget.system)
         {
           file.showLoadingImage();
           window.widget.system(command, ranGrabber);
@@ -1503,7 +1510,7 @@ EPG.settings = function(Debug, growl, file)
     {
       try
       {
-        var now = (new Date()).getTime();
+        var now = new Date().getTime();
         if (now >= lastVersionCheck)
         {
           file.open(upgradeInfoUrl, 
