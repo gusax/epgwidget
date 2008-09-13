@@ -15,6 +15,8 @@ _Nya funktioner_
  * Inforutan: Delar nu upp tid kvar av ett program / tid fram till ett program startar i timmar och minuter (dvs istället för börjar om 130 min så står det nu börjar om 2 tim 10 min).
 
 _Rättade buggar_
+ * Framsidan: Procenttalet som anger hur mycket tid av ett program som förflutit kräver inte längre att man i Tiger vänder widgeten fram och tillbaka för att synas. ([http://code.google.com/p/epgwidget/issues/detail?id=53 53])
+
  * Inforutan: Tid fram till ett program startar räknas nu ut ordentligt. Tidigare räknades fel tid ut, så tiden som stod där var inte tid tills programmet började utan tiden tills programmet slutade.
 
  * Inforutan: Inforutans text är inte längre osynlig i Tiger. ([http://code.google.com/p/epgwidget/issues/detail?id=52 52])
