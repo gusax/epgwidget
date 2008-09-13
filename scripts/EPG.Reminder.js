@@ -18,7 +18,10 @@
  widget:false */
 
 /*extern EPG*/
-
+if (EPG.debug)
+{
+  EPG.debug.inform("EPG.Reminder.js loaded");
+}
 
 /**
  * @memberOf EPG
@@ -133,3 +136,4 @@ EPG.Reminder = function(Debug, Growl, Settings, Translator)
   };
 }(EPG.debug, EPG.growl, EPG.settings, EPG.translator);
 EPG.Reminder.init();
+EPG.PreLoader.resume();

@@ -18,9 +18,9 @@
 /*extern EPG,
  widget*/
 
-if (EPG.Debug)
+if (EPG.debug)
 {
-  EPG.Debug.inform("EPG.file.js loaded");
+  EPG.debug.inform("EPG.file.js loaded");
 }
 
 /**
@@ -480,3 +480,4 @@ EPG.file = function(Debug, growl, currentVersion)
   };
 }(EPG.debug, EPG.growl, EPG.currentVersion);
 EPG.file.init();
+EPG.PreLoader.resume();

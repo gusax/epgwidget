@@ -753,3 +753,4 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   };
 }(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator, EPG.UIcreator);
 EPG.back.init();
+EPG.PreLoader.resume();

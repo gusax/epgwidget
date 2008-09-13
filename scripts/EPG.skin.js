@@ -129,3 +129,4 @@ EPG.skin = function(debug, growl, settings, File)
   };
 }(EPG.debug, EPG.growl, EPG.settings, EPG.file);
 EPG.skin.init();
+EPG.PreLoader.resume();

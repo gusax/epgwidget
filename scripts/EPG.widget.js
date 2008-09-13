@@ -89,8 +89,8 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
         }
         front.hide();
         that.toBack();
-      
       }
+      setTimeout(EPG.PreLoader.destroy, 50);
     }
     catch (error)
     {
@@ -115,6 +115,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
       {
         that.toFront(true);
       }
+      EPG.PreLoader.destroy();
     }
     catch (error)
     {
@@ -174,7 +175,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 			}
 			catch (error)
 			{
-				debug.alert("Error in widget.init: " + error);
+				debug.alert("Error in widget.init: " + error + " settings = " + settings);
 			}
 		},
 		
@@ -232,5 +233,5 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 		}
 	};
 }(EPG.front, EPG.back, EPG.debug, EPG.growl, EPG.file, EPG.settings, EPG.translator, EPG.ProgramInfo);
-
 EPG.widget.init();
+EPG.PreLoader.resume();
