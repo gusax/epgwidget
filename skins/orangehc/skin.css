@@ -91,6 +91,11 @@ div.programs div.program
   font-style: italic;
 }
 
+span.currentProgramDuration
+{
+  
+}
+
 div.programs div.currentprogram
 {
   font-style: normal; 
