@@ -110,7 +110,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
       timeLeft = Math.round(((stop - now)/60000));
       if(timeLeft < 0)
       {
-        hoursLeft = Math.floor(timeLeft / 60);
+        timeLeft = Math.floor((now - stop) / 60000);
+        hoursLeft = Math.floor(timeLeft / 60); 
         minLeft = timeLeft - hoursLeft * 60;
         progressbarFull.style.visibility = "hidden";
         programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + "\u00A0" + (Math.round(length/60000)) + " " + Translator.translate("min") + ", " + Translator.translate("ended") + " ";
