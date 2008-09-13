@@ -391,7 +391,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         programInfoNode = document.createElement("div");
         
         div = document.createElement("div");
-        textNode = document.createTextNode("");
+        textNode = document.createTextNode(".");
         logo = document.createElement("img");
         logo.setAttribute("id","backgroundlogo");
         logo.style.visibility = "hidden";
