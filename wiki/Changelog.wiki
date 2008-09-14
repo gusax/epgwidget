@@ -10,7 +10,9 @@ Senaste ändringarna ligger alltid överst.
 _Nya funktioner_
  * Baksidan: Det går nu att bocka bort %-visningen av avverkad tid om man inte vill se den informationen på framsidan.
 
- * Framsidan: Automatisk kontroll av nya versioner. När en ny version läggs ut visas numer ett meddelande ("Uppdatering tillgänglig!") på framsidan så man slipper kolla upp det själv. Klicka på texten "Uppdatering tillgänglig!" för att komma till relevant blogginlägg där alla ändringar står beskrivna. Alt-klicka om du litar på mig och bara vill ha filen direkt :-) ([http://code.google.com/p/epgwidget/issues/detail?id=39 39])
+ * Baksidan: Lade till möjlighet att byta utseende på framsidan för den som så önskar. För närvarande finns Orange HC och Plast att välja på, resten är på väg. (Fixat [http://code.google.com/p/epgwidget/issues/detail?id=11 11], börjat på [http://code.google.com/p/epgwidget/issues/detail?id=19 19])
+
+ * Framsidan: Automatisk kontroll av nya versioner. När en ny version läggs ut visas numer ett meddelande ("Uppdatering tillgänglig!") på framsidan så man slipper kolla upp det själv. Klicka på texten "Uppdatering tillgänglig!" för att komma till relevant blogginlägg där alla ändringar står beskrivna. Eller alt-klicka om du litar på mig och bara vill ha filen direkt :-) ([http://code.google.com/p/epgwidget/issues/detail?id=39 39])
 
  * Framsidan: Ändrade uppstarten av widgeten för att undvika att widgeten blir osynlig under tiden den startar. Lade även till en liten animation, så man ser att det händer nåt.
 
