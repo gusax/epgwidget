@@ -506,7 +506,13 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       tempCheckBox,
       tempTextNode,
       settingsArray = [],
-      settingsObj;
+      settingsObj,
+      aSkin,
+      skins,
+      index,
+      currentSkin,
+      skinList,
+      skinListItem;
       
       tempContainer = document.createElement("div");
       tempContainer.setAttribute("class", "settingsList");
@@ -522,7 +528,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       settingsObj.prefName = "hideDuration";
       settingsObj.checkedValue = "yes";
       settingsObj.uncheckedValue = "no";
-      settingsObj.title = "Hide duration % on front";
+      settingsObj.title = "Hide duration (%).";
       
       for (i = 0; i < settingsArray.length; i += 1)
       {
@@ -566,6 +572,31 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         false);
       }
       
+      tempContainer.appendChild(tempElement.cloneNode(false));
+      tempContainer.lastChild.setAttribute("class", "text");
+      
+      skins = skin.getAllSkins();
+      currentSkin = skin.getSkinForList(settings.getCurrentChannelListIndex());
+      skinList = UIcreator.createList("Skin:", 
+      "skin", 
+      function () 
+      {
+        skin.saveSkinForList(settings.getCurrentChannelListIndex(), this.value);
+      }, 
+      tempContainer.lastChild);
+      for (index in skins)
+      {
+        if (skins.hasOwnProperty(index))
+        {
+          aSkin = skins[index];
+          aSkin.value = aSkin.id;
+          skinListItem = UIcreator.createListItem(aSkin, skinList);
+          if (aSkin.id === currentSkin)
+          {
+            skinListItem.setAttribute("selected", "selected");
+          }
+        }
+      }
       return UIcreator.createScalableContainer("settingsList", tempContainer, "lista-bakgrund.png","back");
     }
     catch (error)

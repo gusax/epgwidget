@@ -38,6 +38,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
   programInfoNode,
   currentChannelListIndex,
   progressbarFull,
+  progressbarFullContainer,
+  progressbarEmptyContainer,
   logo,
   animationRunning = false,
   animationInterval;
@@ -432,13 +434,14 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         progressbarFull.firstChild.style.height = "100%";
         progressbarFull.firstChild.style.overflow = "hidden";
         progressbarFull.firstChild.appendChild(UIcreator.createScalableContainer("progressbarFull", div.cloneNode(true), "tid.png", currentChannelListIndex));
+        progressbarFullContainer = progressbarFull.firstChild.lastChild;
         progressbarFull.firstChild.firstChild.style.width = "12em";
         progressbarFull.firstChild.firstChild.style.height = "1.4em";
         programInfoNode.appendChild(progressbarFull);
         programInfoNode.progressbarFullNode = programInfoNode.lastChild;
   
         programInfoNode.appendChild(UIcreator.createScalableContainer("progressbarEmpty", div.cloneNode(true), "tidtom.png", currentChannelListIndex));
-        programInfoNode.progressbarEmptyNode = programInfoNode.lastChild;
+        progressbarEmptyContainer = programInfoNode.progressbarEmptyNode = programInfoNode.lastChild;
         UIcreator.setPosition(programInfoNode.progressbarEmptyNode, "4.1em", "4.6em", "12em", "1.4em", 1, "absolute");
         
         programInfoNode.startAndStopNode.appendChild(div.cloneNode(false));
@@ -508,7 +511,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         
         scalableContainer = UIcreator.createScalableContainer("programInfo", programInfoNode, "infobakgrund.png", currentChannelListIndex);
         scalableContainer.setAttribute("id","programInfo");
-        UIcreator.setPosition(scalableContainer, "25.1em", "1em", "22.3em", "26.5em", 10, "absolute");
+        UIcreator.setPosition(scalableContainer, "25.1em", "1em", "22.3em", "26.5em", -1, "absolute");
         scalableContainer.style.fontWeight = "bold";
         scalableContainer.style.visibility = "hidden";
         document.getElementsByTagName("body")[0].appendChild(scalableContainer);
@@ -798,6 +801,26 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
       catch (error)
       {
         Debug.alert("Error in EPG.ProgramInfo.isVisible: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf EPG.ProgramInfo
+     * @function updateSkin
+     * @description Updates skin.
+     */
+    updateSkin: function (skinId) 
+    {
+      try
+      {
+        Debug.inform("Programinfo.updateSkin(" + skinId + ")");
+        scalableContainer.updateSkin(skinId);
+        progressbarEmptyContainer.updateSkin(skinId);
+        progressbarFullContainer.updateSkin(skinId);
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.ProgramInfo.applySkin: " + error);
       }
     }
   };
