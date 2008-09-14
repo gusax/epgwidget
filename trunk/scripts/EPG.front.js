@@ -44,6 +44,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   backDiv,
   frontDiv,
   topBar,
+  topBarContainer,
   bottomBarContainer,
   overviewDiv,
   dayViewDiv,
@@ -103,7 +104,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   {
     try
     {
-      var scalableContainer;
       topBar = document.createElement("div");
       topBar.setAttribute("class", "text");
       topBar.setAttribute("id", "topbarText");
@@ -112,10 +112,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       topBar.appendChild(document.createTextNode("EPG: "));
       topBar.appendChild(document.createTextNode(Translator.translate("overview")));
       topBar.heading = topBar.lastChild;
-      scalableContainer = UIcreator.createScalableContainer("topbar", topBar, "uppe.png", currentChannelListIndex);
-      UIcreator.setPosition(scalableContainer, "0em", "0em", "27em", "4.8em", 99, "absolute");
-      scalableContainer.style.overflow = "hidden";
-      return scalableContainer;
+      topBarContainer = UIcreator.createScalableContainer("topbar", topBar, "uppe.png", currentChannelListIndex);
+      UIcreator.setPosition(topBarContainer, "0em", "0em", "27em", "4.8em", 99, "absolute");
+      topBarContainer.style.overflow = "hidden";
+      return topBarContainer;
     }
     catch (error)
     {
@@ -705,6 +705,40 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     catch (error)
     {
       Debug.alert("Error in front.updateProgramsNode: " + error + " (programNode = " + programNode + ")");
+    }
+  }
+  
+  /**
+   * @memberOf EPG.front
+   * @name applySkin
+   * @function
+   * @description Applies a skin.
+   * @private
+   * @param {string} skinId ID of skin.
+   */
+  function applySkin(skinId)
+  {
+    try
+    {
+      var index, channelNode;
+      
+      topBarContainer.updateSkin(skinId);
+      
+      for (index in channelNodes)
+      {
+        if (channelNodes.hasOwnProperty(index))
+        {
+          channelNodes[index].updateSkin(skinId);
+        }
+      }
+      
+      bottomBarContainer.updateSkin(skinId);
+      
+      ProgramInfo.updateSkin(skinId);
+    }
+    catch (error)
+    {
+      Debug.alert("Error in EPG.front.applySkin: " + error + " (skinId = " + skinId + ")");
     }
   }
   
@@ -1868,8 +1902,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           {
             frontDiv = document.getElementById("front");
             create();
+            ProgramInfo.updateSkin(Skin.getSkinForList(currentChannelListIndex));
           }
-
+          else
+          {
+            applySkin(Skin.getSkinForList(currentChannelListIndex));
+          }
+      
           showChannelNodes();
           that.reloadPrograms(new Date());
           updateClock(new Date());

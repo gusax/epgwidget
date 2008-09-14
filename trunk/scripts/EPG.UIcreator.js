@@ -93,17 +93,23 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         tempContainer.appendChild(tempElement.cloneNode(false));
         
         tempContainer.firstChild.appendChild(contents);
-        
         tempElement = document.createElement("img");
         tempElement.setAttribute("class", "background");
         
         tempElement.setAttribute("src", "skins/" + Skin.getSkinForList(listID) + "/" + backgroundImage);
         
         tempContainer.appendChild(tempElement.cloneNode(false));
-        tempContainer.lastChild.style.opacity = Settings.getTransparency();
+        tempContainer.bgImage = tempContainer.lastChild;
+        tempContainer.bgImage.fileName = backgroundImage;
+        tempContainer.bgImage.style.opacity = Settings.getTransparency();
         transparentElements[transparentElements.length] = tempContainer.lastChild; 
         tempContainer.contents = contents;
         tempContainer.isVisible = true;
+        tempContainer.updateSkin = function (skinId)
+        {
+          this.bgImage.removeAttribute("src");
+          this.bgImage.setAttribute("src", "skins/" + skinId + "/" + this.bgImage.fileName);
+        }
         return tempContainer;
       }
       catch (error)
@@ -353,6 +359,57 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
       catch (error)
       {
         Debug.alert("Error in Epg.UIcreator.applyTransparency: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf EPG.UIcreator
+     * @function createList
+     * @description Creates a list.
+     * @param {string} listTitle Title of list (printed before it)
+     * @param {string} listName Name of list.
+     * @param {function} onChange Callback for when list value changes.
+     */
+    createList: function (listTitle, listName, onChange, parentNode) 
+    {
+      try
+      {
+        var list = document.createElement("select");
+        parentNode.appendChild(document.createTextNode(Translator.translate(listTitle)));
+        list.setAttribute("class", "dropdownmenu");
+        list.setAttribute("name", listName);
+        list.addEventListener("change", onChange, false);
+        parentNode.appendChild(list);
+        return list;
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.UIcreator.createList: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf EPG.UIcreator
+     * @function createListItem
+     * @description Creates a list item.
+     * @param {object} dataItem Data item.
+     */
+    createListItem: function (dataItem, parentNode) 
+    {
+      try
+      {
+        var listItem = document.createElement("option");
+        listItem.setAttribute("value", dataItem.value);
+        listItem.appendChild(document.createTextNode(Translator.translate(dataItem.title)));
+        if (parentNode)
+        {
+          parentNode.appendChild(listItem);
+        }
+        return listItem;
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.UIcreator.createListItem: " + error);
       }
     }
   };

@@ -37,7 +37,8 @@ EPG.skin = function(debug, growl, settings, File)
   currentSkin = {},
   skinElement,
   defaultSkin = "orangehc",
-  backSkin = "back";
+  backSkin = "back",
+  skinList;
   
   // Private methods
   
@@ -46,11 +47,26 @@ EPG.skin = function(debug, growl, settings, File)
   return {
     init: function()
     {
+      var skin;
       if(!that)
       {
         that = this;
       }
       skinElement = document.getElementById("skin");
+      skinList = [];
+      
+      skin = skinList[skinList.length] = {};
+      skin.id = "orangehc";
+      skin.title = "Orange HC";
+      skin.author = "Mathias Andersson";
+      skin.bgOpacity = "0.8";
+      
+      skin = skinList[skinList.length] = {};
+      skin.id = "plastic";
+      skin.title = "Plastic";
+      skin.author = "Mathias Andersson";
+      skin.bgOpacity = "1";
+      
       delete that.init;
     },
     
@@ -85,6 +101,7 @@ EPG.skin = function(debug, growl, settings, File)
       {
         if(typeof(channelListID) !== "undefined" && skin && skin !== backSkin)
         {
+          debug.inform("skin.saveSkinForList " + channelListID + " skin "+ skin);
           settings.savePreference(channelListID + "skin", skin);
         }
       }
@@ -113,6 +130,7 @@ EPG.skin = function(debug, growl, settings, File)
           {
             skin = defaultSkin;
           }
+          debug.inform("skin.getSkinForList returning " + skin);
           return skin;
         }
         else
@@ -124,6 +142,23 @@ EPG.skin = function(debug, growl, settings, File)
       catch (error)
       {
         debug.alert("Error in skin.getSkinForList: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf EPG.skin
+     * @function getAllSkins
+     * @description Returns all available skins.
+     */
+    getAllSkins: function () 
+    {
+      try
+      {
+        return skinList;
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.skin.getAllSkins: " + error);
       }
     }
   };

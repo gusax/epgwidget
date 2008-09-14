@@ -90,7 +90,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
         front.hide();
         that.toBack();
       }
-      setTimeout(EPG.PreLoader.destroy, 50);
+      setTimeout(EPG.PreLoader.destroy, 250);
     }
     catch (error)
     {

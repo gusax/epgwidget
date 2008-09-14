@@ -100,7 +100,7 @@ EPG.debug = function()
 		    }
 		    else
 		    {
-		      that.alert(message);
+		      //that.alert(message);
 		    }
 		  }
 		  catch (error)
@@ -129,7 +129,7 @@ EPG.debug = function()
 		    }
 		    else
 		    {
-		      that.alert(message);
+		      //that.alert(message);
 		    }
 		  }
 		  catch (error)

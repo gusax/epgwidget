@@ -60,9 +60,10 @@ EPG.translator = function(debug)
   localizedStrings["Type four numbers to jump forward up to 24 hours, backspace returns current time. (Examples: 2030 for 20:30, 0615 for 06:15.)"] = "Knappra in fyra siffror för att hoppa upp till 24 tim framåt. Suddtangenten återställer klockan. (Exempel: 2030 för 20:30, 0615 för 06:15).";
   localizedStrings["Click (or press Enter \u21a9) to flip to front."] = "Klicka (eller tryck Enter \u21a9) för att återgå till framsidan.";
   localizedStrings["Click (or press \u2318-,) to flip to backside."] = "Klicka (eller tryck \u2318-,) för att gå till baksidan.";
-  localizedStrings["Hide duration % on front"] = "Göm avverkad % på framsidan";
+  localizedStrings["Hide duration (%)."] = "Göm avverkad tid (%).";
   localizedStrings.hr = localizedStrings.hrs = "tim";
   localizedStrings["Update available!"] = "Uppdatering tillgänglig!";
+  localizedStrings["Skin:"] = "Utseende:";
   // Private methods
   
   

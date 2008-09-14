@@ -52,7 +52,7 @@ EPG.settings = function(Debug, growl, file)
     isTheEmptyProgram : true
   },
   currentChannelListIndex = 0,
-  transparencyValue = 0.8,
+  transparencyValue = 0.95,
   lastVersionCheck = -1,
   upgradeInfoUrl = "http://epgwidget.googlecode.com/svn/trunk/updateInfo.js";
   
