@@ -16,6 +16,8 @@ _Nya funktioner_
 
  * Framsidan: Ändrade uppstarten av widgeten för att undvika att widgeten blir osynlig under tiden den startar. Lade även till en liten animation, så man ser att det händer nåt.
 
+ * Framsidan: Sänkte genomskinligheten för att öka läsbarheten ytterligare.
+
  * Inforutan: Delar nu upp tid kvar av ett program / tid fram till ett program startar i timmar och minuter (dvs istället för börjar om 130 min så står det nu börjar om 2 tim 10 min). ([http://code.google.com/p/epgwidget/issues/detail?id=24 24])
 
 _Rättade buggar_
