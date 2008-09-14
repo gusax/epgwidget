@@ -64,6 +64,7 @@ EPG.translator = function(debug)
   localizedStrings.hr = localizedStrings.hrs = "tim";
   localizedStrings["Update available!"] = "Uppdatering tillgänglig!";
   localizedStrings["Skin:"] = "Utseende:";
+  localizedStrings["Plastic"] = "Plast";
   // Private methods
   
   
