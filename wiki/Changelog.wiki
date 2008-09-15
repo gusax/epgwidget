@@ -6,7 +6,7 @@ Läs så här:
  * Beskrivning av gjord ändring (buggnummer om sådant finnes)
 
 Senaste ändringarna ligger alltid överst.
-== Nästa version ==
+== 20080915 ==
 _Nya funktioner_
  * Baksidan: Det går nu att bocka bort %-visningen av avverkad tid om man inte vill se den informationen på framsidan.
 
