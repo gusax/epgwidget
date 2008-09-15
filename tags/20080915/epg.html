@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+        "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <title>EPG - Electronic Program Guide</title>
+  <link rel="stylesheet" rev="stylesheet" href="skins/sharedstyles.css" charset="utf-8" />
+  <link id="skin" rel="stylesheet" rev="stylesheet" charset="utf-8" />
+  <script type="text/javascript">
+    /**
+	 * @description Container for all objects.
+	 * @static
+	 * @name EPG
+	 */
+	 var EPG = {};
+	 EPG.currentVersion = 20080915;
+	 EPG.grabberVersion = 20080620;
+	 EPG.bootstrap = function ()
+	 {
+	   if (EPG.debug && EPG.PreLoader)
+	   {
+	     EPG.PreLoader.start();
+	   }
+	 }
+  </script>
+</head>
+<body>
+  <div id="front"></div>
+  <div id="back"></div>
+  <script src="scripts/EPG.debug.js" onload="EPG.debug.inform('******** EPG starting ********'); EPG.bootstrap();"></script>
+  <script src="Swedish.lproj/EPG.translator.js"></script>
+  <script src="scripts/EPG.PreLoader.js"></script>
+</body>
+</html>
