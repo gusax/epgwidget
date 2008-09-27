@@ -292,6 +292,10 @@ EPG.settings = function(Debug, growl, file)
         Debug.inform("settings.exportChannelList exporting...");
         widget.system("/bin/echo '" + string + "' > " + file.getHomePath() + "Library/Xmltv/channels/epg.users.channels.txt", channelListExported);
       }
+      else
+      {
+        Debug.inform("settings.exportChannelList: would have run /bin/echo '" + string + "'");
+      }
     }
     catch (error)
     {
@@ -1029,18 +1033,31 @@ EPG.settings = function(Debug, growl, file)
     {
       try
       {
-        var tempList;
+        var tempList, position, i;
         
         if (channelID && listID >= 0)
         {
           
           tempList = channelLists[listID];
-          if (tempList && typeof tempList.hashed[channelID] === "number")
+          if (tempList)
           {
-            Debug.inform("Removing " + channelID + " at position " + tempList.hashed[channelID] + " from list " + listID);
-            tempList.ordered.splice(tempList.hashed[channelID], 1);
-            delete tempList.hashed[channelID];
-            that.saveChannelList(listID);
+            position = tempList.hashed[channelID];
+            if( typeof position === "number")
+            {
+              Debug.inform("settings.removeChannelFromList: Removing " + channelID + " at position " + tempList.hashed[channelID] + " from list " + listID);
+              tempList.ordered.splice(tempList.hashed[channelID], 1);
+              delete tempList.hashed[channelID];
+              for (i = position; i < tempList.ordered.length; i += 1)
+              {
+                Debug.inform("settings.removeChannelFromList: moving " + tempList.ordered[i] + " from position " + tempList.hashed[tempList.ordered[i]] + " to position " + i);
+                tempList.hashed[tempList.ordered[i]] = i;
+              }
+              that.saveChannelList(listID);
+            }
+            else
+            {
+              Debug.alert("channelID " + channelID + " was not found in hash!");
+            }
           }
           else if (tempList)
           {
