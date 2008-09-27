@@ -89,9 +89,21 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         {
           amount = -105;
         }
-        else
+        else if(direction === "down")
         {
           amount = 105;
+        }
+        else if(event.detail)
+        {
+          amount = event.detail * -1;
+        }
+        else if(event.wheelDelta)
+        {
+          amount = event.wheelDelta / 40;
+        }
+        else
+        {
+          amount = 0;
         }
         topY += amount;
         
@@ -110,6 +122,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       if(event.stopPropagation)
       {
         event.stopPropagation();
+        event.preventDefault();
       }
     }
     catch (error)
@@ -617,6 +630,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       backDiv.lastChild.addEventListener("mousedown", function(event){scrollChannelList(event,"down");}, false);
       backDiv.appendChild(createChannelList());
       backDiv.channelList = backDiv.lastChild;
+      backDiv.channelList.addEventListener("DOMMouseScroll", scrollChannelList, false);
+      backDiv.channelList.addEventListener("mousewheel", scrollChannelList, false);
       backDiv.appendChild(createListBottom(document.createTextNode("\u25bc"))); // arrow down
       backDiv.lastChild.addEventListener("mousedown", function(event){scrollChannelList(event,"up");}, false);
       backDiv.appendChild(createListTop());
