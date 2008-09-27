@@ -13,6 +13,8 @@ _Nya funktioner_
 _Rättade buggar_
  * Baksidan: Att ta bort kanaler funkar nu ordentligt, en kanal ska inte längre kunna vara avbockad på baksidan samtidigt som den sedan ändå syns på framsidan. ([http://code.google.com/p/epgwidget/issues/detail?id=15 15])
 
+ * Baksidan: Man behöver inte längre pricka bocken bredvid "Göm avverkad tid (%)", det räcker att trycka på texten precis som i listan med kanaler.
+
 == 20080915 ==
 _Nya funktioner_
  * Baksidan: Det går nu att bocka bort %-visningen av avverkad tid om man inte vill se den informationen på framsidan.
