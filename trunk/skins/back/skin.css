@@ -152,6 +152,16 @@ div.bottombar div.contents div.text
   text-align: left;
 }
 
+
+div.settings
+{
+  position: relative;
+  top:0em;
+  left: 0em;
+  width: 27em;
+  height: 5.2em;
+}
+
 div.settingsList
 {
   position: relative;
@@ -160,17 +170,27 @@ div.settingsList
   width: 27em;
   height: 4.7em;
   text-align: left;
+  margin: 0em 2.8em 0em 2.4em !important; 
 }
 
-div.settingsList div.contents div.text
+div.settingsList div.text
 {
-  margin: 0em 2.8em 0em 2.4em !important; 
+  margin: 0em !important;
+  padding: 0.3em 0em 0em 0.1em;
   color: #aaa;
 }
 
-div.settingsList div.contents div.text a
+div.settingsList div.withHoverEffect:hover
 {
-  margin: 0.5em 0em;
+  color: #fff;
+  text-shadow: #fff 0em 0em 0.2em;
+  padding: 0.2em 0.1em 0.1em 0em;
+}
+
+div.settingsList div.text:hover
+{
+  color: #fff;
+  text-shadow: #fff 0em 0em 0.2em;
 }
 
 div.support

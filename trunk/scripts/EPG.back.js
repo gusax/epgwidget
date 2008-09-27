@@ -530,7 +530,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       tempContainer = document.createElement("div");
       tempContainer.setAttribute("class", "settingsList");
       tempElement = document.createElement("div");
-      tempElement.setAttribute("class", "text");
+      tempElement.setAttribute("class", "text withHoverEffect");
       tempCheckBox = document.createElement("input");
       tempCheckBox.setAttribute("type","checkbox");
       tempElement.appendChild(tempCheckBox);
@@ -576,10 +576,13 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         tempContainer.lastChild.addEventListener("click", 
         function (container) 
         { 
-          return function ()
+          return function (event)
           {
-            tempContainer.lastChild.firstChild.checked = !tempContainer.lastChild.firstChild.checked;
+            debug.alert("click");
+            container.firstChild.checked = !container.firstChild.checked;
             saveSetting (container);
+            event.stopPropagation();
+            event.preventDefault();
           };
         }(tempContainer.lastChild), 
         false);
@@ -610,7 +613,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
           }
         }
       }
-      return UIcreator.createScalableContainer("settingsList", tempContainer, "lista-bakgrund.png","back");
+      return UIcreator.createScalableContainer("settings", tempContainer, "lista-bakgrund.png","back");
     }
     catch (error)
     {
