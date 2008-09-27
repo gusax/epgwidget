@@ -8,7 +8,7 @@ Läs så här:
 Senaste ändringarna ligger alltid överst.
 == Nästa version ==
 _Nya funktioner_
- * Baksidan: Lade till möjligheten att scrolla listan med kanaler med scrollhjul/pekplatta, så man slipper klicka på pilknapparna.
+ * Baksidan: Lade till möjligheten att scrolla listan med kanaler med scrollhjul/pekplatta, så man slipper klicka på pilknapparna. (En del av [http://code.google.com/p/epgwidget/issues/detail?id=2 2])
 
 _Rättade buggar_
  * Baksidan: Att ta bort kanaler funkar nu ordentligt, en kanal ska inte längre kunna vara avbockad på baksidan samtidigt som den sedan ändå syns på framsidan. ([http://code.google.com/p/epgwidget/issues/detail?id=15 15])
