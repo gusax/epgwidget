@@ -694,7 +694,14 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           {
             if(program.title.hasOwnProperty(locale))
             {
-              programNode.titleNode.nodeValue = program.title[locale]; // just pick the first translation and then break
+              if (program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("Programmet sänds i hd-format.") > -1)
+              {
+                programNode.titleNode.nodeValue = program.title[locale] + " [HD]"; // just pick the first translation and then break
+              }
+              else
+              {
+                programNode.titleNode.nodeValue = program.title[locale]; // just pick the first translation and then break
+              }
               //programNode.titleNode.parentNode.setAttribute("title", Translator.translate("Click to open description."));
               break;
             }
