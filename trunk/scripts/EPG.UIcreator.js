@@ -165,7 +165,14 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         	{
         	  if(program.title.hasOwnProperty(locale))
         	  {
-        	  	tempTextNode.nodeValue = program.title[locale]; // just pick the first translation and then break
+        	    if (program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("Programmet sänds i hd-format.") != -1)
+              {
+                tempTextNode.nodeValue = program.title[locale] + " [HD]"; // just pick the first translation and then break
+              }
+              else
+              {
+                tempTextNode.nodeValue = program.title[locale]; // just pick the first translation and then break
+              }
         	  	//titleNode.setAttribute("title", Translator.translate("Click to open description."));
         	  	break;
         	  }
