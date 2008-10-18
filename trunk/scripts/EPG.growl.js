@@ -59,7 +59,7 @@ EPG.growl = function(Debug, Translator)
       if(systemCall.errorString)
       {
         userHasGrowlInstalled = false;
-        Debug.warn("growlCheck: User does not have growl installed :-(");
+        Debug.warn("growlCheck: User does not have growlnotify installed in /usr/local/bin :-(");
       }
       else
       {
