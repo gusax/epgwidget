@@ -10,7 +10,7 @@ Senaste ändringarna ligger alltid överst.
 _Nya funktioner_
  * Baksidan: Lade till möjligheten att scrolla listan med kanaler med scrollhjul/pekplatta, så man slipper klicka på pilknapparna. (En del av [http://code.google.com/p/epgwidget/issues/detail?id=2 2])
 
- * Framsidan: För att lättare kunna skilja agnarna från vetet går det nu att visa en liten [HD]-symbol bakom titeln på de program som på SVT HD faktiskt sänds i hd.
+ * Framsidan: För att lättare kunna skilja agnarna från vetet går det nu att visa en liten [[HD]]-symbol bakom titeln på de program som på SVT HD faktiskt sänds i hd.
 
  * Heldagsvyn: Heldagsvyn (klicka på kanalloggorna) försöker nu scrolla upp tablån för att göra det pågående programmet synligt i alla lägen. Tidigare behövde man, speciellt på långa tablåer, scrolla fram det pågående programmet själv.
 
