@@ -80,9 +80,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         scrollHeight = channelListToScroll.scrollHeight;
       }
       limit = -1*(scrollHeight - channelListToScroll.offsetHeight);
-      debug.inform("channelListToScroll.scrollHeight = " + channelListToScroll.scrollHeight);
-      debug.inform("scrollHeight = " + scrollHeight);
-      debug.inform("limit = " + limit);
       if(limit < 0)
       {
         if(direction === "up")
