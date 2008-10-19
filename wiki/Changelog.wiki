@@ -12,6 +12,8 @@ _Nya funktioner_
 
  * Framsidan: För att lättare kunna skilja agnarna från vetet går det nu att visa en liten [HD]-symbol bakom titeln på de program som på SVT HD faktiskt sänds i hd.
 
+ * Heldagsvyn: Heldagsvyn (klicka på kanalloggorna) försöker nu scrolla upp tablån för att göra det pågående programmet synligt i alla lägen. Tidigare behövde man, speciellt på långa tablåer, scrolla fram det pågående programmet själv.
+
 _Rättade buggar_
  * Baksidan: Att ta bort kanaler funkar nu ordentligt, en kanal ska inte längre kunna vara avbockad på baksidan samtidigt som den sedan ändå syns på framsidan. ([http://code.google.com/p/epgwidget/issues/detail?id=15 15])
 
