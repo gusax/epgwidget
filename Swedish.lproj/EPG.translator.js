@@ -65,6 +65,8 @@ EPG.translator = function(debug)
   localizedStrings["Update available!"] = "Uppdatering tillgänglig!";
   localizedStrings["Skin:"] = "Utseende:";
   localizedStrings["Plastic"] = "Plast";
+  localizedStrings["Click to remove."] = "Klicka för att ta bort";
+  localizedStrings["Show [HD] after HD programs."] = "Visa [HD] efter HD-program.";
   // Private methods
   
   

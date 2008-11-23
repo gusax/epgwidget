@@ -540,6 +540,12 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       settingsObj.uncheckedValue = "no";
       settingsObj.title = "Hide duration (%).";
       
+      settingsObj = settingsArray[settingsArray.length] = {};
+      settingsObj.prefName = "showHDsymbol";
+      settingsObj.checkedValue = "yes";
+      settingsObj.uncheckedValue = "no";
+      settingsObj.title = "Show [HD] after HD programs.";
+      
       for (i = 0; i < settingsArray.length; i += 1)
       {
         tempContainer.appendChild(tempElement.cloneNode(true));

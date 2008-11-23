@@ -123,16 +123,18 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
      * @function createProgramNode
      * @description Creates a program node that displays information about a specific program.
      * @param {object} [program] The program whos information should be displayed in this programNode. If omitted, returns a programNode with the localized text "No program".
+     * @param {object} programInfoObject Program info object.
+     * @param {boolean} showHDsymbol True to allow [HD] symbol after HD programs.
      * @return {object} A DOM-node representing the programNode.
      */
-    createProgramNode: function (program, programInfoObject) 
+    createProgramNode: function (program, programInfoObject, showHDsymbol) 
     {
     	var programNode,
     	startNode,
     	titleNode,
     	tempTextNode,
     	startDate;
-      try
+    	try
       {
       	programNode = document.createElement("div");
       	programNode.setAttribute("class", "program");
@@ -165,14 +167,7 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         	{
         	  if(program.title.hasOwnProperty(locale))
         	  {
-        	    if (program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("Programmet sänds i hd-format.") != -1)
-              {
-                tempTextNode.nodeValue = program.title[locale] + " [HD]"; // just pick the first translation and then break
-              }
-              else
-              {
-                tempTextNode.nodeValue = program.title[locale]; // just pick the first translation and then break
-              }
+        	    tempTextNode.nodeValue = program.title[locale]; // just pick the first translation and then break
         	  	//titleNode.setAttribute("title", Translator.translate("Click to open description."));
         	  	break;
         	  }
@@ -207,6 +202,19 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         programNode.startNode = startNode.firstChild;
         programNode.titleNode = titleNode.firstChild.lastChild;
         programNode.durationNode = titleNode.firstChild.firstChild.firstChild;
+        
+        titleNode.firstChild.appendChild(document.createElement("span"));
+        titleNode.firstChild.lastChild.setAttribute("class", "hdSymbol");
+        
+        if (showHDsymbol && program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("Programmet sänds i hd-format.") != -1)
+        {
+          titleNode.firstChild.lastChild.appendChild(document.createTextNode("[HD]"));
+        }
+        else
+        {
+          titleNode.firstChild.lastChild.appendChild(document.createTextNode(" "));
+        }
+        programNode.hdSymbolNode = titleNode.firstChild.lastChild.firstChild;
         
         titleNode.addEventListener("mouseover", function()
         {
