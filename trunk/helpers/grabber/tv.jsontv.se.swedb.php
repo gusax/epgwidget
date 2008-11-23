@@ -16,7 +16,7 @@ function downloadChannelsXmlJsontv($channelsXmlUrl,$pathToChannelsXml,$pathToCha
   if(file_exists($pathToChannelsJs))
   {
     $channelsJsContents = file_get_contents($pathToChannelsJs);
-    if(strpos($newChannelsJsContents,"jsontv") === false)
+    if(strpos($channelsJsContents,"jsontv") === false)
     {
       // file exists but is corrupt. Delete it.
       unlink($pathToChannelsJs);
