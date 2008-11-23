@@ -3187,7 +3187,15 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           case key.T:
             if(visible)
             {
-              Settings.runGrabber(true);
+              if (event.altKey)
+              {
+                Debug.inform("Epg.front: Forcing grabber update!");
+                Settings.updateGrabber(true);
+              }
+              else
+              {
+                Settings.runGrabber(true);
+              }
             }
           break;
           default:
