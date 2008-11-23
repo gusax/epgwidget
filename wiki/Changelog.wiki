@@ -19,6 +19,8 @@ _Rättade buggar_
 
  * Baksidan: Man behöver inte längre pricka bocken bredvid "Göm avverkad tid (%)", det räcker att trycka på texten precis som i listan med kanaler.
 
+ * Tablånedladdare: Filen med kanaler blev tidigare oavsiktligt raderad vid varje försök att kontakta tablåservern. Detta ledde ovillkorligen till att kanalerna såg ut att vara försvunna i widgeten om man någon gång råkade uppdatera utan att vara ansluten till internet. Detta fel är nu åtgärdat, och kanallistan skall inte längre försvinna om att man tillfälligt saknar internetanslutning. ([http://code.google.com/p/epgwidget/issues/detail?id=56 56])
+
 == 20080915 ==
 _Nya funktioner_
  * Baksidan: Det går nu att bocka bort %-visningen av avverkad tid om man inte vill se den informationen på framsidan.
