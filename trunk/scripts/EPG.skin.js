@@ -130,7 +130,7 @@ EPG.skin = function(debug, growl, settings, File)
           {
             skin = defaultSkin;
           }
-          debug.inform("skin.getSkinForList returning " + skin);
+          //debug.inform("skin.getSkinForList returning " + skin);
           return skin;
         }
         else
