@@ -96,6 +96,11 @@ span.currentProgramDuration
   
 }
 
+span.hdSymbol
+{
+  padding-left: 0.5em;
+}
+
 div.programs div.currentprogram
 {
   font-style: normal; 

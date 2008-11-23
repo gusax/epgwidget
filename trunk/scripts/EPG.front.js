@@ -61,7 +61,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   scrollFrame,
   hideDuration = false,
   updateAvailable,
-  scrollInterval;
+  scrollInterval,
+  showHDsymbol = false;
   
   key.ARROW_UP = 38;
   key.ARROW_DOWN = 40;
@@ -647,77 +648,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   
   /**
    * @memberOf EPG.front
-   * @name updateProgramNode
-   * @function
-   * @description Updates the text in a programNode.
-   * @private
-   * @param {object} programsNode The programsNode.
-   * @param {object} program The program containing the new info.
-   */
-  function updateProgramNode (programNode, program)
-  {
-    try
-    {
-      var i,
-      startDate,
-      start,
-      locale;
-      
-      if(program && program !== programNode.program)
-      {
-        if(programNode.titleNode.parentNode.isAnimating)
-        {
-          if(programNode.titleNode.parentNode.animationType === "interval")
-          {
-            clearInterval(programNode.titleNode.parentNode.isAnimating);
-          }
-          else if(programNode.titleNode.parentNode.animationType === "timeout")
-          {
-            clearTimeout(programNode.titleNode.isAnimating);
-          }
-          programNode.titleNode.parentNode.isAnimating = false;
-          delete programNode.titleNode.parentNode.animationType;
-          programNode.titleNode.parentNode.xPos = 0;
-          programNode.titleNode.parentNode.style.left = "0px";
-        }
-        programNode.program = program;
-        if(program.isTheEmptyProgram)
-        {
-          programNode.startNode.nodeValue = "";
-          programNode.titleNode.nodeValue = "- " + Translator.translate("No program") + " -";
-        }
-        else
-        {
-          startDate = new Date(program.start*1000);
-          programNode.startNode.nodeValue = Settings.getHHMM(startDate);
-          programNode.titleNode.parentNode.removeAttribute("title");
-          for (locale in program.title)
-          {
-            if(program.title.hasOwnProperty(locale))
-            {
-              if (program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("Programmet sänds i hd-format.") > -1)
-              {
-                programNode.titleNode.nodeValue = program.title[locale] + " [HD]"; // just pick the first translation and then break
-              }
-              else
-              {
-                programNode.titleNode.nodeValue = program.title[locale]; // just pick the first translation and then break
-              }
-              //programNode.titleNode.parentNode.setAttribute("title", Translator.translate("Click to open description."));
-              break;
-            }
-          }
-        }
-      }
-    }
-    catch (error)
-    {
-      Debug.alert("Error in front.updateProgramsNode: " + error + " (programNode = " + programNode + ")");
-    }
-  }
-  
-  /**
-   * @memberOf EPG.front
    * @name applySkin
    * @function
    * @description Applies a skin.
@@ -1056,6 +986,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     try
     {
       var limit;
+      var index;
       if(currentView === 0)
       {
         if(typeof amount === "undefined")
@@ -1063,6 +994,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           if(event.detail)
           {
             amount = event.detail * -1;
+          }
+          else if (event.wheelDeltaX)
+          {
+            // Side scrolling
+            Debug.inform("Front scrollFront would have scrolled sideways: " + (event.wheelDeltaX / 40));
+            amount = 0;
           }
           else if(event.wheelDelta)
           {
@@ -1104,7 +1041,77 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     }
   }
   
-  
+  /**
+   * @memberOf EPG.front
+   * @name updateProgramNode
+   * @function
+   * @description Updates the text in a programNode.
+   * @private
+   * @param {object} programsNode The programsNode.
+   * @param {object} program The program containing the new info.
+   */
+  function updateProgramNode (programNode, program)
+  {
+    try
+    {
+      var i,
+      startDate,
+      start,
+      locale;
+      
+      if(program && program !== programNode.program)
+      {
+        if(programNode.titleNode.parentNode.isAnimating)
+        {
+          if(programNode.titleNode.parentNode.animationType === "interval")
+          {
+            clearInterval(programNode.titleNode.parentNode.isAnimating);
+          }
+          else if(programNode.titleNode.parentNode.animationType === "timeout")
+          {
+            clearTimeout(programNode.titleNode.isAnimating);
+          }
+          programNode.titleNode.parentNode.isAnimating = false;
+          delete programNode.titleNode.parentNode.animationType;
+          programNode.titleNode.parentNode.xPos = 0;
+          programNode.titleNode.parentNode.style.left = "0px";
+        }
+        programNode.program = program;
+        if(program.isTheEmptyProgram)
+        {
+          programNode.startNode.nodeValue = "";
+          programNode.titleNode.nodeValue = "- " + Translator.translate("No program") + " -";
+          programNode.hdSymbolNode.nodeValue = "";
+        }
+        else
+        {
+          startDate = new Date(program.start*1000);
+          programNode.startNode.nodeValue = Settings.getHHMM(startDate);
+          programNode.titleNode.parentNode.removeAttribute("title");
+          for (locale in program.title)
+          {
+            if(program.title.hasOwnProperty(locale))
+            {
+              programNode.titleNode.nodeValue = program.title[locale]; // just pick the first translation and then break
+              break;
+            }
+          }
+          if (showHDsymbol && program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("Programmet sänds i hd-format.") > -1)
+          {
+            programNode.hdSymbolNode.nodeValue = "[HD]";
+          }
+          else
+          {
+            programNode.hdSymbolNode.nodeValue = "";
+          }
+        }
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in front.updateProgramsNode: " + error + " (programNode = " + programNode + ")");
+    }
+  }
   
   /**
    * @memberOf EPG.front
@@ -1144,7 +1151,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                 if(stopDate < when)
                 {
                   dayViewDiv.childNodes[i].setAttribute("class", "program");
-                  dayViewDiv.childNodes[i].durationNode.nodeValue = "";
                 }
                 else
                 {
@@ -1153,14 +1159,22 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                     currentNode = dayViewDiv.childNodes[i];
                   }
                   dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
-                  dayViewDiv.childNodes[i].durationNode.nodeValue = "";
                 }
                 dayViewDiv.childNodes[i].style.display = "block";
               }
               else
               {
                 dayViewDiv.childNodes[i].style.display = "none";
-                dayViewDiv.childNodes[i].durationNode.nodeValue = "";
+              }
+              
+              dayViewDiv.childNodes[i].durationNode.nodeValue = "";
+              if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("Programmet sänds i hd-format.") > -1)
+              {
+                dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "[HD]";
+              }
+              else
+              {
+                dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "";
               }
             }
           }
@@ -1176,8 +1190,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                 if(stopDate < when)
                 {
                   dayViewDiv.childNodes[i].setAttribute("class", "program");
-                  dayViewDiv.childNodes[i].durationNode.nodeValue = "";
-                  
                 }
                 else
                 {
@@ -1186,13 +1198,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                     currentNode = dayViewDiv.childNodes[i];
                   }
                   dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
-                  dayViewDiv.childNodes[i].durationNode.nodeValue = "";
                 }
               }
               else
               {
-                dayViewDiv.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo));
-                dayViewDiv.childNodes[i].durationNode.nodeValue = "";
+                dayViewDiv.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo, showHDsymbol));
                 stopDate = new Date(programs[i].stop * 1000);
                 if(stopDate < when)
                 {
@@ -1206,6 +1216,15 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                   }
                   dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
                 }
+              }
+              dayViewDiv.childNodes[i].durationNode.nodeValue = "";
+              if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("Programmet sänds i hd-format.") > -1)
+              {
+                dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "[HD]";
+              }
+              else
+              {
+                dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "";
               }
             }
           }
@@ -1230,6 +1249,14 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                 dayViewDiv.childNodes[i].durationNode.nodeValue = "";
               }
               dayViewDiv.childNodes[i].style.display = "block";
+              if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("Programmet sänds i hd-format.") > -1)
+              {
+                dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "[HD]";
+              }
+              else
+              {
+                dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "";
+              }
             }
           }
         }
@@ -1238,12 +1265,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           length = programs.length;
           for(i = 0; i < length; i += 1)
           {
-            dayViewDiv.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo));
+            dayViewDiv.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo, showHDsymbol));
             stopDate = new Date(programs[i].stop*1000);
             if(stopDate < when)
             {
               dayViewDiv.childNodes[i].setAttribute("class", "program");
-              dayViewDiv.childNodes[i].durationNode.nodeValue = "";
             }
             else
             {
@@ -1252,7 +1278,16 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                 currentNode = dayViewDiv.childNodes[i];
               }
               dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
-              dayViewDiv.childNodes[i].durationNode.nodeValue = "";
+            }
+            
+            dayViewDiv.childNodes[i].durationNode.nodeValue = "";
+            if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("Programmet sänds i hd-format.") > -1)
+            {
+              dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "[HD]";
+            }
+            else
+            {
+              dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "";
             }
           }
         }
@@ -1269,7 +1304,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       if (currentNode)
       {
         limit = -1 * currentNode.offsetTop;
-        Debug.inform("fillDayView: limit = " + limit + " offsetTop " + currentNode.offsetTop + " scrollFrame.offsetHeight " + scrollFrame.offsetHeight + " scrollHeight " + scrollFrame.dayView.scrollHeight);
+        //Debug.inform("fillDayView: limit = " + limit + " offsetTop " + currentNode.offsetTop + " scrollFrame.offsetHeight " + scrollFrame.offsetHeight + " scrollHeight " + scrollFrame.dayView.scrollHeight);
         /*scrollInterval = setInterval(
           function (target, stepsize)
           {
@@ -2201,77 +2236,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   
   /**
    * @memberOf EPG.front
-   * @name updateProgramNode
-   * @function
-   * @description Updates the text in a programNode.
-   * @private
-   * @param {object} programsNode The programsNode.
-   * @param {object} program The program containing the new info.
-   */
-  function updateProgramNode (programNode, program)
-  {
-    try
-    {
-      var i,
-      startDate,
-      start,
-      locale;
-      
-      if(program && program !== programNode.program)
-      {
-        if(programNode.titleNode.parentNode.isAnimating)
-        {
-          if(programNode.titleNode.parentNode.animationType === "interval")
-          {
-            clearInterval(programNode.titleNode.parentNode.isAnimating);
-          }
-          else if(programNode.titleNode.parentNode.animationType === "timeout")
-          {
-            clearTimeout(programNode.titleNode.isAnimating);
-          }
-          programNode.titleNode.parentNode.isAnimating = false;
-          delete programNode.titleNode.parentNode.animationType;
-          programNode.titleNode.parentNode.xPos = 0;
-          programNode.titleNode.parentNode.style.left = "0px";
-        }
-        programNode.program = program;
-        if(program.isTheEmptyProgram)
-        {
-          programNode.startNode.nodeValue = "";
-          programNode.titleNode.nodeValue = "- " + Translator.translate("No program") + " -";
-        }
-        else
-        {
-          startDate = new Date(program.start*1000);
-          programNode.startNode.nodeValue = Settings.getHHMM(startDate);
-          programNode.titleNode.parentNode.removeAttribute("title");
-          for (locale in program.title)
-          {
-            if(program.title.hasOwnProperty(locale))
-            {
-              if (program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("Programmet sänds i hd-format.") > -1)
-              {
-                programNode.titleNode.nodeValue = program.title[locale] + " [HD]"; // just pick the first translation and then break
-              }
-              else
-              {
-                programNode.titleNode.nodeValue = program.title[locale]; // just pick the first translation and then break
-              }
-              //programNode.titleNode.parentNode.setAttribute("title", Translator.translate("Click to open description."));
-              break;
-            }
-          }
-        }
-      }
-    }
-    catch (error)
-    {
-      Debug.alert("Error in front.updateProgramsNode: " + error + " (programNode = " + programNode + ")");
-    }
-  }
-  
-  /**
-   * @memberOf EPG.front
    * @name applySkin
    * @function
    * @description Applies a skin.
@@ -2390,7 +2354,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
               }
               else
               {
-                dayViewDiv.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo));
+                dayViewDiv.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo, showHDsymbol));
                 dayViewDiv.childNodes[i].durationNode.nodeValue = "";
                 stopDate = new Date(programs[i].stop * 1000);
                 if(stopDate < when)
@@ -2437,7 +2401,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           length = programs.length;
           for(i = 0; i < length; i += 1)
           {
-            dayViewDiv.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo));
+            dayViewDiv.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo, showHDsymbol));
             stopDate = new Date(programs[i].stop*1000);
             if(stopDate < when)
             {
@@ -3367,7 +3331,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           for(i = 0; i < programs.length; i += 1)
           {
             program = programs[i];
-            channelNode.appendChild(UIcreator.createProgramNode(program, ProgramInfo));              
+            channelNode.appendChild(UIcreator.createProgramNode(program, ProgramInfo, showHDsymbol));              
             if(i === 0)
             {
               if(program.isTheEmptyProgram || hideDuration)
@@ -4035,6 +3999,14 @@ EPG.PreLoader.resume();
             {
               channelNode.childNodes[i].durationNode.nodeValue = "";
             }
+            if (showHDsymbol && program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("Programmet sänds i hd-format.") > -1)
+            {
+              channelNode.childNodes[i].hdSymbolNode.nodeValue = "[HD]";
+            }
+            else
+            {
+              channelNode.childNodes[i].hdSymbolNode.nodeValue = "";
+            }
           }
         }
         else
@@ -4043,7 +4015,7 @@ EPG.PreLoader.resume();
           for(i = 0; i < programs.length; i += 1)
           {
             program = programs[i];
-            channelNode.appendChild(UIcreator.createProgramNode(program, ProgramInfo));              
+            channelNode.appendChild(UIcreator.createProgramNode(program, ProgramInfo, showHDsymbol));              
             if(i === 0)
             {
               if(program.isTheEmptyProgram || hideDuration)
@@ -4160,6 +4132,8 @@ EPG.PreLoader.resume();
       try
       {
         stopUpdateInterval();
+        showHDsymbol = (Settings.getPreference("showHDsymbol") === "yes");
+        
         if (!visible)
         {
           if(!backDiv)

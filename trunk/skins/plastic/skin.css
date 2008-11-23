@@ -93,7 +93,12 @@ div.programs div.program
 
 span.currentProgramDuration
 {
-  
+
+}
+
+span.hdSymbol
+{
+  padding-left: 0.3em;
 }
 
 div.programs div.currentprogram
