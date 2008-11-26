@@ -766,7 +766,11 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
             {
               amount = event.detail * -1;
             }
-            else
+            else if (event.wheelDeltaX) // Scrolling sideways
+            {
+              amount = 0;
+            }
+            else 
             {
               amount = event.wheelDelta / 40;
             }
