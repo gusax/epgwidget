@@ -67,10 +67,8 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
         window.widget.onshow = that.onshow;
         window.widget.onhide = that.onhide;
       }
-           
       //growl.notifyNow(translator.translate("Found") + " " + channels.length + " " + translator.translate("channels") + "!");
       currentChannelList = settings.getChannelList(currentChannelListIndex);
-      
       if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
       {
         //growl.notifyNow("List with index " + currentChannelListIndex + " had " + currentChannelList.ordered.length + " channels in it.");
@@ -90,7 +88,13 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
         front.hide();
         that.toBack();
       }
-      setTimeout(EPG.PreLoader.destroy, 250);
+      setTimeout(function()
+      {
+        if (EPG.PreLoader && EPG.PreLoader.destroy)
+        {
+          EPG.PreLoader.destroy();
+        } 
+      }, 250);
     }
     catch (error)
     {
@@ -115,7 +119,10 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
       {
         that.toFront(true);
       }
-      EPG.PreLoader.destroy();
+      if (EPG.PreLoader && EPG.PreLoader.destroy)
+      {
+        EPG.PreLoader.destroy();
+      }
     }
     catch (error)
     {
