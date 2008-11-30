@@ -209,6 +209,13 @@ EPG.file = function(Debug, growl, currentVersion)
                  onFailure();
                }
              break;
+             case 23: // Could not create file, perhaps grabber has been removed?
+               Debug.alert("file.fileDownloaded: error with status " + systemCall.status + ". errorString = \n" + systemCall.errorString + "\nwhen trying to download " + url + ". Perhaps grabber folder has been removed?");
+               if (onFailure)
+               {
+                 onFailure("couldNotCreateFile");
+               }
+             break;
              default:
                Debug.alert("file.fileDownloaded: error with status " + systemCall.status + ". errorString = \n" + systemCall.errorString + "\nwhen trying to download " + url);
                if(onFailure)
