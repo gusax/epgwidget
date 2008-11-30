@@ -36,7 +36,8 @@ EPG.file = function(Debug, growl, currentVersion)
   HOME,
   gettingPath = false,
   userAgent,
-  loadingImage;
+  loadingImage,
+  XHRTIMEOUT = 5000;
   
   // Private methods
   
@@ -56,6 +57,10 @@ EPG.file = function(Debug, growl, currentVersion)
       
       if (xhr && xhr.readyState === 4)
       {
+        if (xhr.stopTimeout)
+        {
+          clearTimeout(xhr.stopTimeout);
+        }
         if(xhr.responseText)
         {
           try 
@@ -368,6 +373,16 @@ EPG.file = function(Debug, growl, currentVersion)
             xhr.onreadystatechange = function (){
               fileOpened(xhr);
             };
+            xhr.stopTimeout = setTimeout(
+            function()
+            {
+              this.abort();
+              if (this.onFailure)
+              {
+                Debug.alert("file.open: XHR timeout for file " + this.path);
+                this.onFailure("Timeout");
+              }
+            }, XHRTIMEOUT);
             xhr.open("GET", path, true);
             xhr.send("");
             //Debug.inform("file.open: Opening file at path: " + path);

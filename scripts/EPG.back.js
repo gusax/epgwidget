@@ -74,47 +74,53 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
     try
     {
       var limit, amount;
-      
-      if(topY === 0)
+      if (channelListToScroll)
       {
-        scrollHeight = channelListToScroll.scrollHeight;
-      }
-      limit = -1*(scrollHeight - channelListToScroll.offsetHeight);
-      if(limit < 0)
-      {
-        if(direction === "up")
+        if(topY === 0)
         {
-          amount = -105;
+          scrollHeight = channelListToScroll.scrollHeight;
         }
-        else if(direction === "down")
+        limit = -1*(scrollHeight - channelListToScroll.offsetHeight);
+        if(limit < 0)
         {
-          amount = 105;
+          if(direction === "up")
+          {
+            amount = -105;
+          }
+          else if(direction === "down")
+          {
+            amount = 105;
+          }
+          else if (event.wheelDeltaX)
+          {
+            amount = 0;
+          }
+          else if(event.detail)
+          {
+            amount = event.detail * -1;
+          }
+          else if(event.wheelDelta)
+          {
+            amount = event.wheelDelta / 40;
+          }
+          else
+          {
+            amount = 0;
+          }
+          topY += amount;
+          
+          if(topY > 0)
+          {
+            topY = 0;
+          }
+          else if(topY < limit)
+          {
+            topY = limit;
+          }
+          
+          channelListToScroll.listFrame.style.top = topY + "px";
+          
         }
-        else if(event.detail)
-        {
-          amount = event.detail * -1;
-        }
-        else if(event.wheelDelta)
-        {
-          amount = event.wheelDelta / 40;
-        }
-        else
-        {
-          amount = 0;
-        }
-        topY += amount;
-        
-        if(topY > 0)
-        {
-          topY = 0;
-        }
-        else if(topY < limit)
-        {
-          topY = limit;
-        }
-        
-        channelListToScroll.listFrame.style.top = topY + "px";
-        
       }
       if(event.stopPropagation)
       {
@@ -245,11 +251,15 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
     }
   }
   
-  function createChannelListFailure () 
+  function createChannelListFailure (textNode, message) 
   {
     try
     {
       debug.alert("Feck! Could not create channellist!");
+      if (textNode)
+      {
+        textNode.nodeValue = translator.translate("Channel list download failed :-( Please check that your internet connection works. If you're using Little Snitch, make sure both EPG and the grabber is permitted to access the Internet.");
+      }
     }
     catch (error)
     {
@@ -389,10 +399,20 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       tempContainer.setAttribute("class", "text");
       tempContainer.appendChild(document.createElement("div"));
       tempContainer.lastChild.style.textAlign = "center";
+      tempContainer.lastChild.style.marginRight = "1.5em";
+      tempContainer.lastChild.style.marginLeft = "1.5em";
       tempTextNode = document.createTextNode(translator.translate("Downloading channels..."));
       tempContainer.lastChild.appendChild(tempTextNode.cloneNode(false));
       
-      settings.getAllChannels(function(channels){createChannelListSuccess(channels, tempContainer);}, createChannelListFailure);
+      settings.getAllChannels(
+      function(channels)
+      {
+        createChannelListSuccess(channels, tempContainer);
+      }, 
+      function(message)
+      {
+        createChannelListFailure(tempContainer.lastChild.lastChild, message);
+      });
       channelListContainer = tempContainer;
       return UIcreator.createScalableContainer("channels", tempContainer, "lista-bakgrund.png", "back");
     }
