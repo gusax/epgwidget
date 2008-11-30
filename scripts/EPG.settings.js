@@ -91,7 +91,7 @@ EPG.settings = function(Debug, growl, file)
     }
   }
   
-  function updateAllChannelsCached() 
+  function updateAllChannelsCached(message) 
   {
     try
     {
