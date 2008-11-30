@@ -1132,7 +1132,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         when = new Date();
       }
-      
       if(programs && programs.length > 0)
       {
         if(dayViewDiv.childNodes && dayViewDiv.childNodes.length > 0)
@@ -1160,22 +1159,23 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                   }
                   dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
                 }
+                if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("Programmet sänds i hd-format.") > -1)
+                {
+                  dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "[HD]";
+                }
+                else
+                {
+                  dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "";
+                }
                 dayViewDiv.childNodes[i].style.display = "block";
               }
               else
               {
                 dayViewDiv.childNodes[i].style.display = "none";
-              }
-              
-              dayViewDiv.childNodes[i].durationNode.nodeValue = "";
-              if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("Programmet sänds i hd-format.") > -1)
-              {
-                dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "[HD]";
-              }
-              else
-              {
                 dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "";
               }
+              
+              
             }
           }
           else if(programsLength > length)
@@ -1328,7 +1328,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     }
     catch (error)
     {
-      Debug.alert("Error in EPG.front.fillDayView: " + error + " (programs = " + programs + ")");
+      Debug.alert("Error in EPG.front.fillDayView: " + error + " (programs = " + programs + ", i = " + i + ")");
     }
   }
   
