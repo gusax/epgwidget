@@ -113,11 +113,19 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
       if(!downloadingChannels)
       {
         downloadingChannels = true;
-        settings.downloadChannelList(channelsLoaded, channelsLoadedFailed);
+        settings.downloadChannelList(
+        function()
+        {
+          debug.inform("widget.channelsLoadedFailed: Downloaded missing channel list, trying to open file after download...");
+          settings.getAllChannels(channelsLoaded, channelsLoadedFailed);
+        }, 
+        channelsLoadedFailed);
       }
       else
       {
-        that.toFront(true);
+        downloadingChannels = false;
+        front.hide();
+        that.toBack();
       }
       if (EPG.PreLoader && EPG.PreLoader.destroy)
       {
