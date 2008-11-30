@@ -23,7 +23,7 @@ _Rättade buggar_
 
  * Baksidan: Om kanallistan inte kan laddas ner meddelas man numer om detta, istället för att det ska stå "Laddar ner kanaler..." i tid och evighet. ([http://code.google.com/p/epgwidget/issues/detail?id=37 37])
 
- * Framsidan: Om kanallistan är försvunnen när man startar widgeten första gången, vänder den automatiskt på sig och visar baksidan. På baksidan står det sedan att kanallistan inte kunde laddas ner. (Samma bugg som ovan, [http://code.google.com/p/epgwidget/issues/detail?id=37 37])
+ * Framsidan: Om kanallistan är försvunnen när man startar widgeten första gången, vänder den automatiskt på sig och visar baksidan. På baksidan står det sedan att kanallistan inte kunde laddas ner. Detta är ett bättre beteende än tidigare, då framsidan istället listade samtliga kanaler som "borttagna eller omdöpta". (Samma bugg som ovan, [http://code.google.com/p/epgwidget/issues/detail?id=37 37])
 
  * Tablånedladdare: Filen med kanaler blev tidigare oavsiktligt raderad vid varje försök att kontakta tablåservern. Detta ledde ovillkorligen till att kanalerna såg ut att vara försvunna i widgeten om man någon gång råkade uppdatera utan att vara ansluten till internet. Detta fel är nu åtgärdat, och kanallistan skall inte längre försvinna om att man tillfälligt saknar internetanslutning. ([http://code.google.com/p/epgwidget/issues/detail?id=56 56])
 
