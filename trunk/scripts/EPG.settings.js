@@ -392,6 +392,10 @@ EPG.settings = function(Debug, growl, file)
         if (systemResponse.errorString)
         {
           Debug.alert("settings.ranGrabber: Error when trying to run grabber! Message was " + systemResponse.errorString);
+          if (onFailure)
+          {
+            onFailure(systemResponse.errorString);
+          }
         }
         else
         {
