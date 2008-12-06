@@ -10,7 +10,7 @@ Senaste ändringarna ligger alltid överst.
 _Nya funktioner_
  * Baksidan: Lade till möjligheten att scrolla listan med kanaler med scrollhjul/pekplatta, så man slipper klicka på pilknapparna. (En del av [http://code.google.com/p/epgwidget/issues/detail?id=2 2])
 
- * Framsidan: För att lättare kunna skilja agnarna från vetet går det nu att visa en liten HD-symbol bakom titeln på de program som på SVT HD faktiskt sänds i HD. Slå av och på denna funktion på baksidan. OBS! Enbart SVT HD stöds än så länge, men tanken är att även andra kanaler som blandar HD-program med uppskalade diton (TV4 HD, TV1000 HD) skall stödjas efter en kommande uppdatering på tablåservern.
+ * Framsidan: För att lättare kunna skilja agnarna från vetet går det nu att visa en liten HD-symbol bakom titeln på de program som på SVT HD faktiskt sänds i HD. Slå av och på denna funktion på baksidan. *OBS! Enbart SVT HD* stöds än så länge, men tanken är att även andra kanaler som blandar HD-program med uppskalade diton (TV4 HD, TV1000 HD) skall stödjas efter en kommande uppdatering på tablåservern.
 
  * Framsidan: Nytt kortkommando: Alt + T tvingar fram en ominstallation av tablånedladdaren. Ska normalt sett aldrig behöva användas.
 
