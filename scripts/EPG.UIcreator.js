@@ -177,7 +177,7 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         }
         else if(program && program.isTheEmptyProgram)
         {
-          startNode.appendChild(document.createTextNode(" "));
+          startNode.appendChild(document.createTextNode("."));
           tempTextNode = document.createTextNode(" ");
           titleNode.firstChild.appendChild(document.createElement("span"));
           titleNode.firstChild.firstChild.setAttribute("class", "currentProgramDuration");
