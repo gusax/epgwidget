@@ -2,6 +2,10 @@
 #labels Featured
 
 = Kända fel =
+ * *Alla kanaler påstås ha blivit omdöpta* : Pga ett fel i tablånedladdaren kunde kanallistan råka tas bort om man inte var uppkopplad mot internet just då tablånedladdaren kördes. Detta fel är rättat i alla versioner större än 20080915. Får du detta fel - uppgradera till en nyare version!
+
+ * *Kanallistan dyker inte upp / Alla kanaler påstås blivit omdöpta* : Tablåservern fick vid några tillfällen för sig att skicka ut konstig information om tablåfilerna, som gjorde att tablåfilerna inte packades upp. Detta visade sig oftast genom att framsidan påstod att alla kanaler blivit omdöpta. Enda sättet att få widgeten att funka igen är att köra "killall Dock" utan citationstecken, då Dashboard tydligen cachar den felaktiga filen och vägrar uppdatera till den nya.
+
  * *Problem i Tiger (Mac OS 10.4)* : Widgeten har lite egenheter för sig i Tiger. De största felen åtgärdade i version 20080915, resten åtgärdas i kommande versioner.
 
  * *Nedladdning av tablåer* : Man verkar vara tvungen att logga ut & logga in igen inom två dagar från att EPG-widgeten har installerats första gången, annars går inte bakgrundsnedladdningen igång och man tappar tablåerna.
