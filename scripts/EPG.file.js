@@ -456,14 +456,42 @@ EPG.file = function(Debug, growl, currentVersion)
     {
       try
       {
-        var systemCall;
+        var systemCall,
+        pathOnly,
+        command;
         if(window.widget && window.widget.system)
         {
           if(url && savePath)
           {
+            if (savePath.match("/"))
+            {
+              if (savePath.match("."))
+              {
+                if (savePath.lastIndexOf("/") > 0)
+                {
+                  pathOnly = savePath.substr(0, savePath.lastIndexOf("/")-1);
+                }
+                else
+                {
+                  pathOnly = savePath;
+                }
+              }
+              else
+              {
+                pathOnly = savePath;
+              }
+            }
             that.showLoadingImage();
-            Debug.inform('file.downloadFile running command /usr/bin/curl -S -R --user-agent '+userAgent+' --compressed ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath);
-            systemCall = window.widget.system('/usr/bin/curl -S -R --user-agent '+userAgent+' --compressed ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath , function(response){fileDownloaded(response, onSuccess, onFailure, url, savePath, dontEval);});
+            if (pathOnly)
+            {
+              command = '/bin/mkdir -p ' + HOME + '' + pathOnly + ' && /usr/bin/curl -S -R --user-agent '+userAgent+' --compressed ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath;
+            }
+            else
+            {
+              command = '/usr/bin/curl -S -R --user-agent '+userAgent+' --compressed ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath;
+            }
+            Debug.inform("file.downloadFile: running command " + command);
+            systemCall = window.widget.system(command , function(response){fileDownloaded(response, onSuccess, onFailure, url, savePath, dontEval);});
           }
           else if(onFailure)
           {
