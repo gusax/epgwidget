@@ -589,7 +589,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         { 
           return function (event)
           {
-            saveSetting (container);
+            saveSetting(container);
             event.stopPropagation();
             return false;
           };
@@ -601,9 +601,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         { 
           return function (event)
           {
-            debug.alert("click");
             container.firstChild.checked = !container.firstChild.checked;
-            saveSetting (container);
+            saveSetting(container);
             event.stopPropagation();
             event.preventDefault();
           };
