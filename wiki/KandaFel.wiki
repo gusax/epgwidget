@@ -8,6 +8,8 @@
 
  * *Problem i Tiger (Mac OS 10.4)* : Widgeten har lite egenheter för sig i Tiger. De största felen åtgärdade i version 20080915, resten åtgärdas i kommande versioner.
 
+ * *Glapp i kanallistan om man gör widgeten större* : Pga en bugg (ett räknefel) i Safari blir det ett glapp mellan sista kanalen i kanallistan och den nedersta ramen. 
+
  * *Nedladdning av tablåer* : Man verkar vara tvungen att logga ut & logga in igen inom två dagar från att EPG-widgeten har installerats första gången, annars går inte bakgrundsnedladdningen igång och man tappar tablåerna.
 
  * *Intensivt hårddiskrassel* : Bakgrundsnedladdningen rensar även upp gamla tablåer från Xmltv-widgeten, så om Xmltvwidgeten varit installerad en lång tid kan det rassla rätt bra i hårddisken första gången den automatiska nedladdningen tömmer tablåmappen.
