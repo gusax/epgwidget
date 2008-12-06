@@ -17,11 +17,13 @@ _Nya funktioner_
  * Heldagsvyn: Heldagsvyn (klicka på kanalloggorna) försöker nu scrolla upp tablån för att göra det pågående programmet synligt i alla lägen. Tidigare behövde man, speciellt på långa tablåer, scrolla fram det pågående programmet själv.
 
 _Rättade buggar_
+ * Baksidan: Första gången man startar widgeten har flera personer råkat ut för att baksidan fastnar på "Laddar ner kanaler". Efter mycket, mycket, mycket felsökande hittades orsaken: mapparna som widgeten laddar ner filer till hinner vissa gånger inte skapas i tid. Man försöker alltså ladda ner till en mapp som inte existerar. Detta är nu korrigerat, så att widgeten alltid försöker skapa målmappen innan nedladdning sker. ([http://code.google.com/p/epgwidget/issues/detail?id=63 63])
+
+ * Baksidan: Om kanallistan inte kan laddas ner meddelas man numer om detta, istället för att det ska stå "Laddar ner kanaler..." i tid och evighet. ([http://code.google.com/p/epgwidget/issues/detail?id=37 37])
+
  * Baksidan: Att ta bort kanaler funkar nu ordentligt, en kanal ska inte längre kunna vara avbockad på baksidan samtidigt som den sedan ändå syns på framsidan. ([http://code.google.com/p/epgwidget/issues/detail?id=15 15])
 
  * Baksidan: Man behöver inte längre pricka bocken bredvid "Göm avverkad tid (%)", det räcker att trycka på texten precis som i listan med kanaler.
-
- * Baksidan: Om kanallistan inte kan laddas ner meddelas man numer om detta, istället för att det ska stå "Laddar ner kanaler..." i tid och evighet. ([http://code.google.com/p/epgwidget/issues/detail?id=37 37])
 
  * Framsidan: Om kanallistan är försvunnen när man startar widgeten första gången, vänder den automatiskt på sig och visar baksidan. På baksidan står det sedan att kanallistan inte kunde laddas ner. Detta är ett bättre beteende än tidigare, då framsidan istället listade samtliga kanaler som "borttagna eller omdöpta". (Samma bugg som ovan, [http://code.google.com/p/epgwidget/issues/detail?id=37 37])
 
