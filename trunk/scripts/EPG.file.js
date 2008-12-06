@@ -469,7 +469,7 @@ EPG.file = function(Debug, growl, currentVersion)
               {
                 if (savePath.lastIndexOf("/") > 0)
                 {
-                  pathOnly = savePath.substr(0, savePath.lastIndexOf("/")-1);
+                  pathOnly = savePath.substr(0, savePath.lastIndexOf("/"));
                 }
                 else
                 {
