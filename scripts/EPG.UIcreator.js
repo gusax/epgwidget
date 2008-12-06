@@ -177,7 +177,7 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         }
         else if(program && program.isTheEmptyProgram)
         {
-          startNode.appendChild(document.createTextNode("."));
+          startNode.appendChild(document.createTextNode(" "));
           tempTextNode = document.createTextNode(" ");
           titleNode.firstChild.appendChild(document.createElement("span"));
           titleNode.firstChild.firstChild.setAttribute("class", "currentProgramDuration");
@@ -205,16 +205,16 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         
         titleNode.firstChild.appendChild(document.createElement("span"));
         titleNode.firstChild.lastChild.setAttribute("class", "hdSymbol");
-        
-        if (showHDsymbol && program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("Programmet sänds i hd-format.") != -1)
+        titleNode.firstChild.lastChild.appendChild(document.createTextNode("[HD]"));
+        programNode.hdSymbolNode = titleNode.firstChild.lastChild;
+        if (showHDsymbol && program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("Programmet s\u00e4nds i hd-format.") != -1)
         {
-          titleNode.firstChild.lastChild.appendChild(document.createTextNode("[HD]"));
+          programNode.hdSymbolNode.style.display = "inline";
         }
         else
         {
-          titleNode.firstChild.lastChild.appendChild(document.createTextNode(" "));
+          programNode.hdSymbolNode.style.display = "none";
         }
-        programNode.hdSymbolNode = titleNode.firstChild.lastChild.firstChild;
         
         titleNode.addEventListener("mouseover", function()
         {
