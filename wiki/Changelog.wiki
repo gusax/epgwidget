@@ -6,7 +6,7 @@ Läs så här:
  * Beskrivning av gjord ändring (buggnummer om sådant finnes)
 
 Senaste ändringarna ligger alltid överst.
-== Nästa version ==
+== 20081207 ==
 _Nya funktioner_
  * Baksidan: Lade till möjligheten att scrolla listan med kanaler med scrollhjul/pekplatta, så man slipper klicka på pilknapparna. (En del av [http://code.google.com/p/epgwidget/issues/detail?id=2 2])
 
