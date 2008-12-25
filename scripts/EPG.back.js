@@ -207,7 +207,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       tempTextNode = document.createTextNode("");
       
       tempElement.appendChild(tempTextNode.cloneNode(false));
-      tempElement.firstChild.nodeValue = translator.translate("EPG by") + " Gustav Axelsson. Enjoy :-)";
+      tempElement.firstChild.nodeValue = translator.translate("EPG by") + " Gustav Axelsson. " + translator.translate("Enjoy") + " :-)";
       
       return UIcreator.createScalableContainer("middle", tempElement.cloneNode(true), "bakgrund.png", "back");
     }
