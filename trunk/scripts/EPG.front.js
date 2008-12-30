@@ -1365,7 +1365,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       }
       else if(currentView !== 0) // current view is not now next later
       {
-        dayViewDiv.style.display = "block";
+        dayViewDiv.style.display = "none";
         dimAllChannelNodesExcept(channelNode, true);
         currentView = 0; // now next later
         updateTopBar();
