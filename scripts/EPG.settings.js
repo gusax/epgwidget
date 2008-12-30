@@ -649,20 +649,20 @@ EPG.settings = function(Debug, growl, file)
           fileDate = getFileDateYYYYMMDD(yesterday);
           savePath = "Library/Xmltv/schedules/" + channelID + "_" + fileDate + ".js";
           url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js.gz";
-          file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){Debug.alert("Schedule download failure :-(");},true);
+          file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){/*Debug.alert("Schedule download failure :-(");*/},true);
           
           fileDate = getFileDateYYYYMMDD(now);
           savePath = "Library/Xmltv/schedules/" + channelID + "_" + fileDate + ".js";
           url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js.gz";
-          file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){Debug.alert("Schedule download failure :-(");},true);
+          file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){/*Debug.alert("Schedule download failure :-(");*/},true);
           
           fileDate = getFileDateYYYYMMDD(tomorrow);
           savePath = "Library/Xmltv/schedules/" + channelID + "_" + fileDate + ".js";
           url = channel.baseUrl + "" + channelID + "_" + fileDate + ".js.gz";
-          file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){Debug.alert("Schedule download failure :-(");},true);
+          file.downloadFile(url, savePath, function(){Debug.inform("Schedule download success!");}, function(){/*Debug.alert("Schedule download failure :-(");*/},true);
           if (channel.icon)
           {
-            file.downloadFile(channel.icon, "Library/Xmltv/logos/" + channelID + ".png", function(){Debug.inform("Icon download success!");}, function(){Debug.alert("Icon download failure :-(");},true);
+            file.downloadFile(channel.icon, "Library/Xmltv/logos/" + channelID + ".png", function(){Debug.inform("Icon download success!");}, function(){/*Debug.alert("Icon download failure :-(");*/},true);
           }
         }
       }
