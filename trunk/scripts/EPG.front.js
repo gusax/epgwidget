@@ -570,7 +570,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       }
       else
       {
-        channelNode.logo.style.opacity = "0.15";
+        channelNode.logo.style.opacity = "0.3";
         channelNode.programsNode.style.visibility = "hidden";
       }
     }
