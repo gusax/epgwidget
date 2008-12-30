@@ -10,6 +10,8 @@ Senaste ändringarna ligger alltid överst.
 _Rättade buggar_
  * Dagsvyn ligger inte längre kvar ovanpå nu-nästa-senare-vyn om man vänder widgeten fram och tillbaka när heldagsvyn är synlig. ([http://code.google.com/p/epgwidget/issues/detail?id=62 62])
 
+ * Loggorna bör inte längre flimra i Tiger när man pekar med muspekare på dem, för att öppna heldagsvyn tex. Det bör heller inte längre vara så svårt att ta sig ur heldagsvyn. ([http://code.google.com/p/epgwidget/issues/detail?id=54 54])
+
 ----
 == 20081207 ==
 _Nya funktioner_
