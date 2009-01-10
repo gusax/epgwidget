@@ -6,13 +6,24 @@ Läs så här:
  * Beskrivning av gjord ändring (buggnummer om sådant finnes)
 
 Senaste ändringarna ligger alltid överst.
+
+----
 == Nästa version ==
+_Nya funktioner_
+ * Baksidan: Kanalerna är nu grupperade efter tema, istället för att bara ligga huller om buller i en lång lista. Dokumentär, sport, musik osv. För att få lite mer översikt över de nya grupperingarna har baksidan gjorts bredare. ([http://code.google.com/p/epgwidget/issues/detail?id=2 2])
+
+ * Baksidan: Kanaler som dyker upp på servern efter senaste uppdateringen av widgeten hamnar automatiskt i gruppen "Nya", överst i listan. Förhoppningsvis blir det då lättare att avgöra om någon ny kanal har dykt upp. ([http://code.google.com/p/epgwidget/issues/detail?id=2 2])
+
+ * Baksidan: Borttagna eller omdöpta kanaler hamnar nu i gruppen "Borttagna eller omdöpta" längst ner i listan. Det går pga detta också att ta bort försvunna eller omdöpta kanaler från baksidan, en funktion som saknades tidigare. ([http://code.google.com/p/epgwidget/issues/detail?id=61 61])
+
 _Rättade buggar_
  * Dagsvyn ligger inte längre kvar ovanpå nu-nästa-senare-vyn om man vänder widgeten fram och tillbaka när heldagsvyn är synlig. ([http://code.google.com/p/epgwidget/issues/detail?id=62 62])
 
  * Loggorna bör inte längre flimra i Tiger när man pekar med muspekare på dem, för att öppna heldagsvyn tex. Det bör heller inte längre vara så svårt att ta sig ur heldagsvyn. ([http://code.google.com/p/epgwidget/issues/detail?id=54 54])
 
 ----
+
+
 == 20081207 ==
 _Nya funktioner_
  * Baksidan: Lade till möjligheten att scrolla listan med kanaler med scrollhjul/pekplatta, så man slipper klicka på pilknapparna. (En del av [http://code.google.com/p/epgwidget/issues/detail?id=2 2])
@@ -34,9 +45,12 @@ _Rättade buggar_
 
  * Framsidan: Om kanallistan är försvunnen när man startar widgeten första gången, vänder den automatiskt på sig och visar baksidan. På baksidan står det sedan att kanallistan inte kunde laddas ner. Detta är ett bättre beteende än tidigare, då framsidan istället listade samtliga kanaler som "borttagna eller omdöpta". (Samma bugg som ovan, [http://code.google.com/p/epgwidget/issues/detail?id=37 37])
 
+
  * Tablånedladdare: Filen med kanaler blev tidigare oavsiktligt raderad vid varje försök att kontakta tablåservern. Detta ledde ovillkorligen till att kanalerna såg ut att vara försvunna i widgeten om man någon gång råkade uppdatera utan att vara ansluten till internet. Detta fel är nu åtgärdat, och kanallistan skall inte längre försvinna om att man tillfälligt saknar internetanslutning. ([http://code.google.com/p/epgwidget/issues/detail?id=56 56])
 
 ----
+
+
 == 20080915 ==
 _Nya funktioner_
  * Baksidan: Det går nu att bocka bort %-visningen av avverkad tid om man inte vill se den informationen på framsidan.
@@ -59,6 +73,8 @@ _Rättade buggar_
  * Inforutan: Inforutans text är inte längre osynlig i Tiger. ([http://code.google.com/p/epgwidget/issues/detail?id=52 52])
 
 ----
+
+
 == 20080826 ==
 _Nya funktioner_
  * Framsidan: Indikator i procent på hur lång tid som ett program pågått.
@@ -75,6 +91,8 @@ _Rättade buggar_
  * Filnamn osv: Inkonsekventa skiftlägen på filnamn och mappar fixade. Widgeten går nu att installera även på ett skiftlägeskänsligt filsystem, tidigare startade den inte ens. ([http://code.google.com/p/epgwidget/issues/detail?id=50 50], tack till Johan Backlund) 
 
 ----
+
+
 == 20080630 ==
 _Nya funktioner_
  * Framsidan & baksidan: En laddningssymbol (ett timglas) visas nu när tablåer öppnas, kanaler läggs till samt om man trycker på T för att tvinga fram en nedladdning av tablåer.  Obs: med en tillräckligt rapp dator kommer det förmodligen knappt hinna visas innan det försvinner.
@@ -89,6 +107,8 @@ _Rättade buggar_
  * Inforutan: Widgeten reserverar inte längre allt utrymme under inforutan om inforutan inte är synlig. Det gör i sin tur att det nu fungerar mycket bättre att svepa in från höger med muspekaren och att EPG inte stjäl fokus från närliggande widgets. (Det blir dock fortfarande lite skumt om man har inforutan framme.) 
 
 ----
+
+
 == 20080606 ==
 _Nya funktioner_
  * Framsidan: Det går nu att tvinga fram en nedladdning av nya tablåer genom att trycka på T-tangenten (T för Tablåer). Det finns dock än så länge ingen indikering i guit på att så sker - så vänta 10 sek (exakt tid beror på vad för internetuppkoppling du har), ta bort dashboard och ta fram det igen så ska förhoppningsvis de flesta tablåer vara på plats. Saknas några så vänta nån sekund till, göm dashboard och ta fram det igen. Du behöver inte trycka T en gång till. (Och ja, det kommer visas nån laddningssymbol i en senare version.)
@@ -107,6 +127,8 @@ _Rättade buggar_
  * Grabbern: Den automatiska nedladdningen av tablåer har nu 10 sekunders fördröjning (så att airport ska hinna koppla upp innan nedladdningen påbörjas). Denna fördröjning satt av misstag på den manuella nedladdningen tidigare.
 
 ----
+
+
 == 20080601 ==
 _Nya funktioner_
  * Framsidan: Framsidan är nu mindre genomskinlig än den var innan (för ökad läsbarhet).
@@ -127,6 +149,8 @@ _Rättade buggar_
  * Baksidan: Bloglänken korrigerad ([http://code.google.com/p/epgwidget/issues/detail?id=42 42])
 
 ----
+
+
 == 20080518 ==
 _Nya funktioner_
  * Framsidan: Det går nu att hoppa upp till 24 timmar framåt i tiden genom att skriva in klockslaget med fyra siffror (1945 för att hoppa till 19:45, 0600 för 06:00 osv). Suddtangenten, backspace, återställer klockan (eller så kan man ta bort och ta fram Dashboard igen).
@@ -153,6 +177,8 @@ _Rättade buggar_
  * Baksidan: Bytte håll på pilarna i kanallistan, de gick åt fel håll jämfört med inforutan innan.
 
 ----
+
+
 == 20080426 ==
 _Nya funktioner_
  * Inforutan: Flyttade positioneringen från CSS till javascript.
@@ -169,6 +195,8 @@ _Rättade buggar_
  * Inga.
 
 ----
+
+
 == 20080324 ==
 _Nya funktioner_
  * Inga.
@@ -181,5 +209,7 @@ _Rättade buggar_
  * Grabbern installeras nu när man startar widgeten för första gången. (31)
 
 ----
+
+
 == 20080302 ==
  * Första versionen (som gick att ladda ner som zipfil)
