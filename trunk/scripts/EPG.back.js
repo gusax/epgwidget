@@ -931,8 +931,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       [
         "p1.sr.se",
         "p3.sr.se",
-        "p2.sr.se",
-        "bizo.se"
+        "p2.sr.se"
       ]);
       groupChannels("Other", 
       [
