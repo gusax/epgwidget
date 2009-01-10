@@ -16,6 +16,8 @@ _Nya funktioner_
 
  * Baksidan: Borttagna eller omdöpta kanaler hamnar nu i gruppen "Borttagna eller omdöpta" längst ner i listan. Det går pga detta också att ta bort försvunna eller omdöpta kanaler från baksidan, en funktion som saknades tidigare. ([http://code.google.com/p/epgwidget/issues/detail?id=61 61])
 
+ * Framsidan: Det går nu att scrolla framsidan upp och ner med mellanslagstangenten. Tryck på mellanslag för att scrolla ett stort hopp nedåt i kanallistan, håll inne shift och tryck på mellanslag för att scrolla ett stort hopp uppåt. Samma kortkommando som i Firefox mao.
+
 _Rättade buggar_
  * Dagsvyn ligger inte längre kvar ovanpå nu-nästa-senare-vyn om man vänder widgeten fram och tillbaka när heldagsvyn är synlig. ([http://code.google.com/p/epgwidget/issues/detail?id=62 62])
 
