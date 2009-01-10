@@ -69,6 +69,16 @@ EPG.translator = function(debug)
   localizedStrings["Show [HD] after HD programs."] = "Visa [HD] efter HD-program.";
   localizedStrings["Channel list download failed :-( Please check that your internet connection works. If you're using Little Snitch, make sure both EPG and the grabber is permitted to access the Internet."] = "Lyckades inte ladda ner kanallistan\u00A0:-( Kontrollera att din internetuppkoppling fungerar. Om du använder Little Snitch, säkerställ att både EPG och tablånedladdaren har tillåtelse att gå ut på Internet.";
   localizedStrings.Enjoy = "Mycket nöje";
+  localizedStrings.New = "Nya";
+  localizedStrings.Swedish = "Svenska";
+  localizedStrings.Nordic = "Nordiska";
+  localizedStrings["Documentaries & nature"] = "Dokumentär & natur";
+  localizedStrings.Movies = "Film";
+  localizedStrings["Children & youth"] = "Barn & ungdom";
+  localizedStrings.Music = "Musik";
+  localizedStrings.European = "Europeiska";
+  localizedStrings.Other = "Övrigt";
+  localizedStrings["Removed or renamed"] = "Borttagna eller omdöpta";
   // Private methods
   
   

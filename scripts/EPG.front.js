@@ -1781,8 +1781,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       scrollFrame.dayView = overviewDiv.dayViewNode = scrollFrame.lastChild;
       scrollFrame.dayView.topY = 0;
       UIcreator.setPosition(scrollFrame.dayView, "5.7em", "0em", false, false, 3, "absolute");
-      document.getElementsByTagName("body")[0].addEventListener("keydown", keyHandler, false);
-      document.getElementsByTagName("body")[0].addEventListener("keypress", repeatKeyHandler, false);
+      document.addEventListener("keydown", keyHandler, false);
+      document.addEventListener("keypress", repeatKeyHandler, false);
       scrollFrame.dayView.addEventListener("DOMMouseScroll", scrollDayView, false);
       //frontDiv.addEventListener("mousewheel", scrollDayView, false);
       frontDiv.addEventListener("DOMMouseScroll", scrollFront, false);
@@ -1990,7 +1990,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           {
             if (window.widget) 
             {
-              Settings.resizeTo(width, screen.height, true);
+              Settings.resizeTo(474, screen.height, true);
               window.widget.prepareForTransition("ToFront");
               Settings.resizeTo(width, height);
             }

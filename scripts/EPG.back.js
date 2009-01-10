@@ -51,7 +51,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
   toFront,
   channelListContainer,
   topY = 0,
-  scrollHeight = 0;
+  scrollHeight = 0,
+  categories = [];
   
   // Private methods
   
@@ -296,7 +297,221 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
     }
   }
   
+  /**
+   * @memberOf EPG.back
+   * @name removeChildNodes
+   * @function
+   * @description Removes child nodes from a parent node.
+   * @private
+   * @param {object} parentNode Parent node.
+   */
+  function removeChildNodes(parentNode)
+  {
+    try
+    {
+      while(parentNode.firstChild)
+      {
+        parentNode.removeChild(parentNode.firstChild);
+      }
+    }
+    catch (error)
+    {
+      debug.alert("Error in EPG.back.removeChildNodes: " + error + " (parentNode = " + parentNode + ")");
+    }
+  }
+  
+  /**
+   * @memberOf EPG.back
+   * @name createBacksideChannelNode
+   * @function
+   * @description Creates a channel node for the backside
+   * @private
+   * @param {object} channel Channel object.
+   * @param {object} parentNode Parent node.
+   * @param {boolean} selected True if checkbox should be selected.
+   */
+  function createBacksideChannelNode(channel, parentNode, channelID, selected)
+  {
+    try
+    {
+      var div,
+      locale,
+      foundLocale = false;
+      if (channel && channel.displayName)
+      {
+        div = document.createElement("div");
+        div.channelID = channelID;
+        div.setAttribute("class", "text");
+        div.appendChild(document.createElement("input"));
+        div.lastChild.setAttribute("type", "checkbox");
+        if (selected)
+        {
+          div.lastChild.setAttribute("checked", "checked");
+        }
+        else
+        {
+          div.lastChild.removeAttribute("checked", "checked");
+        }
+        for (locale in channel.displayName)
+        {
+          if (channel.displayName.hasOwnProperty(locale))
+          {
+            div.appendChild(document.createTextNode(channel.displayName[locale]));
+            foundLocale = true;
+            break;
+          }
+        }
+        if (foundLocale)
+        {
+          parentNode.appendChild(div);
+          div.addEventListener("click", function(){return function(event){that.selectChannel(this, event);};}(), false);
+        }
+        else
+        {
+          debug.alert("Found no locale for channel with id " + channelID);
+        }
+      }
+      
+    }
+    catch (error)
+    {
+      debug.alert("Error in EPG.back.createBacksideChannelNode: " + error + " (channel = " + channel + ")");
+    }
+  }
+  
+  /**
+   * @memberOf EPG.back
+   * @name createGroupNode
+   * @function
+   * @description Creates a node for the channel group.
+   * @private
+   * @param {object} group Channel group.
+   */
+  function createGroupNode(group, parentNode, channelList, missingChannels, currentChannelList, evenWhenEmpty)
+  {
+    try
+    {
+      var heading,
+      i,
+      channel,
+      channelID;
+      
+      if (evenWhenEmpty || (group.channels && group.channels.length > 0))
+      {
+        heading = document.createElement("h2");
+        heading.appendChild(document.createTextNode(group.title));
+        parentNode.appendChild(heading);
+        if (group.channels)
+        {
+          for (i = 0; i < group.channels.length; i += 1)
+          {
+            channelID = group.channels[i];
+            channel = channelList[channelID];
+            if (channel)
+            {
+              channel.alreadyKnownByWidget = true;
+              createBacksideChannelNode(channel, parentNode, channelID, (currentChannelList && currentChannelList.hashed[channelID] >= 0));
+            }
+            else if (evenWhenEmpty)
+            {
+              channel = {};
+              channel.displayName = {};
+              channel.displayName.sv = channelID;
+              createBacksideChannelNode(channel, parentNode, channelID, (currentChannelList && currentChannelList.hashed[channelID] >= 0));
+            }
+            else
+            {
+              missingChannels[missingChannels.length] = channelID;
+            }
+          } 
+        }
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+      
+    }
+    catch (error)
+    {
+      debug.alert("Error in EPG.back.createGroupNode: " + error + " (group = " + group + ")");
+      return false;
+    }
+  }
+  
   function createChannelListSuccess (channels, targetElement)
+  {
+    try
+    {
+      var groupIndex, 
+      group,
+      currentChannelList,
+      channel,
+      createdOneGroup = false,
+      missingChannels = [],
+      channelId,
+      tempElement;
+      if (targetElement)
+      {
+        channelListToScroll = targetElement;
+        removeChildNodes(targetElement);
+        channelListToScroll.setAttribute("class","channellist");
+        channelListToScroll.appendChild(document.createElement("div"));
+        channelListToScroll.listFrame = channelListToScroll.lastChild;
+        channelListToScroll.listFrame.style.position = "absolute";
+        
+        currentChannelList = settings.getChannelList(currentChannelListIndex);
+        
+        for (groupIndex = 1; groupIndex < categories.length-1; groupIndex += 1)
+        {
+          if (createGroupNode(categories[groupIndex], channelListToScroll.listFrame, channels, missingChannels, currentChannelList) && !createdOneGroup)
+          {
+            createdOneGroup = true;
+          }
+        }
+        // Look for new channels
+        for (channelId in channels)
+        {
+          if (channels.hasOwnProperty(channelId))
+          {
+            channel = channels[channelId];
+            if (!channel.alreadyKnownByWidget && channelId !== "orderedChannelIDs" && channelId !== "length")
+            {
+              debug.inform(channelId + " looks like a new channel");
+              categories[0].channels[categories[0].channels.length] = channelId; 
+            }
+          }
+        }
+        tempElement = document.createElement("div");
+        if (createGroupNode(categories[0], tempElement, channels, missingChannels, currentChannelList))
+        {
+          channelListToScroll.listFrame.insertBefore(tempElement, channelListToScroll.listFrame.firstChild);
+        }
+        
+        // Look for missing channels
+        if (missingChannels.length > 0)
+        {
+          categories[categories.length-1].channels = missingChannels;
+          createGroupNode(categories[categories.length-1], channelListToScroll.listFrame, channels, [], currentChannelList, true);
+        }
+        
+        // TODO: write an error message if createdOneGroup is still false
+        scrollHeight = channelListToScroll.scrollHeight;
+      }
+      else
+      {
+        debug.alert("Back.createChannelListSuccess2 did not get any target element! Cannot create channel list!");
+      }
+      
+    }
+    catch (error)
+    {
+      debug.alert("Error in back.createChannelListSuccess2: " + error + " (channels " + channels + ", targetElement " + targetElement + ")");
+    }
+  }
+  
+  function createChannelListSuccess1 (channels, targetElement)
   {
     try
     {
@@ -308,7 +523,9 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       orderedChannelIDs,
       tempCheckBox,
       tempChannelList,
-      i = 0;
+      i = 0,
+      j = 1,
+      heading;
       
       if(channels.length > 0 && targetElement)
       {
@@ -334,6 +551,11 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         channelListToScroll.listFrame.style.position = "absolute";
         tempElement = document.createElement("div");
         tempElement.setAttribute("class", "text");
+        
+        heading = document.createElement("h2");
+        heading.appendChild(document.createTextNode(translator.translate(categories[0].title)));
+        channelListToScroll.listFrame.appendChild(heading.cloneNode(true));
+        
         tempCheckBox = document.createElement("input");
         tempCheckBox.setAttribute("type","checkbox");
         tempElement.appendChild(tempCheckBox);
@@ -349,6 +571,12 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
             if(channel.displayName)
             {
               i+=1;
+              if (i % 10 === 0)
+              {
+                heading.lastChild.nodeValue = categories[j].title;
+                j += 1;
+                channelListToScroll.listFrame.appendChild(heading.cloneNode(true));
+              }
               //debug.alert("adding " + index);
               if(channel.displayName.sv)
               {
@@ -675,6 +903,28 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
     }
   }
   
+  function groupChannels(title, channels)
+  {
+    try
+    {
+      var obj = {};
+      obj.title = translator.translate(title);
+      if (channels)
+      {
+        obj.channels = channels;
+      }
+      else
+      {
+        obj.channels = [];
+      }
+      categories[categories.length] = obj;
+    }
+    catch (error)
+    {
+      debug.alert("Error in back.groupChannels: " + error);
+    }
+  }
+  
   // Public methods
   return {
     init: function()
@@ -683,8 +933,139 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       {
         that = this;
       }
+      groupChannels("New");
+      groupChannels("Swedish", 
+      [
+        "svt1.svt.se",
+        "svt24.svt.se",
+        "svt2.svt.se",
+        "hd.svt.se",
+        "tv3.viasat.se",
+        "plus.tv4.se",
+        "tv4.se",
+        "goteborg.kanallokal.se",
+        "kanal5.se",
+        "ostergotland.kanallokal.se",
+        "tv6.viasat.se",
+        "skane.kanallokal.se",
+        "svtb-kunskap.svt.se",
+        "stockholm.kanallokal.se",
+        "kanal9.se"
+      ]);
+      groupChannels("Documentaries & nature", 
+      [
+        "nordic.discovery.com",
+        "tv8.se",
+        "nordic.science.discovery.com",
+        "explorer.viasat.se",
+        "world.discovery.com",
+        "history.viasat.se",
+        "hd.discovery.com",
+        "nature.viasat.se",
+        "nordic.travel.discovery.com",
+        "nordic.animalplanet.discovery.com",
+        "fakta.tv4.se",
+        "axess.se",
+        "kunskapskanalen.svt.se",
+        "ngcsverige.com",
+        "hd.ngcsverige.com"
+      ]);
+      groupChannels("Movies", 
+      [
+        "film.tv4.se",
+        "tv1000.viasat.se",
+        "action.canalplus.se",
+        "plus-1.tv1000.viasat.se",
+        "comedy.canalplus.se",
+        "action.tv1000.viasat.se",
+        "drama.canalplus.se",
+        "classic.tv1000.viasat.se",
+        "filmhd.canalplus.se",
+        "family.tv1000.viasat.se",
+        "first.canalplus.se",
+        "hd.tv1000.viasat.se",
+        "hits.canalplus.se",
+        "nordic.tv1000.viasat.se",
+        "hits-sport-weekend.canalplus.se"
+      ]);
+      groupChannels("Sport", 
+      [
+        "eurosport.com",
+        "sport.tv4.se",
+        "eurosport2.eurosport.com",
+        "fotboll.viasat.se",
+        "se.nasn.com",
+        "golf.viasat.se",
+        "sport1.canalplus.se",
+        "motor.viasat.se",
+        "sport2.canalplus.se",
+        "sport.viasat.se",
+        "sport-extra.canalplus.se",
+        "sporthd.viasat.se",
+        "sporthd.canalplus.se"
+      ]);
+      groupChannels("Children & youth", 
+      [ 
+        "svtb.svt.se",
+        "disneychannel.se",
+        "nickelodeon.se",
+        "playhouse.disneychannel.se",
+        "nordic.mtve.com",
+        "toon.disneychannel.se",
+        "tv400.tv4.se"
+      ]
+      );
+      groupChannels("Music", 
+      [
+        "vh1.com",
+        "mtv2.mtve.com",
+        "ztv.se",
+        "hd.mtve.com"
+      ]);
+      groupChannels("Nordic", 
+      [
+        "dr1.dr.dk",
+        "dr2.dr.dk"
+      ]);
+      groupChannels("European", 
+      [
+        "europa.svt.se"
+      ]);
+      groupChannels("Radio", 
+      [
+        "p1.sr.se",
+        "p3.sr.se",
+        "p2.sr.se",
+        "bizo.se"
+      ]);
+      groupChannels("Other", 
+      [
+        "guld.tv4.se",
+        "viasat-nature-nick.spa.se",
+        "komedi.tv4.se",
+        "se.comedycentral.tv",
+        "sf.tv4.se"
+      ]);
+      groupChannels("PPV",
+      [
+        "ppv1.canalplus.se",
+        "ppv8.canalplus.se",
+        "ppv2.canalplus.se",
+        "ppvsport1.canalplus.se",
+        "ppv3.canalplus.se",
+        "ppvsport2.canalplus.se",
+        "ppv4.canalplus.se",
+        "ppvsport3.canalplus.se",
+        "ppv5.canalplus.se",
+        "ppvsport4.canalplus.se",
+        "ppv6.canalplus.se",
+        "ppvsport5.canalplus.se",
+        "ppv7.canalplus.se"
+      ]);
+      groupChannels("Removed or renamed");
+      
       currentChannelListIndex = settings.getCurrentChannelListIndex();
-      document.getElementsByTagName("body")[0].addEventListener("keyup", 
+      document.addEventListener("keyup", 
         function(event)
         {
           if(visible && event && event.keyCode === 13)
@@ -703,9 +1084,9 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         {
           if (window.widget) 
           {
-            settings.resizeTo(270, screen.height, true);
+            settings.resizeTo(474, screen.height, true);
             window.widget.prepareForTransition("ToBack");
-            settings.resizeTo(270, document.getElementById("back").offsetHeight);
+            settings.resizeTo(474, document.getElementById("back").offsetHeight);
           }
           
           toFront = toFrontMethod;

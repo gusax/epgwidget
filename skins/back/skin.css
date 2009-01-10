@@ -49,7 +49,7 @@ div.scalable div.contents div div
 
 div.topbar
 {
-  width: 27em;
+  width: 47.4em;
   height: 3.9em;
   overflow: hidden;
 }
@@ -65,7 +65,7 @@ div.topbar div.contents div.text
 
 div.topbarlist
 {
-  width: 27em;
+  width: 47.4em;
   height: 1.9em;
 }
 
@@ -87,7 +87,7 @@ div.channels
   position: relative;
   top:0em;
   left: 0em;
-  width: 27em;
+  width: 47.4em;
   height: 25em;
 }
 
@@ -99,38 +99,49 @@ div.channellist
   height:24em;
   overflow: hidden;
   text-align: left;
-  margin: 0em 2.8em 0em 2.4em !important; 
+  margin: 0em 4.8em 0em 4.4em !important; 
+}
+
+div.channellist h2
+{
+  color: #fff;
+  font-size: 1.4em;
+  clear:both;
+  margin: 0em;
+  padding: 1em 0em 0.3em 0em;
+  font-weight: bold;
 }
 
 div.channellist div.text
 {
   margin: 0em !important;
-  padding: 0.3em 0em 0.3em 0.1em;
+  padding: 0em 0em 0.3em 0em;
   color: #aaa;
+  float: left;
+  min-width: 50%;
 }
 
 div.channellist div.text:hover
 {
   color: #fff;
   text-shadow: #fff 0em 0em 0.2em;
-  padding: 0.2em 0.1em 0.4em 0em;
 }
 
 div.middle
 {
-  width: 27em;
+  width: 47.4em;
   height: 2em;
 }
 
 div.bottombar
 {
-  width: 27em;
+  width: 47.4em;
   height: 3.9em;
 }
 
 div.bottombarlist
 {
-  width: 27em;
+  width: 47.4em;
   height: 1.9em;
 }
 
@@ -158,7 +169,7 @@ div.settings
   position: relative;
   top:0em;
   left: 0em;
-  width: 27em;
+  width: 47.4em;
   height: 7.2em;
 }
 
@@ -167,10 +178,10 @@ div.settingsList
   position: relative;
   top:0em;
   left: 0em;
-  width: 27em;
+  width: 47.4em;
   height: 6.7em;
   text-align: left;
-  margin: 0em 2.8em 0em 2.4em !important; 
+  margin: 0em 4.8em 0em 4.4em !important; 
 }
 
 div.settingsList div.text
@@ -198,14 +209,14 @@ div.support
   position: relative;
   top:0em;
   left: 0em;
-  width: 27em;
+  width: 47.4em;
   height: 11em;
   text-align: left;
 }
 
 div.support div.contents div.text
 {
-  margin: 0em 2.8em 0em 2.4em !important; 
+  margin: 0em 4em 0em 3.6em !important; 
   color: #aaa;
 }
 
