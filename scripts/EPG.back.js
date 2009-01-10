@@ -451,7 +451,10 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       createdOneGroup = false,
       missingChannels = [],
       channelId,
-      tempElement;
+      tempElement,
+      i,
+      alreadyFoundMissingChannel;
+      
       if (targetElement)
       {
         channelListToScroll = targetElement;
@@ -489,7 +492,34 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
           channelListToScroll.listFrame.insertBefore(tempElement, channelListToScroll.listFrame.firstChild);
         }
         
-        // Look for missing channels
+        // Look for missing channels in user channel list
+        if (currentChannelList)
+        {
+          for (channelId in currentChannelList.hashed)
+          {
+            if (currentChannelList.hashed.hasOwnProperty(channelId) && channelId !== "ordered" && channelId !== "hashed")
+            {
+              if (!channels[channelId])
+              {
+                alreadyFoundMissingChannel = false;
+                for (i = 0; i < missingChannels.length; i += 1)
+                {
+                  if (missingChannels[i] === channelId)
+                  {
+                    alreadyFoundMissingChannel = true;
+                  }
+                }
+                
+                if (!alreadyFoundMissingChannel)
+                {
+                  missingChannels[missingChannels.length] = channelId;
+                }
+              }
+            }
+          }
+        }
+        
+        // Print missing channels
         if (missingChannels.length > 0)
         {
           categories[categories.length-1].channels = missingChannels;
