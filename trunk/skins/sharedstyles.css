@@ -32,7 +32,7 @@ body
 	position: absolute;
 	top:0em;
 	left: 0em;
-	width: 27em;
+	width: 47.4em;
 	min-height: 3.9em;
 	overflow: hidden;
 }
@@ -148,4 +148,19 @@ a.biggertext
 img.logo
 {
   cursor: move;
+}
+
+div.table
+{
+  display: table;
+}
+
+div.tablerow
+{
+  display: table-row;
+}
+
+div.tablecell
+{
+  display: table-cell;
 }
