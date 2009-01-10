@@ -68,6 +68,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   key.ARROW_DOWN = 40;
   key.BACKSPACE = 8;
   key.COMMA = 188;
+  key.SPACE = 32;
   
   key.ZERO = 48;
   key.ONE = 49;
@@ -1695,6 +1696,27 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             if(visible && event.metaKey)
             {
               that.goToBack(event);
+            }
+          break;
+          case key.SPACE:
+            if (ProgramInfo.isVisible())
+            {
+              if (event.shiftKey)
+              {
+                ProgramInfo.scroll(false, false, 40);
+              }
+              else
+              {
+                ProgramInfo.scroll(false, false, -40);
+              }
+            }
+            else if (event.shiftKey)
+            {
+              scrollFront(event, Math.round(scrollFrame.offsetHeight / 2));
+            }
+            else
+            {
+              scrollFront(event, -Math.round(scrollFrame.offsetHeight / 2));
             }
           break;
           case key.T:
