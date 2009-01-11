@@ -1,0 +1,13 @@
+#summary Bilder på EPG
+#labels Featured
+
+= Screenshots =
+
+== Framsida ==
+http://epgwidget.googlecode.com/svn/trunk/docs/Front.jpg
+
+== Heldagsvy ==
+http://epgwidget.googlecode.com/svn/trunk/docs/Dayview.jpg
+
+== Baksida ==
+http://epgwidget.googlecode.com/svn/trunk/docs/Back.jpg
