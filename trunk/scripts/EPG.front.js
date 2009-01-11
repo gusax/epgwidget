@@ -1638,7 +1638,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   {
     try
     {
-      if(event)
+      if(event && visible)
       {
         switch (event.keyCode) {
         	case key.ZERO:
