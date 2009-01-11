@@ -993,9 +993,31 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       document.addEventListener("keyup", 
         function(event)
         {
-          if(visible && event && event.keyCode === 13)
+          if(visible && event)
           {
-            that.goToFront(event);
+            if (event.keyCode === 13)
+            {
+              that.goToFront(event);
+            }
+            else if (event.keyCode === 38)
+            {
+              scrollChannelList(event,"down");
+            }
+            else if (event.keyCode === 40)
+            {
+              scrollChannelList(event,"up");
+            }
+            else if (event.keyCode === 32)
+            {
+              if (event.shiftKey)
+              {
+                scrollChannelList(event,"down");
+              }
+              else
+              {
+                scrollChannelList(event,"up");
+              }
+            }
           }
         }, false);
       delete that.init;
