@@ -1,7 +1,9 @@
 #summary Innehållsförteckning för changeloggen
 #labels Deprecated
-===Innehållsförteckning===
+==Innehållsförteckning==
+===2009===
  * [Changelog Nästa version]
+
 ===2008===
  * [Changelog#20081207 20081207]
  * [Changelog#20080915 20080915]
