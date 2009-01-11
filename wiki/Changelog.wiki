@@ -8,6 +8,7 @@ Läs så här:
 Senaste ändringarna ligger alltid överst.
 
 ----
+<a name="nextversion"></a>
 == Nästa version ==
 _Nya funktioner_
  * Baksidan: Kanalerna är nu grupperade efter tema, istället för att bara ligga huller om buller i en lång lista. Dokumentär, sport, musik osv. För att få lite mer översikt över de nya grupperingarna har baksidan gjorts bredare. ([http://code.google.com/p/epgwidget/issues/detail?id=2 2])
