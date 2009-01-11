@@ -1,0 +1,6 @@
+ * [Changelog Nästa version]
+ * [Changelog#20081207 20081207]
+ * [Changelog#20080915 20080915]
+ * [Changelog#20080826 20080826]
+ * [Changelog#20080630 20080630]
+ * [Changelog#20080606 20080606]
