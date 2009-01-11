@@ -1,8 +1,14 @@
 #summary Innehållsförteckning för changeloggen
-Innehållsförteckning
+===Innehållsförteckning===
  * [Changelog Nästa version]
+
  * [Changelog#20081207 20081207]
  * [Changelog#20080915 20080915]
  * [Changelog#20080826 20080826]
  * [Changelog#20080630 20080630]
  * [Changelog#20080606 20080606]
+ * [Changelog#20080601 20080601]
+ * [Changelog#20080518 20080518]
+ * [Changelog#20080426 20080426]
+ * [Changelog#20080324 20080324]
+ * [Changelog#20080324 20080324]
