@@ -1,6 +1,6 @@
 #summary Lista med vad som ändrats/lagts till/tagits bort mellan olika versioner.
 #labels Featured
-
+#sidebar ChangelogToc
 = Changelog för EPG-widgeten =
 Läs så här:
  * Beskrivning av gjord ändring (buggnummer om sådant finnes)
