@@ -1,4 +1,5 @@
 #summary Innehållsförteckning för changeloggen
+#labels Deprecated
 ===Innehållsförteckning===
  * [Changelog Nästa version]
 ===2008===
