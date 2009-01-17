@@ -63,12 +63,13 @@ EPG.growl = function(Debug, Translator)
       }
       else
       {
+        Debug.inform("growlCheck: growlnotify is installed in /usr/local/bin!");
         userHasGrowlInstalled = true;
       }
       
       if(callback)
       {
-        callBack(userHasGrowlInstalled);
+        callback(userHasGrowlInstalled);
       }
     }
     catch (error)
@@ -132,8 +133,7 @@ EPG.growl = function(Debug, Translator)
         
         if(window.widget)
         {
-          
-          widget.system(pathToGrowl + " --name \"DreamEPG\" --image \"" + pathToEPGIcon + "\" --message \"" + Translator.translate("Jippie, you can use Growl together with the EPG widget :-)") + "\"", function(systemcall){growlCheck(systemcall, callback);});
+          widget.system(pathToGrowl + " --name \"EPG\" --image \"" + pathToEPGIcon + "\" --title \"EPG\" --message \"" + Translator.translate("Jippie, you can use Growl together with the EPG widget :-)") + "\"", function(systemcall){growlCheck(systemcall, callback);});
         }
       }
       catch (error)
@@ -150,7 +150,7 @@ EPG.growl = function(Debug, Translator)
       * @param {string} [pathToImage] Absolute path to the image that should be used as the icon for the growl notification.
       * @param {boolean} [sticky] True if the notification should be sticky (not disappear until clicked by the user).
       */
-    notifyNow: function(message, pathToImage, sticky) 
+    notifyNow: function(message, pathToImage, sticky, title) 
     {
       
       try
@@ -163,12 +163,16 @@ EPG.growl = function(Debug, Translator)
           {
             if(pathToImage)
             {
-              message = pathToGrowl + " --name \"DreamEPG\" --message \"" + message + "\" --image \"" + pathToImage + "\"";
+              message = pathToGrowl + " --name \"EPG\" --message \"" + message + "\" --image \"" + pathToImage + "\"";
               
             }
             else
             {
-              message = pathToGrowl + " --name \"DreamEPG\" --message \"" + message + "\" --image \"" + pathToEPGIcon + "\"";
+              message = pathToGrowl + " --name \"EPG\" --message \"" + message + "\" --image \"" + pathToEPGIcon + "\"";
+            }
+            if (title)
+            {
+              message += " --title \"" + title + "\"";
             }
             
             if(sticky)
@@ -180,7 +184,7 @@ EPG.growl = function(Debug, Translator)
           else if(hasNotCheckedForGrowlYet)
           {
             Debug.inform("growl.notifyNow: Cannot send growl notification now, don't yet know if growl is installed. Trying again in just a moment...");
-            that.notifyLater(message, pathToImage, sticky, 100);
+            that.notifyLater(message, pathToImage, sticky, 100, title);
           }
           else
           {
@@ -208,7 +212,7 @@ EPG.growl = function(Debug, Translator)
       * @param {object} later Date object representing at which point in time the notification should be shown to the user.
       * @param {number} msToNotification Number of milliseconds to wait before showing the notification.
       */
-    notifyLater: function(message, pathToImage, sticky, later, msToNotification) 
+    notifyLater: function(message, pathToImage, sticky, later, msToNotification, title) 
     {
       try
       {
@@ -219,7 +223,7 @@ EPG.growl = function(Debug, Translator)
         // set a timeout that notifies at the specified date and time
         if(userHasGrowlInstalled || hasNotCheckedForGrowlYet)
         {
-          timers.push(setTimeout(function(){that.notifyNow(message, pathToImage, sticky);}, msToNotification));
+          timers.push(setTimeout(function(){that.notifyNow(message, pathToImage, sticky, title);}, msToNotification));
           return timers.length - 1;
         }
         else

@@ -62,7 +62,7 @@ EPG.Reminder = function(Debug, Growl, Settings, Translator)
     {
       try
       {
-        var timeLeft, message, local, channel, logoPath, start;
+        var timeLeft, message, local, channel, logoPath, start, title, stopTime;
         
         if(program && program.start && program.channel)
         {
@@ -79,24 +79,30 @@ EPG.Reminder = function(Debug, Growl, Settings, Translator)
               reminders[program.channel] = {};
             }
             start = new Date(program.start * 1000);
+            stopTime = new Date(program.stop * 1000);
             channel = Settings.getChannel(program.channel);
             timeLeft = start - (new Date()) - 60000; // Alert 1 minute before the program starts.
             //timeLeft = 5000; // Alert 1 minute before the program starts.
-            if(timeLeft > 0)
-            { 
+            if (timeLeft <= 0)
+            {
+              timeLeft = 1;
+            }
+            //if(timeLeft > 0)
+            //{ 
+              title = "";
               message = "";
               for (locale in program.title)
               {
                 if(program.title.hasOwnProperty(locale))
                 {
-                  message += program.title[locale];
+                  title += program.title[locale];
                   break;
                 }
               }
               
               if(channel)
               {
-                message += "\n";
+                //message = "\n";
                 for (locale in channel.displayName)
                 {
                   if(channel.displayName.hasOwnProperty(locale))
@@ -105,21 +111,21 @@ EPG.Reminder = function(Debug, Growl, Settings, Translator)
                     break;
                   }
                 }
-                message += " " + Settings.getHHMM(start);
+                message += ", " + Settings.getHHMM(start) + " - " + Settings.getHHMM(stopTime);
               }
               else
               {
-                message += "\n" + Settings.getHHMM(start);
+                message += " " + Settings.getHHMM(start) + " - " + Settings.getHHMM(stopTime);
               }
 
               if(message)
               {
                 logoPath = Settings.getLogoPath(program.channel);
                 Debug.inform("Settings.getLogoPath(program.channel) = " + Settings.getLogoPath(program.channel));
-                reminders[program.channel][program.start] = Growl.notifyLater(message, logoPath, true, false, timeLeft);
+                reminders[program.channel][program.start] = Growl.notifyLater(message, logoPath, true, false, timeLeft, title);
               }
               
-            }
+            //}
             return true;
           }
         }
