@@ -396,7 +396,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       channel,
       channelID;
       
-      if (evenWhenEmpty || (group.channels && group.channels.length > 0))
+      if (evenWhenEmpty || (group.channels && group.channels.length > 0))
       {
         heading = document.createElement("h2");
         heading.appendChild(document.createTextNode(group.title));
