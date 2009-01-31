@@ -780,9 +780,11 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
           {
             scrollDescription(amount);
           }
-          event.preventDefault();
-          event.stopPropagation();
-          return false;
+          if (event.stopPropagation)
+          {
+            event.preventDefault();
+            event.stopPropagation();
+          }
         }
       }
       catch (error)
