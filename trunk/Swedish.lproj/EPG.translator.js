@@ -79,6 +79,7 @@ EPG.translator = function(debug)
   localizedStrings.European = "Europeiska";
   localizedStrings.Other = "Övrigt";
   localizedStrings["Removed or renamed"] = "Borttagna eller omdöpta";
+  localizedStrings.by = "av";
   // Private methods
   
   
