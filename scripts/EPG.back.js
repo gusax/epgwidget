@@ -473,6 +473,9 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
             createdOneGroup = true;
           }
         }
+        // Remove already found new channels
+        categories[0].channels = [];
+        
         // Look for new channels
         for (channelId in channels)
         {
@@ -482,11 +485,12 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
             if (!channel.alreadyKnownByWidget && channelId !== "orderedChannelIDs" && channelId !== "length")
             {
               debug.inform(channelId + " looks like a new channel");
-              categories[0].channels[categories[0].channels.length] = channelId; 
+              categories[0].channels[categories[0].channels.length] = channelId;
             }
           }
         }
         tempElement = document.createElement("div");
+        // Print new channels
         if (createGroupNode(categories[0], tempElement, channels, missingChannels, currentChannelList))
         {
           channelListToScroll.listFrame.insertBefore(tempElement, channelListToScroll.listFrame.firstChild);
@@ -696,7 +700,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       index,
       currentSkin,
       skinList,
-      skinListItem;
+      skinListItem,
+      i;
       
       tempContainer = document.createElement("div");
       tempContainer.setAttribute("class", "settingsList");
