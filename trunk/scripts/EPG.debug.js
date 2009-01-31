@@ -69,7 +69,7 @@ EPG.debug = function()
 			  {
 			    window.widget.system("echo '" + (new Date()) + " ERROR " + message + "' >> error.log", afterLogWrite);
 			  }
-			  else if(typeof(window.console) === "object" && window.console.error)
+			  else if(window.console)
         {
           window.console.error(message);
         }
@@ -94,7 +94,7 @@ EPG.debug = function()
         {
           window.widget.system("echo '" + (new Date()) + " WARNING " + message + "' >> error.log", afterLogWrite);
         }
-        else if(typeof(window.console) === "object" && window.console.warn)
+        else if(window.console && window.console.warn)
 		    {
 		      window.console.warn(message);
 		    }
@@ -123,7 +123,7 @@ EPG.debug = function()
         {
           window.widget.system("echo '" + (new Date()) + " INFO " + message + "' >> error.log", afterLogWrite);
         }
-        else if(typeof(window.console) === "object" && window.console.info)
+        else if(window.console && window.console.info)
 		    {
 		      window.console.info(message);
 		    }
