@@ -17,6 +17,8 @@ _Nya funktioner_
 
  * Baksidan: Borttagna eller omdöpta kanaler hamnar nu i gruppen "Borttagna eller omdöpta" längst ner i listan. Det går pga detta också att ta bort försvunna eller omdöpta kanaler från baksidan, en funktion som saknades tidigare. ([http://code.google.com/p/epgwidget/issues/detail?id=61 61])
 
+ * Baksidan: Äntligen visas namnet på konstnären som gjort utseendet bredvid utseendets namn i rullgardinsmenyn. Äras den som äras bör! (Ursäkta dröjsmålet.)
+
  * Baksidan: Det går nu att scrolla kanallistan både med piltangenterna och med mellanslag (se nästa punkt).
 
  * Framsidan: Det går nu att scrolla framsidan upp och ner med mellanslagstangenten. Tryck på mellanslag för att scrolla ett stort hopp nedåt i kanallistan, håll inne shift och tryck på mellanslag för att scrolla ett stort hopp uppåt. Samma kortkommando som i Firefox mao.
