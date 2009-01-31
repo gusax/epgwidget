@@ -197,7 +197,7 @@ EPG.settings = function(Debug, growl, file)
           body.style.fontSize = body.fontSize * currentSize.scale + "px";
         }
         window.resizeTo(width, height);
-        Debug.inform("settings.resize: Resized to width " + width + ", height " + height);
+        //Debug.inform("settings.resize: Resized to width " + width + ", height " + height);
       }
     }
     catch (error)
@@ -226,7 +226,7 @@ EPG.settings = function(Debug, growl, file)
         }
         else
         {
-          Debug.inform("settings.channelListExported success!");
+          //Debug.inform("settings.channelListExported success!");
         }
       }
       else
@@ -289,7 +289,7 @@ EPG.settings = function(Debug, growl, file)
       if (window.widget && window.widget.system)
       {
         file.showLoadingImage();
-        Debug.inform("settings.exportChannelList exporting...");
+        //Debug.inform("settings.exportChannelList exporting...");
         widget.system("/bin/echo '" + string + "' > " + file.getHomePath() + "Library/Xmltv/channels/epg.users.channels.txt", channelListExported);
       }
       else

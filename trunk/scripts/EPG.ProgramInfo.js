@@ -693,7 +693,6 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
     {
       try
       {
-        Debug.inform("ProgramInfo.hide");
         if(scalableContainer.style.visibility !== "hidden")
         {
           scalableContainer.style.visibility = "hidden";
@@ -819,7 +818,6 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
     {
       try
       {
-        Debug.inform("Programinfo.updateSkin(" + skinId + ")");
         scalableContainer.updateSkin(skinId);
         progressbarEmptyContainer.updateSkin(skinId);
         progressbarFullContainer.updateSkin(skinId);

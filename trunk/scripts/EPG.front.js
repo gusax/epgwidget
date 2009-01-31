@@ -462,7 +462,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       if(dragElement !== channelNode)
       {
         dragElement = channelNode;
-        Debug.inform("Started dragging element: " + dragElement);
+        //Debug.inform("Started dragging element: " + dragElement);
       }
     }
     catch (error)
@@ -487,7 +487,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       stopEvent(event);
       if(dragElement && channelNode && dragElement !== channelNode)
       {
-        Debug.inform("Dragged over element: " + channelNode);
+        //Debug.inform("Dragged over element: " + channelNode);
         dragElement.hasBeenDragged = true;
         switchChannelNodes(channelNode);
       }
@@ -771,7 +771,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   {
     try
     {
-      Debug.inform("Front.updateClock: time = " + time);
+      //Debug.inform("Front.updateClock: time = " + time);
       if(typeof time  === "string")
       {
         topBar.heading.overview = time;
@@ -838,7 +838,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     try
     {
       var num, time, hour, minute;
-      Debug.inform("number " + number);
+      //Debug.inform("number " + number);
       if(typeof key.firstKey !== "number" && number < 3) // first number, must be 0, 1 or 2
       {
         key.firstKey = number;
@@ -887,7 +887,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             {
               updateClock(key.firstKey + "" + key.secondKey + ":" + key.thirdKey + "" + key.forthKey + " " + Translator.translate("today"));
             }
-            Debug.inform("time = " + time);
+            //Debug.inform("time = " + time);
             stopUpdateInterval();
             that.reloadPrograms(time, true);
             delete key.firstKey;
@@ -999,7 +999,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           else if (event.wheelDeltaX)
           {
             // Side scrolling
-            Debug.inform("Front scrollFront would have scrolled sideways: " + (event.wheelDeltaX / 40));
+            //Debug.inform("Front scrollFront would have scrolled sideways: " + (event.wheelDeltaX / 40));
             amount = 0;
           }
           else if(event.wheelDelta)
@@ -2077,7 +2077,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
       try
       {
-        Debug.inform("Front.hide");
+        //Debug.inform("Front.hide");
         visible = false;
         stopUpdateInterval();
         ProgramInfo.hide();
@@ -2152,7 +2152,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         currentChannelList = Settings.getChannelList(currentChannelListIndex);
         if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
         {
-          Debug.inform("number of channels in list " + currentChannelListIndex + ": " + currentChannelList.ordered.length);
+          //Debug.inform("number of channels in list " + currentChannelListIndex + ": " + currentChannelList.ordered.length);
           height = 80 + currentChannelList.ordered.length * 38;
           channelListHeight = height;
           overviewDiv.style.height = ((channelListHeight/10) - 8) + "em";
@@ -2162,7 +2162,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           }
           channelListHeight -= 80;
           channelListHeight = channelListHeight / 10;
-          Debug.inform("channelListHeight = " + channelListHeight);
+          //Debug.inform("channelListHeight = " + channelListHeight);
           if(channelListHeight < 0)
           {
             channelListHeight = 0;
@@ -2288,7 +2288,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
       try
       {
-        Debug.inform("front.onShow");
+        //Debug.inform("front.onShow");
         that.reloadIcons();
         that.reloadPrograms();
         startUpdateInterval(); // should really be one interval per channel

@@ -121,7 +121,7 @@ EPG.Reminder = function(Debug, Growl, Settings, Translator)
               if(message)
               {
                 logoPath = Settings.getLogoPath(program.channel);
-                Debug.inform("Settings.getLogoPath(program.channel) = " + Settings.getLogoPath(program.channel));
+                //Debug.inform("Settings.getLogoPath(program.channel) = " + Settings.getLogoPath(program.channel));
                 reminders[program.channel][program.start] = Growl.notifyLater(message, logoPath, true, false, timeLeft, title);
               }
               
