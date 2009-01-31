@@ -848,7 +848,7 @@ EPG.settings = function(Debug, growl, file)
       }
     },
     
-    getAllChannels: function(onSuccess, onFailure) 
+    getAllChannels: function(onSuccess, onFailure, forceRefresh) 
     {
       try
       {
@@ -863,7 +863,7 @@ EPG.settings = function(Debug, growl, file)
         }
         callbacks.allChannels.push(callback);
         
-        if (!allChannels.lastUpdate || (now - allChannels.lastUpdate) >= oneDay)
+        if (forceRefresh || !allChannels.lastUpdate || (now - allChannels.lastUpdate) >= oneDay)
         {
           // re-import channels.js once per day (just assume that the file is there, the download itself is taken care of by the grabber)
           //Debug.inform("settings.getAllChannels: Opening channels.js since it was more than one day since it was last opened.");

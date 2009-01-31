@@ -199,7 +199,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 		  try
 		  {
 		    debug.inform("----------- Onshow! -----------");
-		    settings.getAllChannels(afterOnShow, channelsLoadedFailed);
+		    settings.getAllChannels(afterOnShow, channelsLoadedFailed, true);
 		  }
 		  catch (error)
 		  {
