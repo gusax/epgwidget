@@ -193,7 +193,7 @@ EPG.growl = function(Debug, Translator)
         }
         else
         {
-          Debug.inform("GROWL NOTIFICATION:\n" + message);
+          //Debug.inform("GROWL NOTIFICATION:\n" + message);
         }
       }
       catch (error)

@@ -79,11 +79,11 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
       {
         if(!currentChannelList)
         {
-          growl.notifyNow("List with index " + currentChannelListIndex + " did not exist! Switching to backside!");
+          //growl.notifyNow("List with index " + currentChannelListIndex + " did not exist! Switching to backside!");
         }
         else
         {
-          growl.notifyNow("List with index " + currentChannelListIndex + " had no channels in it! Switching to backside!");
+          //growl.notifyNow("List with index " + currentChannelListIndex + " had no channels in it! Switching to backside!");
         }
         front.hide();
         that.toBack();
@@ -107,7 +107,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
   {
     try
     {
-      growl.notifyNow("Could not load any channels :-( - does your internet connection work?");
+      //growl.notifyNow("Could not load any channels :-( - does your internet connection work?");
       debug.alert("Could not load any channels :-( - does your internet connection work?");
       
       if(!downloadingChannels)
