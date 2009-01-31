@@ -36,7 +36,7 @@ EPG.skin = function(debug, growl, settings, File)
   var that,
   currentSkin = {},
   skinElement,
-  defaultSkin = "orangehc",
+  defaultSkin = "plastic",
   backSkin = "back",
   skinList;
   
