@@ -1053,7 +1053,20 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
           }
           else
           {
-            //reload();
+            settings.getAllChannels(that.reloadChannelList, 
+            function()
+            {
+              try
+              {
+                resetChannelListScroll(); 
+                createChannelListFailure(channelListContainer);
+              }
+              catch (error2)
+              {
+                debug.alert("Error in back.show when trying to update channel list: " + error2);
+              }
+            },
+            true);
           }
           backDiv.style.display="block";
           
