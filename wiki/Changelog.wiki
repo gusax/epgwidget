@@ -21,10 +21,14 @@ _Nya funktioner_
 
  * Framsidan: Det går nu att scrolla framsidan upp och ner med mellanslagstangenten. Tryck på mellanslag för att scrolla ett stort hopp nedåt i kanallistan, håll inne shift och tryck på mellanslag för att scrolla ett stort hopp uppåt. Samma kortkommando som i Firefox mao.
 
-_Rättade buggar_
- * Dagsvyn ligger inte längre kvar ovanpå nu-nästa-senare-vyn om man vänder widgeten fram och tillbaka när heldagsvyn är synlig. ([http://code.google.com/p/epgwidget/issues/detail?id=62 62])
+ * Framsidan: Bytte så standardutseendet numer är "Plast" istället för "Orange HC".
 
- * Loggorna bör inte längre flimra i Tiger när man pekar med muspekare på dem, för att öppna heldagsvyn tex. Det bör heller inte längre vara så svårt att ta sig ur heldagsvyn. Detta har gjort att utseendet i heldagsvyn ändrats en smula. ([http://code.google.com/p/epgwidget/issues/detail?id=54 54])
+_Rättade buggar_
+ * Baksidan: Kanallistan uppdateras nu varje gång man tar fram widgeten, oavsett vilken sida som är vänd framåt. Tidigare uppdaterades den enbart om man hade baksidan uppe när man tog fram dashboard.
+
+ * Framsidan: Dagsvyn ligger inte längre kvar ovanpå nu-nästa-senare-vyn om man vänder widgeten fram och tillbaka när heldagsvyn är synlig. ([http://code.google.com/p/epgwidget/issues/detail?id=62 62])
+
+ * Framsidan: Loggorna bör inte längre flimra i Tiger när man pekar med muspekare på dem, för att öppna heldagsvyn tex. Det bör heller inte längre vara så svårt att ta sig ur heldagsvyn. Detta har gjort att utseendet i heldagsvyn ändrats en smula. ([http://code.google.com/p/epgwidget/issues/detail?id=54 54])
 
 ----
 
