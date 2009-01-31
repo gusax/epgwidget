@@ -787,6 +787,10 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         {
           aSkin = skins[index];
           aSkin.value = aSkin.id;
+          if (aSkin.author)
+          {
+            aSkin.title = translator.translate(aSkin.title) + " - " + translator.translate("by") + " " + aSkin.author;
+          }
           skinListItem = UIcreator.createListItem(aSkin, skinList);
           if (aSkin.id === currentSkin)
           {
