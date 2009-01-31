@@ -3,6 +3,9 @@
 ===Innehållsförteckning===
  * [Changelog Nästa version]
 
+===2009===
+ * [Changelog#20090131 20090131]
+
 ===2008===
  * [Changelog#20081207 20081207]
  * [Changelog#20080915 20080915]
