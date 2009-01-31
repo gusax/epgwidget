@@ -2,8 +2,6 @@
 #labels Deprecated
 ===Innehållsförteckning===
  * [Changelog Nästa version]
-
-===2009===
  * [Changelog#20090131 20090131]
 
 ===2008===
