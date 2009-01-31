@@ -868,20 +868,16 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       groupChannels("Swedish", 
       [
         "svt1.svt.se",
-        "svt24.svt.se",
-        "svt2.svt.se",
-        "hd.svt.se",
-        "tv3.viasat.se",
-        "plus.tv4.se",
-        "tv4.se",
-        "goteborg.kanallokal.se",
-        "kanal5.se",
-        "ostergotland.kanallokal.se",
-        "tv6.viasat.se",
-        "skane.kanallokal.se",
         "svtb-kunskap.svt.se",
-        "stockholm.kanallokal.se",
-        "kanal9.se"
+        "svt2.svt.se",
+        "svt24.svt.se",
+        "tv3.viasat.se",
+        "hd.svt.se",
+        "tv4.se",
+        "plus.tv4.se",
+        "kanal5.se",
+        "kanal9.se",
+        "tv6.viasat.se"
       ]);
       groupChannels("Documentaries & nature", 
       [
@@ -995,7 +991,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       groupChannels("Removed or renamed");
       
       currentChannelListIndex = settings.getCurrentChannelListIndex();
-      document.addEventListener("keyup", 
+      document.addEventListener("keydown", 
         function(event)
         {
           if(visible && event)
