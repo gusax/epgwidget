@@ -567,12 +567,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       if(reverse)
       {
         channelNode.logo.style.opacity = "0.8";
-        channelNode.programsNode.style.visibility = "inherit";
+        channelNode.programsNode.style.opacity = "1";
       }
       else
       {
         channelNode.logo.style.opacity = "0.3";
-        channelNode.programsNode.style.visibility = "hidden";
+        channelNode.programsNode.style.opacity = "0";
       }
     }
     catch (error)
@@ -607,12 +607,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             if(reverse)
             {
               channelNode.logo.style.opacity = "0.8";
-              channelNode.programsNode.style.visibility = "inherit";
+              channelNode.programsNode.style.opacity = "1";
             }
             else
             {
               channelNode.logo.style.opacity = "0.8";
-              channelNode.programsNode.style.visibility = "hidden";
+              channelNode.programsNode.style.opacity = "0";
             }
           }
           else
@@ -720,7 +720,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       dayViewDiv = document.createElement("div");
       dayViewDiv.setAttribute("id", "dayView");
       UIcreator.setPosition(dayViewDiv, "5.7em", "0em", "19.3em", false, 4, "absolute");
-      dayViewDiv.style.visibility = "hidden";
+      dayViewDiv.style.opacity = "0";
+      dayViewDiv.style.zIndex = "-1";
       return dayViewDiv;
     }
     catch (error)
@@ -1301,7 +1302,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         // print error
       }
-      dayViewDiv.style.display = "block";
+      //dayViewDiv.style.display = "block";
       if (currentNode)
       {
         limit = -1 * currentNode.offsetTop;
@@ -1325,7 +1326,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           40);*/
         scrollDayView(false, -1 * currentNode.offsetTop);
       }
-      dayViewDiv.style.visibility = "visible";
+      dayViewDiv.style.opacity = "1";
+      dayViewDiv.style.zIndex = "99";
     }
     catch (error)
     {
@@ -1358,7 +1360,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         }
         else
         {
-          dayViewDiv.style.display = "none";
+          //dayViewDiv.style.display = "none";
+          dayViewDiv.style.opacity = "0";
+          dayViewDiv.style.zIndex = "-1";
           dimAllChannelNodesExcept(channelNode, true);
           currentView = 0; // now next later
         }
@@ -1366,7 +1370,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       }
       else if(currentView !== 0) // current view is not now next later
       {
-        dayViewDiv.style.display = "none";
+        //dayViewDiv.style.display = "none";
+        dayViewDiv.style.opacity = "0";
+        dayViewDiv.style.zIndex = "-1";
         dimAllChannelNodesExcept(channelNode, true);
         currentView = 0; // now next later
         updateTopBar();
