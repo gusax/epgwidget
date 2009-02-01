@@ -115,7 +115,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         timeLeft = Math.floor((now - stop) / 60000);
         hoursLeft = Math.floor(timeLeft / 60); 
         minLeft = timeLeft - hoursLeft * 60;
-        progressbarFull.style.visibility = "hidden";
+        progressbarFull.firstChild.style.width = "0%";
+        //progressbarFull.style.visibility = "hidden";
         programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + "\u00A0" + (Math.round(length/60000)) + " " + Translator.translate("min") + ", " + Translator.translate("ended") + " ";
         minWording = "\u00A0ago";
         hoursLeft = -1*hoursLeft;
@@ -127,7 +128,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         minLeft = timeLeft - hoursLeft * 60;
         width = Math.round( ((now - start) / length) * 100);
         progressbarFull.firstChild.style.width = width + "%";
-        progressbarFull.style.visibility = "inherit";
+        //progressbarFull.style.visibility = "inherit";
         minWording = "\u00A0left";
         programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + " " + Math.round(length/60000) + "\u00A0" + Translator.translate("min") + ", ";
       }
@@ -136,7 +137,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         timeLeft = Math.round(((start - now)/60000));
         hoursLeft = Math.floor(timeLeft / 60);
         minLeft = timeLeft - hoursLeft * 60;
-        progressbarFull.style.visibility = "hidden";
+        progressbarFull.firstChild.style.width = "0%";
+        //progressbarFull.style.visibility = "hidden";
         minWording = "";
         programInfoNode.durationNode.nodeValue = Translator.translate("Duration") + " " + (Math.round(length/60000)) + "\u00A0" + Translator.translate("min") + ", " + Translator.translate("starts\u00A0in") + "\u00A0";
       }
@@ -430,6 +432,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         progressbarFull.setAttribute("class","progressbarFullContainer");
         UIcreator.setPosition(progressbarFull, "4.1em", "4.6em", "12em", "1.4em", 2, "absolute");
         progressbarFull.appendChild(div.cloneNode(true));
+        progressbarFull.firstChild.setAttribute("class", "progressbarScalableContainer");
         progressbarFull.firstChild.style.width = "0%";
         progressbarFull.firstChild.style.height = "100%";
         progressbarFull.firstChild.style.overflow = "hidden";
@@ -513,7 +516,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         scalableContainer.setAttribute("id","programInfo");
         UIcreator.setPosition(scalableContainer, "25.1em", "1em", "22.3em", "26.5em", -1, "absolute");
         scalableContainer.style.fontWeight = "bold";
-        scalableContainer.style.visibility = "hidden";
+        scalableContainer.style.opacity = "0";
         document.getElementsByTagName("body")[0].appendChild(scalableContainer);
         
         delete that.init;
@@ -573,7 +576,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
               programInfoNode.startNode.nodeValue = "";
               programInfoNode.stopNode.nodeValue = "";
               programInfoNode.durationNode.nodeValue = "";
-              progressbarFull.style.visibility = "hidden";
+              progressbarFull.firstChild.style.width = "0%";
+              //progressbarFull.style.visibility = "hidden";
             }
             else if(typeof(program.title) === "undefined")
             {
@@ -629,7 +633,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
                 programInfoNode.startNode.nodeValue = "";
                 programInfoNode.stopNode.nodeValue = "";
                 programInfoNode.durationNode.nodeValue = "";
-                progressbarFull.style.visibility = "hidden";
+                progressbarFull.firstChild.style.width = "0%";
+                //progressbarFull.style.visibility = "hidden";
               }
               
               // Duration & time to/left
@@ -651,24 +656,24 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
                 programInfoNode.scrollDownButton.style.visibility = "hidden";
               }
               
-              if(scalableContainer.style.visibility !== "visible")
+              if(scalableContainer.style.opacity !== "1")
               {
-                scalableContainer.style.visibility = "visible";
+                scalableContainer.style.opacity = "1";
                 Settings.resizeTo(474);
               }
             }
             programInfoNode.titleNode.parentNode.setAttribute("title", programInfoNode.titleNode.nodeValue);
           } 
-          else if(scalableContainer.style.visibility !== "visible")
+          else if(scalableContainer.style.opacity !== "1")
           {
             programInfoNode.durationContainer.style.top = "0px";
             programInfoNode.descriptionContainer.style.top = "0px";
-            scalableContainer.style.visibility = "visible";
+            scalableContainer.style.opacity = "1";
             Settings.resizeTo(474);
           }
-          else if(scalableContainer.style.visibility !== "hidden")
+          else if(scalableContainer.style.opacity !== "0")
           {
-            scalableContainer.style.visibility = "hidden";
+            scalableContainer.style.opacity = "0";
             Settings.resizeTo(270);
           }
           
@@ -693,9 +698,9 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
     {
       try
       {
-        if(scalableContainer.style.visibility !== "hidden")
+        if(scalableContainer.style.opacity !== "0")
         {
-          scalableContainer.style.visibility = "hidden";
+          scalableContainer.style.opacity = "0";
           delete programInfoNode.program;
           Settings.resizeTo(270);
         }
@@ -801,7 +806,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
     {
       try
       {
-        return scalableContainer.style.visibility != "hidden";
+        return scalableContainer.style.opacity !== "0";
       }
       catch (error)
       {
