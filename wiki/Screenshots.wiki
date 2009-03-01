@@ -1,4 +1,4 @@
-#summary Bilder på EPG
+#summary Bilder på EPG-widgeten
 #labels Featured
 
 = Screenshots =
