@@ -59,7 +59,7 @@ EPG.file = function(Debug, growl, currentVersion)
       {
         if (xhr.stopTimeout)
         {
-          clearTimeout(xhr.stopTimeout);
+          xhr.stopTimeout = clearTimeout(xhr.stopTimeout);
         }
         if(xhr.responseText)
         {
@@ -106,6 +106,10 @@ EPG.file = function(Debug, growl, currentVersion)
           if(xhr.onFailure)
           {
             xhr.onFailure(xhr.channelID);
+          }
+          if (xhr.stopTimeout)
+          {
+            xhr.stopTimeout = clearTimeout(xhr.stopTimeout);
           }
         }
         xhr = false;
@@ -381,15 +385,18 @@ EPG.file = function(Debug, growl, currentVersion)
               fileOpened(xhr);
             };
             xhr.stopTimeout = setTimeout(
-            function()
+            function(xhr)
             {
-              this.abort();
-              if (this.onFailure)
+              return function ()
               {
-                Debug.alert("file.open: XHR timeout for file " + this.path);
-                this.onFailure("Timeout");
-              }
-            }, XHRTIMEOUT);
+                Debug.alert("file.open: XHR timeout for file " + xhr.path);
+                if (xhr.onFailure)
+                {
+                  xhr.onFailure("Timeout");
+                }
+                xhr.abort();
+              };
+            }(xhr), XHRTIMEOUT);
             xhr.open("GET", path, true);
             xhr.send("");
             //Debug.inform("file.open: Opening file at path: " + path);
