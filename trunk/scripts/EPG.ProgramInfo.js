@@ -42,7 +42,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
   progressbarEmptyContainer,
   logo,
   animationRunning = false,
-  animationInterval;
+  animationInterval,
+  safariVersion = 0;
   
   // Private methods
   /**
@@ -348,23 +349,43 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
       var limit;
       
       limit = -1*(programInfoNode.descriptionFrameNode.scrollHeight - programInfoNode.descriptionFrameNode.offsetHeight);
+      if ((amount < 0 && amount < limit)) // Trying to scroll to far down
+      {
+        amount = limit;
+      }
       if(!animationRunning)
       {
-        if(limit < 0)
+        if (safariVersion < 4)
         {
-          programInfoNode.descriptionContainer.topY = programInfoNode.descriptionContainer.topY + amount;
-          if(programInfoNode.descriptionContainer.topY > 0)
+          if(limit < 0)
           {
-            //startBounceback(amount, 0);
-            programInfoNode.descriptionContainer.topY = 0;
+            programInfoNode.descriptionContainer.topY = programInfoNode.descriptionContainer.topY + amount;
+            if(programInfoNode.descriptionContainer.topY > 0)
+            {
+              //startBounceback(amount, 0);
+              programInfoNode.descriptionContainer.topY = 0;
+            }
+            else if(programInfoNode.descriptionContainer.topY < limit)
+            {
+              //startBounceback(amount, limit);
+              programInfoNode.descriptionContainer.topY = limit;
+            }
+            programInfoNode.durationContainer.style.top = programInfoNode.descriptionContainer.topY + "px";
+            programInfoNode.descriptionContainer.style.top = programInfoNode.descriptionContainer.topY + "px";
           }
-          else if(programInfoNode.descriptionContainer.topY < limit)
+        }
+        else
+        {
+          if(limit < 0 || (limit === 0 && amount > 0))
           {
-            //startBounceback(amount, limit);
-            programInfoNode.descriptionContainer.topY = limit;
+            programInfoNode.descriptionContainer.topY = programInfoNode.descriptionContainer.topY + amount;
+            if (programInfoNode.descriptionContainer.topY > 0) // Trying to scroll too far up
+            {
+              programInfoNode.descriptionContainer.topY = 0;
+            }
+            programInfoNode.durationContainer.style.top = programInfoNode.descriptionContainer.topY + "px";
+            programInfoNode.descriptionContainer.style.top = programInfoNode.descriptionContainer.topY + "px";
           }
-          programInfoNode.durationContainer.style.top = programInfoNode.descriptionContainer.topY + "px";
-          programInfoNode.descriptionContainer.style.top = programInfoNode.descriptionContainer.topY + "px";
         }
       }
     }
@@ -391,6 +412,34 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         {
           that = this;
         }
+        
+        Debug.inform("navigator.appVersion = " + navigator.appVersion + " navigator.appVersion.match(Safari) " + navigator.appVersion.match("Safari"));
+        if (navigator.appVersion.match("Safari"))
+        {
+          if (navigator.appVersion.match("Version/4")) // Leopard with Safari 4
+          {
+            safariVersion = 4;
+          }
+          else if (navigator.appVersion.match("Version/3")) // Tiger (and also Leopard with Safari 3)
+          {
+            safariVersion = 3;
+          }
+          else if (navigator.appVersion.match("Version/2")) // Tiger
+          {
+            safariVersion = 2;
+          }
+          else
+          {
+            safariVersion = 0;
+          }
+          Debug.inform("Safari version detected: " + safariVersion);
+        }
+        else // Firefox
+        {
+          safariVersion = 4;
+          Debug.inform("Firefox detected, safariVersion set to " + safariVersion);
+        }
+        
         
         currentChannelListIndex = Settings.getCurrentChannelListIndex();
         programInfoNode = document.createElement("div");
