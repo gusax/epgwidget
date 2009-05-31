@@ -11,7 +11,7 @@ Senaste ändringarna ligger alltid överst.
 ----
 
 
-== Nästa version ==
+== 20090531 ==
 _Nya funktioner_
  * Framsidan: Lade till tonade övergångar mellan nu-nästa-senare- och heldagsvyn samt animerad progressbar i inforutan. (Fungerar ej i Tiger, vissa effekter kräver Safari 4 i Leopard.) 
 
