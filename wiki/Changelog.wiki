@@ -14,6 +14,7 @@ Senaste ändringarna ligger alltid överst.
 == Nästa version ==
 _Nya funktioner_
  * Framsidan: Lade till tonade övergångar mellan nu-nästa-senare- och heldagsvyn samt animerad progressbar i inforutan. (Fungerar ej i Tiger, vissa effekter kräver Safari 4 i Leopard.) 
+
  * Baksidan: Lade till TV1000 Drama och TV7 i listan med kända kanaler.
 
 _Rättade buggar_
