@@ -1687,6 +1687,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             {
               scrollFront(event, 10);
             }
+            if (event.preventDefault)
+            {
+              event.preventDefault();
+            }
           break;
           case key.ARROW_DOWN:
             if (ProgramInfo.isVisible())
@@ -1696,6 +1700,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             else
             {
               scrollFront(event, -10);
+            }
+            if (event.preventDefault)
+            {
+              event.preventDefault();
             }
           break;
           case key.COMMA:
@@ -1723,6 +1731,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             else
             {
               scrollFront(event, -Math.round(scrollFrame.offsetHeight / 2));
+            }
+            if (event.preventDefault)
+            {
+              event.preventDefault();
             }
           break;
           case key.T:
