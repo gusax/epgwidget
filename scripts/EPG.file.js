@@ -394,7 +394,14 @@ EPG.file = function(Debug, growl, currentVersion)
                 {
                   xhr.onFailure("Timeout");
                 }
-                xhr.abort();
+                try
+                {
+                  xhr.abort(); 
+                }
+                catch (error)
+                {
+                  // Crashes on Safari 4. Fail silently...
+                }
               };
             }(xhr), XHRTIMEOUT);
             xhr.open("GET", path, true);
