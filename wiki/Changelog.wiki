@@ -9,6 +9,22 @@ Senaste ändringarna ligger alltid överst.
 
 
 ----
+
+
+== Nästa version ==
+_Nya funktioner_
+ * Framsidan: Lade till tonade övergångar mellan nu-nästa-senare- och heldagsvyn samt animerad progressbar i inforutan. (Fungerar ej i Tiger, vissa effekter kräver Safari 4 i Leopard.) 
+
+_Rättade buggar_
+ * Intern logik: Tog bort en funktion som kunde orsaka att widgeten kraschade vid timeout i XMLHttpRequest om man hade Safari 4 installerad. 
+
+ * Inforutan: Det går nu att scrolla texten i inforutan även i Safari 4.
+
+ * Baksidan: Lade till en text för att förtydliga att tablåerna kommer från tv.swedb.se . ([http://code.google.com/p/epgwidget/issues/detail?id=72 72])
+
+----
+
+
 == 20090131 ==
 _Nya funktioner_
  * Baksidan: Kanalerna är nu grupperade efter tema, istället för att bara ligga huller om buller i en lång lista. Dokumentär, sport, musik osv. För att få lite mer översikt över de nya grupperingarna har baksidan gjorts bredare. ([http://code.google.com/p/epgwidget/issues/detail?id=2 2])
