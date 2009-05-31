@@ -80,6 +80,7 @@ EPG.translator = function(debug)
   localizedStrings.Other = "Övrigt";
   localizedStrings["Removed or renamed"] = "Borttagna eller omdöpta";
   localizedStrings.by = "av";
+  localizedStrings["schedules from tv.swedb.se"] = "tablåer från tv.swedb.se";
   // Private methods
   
   

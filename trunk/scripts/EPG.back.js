@@ -208,7 +208,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       tempTextNode = document.createTextNode("");
       
       tempElement.appendChild(tempTextNode.cloneNode(false));
-      tempElement.firstChild.nodeValue = translator.translate("EPG by") + " Gustav Axelsson. " + translator.translate("Enjoy") + " :-)";
+      tempElement.firstChild.nodeValue = translator.translate("EPG by") + " Gustav Axelsson, " + translator.translate("schedules from tv.swedb.se") + ". " + translator.translate("Enjoy") + " :-)";
       
       return UIcreator.createScalableContainer("middle", tempElement.cloneNode(true), "bakgrund.png", "back");
     }
@@ -881,7 +881,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         "plus.tv4.se",
         "kanal5.se",
         "kanal9.se",
-        "tv6.viasat.se"
+        "tv6.viasat.se",
+        "tv7.nu"
       ]);
       groupChannels("Documentaries & nature", 
       [
@@ -917,7 +918,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         "hd.tv1000.viasat.se",
         "hits.canalplus.se",
         "nordic.tv1000.viasat.se",
-        "hits-sport-weekend.canalplus.se"
+        "hits-sport-weekend.canalplus.se",
+        "drama.tv1000.viasat.se"
       ]);
       groupChannels("Sport", 
       [
