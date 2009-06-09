@@ -355,7 +355,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
       }
       if(!animationRunning)
       {
-        if (safariVersion < 4)
+        if (safariVersion < 99)
         {
           if(limit < 0)
           {
@@ -416,9 +416,9 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         Debug.inform("navigator.appVersion = " + navigator.appVersion + " navigator.appVersion.match(Safari) " + navigator.appVersion.match("Safari"));
         if (navigator.appVersion.match("Safari"))
         {
-          if (navigator.appVersion.match("Version/4")) // Leopard with Safari 4
+          if (navigator.appVersion.match("Version/4")) // Leopard with Safari 4 beta
           {
-            safariVersion = 4;
+            safariVersion = 99;
           }
           else if (navigator.appVersion.match("Version/3")) // Tiger (and also Leopard with Safari 3)
           {
@@ -432,14 +432,16 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
           {
             safariVersion = 0;
           }
-          Debug.inform("Safari version detected: " + safariVersion);
+        }
+        else if(navigator.appVersion.match("AppleWebKit")) // Safari 4
+        {
+          safariVersion = 4;
         }
         else // Firefox
         {
-          safariVersion = 4;
-          Debug.inform("Firefox detected, safariVersion set to " + safariVersion);
+          safariVersion = 99;
         }
-        
+        Debug.inform("Safari version detected: " + safariVersion);
         
         currentChannelListIndex = Settings.getCurrentChannelListIndex();
         programInfoNode = document.createElement("div");
