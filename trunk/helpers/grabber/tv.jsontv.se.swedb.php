@@ -164,13 +164,21 @@ function createLinksJsontv($filenames,$usersChannels,$pathToChannelsXml,$links,$
 							array_push($links,$baseUrl ."". $filename);
 						}
 						
-						// And create one imageLink for the icon (if one exists)
-						$start = strpos($channelTag,"<icon src=\"") + 11;
-						$end = strpos($channelTag,"\"",$start);
-						if($start < $end)
+						if (strpos($channelTag,"<icon src=\"") === false)
 						{
-							$iconSrc = trim(substr($channelTag,$start,$end-$start));
-							$iconLinks[$id] = $iconSrc;
+							// No icon. For some reason $start < $end does not work when <icon> is missing.
+							$iconSrc = "";
+						}
+						else
+						{
+							// And create one imageLink for the icon (if one exists)
+							$start = strpos($channelTag,"<icon src=\"") + 11;
+							$end = strpos($channelTag,"\"",$start);
+							if($start < $end)
+							{
+								$iconSrc = trim(substr($channelTag,$start,$end-$start));
+								$iconLinks[$id] = $iconSrc;
+							}
 						}
 					}
 				}
