@@ -742,6 +742,37 @@ EPG.settings = function(Debug, growl, file)
       paths.channelsFolder = "Library/Xmltv/channels/";
       paths.scheduleFolder = "Library/Xmltv/schedules/";
       paths.allChannels = paths.channelsFolder + "tv.jsontv.se.swedb.channels.js";
+      Debug.inform("Settings.init: navigator.userAgent = " + navigator.userAgent);
+      if (navigator.userAgent.match("Safari"))
+      {
+        if (navigator.userAgent.indexOf("Version/4") > 0) // Leopard with Safari 4 (including the beta versions)
+        {
+          that.safariVersion = 4;
+        }
+        else if (navigator.userAgent.indexOf("Version/3") > 0) // Tiger (and also Leopard with Safari 3)
+        {
+          that.safariVersion = 3;
+        }
+        else if (navigator.userAgent.indexOf("Version/2") > 0) // Tiger
+        {
+          that.safariVersion = 2;
+        }
+        else
+        {
+          that.safariVersion = 0;
+        }
+        Debug.inform("Safari version detected: " + that.safariVersion);
+      }
+      else if (navigator.userAgent.indexOf("Firefox") > 0)
+      {
+        that.safariVersion = 999;
+        Debug.inform("Settings.init: Firefox detected! that.safariVersion set to " + that.safariVersion);
+      }
+      else
+      {
+        that.safariVersion = 4;
+        Debug.inform("Settings.init: that.safariVersion set to " + that.safariVersion);
+      }
       delete that.init;
     },
     

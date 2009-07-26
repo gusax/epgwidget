@@ -1005,7 +1005,14 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           }
           else if(event.wheelDelta)
           {
-            amount = event.wheelDelta / 40;
+            if (Settings.safariVersion === 4)
+            {
+              amount = event.wheelDelta;
+            }
+            else
+            {
+              amount = event.wheelDelta / 40;
+            }
           }
           else
           {
@@ -1306,24 +1313,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       if (currentNode)
       {
         limit = -1 * currentNode.offsetTop;
-        //Debug.inform("fillDayView: limit = " + limit + " offsetTop " + currentNode.offsetTop + " scrollFrame.offsetHeight " + scrollFrame.offsetHeight + " scrollHeight " + scrollFrame.dayView.scrollHeight);
-        /*scrollInterval = setInterval(
-          function (target, stepsize)
-          {
-            return function ()
-            {
-              target += -1*stepsize;
-              if (target < 0)
-              {
-                scrollDayView(false, stepsize);
-              }
-              else
-              {
-                clearInterval(scrollInterval);
-              }
-            };
-          }(-1 * currentNode.offsetTop, -12), 
-          40);*/
         scrollDayView(false, -1 * currentNode.offsetTop);
       }
       dayViewDiv.style.opacity = "1";

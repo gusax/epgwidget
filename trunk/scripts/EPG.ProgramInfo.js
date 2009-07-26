@@ -42,8 +42,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
   progressbarEmptyContainer,
   logo,
   animationRunning = false,
-  animationInterval,
-  safariVersion = 0;
+  animationInterval;
   
   // Private methods
   /**
@@ -347,7 +346,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
     try
     {
       var limit;
-      
+      //Debug.inform("ProgramInfo scrollDescription incoming amount: " + amount);
       limit = -1*(programInfoNode.descriptionFrameNode.scrollHeight - programInfoNode.descriptionFrameNode.offsetHeight);
       if ((amount < 0 && amount < limit)) // Trying to scroll to far down
       {
@@ -355,37 +354,21 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
       }
       if(!animationRunning)
       {
-        if (safariVersion < 99)
+        if(limit < 0)
         {
-          if(limit < 0)
+          programInfoNode.descriptionContainer.topY = programInfoNode.descriptionContainer.topY + amount;
+          if(programInfoNode.descriptionContainer.topY > 0)
           {
-            programInfoNode.descriptionContainer.topY = programInfoNode.descriptionContainer.topY + amount;
-            if(programInfoNode.descriptionContainer.topY > 0)
-            {
-              //startBounceback(amount, 0);
-              programInfoNode.descriptionContainer.topY = 0;
-            }
-            else if(programInfoNode.descriptionContainer.topY < limit)
-            {
-              //startBounceback(amount, limit);
-              programInfoNode.descriptionContainer.topY = limit;
-            }
-            programInfoNode.durationContainer.style.top = programInfoNode.descriptionContainer.topY + "px";
-            programInfoNode.descriptionContainer.style.top = programInfoNode.descriptionContainer.topY + "px";
+            //startBounceback(amount, 0);
+            programInfoNode.descriptionContainer.topY = 0;
           }
-        }
-        else
-        {
-          if(limit < 0 || (limit === 0 && amount > 0))
+          else if(programInfoNode.descriptionContainer.topY < limit)
           {
-            programInfoNode.descriptionContainer.topY = programInfoNode.descriptionContainer.topY + amount;
-            if (programInfoNode.descriptionContainer.topY > 0) // Trying to scroll too far up
-            {
-              programInfoNode.descriptionContainer.topY = 0;
-            }
-            programInfoNode.durationContainer.style.top = programInfoNode.descriptionContainer.topY + "px";
-            programInfoNode.descriptionContainer.style.top = programInfoNode.descriptionContainer.topY + "px";
+            //startBounceback(amount, limit);
+            programInfoNode.descriptionContainer.topY = limit;
           }
+          programInfoNode.durationContainer.style.top = programInfoNode.descriptionContainer.topY + "px";
+          programInfoNode.descriptionContainer.style.top = programInfoNode.descriptionContainer.topY + "px";
         }
       }
     }
@@ -412,36 +395,6 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         {
           that = this;
         }
-        
-        Debug.inform("navigator.appVersion = " + navigator.appVersion + " navigator.appVersion.match(Safari) " + navigator.appVersion.match("Safari"));
-        if (navigator.appVersion.match("Safari"))
-        {
-          if (navigator.appVersion.match("Version/4")) // Leopard with Safari 4 beta
-          {
-            safariVersion = 99;
-          }
-          else if (navigator.appVersion.match("Version/3")) // Tiger (and also Leopard with Safari 3)
-          {
-            safariVersion = 3;
-          }
-          else if (navigator.appVersion.match("Version/2")) // Tiger
-          {
-            safariVersion = 2;
-          }
-          else
-          {
-            safariVersion = 0;
-          }
-        }
-        else if(navigator.appVersion.match("AppleWebKit")) // Safari 4
-        {
-          safariVersion = 4;
-        }
-        else // Firefox
-        {
-          safariVersion = 99;
-        }
-        Debug.inform("Safari version detected: " + safariVersion);
         
         currentChannelListIndex = Settings.getCurrentChannelListIndex();
         programInfoNode = document.createElement("div");
@@ -813,6 +766,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
     {
       try
       {
+        //Debug.inform("ProgramInfo.scroll incoming amount: " + amount);
         if(scalableContainer.style.visibility !== "hidden" && (program && programInfoNode.program === program) || (!program && programInfoNode.program))
         {
           if(!amount)
@@ -825,7 +779,11 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
             {
               amount = 0;
             }
-            else 
+            else if (Settings.safariVersion === 4)
+            {
+              amount = event.wheelDelta;
+            }
+            else
             {
               amount = event.wheelDelta / 40;
             }
