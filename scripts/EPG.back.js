@@ -102,7 +102,14 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
           }
           else if(event.wheelDelta)
           {
-            amount = event.wheelDelta / 40;
+            if (settings.safariVersion === 4)
+            {
+              amount = event.wheelDelta;
+            }
+            else
+            {
+              amount = event.wheelDelta / 40;
+            }
           }
           else
           {
