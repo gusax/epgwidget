@@ -13,7 +13,7 @@ Senaste ändringarna ligger alltid överst.
 _Nya funktioner_
 
 _Rättade buggar_
- * Inforutan: rättade scrollningen i Safari 4 slutliga versionen, dvs icke beta. ([http://code.google.com/p/epgwidget/issues/detail?id=80 80])
+ * Inforutan, framsidan och baksidan: rättade scrollningen i Safari 4 slutliga versionen, dvs icke beta. ([http://code.google.com/p/epgwidget/issues/detail?id=80 80] och [http://code.google.com/p/epgwidget/issues/detail?id=81 81])
 
  * Tablånedladdare: Av någon anledning kunde trams laddas ner från helt felaktiga adresser, om en kanal saknade logga. Det ska inte längre vara möjligt. ([http://code.google.com/p/epgwidget/issues/detail?id=83 83])
 
