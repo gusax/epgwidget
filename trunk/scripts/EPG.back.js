@@ -1068,13 +1068,19 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
           }
           else
           {
-            settings.getAllChannels(that.reloadChannelList, 
+            settings.getAllChannels(
+            function(channels)
+            {
+              that.reloadChannelList(channels);
+              settings.resizeTo(474, 648); // So that the keep/remove dialog on first install does not flow outside the screen.
+            },
             function()
             {
               try
               {
                 resetChannelListScroll(); 
                 createChannelListFailure(channelListContainer);
+                settings.resizeTo(474, 648); // So that the keep/remove dialog on first install does not flow outside the screen.
               }
               catch (error2)
               {
