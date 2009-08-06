@@ -17,6 +17,8 @@ _Rättade buggar_
 
  * Tablånedladdare: Av någon anledning kunde trams laddas ner från helt felaktiga adresser, om en kanal saknade logga. Det ska inte längre vara möjligt. ([http://code.google.com/p/epgwidget/issues/detail?id=83 83])
 
+ * Baksidan: Knapparna längst ner i behåll-/raderarutan man får upp vid första installationen ska nu inte längre hamna utanför skärmen. ([http://code.google.com/p/epgwidget/issues/detail?id=82 82])
+
 
 ----
 == 20090531 ==
