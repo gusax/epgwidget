@@ -838,6 +838,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       backDiv.appendChild(createDoneButton());
       backDiv.appendChild(createBottom());
       backDiv.lastChild.addEventListener("mouseup", that.goToFront, false);
+      settings.resizeTo(474, 648); // So that the keep/remove dialog on first install does not flow outside the screen.
     }
     catch (error)
     {
