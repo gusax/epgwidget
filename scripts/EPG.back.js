@@ -460,7 +460,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       channelId,
       tempElement,
       i,
-      alreadyFoundMissingChannel;
+      alreadyFoundMissingChannel,
+      fragment = document.createDocumentFragment();
       
       if (targetElement)
       {
@@ -473,9 +474,9 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         
         currentChannelList = settings.getChannelList(currentChannelListIndex);
         
-        for (groupIndex = 1; groupIndex < categories.length-1; groupIndex += 1)
+        for (groupIndex = 2; groupIndex < categories.length; groupIndex += 1)
         {
-          if (createGroupNode(categories[groupIndex], channelListToScroll.listFrame, channels, missingChannels, currentChannelList) && !createdOneGroup)
+          if (createGroupNode(categories[groupIndex], fragment, channels, missingChannels, currentChannelList) && !createdOneGroup)
           {
             createdOneGroup = true;
           }
@@ -533,8 +534,13 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         // Print missing channels
         if (missingChannels.length > 0)
         {
-          categories[categories.length-1].channels = missingChannels;
-          createGroupNode(categories[categories.length-1], channelListToScroll.listFrame, channels, [], currentChannelList, true);
+          categories[1].channels = missingChannels;
+          createGroupNode(categories[1], channelListToScroll.listFrame, channels, [], currentChannelList, true);
+        }
+        
+        if (createdOneGroup)
+        {
+          channelListToScroll.listFrame.appendChild(fragment);
         }
         
         // TODO: write an error message if createdOneGroup is still false
@@ -877,6 +883,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         that = this;
       }
       groupChannels("New");
+      groupChannels("Removed or renamed");
       groupChannels("Swedish", 
       [
         "svt1.svt.se",
@@ -1002,7 +1009,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
         "ppvsport5.canalplus.se",
         "ppv7.canalplus.se"
       ]);
-      groupChannels("Removed or renamed");
       
       currentChannelListIndex = settings.getCurrentChannelListIndex();
       document.addEventListener("keydown", 
