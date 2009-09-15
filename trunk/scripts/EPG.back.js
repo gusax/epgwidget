@@ -977,7 +977,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       ]);
       groupChannels("European", 
       [
-        "europa.svt.se"
+        "world.svt.se"
       ]);
       groupChannels("Radio", 
       [
