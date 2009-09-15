@@ -1,3 +1,10 @@
+#loadingImageFrame
+{
+  position: absolute;
+  top: 0.6em;
+  right: 4em;  	
+}
+
 #loadingImage
 {
   color: #fff;
