@@ -11,6 +11,9 @@ Senaste ändringarna ligger alltid överst.
 ----
 == Nästa version ==
 _Nya funktioner_
+ * Baksidan: SVT Europa omdöpt till SVT World.
+
+ * Baksidan: Borttagna kanaler ligger nu på andra position i listan av kanalgrupper. Tidigare låg den sist och var lätt att missa om man inte tittade efter den speciellt.
 
 _Rättade buggar_
  * Inforutan, framsidan och baksidan: rättade scrollningen i Safari 4 slutliga versionen, dvs icke beta. ([http://code.google.com/p/epgwidget/issues/detail?id=80 80] och [http://code.google.com/p/epgwidget/issues/detail?id=81 81])
