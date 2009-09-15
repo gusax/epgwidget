@@ -15,6 +15,8 @@ _Nya funktioner_
 _Rättade buggar_
  * Inforutan, framsidan och baksidan: rättade scrollningen i Safari 4 slutliga versionen, dvs icke beta. ([http://code.google.com/p/epgwidget/issues/detail?id=80 80] och [http://code.google.com/p/epgwidget/issues/detail?id=81 81])
 
+ * Baksidan: Flyttade timglaset som dyker upp när man laddar ner tablåer till rätt ställe.
+
  * Tablånedladdare: Av någon anledning kunde trams laddas ner från helt felaktiga adresser, om en kanal saknade logga. Det ska inte längre vara möjligt. ([http://code.google.com/p/epgwidget/issues/detail?id=83 83])
 
  * Baksidan: Knapparna längst ner i behåll-/raderarutan man får upp vid första installationen ska nu inte längre hamna utanför skärmen. ([http://code.google.com/p/epgwidget/issues/detail?id=82 82])
