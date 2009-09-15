@@ -272,9 +272,7 @@ EPG.file = function(Debug, growl, currentVersion)
         }
         
         loadingImage = document.createElement("div");
-        loadingImage.style.position = "absolute";
-        loadingImage.style.left = "23.2em";
-        loadingImage.style.top = "0.6em";
+        loadingImage.setAttribute("id", "loadingImageFrame");
         loadingImage.style.visibility = "visible";
         loadingImage.style.zIndex = "999";
         loadingImage.style.fontSize = "1em";
