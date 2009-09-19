@@ -75,16 +75,29 @@ EPG.file = function(Debug, growl, currentVersion)
             else
             {
               jsonObject = eval("(" + xhr.responseText + ")");
-              if(jsonObject && jsonObject.jsontv && xhr.onSuccess)
+              if(jsonObject && xhr.onSuccess)
               {
-                //Debug.inform("file.fileOpened: Successfully opened file " + xhr.path);
-                xhr.onSuccess(jsonObject.jsontv, xhr.channelID);
+                if (jsonObject.jsontv)
+                {
+                  //Debug.inform("file.fileOpened: Successfully opened jsontv file " + xhr.path + "\n" + xhr.responseText);
+                  xhr.onSuccess(jsonObject.jsontv, xhr.channelID);
+                }
+                else if (!xhr.channelID)
+                {
+                  //Debug.inform("file.fileOpened: Successfully opened file " + xhr.path + "\n" + xhr.responseText);
+                  xhr.onSuccess(jsonObject);
+                }
+                else if(xhr.onFailure)
+                {
+                  Debug.warn("file.fileOpened: Opened file " + xhr.path + " but it did not contain a jsontv-object! Contents:\n" + xhr.responseText);
+                  xhr.onFailure(xhr.responseText, xhr.channelID);
+                }
               }
               else
               {
                 if(xhr.onFailure)
                 {
-                  Debug.warn("file.fileOpened: Opened file " + xhr.path + " but it did not contain a jsontv-object! Contents:\n" + xhr.responseText);
+                  Debug.warn("file.fileOpened: Opened file " + xhr.path + " but it did not contain a json object! Contents:\n" + xhr.responseText);
                   xhr.onFailure(xhr.responseText, xhr.channelID);
                 }
               }
@@ -342,7 +355,7 @@ EPG.file = function(Debug, growl, currentVersion)
      * @param {string} channelID ID of the channel that the file (schedule) belongs to.
      * @param {boolean} dontEval True to skip json evaluation at the end.
      */
-    open: function(path, onSuccess, onFailure, channelID, dontEval, isUrl) 
+    open: function(path, onSuccess, onFailure, channelID, dontEval, isUrl, useIsoEncoding) 
     {
       try
       {
@@ -373,12 +386,17 @@ EPG.file = function(Debug, growl, currentVersion)
             {
               path = HOME + "" + path;
             }
+            //Debug.inform("file.open trying to open " + path);
             xhr = new XMLHttpRequest();
             xhr.path = path;
             xhr.channelID = channelID;
             xhr.onSuccess = onSuccess;
             xhr.onFailure = onFailure;
             xhr.dontEval = dontEval;
+            if (useIsoEncoding)
+            {
+              xhr.overrideMimeType("application/javascript; charset=ISO-8859-1");
+            }
             xhr.onreadystatechange = function (){
               fileOpened(xhr);
             };
