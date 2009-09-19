@@ -253,6 +253,7 @@ EPG.PreLoader.addScript("scripts/EPG.settings.js");
 EPG.PreLoader.addScript("scripts/EPG.skin.js");
 EPG.PreLoader.addScript("scripts/EPG.Reminder.js");
 EPG.PreLoader.addScript("scripts/EPG.UIcreator.js");
+EPG.PreLoader.addScript("scripts/EPG.Filmtipset.js");
 EPG.PreLoader.addScript("scripts/EPG.back.js");
 EPG.PreLoader.addScript("scripts/EPG.ProgramInfo.js");
 EPG.PreLoader.addScript("scripts/EPG.front.js");

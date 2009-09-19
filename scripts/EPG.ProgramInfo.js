@@ -30,7 +30,7 @@ if(EPG.debug)
  * @type object
  * @description Shows the program info.
  */
-EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, Reminder) 
+EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, Reminder, Filmtipset)
 {
   // Private Variables
   var that,
@@ -378,6 +378,35 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
     }
   }
   
+  function hideFilmtipsetScore(programWithScore, errorCode)
+  {
+    try
+    {
+      programInfoNode.filmtipsetScore.nodeValue = "";
+      programInfoNode.titleContainer.style.marginRight = "2.7em";
+    }
+    catch (error)
+    {
+      Debug.alert("EPG.ProgramInfo hideFilmtipsetSore error " + error);
+    }
+  }
+  
+  function showFilmtipsetScore(programWithScore)
+  {
+    try
+    {
+      if (programInfoNode.program === programWithScore && programInfoNode.program.filmtipsetgrade.value)
+      {
+        programInfoNode.titleContainer.style.marginRight = "3.7em";
+        programInfoNode.filmtipsetScore.nodeValue = Filmtipset.getStars(programInfoNode.program.filmtipsetgrade);
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in ProgramInfo.showFilmtipsetScore " + error + " programWithScore = " + programWithScore);
+    }
+  }
+  
   // Public methods
   return /** @scope ProgramInfo */ {
     /**
@@ -408,7 +437,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         
         programInfoNode.appendChild(div.cloneNode(false));
         programInfoNode.lastChild.setAttribute("class","title");
-        programInfoNode.lastChild.style.margin = "2.5em 2.7em 0em 0.9em";
+        programInfoNode.titleContainer = programInfoNode.lastChild;
+        programInfoNode.titleContainer.style.margin = "2.5em 2.7em 0em 0.9em";
         programInfoNode.lastChild.style.height = "1.3em";
         programInfoNode.lastChild.style.overflow = "hidden";
         programInfoNode.lastChild.style.fontSize = "1.1em";
@@ -458,6 +488,25 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         
         programInfoNode.startAndStopNode.lastChild.appendChild(textNode.cloneNode(false));
         programInfoNode.stopNode = programInfoNode.startAndStopNode.lastChild.firstChild;
+        
+        // Filmtipset score
+        programInfoNode.appendChild(div.cloneNode(false));
+        programInfoNode.lastChild.setAttribute("id","filmtipsetScore");
+        programInfoNode.filmtipsetScore = programInfoNode.lastChild;
+        programInfoNode.filmtipsetScore.appendChild(document.createTextNode("F")); // Arrow up
+        //UIcreator.setPosition(programInfoNode.filmtipsetScore, "9em", "1em", "1.2em", "1.2em", 1, "absolute");
+        programInfoNode.filmtipsetScore.style.position = "absolute";
+        programInfoNode.filmtipsetScore.style.top = "1em";
+        programInfoNode.filmtipsetScore.style.right = "1.2em";
+        programInfoNode.filmtipsetScore.style.width = "5em";
+        programInfoNode.filmtipsetScore.style.height = "1.2em";
+        programInfoNode.filmtipsetScore.style.zIndex = "-1";
+        
+        programInfoNode.filmtipsetScore.style.lineHeight = "1.2em";
+        programInfoNode.filmtipsetScore.style.textAlign = "right";
+        programInfoNode.filmtipsetScore.style.fontSize = "2em";
+        programInfoNode.filmtipsetScore = programInfoNode.filmtipsetScore.lastChild;
+        //programInfoNode.filmtipsetScore.addEventListener("mousedown", function(event){try{that.scroll(event, programInfoNode.program, 10);}catch(e){Debug.alert("Error when clicking on filmtipsetScore: " + e);}}, false);
         
         // Scrollbar
         programInfoNode.appendChild(div.cloneNode(false));
@@ -523,6 +572,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         scalableContainer.style.opacity = "0";
         document.getElementsByTagName("body")[0].appendChild(scalableContainer);
         
+        Filmtipset.setCallbacks(Filmtipset.CALLBACK_GET_SCORE, showFilmtipsetScore, hideFilmtipsetScore);
+        
         delete that.init;
       }
       catch (error)
@@ -554,7 +605,6 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
                 
         if(program)
         {
-
           if(programInfoNode.program !== program)
           {
             programInfoNode.descriptionContainer.topY = 0;
@@ -664,6 +714,15 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
               {
                 scalableContainer.style.opacity = "1";
                 Settings.resizeTo(474);
+              }
+              if (program.filmtipsetgrade)
+              {
+                showFilmtipsetScore(program);
+              }
+              else
+              {
+                hideFilmtipsetScore();
+                Filmtipset.getScore(program);
               }
             }
             programInfoNode.titleNode.parentNode.setAttribute("title", programInfoNode.titleNode.nodeValue);
@@ -842,6 +901,6 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
       }
     }
   };
-}(EPG.debug, EPG.UIcreator, EPG.translator, EPG.settings, EPG.skin, EPG.file, EPG.Reminder);
+}(EPG.debug, EPG.UIcreator, EPG.translator, EPG.settings, EPG.skin, EPG.file, EPG.Reminder, EPG.Filmtipset);
 EPG.ProgramInfo.init();
 EPG.PreLoader.resume();

@@ -33,10 +33,10 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
 {
   // Private Variables
   var that,
-  transparentElements = [];
+  transparentElements = [],
+  FT_STAR = "\u272D";
   
   // Private methods
-  
   
   // Public methods
   return /** @scope UIcreator */ {
@@ -127,7 +127,7 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
      * @param {boolean} showHDsymbol True to allow [HD] symbol after HD programs.
      * @return {object} A DOM-node representing the programNode.
      */
-    createProgramNode: function (program, programInfoObject, showHDsymbol) 
+    createProgramNode: function (program, programInfoObject, showHDsymbol, showFtScore) 
     {
     	var programNode,
     	startNode,
@@ -215,6 +215,12 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         {
           programNode.hdSymbolNode.style.display = "none";
         }
+        
+        titleNode.firstChild.appendChild(document.createElement("span"));
+        titleNode.firstChild.lastChild.setAttribute("class", "ftScore");
+        titleNode.firstChild.lastChild.appendChild(document.createTextNode(FT_STAR));
+        programNode.ftScoreNode = titleNode.firstChild.lastChild;
+        programNode.ftScoreNode.style.display = "none";
         
         titleNode.addEventListener("mouseover", function()
         {
