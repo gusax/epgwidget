@@ -35,7 +35,7 @@ if (EPG.debug)
   * @param {object} UIcreator EPG.UIcreator. 
   * @param {object} File EPG.file. 
   */
-EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, ProgramInfo) 
+EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, ProgramInfo, Filmtipset) 
 {
   // Private Variables
   var that,
@@ -62,7 +62,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   hideDuration = false,
   updateAvailable,
   scrollInterval,
-  showHDsymbol = false;
+  showHDsymbol = false,
+  showFtScore = true,
+  waitingForScore = [];
   
   key.ARROW_UP = 38;
   key.ARROW_DOWN = 40;
@@ -1050,6 +1052,105 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     }
   }
   
+  function setFtScore(pNode)
+  {
+    try
+    {
+      var score;
+      if (pNode && pNode.program && pNode.program.title)
+      {
+        if (pNode.program.filmtipsetgrade)
+        {
+          if(pNode.program.filmtipsetgrade.value * 1 > 0)
+          {
+            pNode.ftScoreNode.firstChild.nodeValue = Filmtipset.getStars(pNode.program.filmtipsetgrade);
+            pNode.ftScoreNode.style.display = "inline";
+          }
+          else
+          {
+            pNode.ftScoreNode.style.display = "none";
+          }
+        }
+      }
+      else
+      {
+        pNode.ftScoreNode.style.display = "none";
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("EPG.front setFtScore error " + error);
+    }
+  }
+  
+  function fixTitle(locale, program)
+  {
+    try
+    {
+      var l;
+      for (l in program.title)
+      {
+        if (program.title.hasOwnProperty(l) && l !== locale)
+        {
+          program.title[locale] = program.title[l];
+          return;
+        }
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("EPG.front fixTitle error " + error);
+    }
+  }
+  
+  function ftAddToQueue(pNode)
+  {
+    pNode.ftScoreNode.style.display = "none";
+    if (pNode.program && pNode.program.title)
+    {
+      if (!pNode.program.title.sv)
+      {
+        fixTitle("sv", pNode.program);
+      }
+      if (!waitingForScore[pNode.program.title.sv.toLowerCase()])
+      {
+        waitingForScore[pNode.program.title.sv.toLowerCase()] = [];
+      }
+      waitingForScore[pNode.program.title.sv.toLowerCase()].push(pNode);
+    }
+  }
+  
+  function ftCallback (program)
+  {
+    try
+    {
+      var callbacks,
+      score,
+      pNode;
+      if (!program.title.sv)
+      {
+        fixTitle("sv", program);
+      }
+      callbacks = waitingForScore[program.title.sv.toLowerCase()]
+      if (showFtScore && callbacks)
+      {
+        score = callbacks[0].filmtipsetgrade;
+        while (callbacks.length > 0)
+        {
+          pNode = callbacks.shift();
+          pNode.program.filmtipsetgrade = program.filmtipsetgrade;
+          pNode.program.imdbgrade = program.imdbgrade;
+          pNode.program.imdbid = program.imdbid;
+          setFtScore(pNode);
+        }
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("EPG.front ftCallback " + error);
+    }
+  }
+  
   /**
    * @memberOf EPG.front
    * @name updateProgramNode
@@ -1114,6 +1215,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             programNode.hdSymbolNode.style.display = "none";
           }
         }
+        if (showFtScore)
+        {
+          ftAddToQueue(programNode);
+          Filmtipset.getScore(programNode.program);
+        }
       }
     }
     catch (error)
@@ -1135,7 +1241,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   {
     try
     {
-      var i, length, programsLength, stopDate, currentNode, limit;
+      var i, length, programsLength, stopDate, currentNode, limit, pNode;
       
       if(!when)
       {
@@ -1211,7 +1317,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
               }
               else
               {
-                dayViewDiv.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo, showHDsymbol));
+                pNode = UIcreator.createProgramNode(programs[i], ProgramInfo, showHDsymbol, showFtScore);
+                if(showFtScore)
+                {
+                  ftAddToQueue(pNode);
+                  Filmtipset.getScore(pNode.program);
+                }
+                dayViewDiv.appendChild(pNode);
                 stopDate = new Date(programs[i].stop * 1000);
                 if(stopDate < when)
                 {
@@ -1274,7 +1386,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           length = programs.length;
           for(i = 0; i < length; i += 1)
           {
-            dayViewDiv.appendChild(UIcreator.createProgramNode(programs[i], ProgramInfo, showHDsymbol));
+            pNode = UIcreator.createProgramNode(programs[i], ProgramInfo, showHDsymbol, showFtScore);
+            if(showFtScore)
+            {
+              ftAddToQueue(pNode);
+              Filmtipset.getScore(pNode.program);
+            }
+            dayViewDiv.appendChild(pNode);
             stopDate = new Date(programs[i].stop*1000);
             if(stopDate < when)
             {
@@ -1741,7 +1859,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             }
           break;
         	default:
-        	  Debug.inform("Front.keyHandler: event.keyCode = " + event.keyCode);
+        	  //Debug.inform("Front.keyHandler: event.keyCode = " + event.keyCode);
           break;
         }
       }
@@ -1839,6 +1957,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
       var channelNode,
       programNode,
+      pNode,
       title,
       i,
       program,
@@ -1889,7 +2008,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           for(i = 0; i < programs.length; i += 1)
           {
             program = programs[i];
-            channelNode.appendChild(UIcreator.createProgramNode(program, ProgramInfo, showHDsymbol));              
+            pNode = UIcreator.createProgramNode(program, ProgramInfo, showHDsymbol, showFtScore);
+            if (showFtScore)
+            {
+              ftAddToQueue(pNode);
+              Filmtipset.getScore(pNode.program);
+            }
+            channelNode.appendChild(pNode);
             if(i === 0)
             {
               if(program.isTheEmptyProgram || hideDuration)
@@ -1990,6 +2115,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         that = this;
       }
+      Filmtipset.setCallbacks(Filmtipset.CALLBACK_GET_SCORE, ftCallback, function () {});
       delete that.init;
     },
     
@@ -2308,6 +2434,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       }
     }
   };
-}(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator, EPG.UIcreator, EPG.file, EPG.ProgramInfo);
+}(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator, EPG.UIcreator, EPG.file, EPG.ProgramInfo, EPG.Filmtipset);
 EPG.front.init();
 EPG.PreLoader.resume();

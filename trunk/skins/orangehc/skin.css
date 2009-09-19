@@ -53,6 +53,12 @@
   padding-left: 0.5em;
 }
 
+#filmtipsetScore
+{
+  color: #5F5F5F;
+  opacity: 0.4;
+}
+
 div.channelnode
 {
   margin: 0em 2em 0em 1.5em;  
@@ -108,6 +114,11 @@ span.currentProgramDuration
 span.hdSymbol
 {
   padding-left: 0.5em;
+}
+
+span.ftScore
+{
+  padding-left: 0.3em;
 }
 
 div.programs div.currentprogram

@@ -739,6 +739,7 @@ EPG.settings = function(Debug, growl, file)
       {
         that = this;
       }
+      that.setPreference = that.savePreference;
       paths.channelsFolder = "Library/Xmltv/channels/";
       paths.scheduleFolder = "Library/Xmltv/schedules/";
       paths.allChannels = paths.channelsFolder + "tv.jsontv.se.swedb.channels.js";

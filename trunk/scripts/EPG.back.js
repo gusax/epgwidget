@@ -35,7 +35,7 @@ if (EPG.debug)
   * @param {object} translator EPG.translator.
   * @param {object} UIcreator EPG.UIcreator. 
   */
-EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
+EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtipset)
 {
   // Private Variables
   var that,
@@ -1190,6 +1190,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator)
       }
     }
   };
-}(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator, EPG.UIcreator);
+}(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator, EPG.UIcreator, EPG.Filmtipset);
 EPG.back.init();
 EPG.PreLoader.resume();
