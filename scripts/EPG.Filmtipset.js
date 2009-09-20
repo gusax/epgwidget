@@ -379,5 +379,4 @@ EPG.Filmtipset = (function ()
 }());
 EPG.Filmtipset.implementing.LoadIF.provides.onLoad(EPG.debug, EPG.file, EPG.settings);
 EPG.Filmtipset = EPG.Filmtipset.provides;
-EPG.Filmtipset.setUserId(63725);
 EPG.PreLoader.resume();
