@@ -372,7 +372,7 @@ EPG.file = function(Debug, growl, currentVersion)
             }
             else
             {
-              setTimeout(savePath,1);
+              setTimeout(savePATH,1);
             }
           }
           //Debug.inform("file.open: don't have HOME-path yet. Trying again in 100ms...");
@@ -500,7 +500,7 @@ EPG.file = function(Debug, growl, currentVersion)
             }
             else
             {
-              setTimeout(savePath,1);
+              setTimeout(savePATH,1);
             }
           }
           //Debug.inform("file.open: don't have HOME-path yet. Trying again in 100ms...");
