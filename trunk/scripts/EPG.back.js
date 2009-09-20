@@ -215,7 +215,10 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       tempTextNode = document.createTextNode("");
       
       tempElement.appendChild(tempTextNode.cloneNode(false));
-      tempElement.firstChild.nodeValue = translator.translate("EPG by") + " Gustav Axelsson, " + translator.translate("schedules from tv.swedb.se") + ". " + translator.translate("Enjoy") + " :-)";
+      tempElement.firstChild.nodeValue = translator.translate("EPG by") + " Gustav Axelsson. " + translator.translate("Schedules from") + " tv.swedb.se.";
+      tempElement.appendChild(document.createElement("br"));
+      tempElement.appendChild(tempTextNode.cloneNode(false));
+      tempElement.lastChild.nodeValue = translator.translate("Movie ratings from") + " filmtipset.se. " + translator.translate("Enjoy") + " :-)";
       
       return UIcreator.createScalableContainer("middle", tempElement.cloneNode(true), "bakgrund.png", "back");
     }
@@ -617,7 +620,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         tempContainer.lastChild.setAttribute("href", "http://epgwidget.googlecode.com"); 
       }
       
-      tempElement.firstChild.nodeValue = translator.translate("http://epgwidget.blogspot.com");
+      tempElement.firstChild.nodeValue = translator.translate("Blog...");
+      tempElement.setAttribute("class", "inline");
       tempContainer.appendChild(tempElement.cloneNode(true));
       if(window.widget)
       {
@@ -629,6 +633,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       }
       
       tempElement.firstChild.nodeValue = translator.translate("Help & support...");
+      tempElement.setAttribute("class", "inline");
       tempContainer.appendChild(tempElement.cloneNode(true));
       if(window.widget)
       {
@@ -640,6 +645,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       }
       
       tempElement.firstChild.nodeValue = translator.translate("Report a bug...");
+      tempElement.setAttribute("class", "inline");
       tempContainer.appendChild(tempElement.cloneNode(true));
       if(window.widget)
       {
@@ -651,6 +657,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       }
       
       tempElement.firstChild.nodeValue = translator.translate("Complaints...");
+      tempElement.setAttribute("class", "inline");
       tempContainer.appendChild(tempElement.cloneNode(true));
       if(window.widget)
       {
@@ -738,6 +745,12 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       settingsObj.uncheckedValue = "no";
       settingsObj.title = "Show [HD] after HD programs.";
       
+      settingsObj = settingsArray[settingsArray.length] = {};
+      settingsObj.prefName = Filmtipset.PREF_NAME_ENABLED;
+      settingsObj.checkedValue = "yes";
+      settingsObj.uncheckedValue = "no";
+      settingsObj.title = "Show ratings from Filmtipset.se (membership required).";
+      
       for (i = 0; i < settingsArray.length; i += 1)
       {
         tempContainer.appendChild(tempElement.cloneNode(true));
@@ -782,6 +795,38 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         false);
       }
       
+      tempContainer.appendChild(tempElement.cloneNode(false));
+      tempContainer.lastChild.setAttribute("class", "text");
+      tempContainer.lastChild.appendChild(document.createTextNode(translator.translate("Filmtipset.se user number:")));
+      tempContainer.lastChild.appendChild(document.createElement("input"));
+      tempContainer.lastChild.lastChild.style.marginLeft = "1em";
+      tempContainer.lastChild.lastChild.style.width= "8em";
+      tempContainer.lastChild.lastChild.setAttribute("type", "text");
+      tempContainer.lastChild.lastChild.setAttribute("maxlength", "8");
+      if (settings.getPreference(Filmtipset.PREF_NAME_USER_ID) * 1 >= 0)
+      {
+        tempContainer.lastChild.lastChild.setAttribute("value", settings.getPreference(Filmtipset.PREF_NAME_USER_ID));
+      }
+      input.addEventListener("input",
+          function (input) 
+          {
+            return function (event)
+            {
+              var number;
+              if (input.value * 1 >= 0 || input.value === "")
+              {
+                if (input.style.backgroundColor !== "#fff")
+                {
+                  input.style.backgroundColor = "#fff";
+                }
+                Filmtipset.setUserId(input.value);
+              }
+              else
+              {
+                input.style.backgroundColor = "#f00";
+              }
+            };
+          }(tempContainer.lastChild.lastChild), false);
       tempContainer.appendChild(tempElement.cloneNode(false));
       tempContainer.lastChild.setAttribute("class", "text");
       

@@ -25,7 +25,6 @@ EPG.Filmtipset = (function ()
   BASE_URL = "http://www.filmtipset.se/api/api.cgi?returntype=json&accesskey=",
   ACCESS_KEY = "",
   FT_URL,
-  PREF_USER_ID,
   FT_STAR = "\u272D",
   userId,
   callbacks = {},
@@ -43,9 +42,10 @@ EPG.Filmtipset = (function ()
   callbacks.search = {};
   
   FT_URL = BASE_URL + ACCESS_KEY + "&";
-  PREF_USER_ID = obj.id + ".user.id";
   
   obj.provides.YOUR_PAGE_URL = "http://www.filmtipset.se/yourpage.cgi";
+  obj.provides.PREF_NAME_USER_ID = obj.id + ".user.id";
+  obj.provides.PREF_NAME_ENABLED = obj.id + ".enabled";
   
   obj.provides.ERROR_MOVIE_NOT_FOUND = -1;
   obj.provides.ERROR_NO_INTERNET_CONNECTION = -2;
@@ -73,13 +73,21 @@ EPG.Filmtipset = (function ()
   
   obj.provides.setUserId = function (un)
   {
-    userId = un;
-    Preferences.setPreference(PREF_USER_ID, un);
+    if (un * 1 >= 0)
+    {
+      userId = un;
+      Preferences.setPreference(obj.provides.PREF_NAME_USER_ID, un);
+    }
+    else
+    {
+      userId = false;
+      Preferences.deletePreference(obj.provides.PREF_NAME_USER_ID);
+    }
   };
   
   obj.provides.getUserId = function ()
   {
-    userId = Preferences.getPreference(PREF_USER_ID);
+    userId = Preferences.getPreference(obj.provides.PREF_NAME_USER_ID);
     return userId;
   };
   
@@ -373,6 +381,23 @@ EPG.Filmtipset = (function ()
       }
     }
     return answer;
+  };
+  
+  obj.provides.isEnabled = function ()
+  {
+    return (Preferences.getPreference(obj.provides.PREF_NAME_ENABLED) === "yes");
+  };
+  
+  obj.provides.setEnabled = function (enabled)
+  {
+    if (enabled)
+    {
+      Settings.setPreference(obj.id + ".enabled", "yes");
+    }
+    else
+    {
+      Settings.deletePreference(obj.id + ".enabled");
+    }
   };
   
   return obj;
