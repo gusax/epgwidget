@@ -83,7 +83,7 @@ EPG.translator = function(debug)
   localizedStrings["Schedules from"] = "tablåer från";
   localizedStrings["Show ratings from Filmtipset.se (membership required)."] = "Visa betyg från Filmtipset.se (medlemsskap krävs).";
   localizedStrings["Movie ratings from"] = "filmbetyg från";
-  localizedStrings["Filmtipset.se user number:"] = "Filmtipset.se medlemsnummer:"
+  localizedStrings["Filmtipset.se user number:"] = "Filmtipset.se medlemsnummer:";
   // Private methods
   
   
