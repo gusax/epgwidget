@@ -1,6 +1,10 @@
 /*jslint adsafe:false, bitwise: true, browser:true, cap:false, Debug:false, eqeqeq: true, evil: false, fragment:false, laxbreak:false, nomen:true, passfail:false, plusplus:true, rhino:false, undef:true, white:false, widget:false */
 
 /*extern EPG, widget*/
+if (EPG.debug)
+{
+  EPG.debug.inform("EPG.Filmtipset.js loaded");
+}
 
 EPG.Filmtipset = (function ()
 {
@@ -332,8 +336,14 @@ EPG.Filmtipset = (function ()
         else if (new Date().getTime() - ONE_DAY > lastRefresh)
         {
           Debug.inform("EPG.Filmtipset downloading tv list from Filmtipset and updating cache");
-          downloadTvList(openTvListSuccess);
-          //FileLoader.open(PATH_FILMTIPSET_TV_LIST, openTvListSuccess, function(){downloadTvList(openTvListSuccess);}, false, false, false, true);
+          if (window.widget)
+          {
+            downloadTvList(openTvListSuccess);
+          }
+          else
+          {
+            FileLoader.open(PATH_FILMTIPSET_TV_LIST, openTvListSuccess, function(){downloadTvList(openTvListSuccess);}, false, false, false, true);
+          }
           isUpdating = true;
           clearTimeout(updateTimeout);
           updateTimeout = setTimeout(stopUpdate, 5000);
