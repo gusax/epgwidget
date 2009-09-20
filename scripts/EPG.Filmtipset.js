@@ -227,7 +227,7 @@ EPG.Filmtipset = (function ()
   {
     try
     {
-      FileLoader.open(FT_URL + "action=list&id=tv", onSuccess, findScores, false, false, true, true);
+      FileLoader.downloadFile("\"" + encodeURI(FT_URL + "action=list&id=tv") + "\"", PATH_FILMTIPSET_TV_LIST, onSuccess, findScores, false, true);
     }
     catch (error)
     {
@@ -317,12 +317,13 @@ EPG.Filmtipset = (function ()
         callbacks[obj.provides.CALLBACK_GET_SCORE].programmes.push(program);
         if (isUpdating)
         {
-          // Just wait
+          //Dont do anything. Callback will be run when update is complete.
         }
         else if (new Date().getTime() - ONE_DAY > lastRefresh)
         {
-          Debug.inform("EPG.Filmtipset updating cache");
-          FileLoader.open(PATH_FILMTIPSET_TV_LIST, openTvListSuccess, function(){downloadTvList(openTvListSuccess);}, false, false, false, true);
+          Debug.inform("EPG.Filmtipset downloading tv list from Filmtipset and updating cache");
+          downloadTvList(openTvListSuccess);
+          //FileLoader.open(PATH_FILMTIPSET_TV_LIST, openTvListSuccess, function(){downloadTvList(openTvListSuccess);}, false, false, false, true);
           isUpdating = true;
           clearTimeout(updateTimeout);
           updateTimeout = setTimeout(stopUpdate, 5000);
@@ -369,7 +370,6 @@ EPG.Filmtipset = (function ()
         break;
       }
     }
-    Debug.inform("Filmtipset getStars returning " + answer);
     return answer;
   };
   
