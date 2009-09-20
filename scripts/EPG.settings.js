@@ -956,7 +956,7 @@ EPG.settings = function(Debug, growl, file)
           {
             tempListHashed = {};
             tempListOrdered = that.getPreference("channelList" + listIndex);
-            Debug.inform("channelList" + listIndex + " = " + tempListOrdered);
+            Debug.inform("EPG.Settings getChannelList channelList" + listIndex + " = " + tempListOrdered);
             if (tempListOrdered)
             {
               tempListOrdered = tempListOrdered.split(";");
@@ -964,7 +964,6 @@ EPG.settings = function(Debug, growl, file)
               for (i = 0; i < tempListOrdered.length; i+=1)
               {
                 tempListHashed[tempListOrdered[i]] = i;
-                Debug.inform(i + ":" + tempListOrdered[i]);
               }
               tempList = {};
               tempList.ordered = tempListOrdered;
