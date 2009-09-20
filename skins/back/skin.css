@@ -39,7 +39,12 @@ a:hover
   text-decoration: underline;
   color: #fff;
   text-shadow: #fff 0em 0em 0.2em;
-  padding: 0em 0.1em 0.1em 0em;
+  
+}
+
+a.inline
+{
+  padding-right: 1em;	
 }
 
 div.contents div.text
@@ -137,7 +142,7 @@ div.channellist div.text:hover
 div.middle
 {
   width: 47.4em;
-  height: 2em;
+  height: 2.5em;
 }
 
 div.bottombar
@@ -177,7 +182,7 @@ div.settings
   top:0em;
   left: 0em;
   width: 47.4em;
-  height: 7.2em;
+  height: 11.7em;
 }
 
 div.settingsList
@@ -186,7 +191,7 @@ div.settingsList
   top:0em;
   left: 0em;
   width: 47.4em;
-  height: 6.7em;
+  height: 11.2em;
   text-align: left;
   margin: 0em 4.8em 0em 4.4em !important; 
 }
@@ -217,7 +222,7 @@ div.support
   top:0em;
   left: 0em;
   width: 47.4em;
-  height: 11em;
+  height: 6em;
   text-align: left;
 }
 

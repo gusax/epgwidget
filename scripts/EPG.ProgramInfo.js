@@ -42,7 +42,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
   progressbarEmptyContainer,
   logo,
   animationRunning = false,
-  animationInterval;
+  animationInterval,
+  showFtScore;
   
   // Private methods
   /**
@@ -573,7 +574,6 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         document.getElementsByTagName("body")[0].appendChild(scalableContainer);
         
         Filmtipset.setCallbacks(Filmtipset.CALLBACK_GET_SCORE, showFilmtipsetScore, hideFilmtipsetScore);
-        
         delete that.init;
       }
       catch (error)
@@ -598,6 +598,8 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         stop,
         channel;
         
+        showFtScore = Filmtipset.isEnabled();
+        Debug.inform("ProgramInfo show showFtScore: " + showFtScore);
         if(!now)
         {
           now = new Date();
@@ -715,14 +717,17 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
                 scalableContainer.style.opacity = "1";
                 Settings.resizeTo(474);
               }
-              if (program.filmtipsetgrade)
+              if (showFtScore && program.filmtipsetgrade)
               {
                 showFilmtipsetScore(program);
               }
               else
               {
                 hideFilmtipsetScore();
-                Filmtipset.getScore(program);
+                if (showFtScore)
+                {
+                  Filmtipset.getScore(program);
+                }
               }
             }
             programInfoNode.titleNode.parentNode.setAttribute("title", programInfoNode.titleNode.nodeValue);
@@ -733,16 +738,30 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
             programInfoNode.descriptionContainer.style.top = "0px";
             scalableContainer.style.opacity = "1";
             Settings.resizeTo(474);
+            if (showFtScore && program.filmtipsetgrade)
+            {
+              showFilmtipsetScore(program);
+            }
+            else
+            {
+              hideFilmtipsetScore();
+              if (showFtScore)
+              {
+                Filmtipset.getScore(program);
+              }
+            }
           }
           else if(scalableContainer.style.opacity !== "0")
           {
             scalableContainer.style.opacity = "0";
             Settings.resizeTo(270);
+            hideFilmtipsetScore();
           }
           
         }
         else
         {
+          hideFilmtipsetScore();
           Debug.warn("ProgramInfo.show: Program was undefined!");
         }
       }

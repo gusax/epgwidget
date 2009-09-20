@@ -80,7 +80,10 @@ EPG.translator = function(debug)
   localizedStrings.Other = "Övrigt";
   localizedStrings["Removed or renamed"] = "Borttagna eller omdöpta";
   localizedStrings.by = "av";
-  localizedStrings["schedules from tv.swedb.se"] = "tablåer från tv.swedb.se";
+  localizedStrings["Schedules from"] = "tablåer från";
+  localizedStrings["Show ratings from Filmtipset.se (membership required)."] = "Visa betyg från Filmtipset.se (medlemsskap krävs).";
+  localizedStrings["Movie ratings from"] = "filmbetyg från";
+  localizedStrings["Filmtipset.se user number:"] = "Filmtipset.se medlemsnummer (krävs):"
   // Private methods
   
   
