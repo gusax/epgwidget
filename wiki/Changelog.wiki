@@ -11,7 +11,11 @@ Senaste ändringarna ligger alltid överst.
 ----
 == Nästa version ==
 _Nya funktioner_
+ * Framsidan: Möjlighet att samköra information från [http://www.filmtipset.se Filmtipset.se] med tvtablåerna, och visa (förvånansvärt träffande) betyg på de filmer som går på tv. Valet av aftonfilm har aldrig varit lättare! Medlemsskap på Filmtipset.se krävs, men det är å andra sidan en förutsättning för att betygsättningen ska funka optimalt. Ange medlemsnummer (OBS: EJ användarnamn!) och aktivera funktionen på baksidan. Stjärnor (1 - 5) efter filmtiteln anger hur pass bra filmen förmodligen är.
+
  * Baksidan: SVT Europa omdöpt till SVT World.
+
+ * Baksidan: Viasat Hockey tillagd bland sportkanalerna.
 
  * Baksidan: Borttagna kanaler ligger nu på andra position i listan av kanalgrupper. Tidigare låg den sist och var lätt att missa om man inte tittade efter den speciellt.
 
