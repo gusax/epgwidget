@@ -138,13 +138,13 @@ EPG.file = function(Debug, growl, currentVersion)
   }
   /**
    * @memberOf EPG.file
-   * @name savePath
+   * @name savePATH
    * @function
    * @description Extracts the HOME-path from the systemCall recieved
    * @private
    * @param  {object} systemCall Widget.system-object containing the HOME-path (path to the home folder of the current user).
    */
-  function savePath (systemCall) 
+  function savePATH (systemCall) 
   {
     try
     {
@@ -175,7 +175,7 @@ EPG.file = function(Debug, growl, currentVersion)
     catch (error)
     {
       that.hideLoadingImage();
-      Debug.alert("Error in file.savePath: " + error);
+      Debug.alert("Error in file.savePATH: " + error);
     }
   }
   
@@ -368,7 +368,7 @@ EPG.file = function(Debug, growl, currentVersion)
             gettingPath = true;
             if(window.widget)
             {
-              window.widget.system("/bin/echo $HOME", savePath);
+              window.widget.system("/bin/echo $HOME", savePATH);
             }
             else
             {
@@ -482,14 +482,31 @@ EPG.file = function(Debug, growl, currentVersion)
      * @function downloadFile
      * @description Downloads a file.
      */
-    downloadFile: function (url, savePath, onSuccess, onFailure, dontEval) 
+    downloadFile: function (url, savePath, onSuccess, onFailure, dontEval, skipCompression) 
     {
       try
       {
         var systemCall,
         pathOnly,
         command;
-        if(window.widget && window.widget.system)
+        if(!HOME)
+        {
+          if(!gettingPath)
+          {
+            gettingPath = true;
+            if(window.widget)
+            {
+              window.widget.system("/bin/echo $HOME", savePATH);
+            }
+            else
+            {
+              setTimeout(savePath,1);
+            }
+          }
+          //Debug.inform("file.open: don't have HOME-path yet. Trying again in 100ms...");
+          setTimeout(function(){that.downloadFile(url, savePath, onSuccess, onFailure, dontEval, skipCompression);}, 100);
+        } 
+        else if(window.widget && window.widget.system)
         {
           if(url && savePath)
           {
@@ -514,11 +531,15 @@ EPG.file = function(Debug, growl, currentVersion)
             that.showLoadingImage();
             if (pathOnly)
             {
-              command = '/bin/mkdir -p ' + HOME + '' + pathOnly + ' && /usr/bin/curl -S -R --user-agent '+userAgent+' --compressed ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath;
+              command = '/bin/mkdir -p ' + HOME + '' + pathOnly + ' && /usr/bin/curl -S -s -R --user-agent ' + userAgent + ' ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath;
             }
             else
             {
-              command = '/usr/bin/curl -S -R --user-agent '+userAgent+' --compressed ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath;
+              command = '/usr/bin/curl -S -s -R --user-agent ' + userAgent + ' ' + url + ' -o ' + HOME + '' + savePath + ' -z ' + HOME + '' + savePath;
+            }
+            if (!skipCompression)
+            {
+              command += " --compressed";
             }
             Debug.inform("file.downloadFile: running command " + command);
             systemCall = window.widget.system(command , function(response){fileDownloaded(response, onSuccess, onFailure, url, savePath, dontEval);});
