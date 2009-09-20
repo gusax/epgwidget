@@ -807,7 +807,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       {
         tempContainer.lastChild.lastChild.setAttribute("value", settings.getPreference(Filmtipset.PREF_NAME_USER_ID));
       }
-      input.addEventListener("input",
+      tempContainer.lastChild.lastChild.addEventListener("input",
           function (input) 
           {
             return function (event)
@@ -990,12 +990,13 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         "se.nasn.com",
         "golf.viasat.se",
         "sport1.canalplus.se",
-        "motor.viasat.se",
+        "hockey.viasat.se",
         "sport2.canalplus.se",
-        "sport.viasat.se",
+        "motor.viasat.se",
         "sport-extra.canalplus.se",
-        "sporthd.viasat.se",
-        "sporthd.canalplus.se"
+        "sport.viasat.se",
+        "sporthd.canalplus.se",
+        "sporthd.viasat.se"
       ]);
       groupChannels("Children & youth", 
       [ 
