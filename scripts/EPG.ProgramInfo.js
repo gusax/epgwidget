@@ -599,7 +599,6 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
         channel;
         
         showFtScore = Filmtipset.isEnabled();
-        Debug.inform("ProgramInfo show showFtScore: " + showFtScore);
         if(!now)
         {
           now = new Date();
