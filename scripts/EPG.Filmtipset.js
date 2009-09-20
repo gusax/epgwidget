@@ -45,6 +45,8 @@ EPG.Filmtipset = (function ()
   FT_URL = BASE_URL + ACCESS_KEY + "&";
   PREF_USER_ID = obj.id + ".user.id";
   
+  obj.provides.YOUR_PAGE_URL = "http://www.filmtipset.se/yourpage.cgi";
+  
   obj.provides.ERROR_MOVIE_NOT_FOUND = -1;
   obj.provides.ERROR_NO_INTERNET_CONNECTION = -2;
   obj.provides.ERROR_UNKNOWN_ERROR = -3;
