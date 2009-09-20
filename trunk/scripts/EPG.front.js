@@ -2159,7 +2159,6 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         stopUpdateInterval();
         showHDsymbol = (Settings.getPreference("showHDsymbol") === "yes");
         showFtScore = Filmtipset.isEnabled();
-        Debug.inform("Front show showFtScore: " + showFtScore);
         if (!visible)
         {
           if(!backDiv)
