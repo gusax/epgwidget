@@ -1287,11 +1287,21 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                   dayViewDiv.childNodes[i].hdSymbolNode.style.display = "none";
                 }
                 dayViewDiv.childNodes[i].style.display = "block";
+                if(showFtScore)
+                {
+                  ftAddToQueue(dayViewDiv.childNodes[i]);
+                  Filmtipset.getScore(dayViewDiv.childNodes[i].program);
+                }
+                else
+                {
+                  dayViewDiv.childNodes[i].ftScoreNode.style.display = "none";
+                }
               }
               else
               {
                 dayViewDiv.childNodes[i].style.display = "none";
                 dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "";
+                dayViewDiv.childNodes[i].ftScoreNode.style.display = "none";
               }
               
               

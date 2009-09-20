@@ -215,12 +215,33 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       tempTextNode = document.createTextNode("");
       
       tempElement.appendChild(tempTextNode.cloneNode(false));
-      tempElement.firstChild.nodeValue = translator.translate("EPG by") + " Gustav Axelsson. " + translator.translate("Schedules from") + " tv.swedb.se.";
+      tempElement.firstChild.nodeValue = translator.translate("EPG by") + " Gustav Axelsson. " + translator.translate("Schedules from") + " ";
+      tempElement.appendChild(document.createElement("a"));
+      tempElement.lastChild.appendChild(document.createTextNode("tv.swedb.se."));
+      if(window.widget)
+      {
+        tempElement.lastChild.addEventListener("click", function(event){window.widget.openURL("http://tv.swedb.se/");} , false);
+      }
+      else
+      {
+        tempElement.lastChild.setAttribute("href", "http://tv.swedb.se/"); 
+      }
       tempElement.appendChild(document.createElement("br"));
       tempElement.appendChild(tempTextNode.cloneNode(false));
-      tempElement.lastChild.nodeValue = translator.translate("Movie ratings from") + " filmtipset.se. " + translator.translate("Enjoy") + " :-)";
+      tempElement.lastChild.nodeValue = translator.translate("Movie ratings from") + " ";
+      tempElement.appendChild(document.createElement("a"));
+      tempElement.lastChild.appendChild(document.createTextNode("filmtipset.se"));
+      if(window.widget)
+      {
+        tempElement.lastChild.addEventListener("click",function(){window.widget.openURL("http://www.filmtipset.se/");}, false);
+      }
+      else
+      {
+        tempElement.lastChild.setAttribute("href", "http://www.filmtipset.se/"); 
+      }
+      tempElement.appendChild(document.createTextNode(". " + translator.translate("Enjoy") + " :-)"));
       
-      return UIcreator.createScalableContainer("middle", tempElement.cloneNode(true), "bakgrund.png", "back");
+      return UIcreator.createScalableContainer("middle", tempElement, "bakgrund.png", "back");
     }
     catch (error)
     {
@@ -796,10 +817,10 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       }
       
       tempContainer.appendChild(tempElement.cloneNode(false));
-      tempContainer.lastChild.setAttribute("class", "text");
+      tempContainer.lastChild.setAttribute("class", "textNoHover");
       tempContainer.lastChild.appendChild(document.createTextNode(translator.translate("Filmtipset.se user number:")));
       tempContainer.lastChild.appendChild(document.createElement("input"));
-      tempContainer.lastChild.lastChild.style.marginLeft = "1em";
+      tempContainer.lastChild.lastChild.style.marginLeft = "0.7em";
       tempContainer.lastChild.lastChild.style.width= "8em";
       tempContainer.lastChild.lastChild.setAttribute("type", "text");
       tempContainer.lastChild.lastChild.setAttribute("maxlength", "8");
@@ -827,8 +848,19 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
               }
             };
           }(tempContainer.lastChild.lastChild), false);
+      tempContainer.lastChild.appendChild(document.createElement("a"));
+      tempContainer.lastChild.lastChild.appendChild(document.createTextNode(translator.translate("(Shown here...)")));
+      if(window.widget)
+      {
+        tempContainer.lastChild.lastChild.addEventListener("click", function(){window.widget.openURL("http://www.filmtipset.se/yourpage.cgi");}, false);
+      }
+      else
+      {
+        tempContainer.lastChild.lastChild.setAttribute("href", "http://www.filmtipset.se/yourpage.cgi"); 
+      }
+      
       tempContainer.appendChild(tempElement.cloneNode(false));
-      tempContainer.lastChild.setAttribute("class", "text");
+      tempContainer.lastChild.setAttribute("class", "textNoHover");
       
       skins = skin.getAllSkins();
       currentSkin = skin.getSkinForList(settings.getCurrentChannelListIndex());
