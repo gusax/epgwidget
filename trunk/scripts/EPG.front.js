@@ -1134,14 +1134,21 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       callbacks = waitingForScore[program.title.sv.toLowerCase()]
       if (showFtScore && callbacks)
       {
-        score = callbacks[0].filmtipsetgrade;
-        while (callbacks.length > 0)
+        if (callbacks.length > 0)
         {
-          pNode = callbacks.shift();
-          pNode.program.filmtipsetgrade = program.filmtipsetgrade;
-          pNode.program.imdbgrade = program.imdbgrade;
-          pNode.program.imdbid = program.imdbid;
-          setFtScore(pNode);
+          score = callbacks[0].filmtipsetgrade;
+          while (callbacks.length > 0)
+          {
+            pNode = callbacks.shift();
+            pNode.program.filmtipsetgrade = program.filmtipsetgrade;
+            pNode.program.imdbgrade = program.imdbgrade;
+            pNode.program.imdbid = program.imdbid;
+            setFtScore(pNode);
+          }
+        }
+        else
+        {
+          delete waitingForScore[program.title.sv.toLowerCase()];
         }
       }
     }
