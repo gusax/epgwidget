@@ -12,7 +12,7 @@ Då kanske lösningen för dig är att avinstallera EPG från din dator.
  # Bekräfta att du vill kasta EPG i papperskorgen.
  # Ta bort inställningsfilen ~/Bibliotek/Preferences/*widget-se.bizo.widget.epg.plist*
  # Stäng av den automatiska nedladdningen av tablåer, som startar tablånedladdningen en gång om dagen, genom att kasta ~/Bibliotek/LaunchAgents/*se.bizo.epgwidget.grabber.plist*
- # Om du har Xmltv-widgeten installerad, och ämnar fortsätta använda den, så töm papperskorgen nu och hoppa sedan till nästa punkt. Om du inte har Xmltv-widgeten installerad, ta även bort mappen där alla tablåer ligger: ~/Bibliotek/Xmltv. Töm sedan papperskorgen och gå till nästa punkt.
+ # Om du har gamla Xmltv installerad, och ämnar fortsätta använda den, så töm papperskorgen nu och hoppa sedan till nästa punkt. Om du inte har Xmltv installerad, ta även bort mappen där alla tablåer ligger: ~/Bibliotek/Xmltv. Töm sedan papperskorgen och gå till nästa punkt.
  # Om du ämnar ominstallera widgeten behöver du starta om Dashboard genom att skriva in "killall Dock" i terminalen (eller logga ut och logga in igen). Om du inte tänker ominstallera så kan du hoppa till nästa punkt.
  # Klart!
 
