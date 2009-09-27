@@ -198,7 +198,7 @@ EPG.file = function(Debug, growl, currentVersion)
           switch(systemCall.status)
           {
              case 0: // status seems to always be 0...
-               Debug.inform("file.fileDownloaded: Successfully downloaded " + url + "!");
+               //Debug.inform("file.fileDownloaded: Successfully downloaded " + url + "!");
                if(localPath && localPath.search(/(.png)+$/i) > 0) // a file that ends in .png (case insensitive)
                {
                  // This is an icon.
@@ -244,7 +244,7 @@ EPG.file = function(Debug, growl, currentVersion)
         }
         else
         {
-          Debug.inform("file.fileDownloaded: Successfully downloaded " + url + "!");
+          //Debug.inform("file.fileDownloaded: Successfully downloaded " + url + "!");
           that.open(localPath, onSuccess, onFailure, dontEval);
         }
         systemCall.close();
@@ -541,7 +541,7 @@ EPG.file = function(Debug, growl, currentVersion)
             {
               command += " --compressed";
             }
-            Debug.inform("file.downloadFile: running command " + command);
+            //Debug.inform("file.downloadFile: running command " + command);
             systemCall = window.widget.system(command , function(response){fileDownloaded(response, onSuccess, onFailure, url, savePath, dontEval);});
           }
           else if(onFailure)
