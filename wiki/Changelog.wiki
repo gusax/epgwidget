@@ -10,10 +10,8 @@ Senaste ändringarna ligger alltid överst.
 
 ----
 == Nästa version ==
-_Nya funktioner_
-
 _Rättade buggar_
-* Baksidan: Det är inte lägre möjligt att fylla i nåt medlemsnummer från Filmtipset om man inte samtidigt bockat i att man faktiskt vill visa filmbetygen därifrån.
+ * Baksidan: Det är inte lägre möjligt att fylla i nåt medlemsnummer från Filmtipset om man inte samtidigt bockat i att man faktiskt vill visa filmbetygen därifrån.
 
 == 20090921 ==
 _Nya funktioner_
