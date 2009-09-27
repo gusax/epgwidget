@@ -742,7 +742,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       currentSkin,
       skinList,
       skinListItem,
-      i;
+      i,
+      ftSetting;
       
       tempContainer = document.createElement("div");
       tempContainer.setAttribute("class", "settingsList");
@@ -771,14 +772,13 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       settingsObj.checkedValue = "yes";
       settingsObj.uncheckedValue = "no";
       settingsObj.title = "Show ratings from Filmtipset.se (membership required).";
-      
       for (i = 0; i < settingsArray.length; i += 1)
       {
         tempContainer.appendChild(tempElement.cloneNode(true));
         tempContainer.lastChild.checkBox = tempContainer.lastChild.firstChild; 
         settingsArray[i].value = settings.getPreference(settingsArray[i].prefName);
         tempContainer.lastChild.setting = settingsArray[i];
-        if (tempContainer.lastChild.setting.value === tempContainer.lastChild.setting.checkedValue)
+        if (settingsArray[i].value === "yes")
         {
           tempContainer.lastChild.firstChild.setAttribute("checked", "checked");
           tempContainer.lastChild.firstChild.checked = true;
@@ -790,40 +790,125 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         }
         tempContainer.lastChild.lastChild.nodeValue = translator.translate(tempContainer.lastChild.setting.title);
         
-        tempContainer.lastChild.checkBox.addEventListener("click", 
-        function (container) 
-        { 
-          return function (event)
-          {
-            saveSetting(container);
-            event.stopPropagation();
-            return false;
-          };
-        }(tempContainer.lastChild), 
-        false);
-        
-        tempContainer.lastChild.addEventListener("click", 
-        function (container) 
-        { 
-          return function (event)
-          {
-            container.firstChild.checked = !container.firstChild.checked;
-            saveSetting(container);
-            event.stopPropagation();
-            event.preventDefault();
-          };
-        }(tempContainer.lastChild), 
-        false);
+        if (settingsArray[i].prefName === Filmtipset.PREF_NAME_ENABLED)
+        {
+          ftSetting = {};
+          ftSetting.setting = settingsArray[i];
+          ftSetting.container = tempContainer.lastChild;
+          ftSetting.checked = tempContainer.lastChild.firstChild.checked;
+        }
+        else
+        {
+          tempContainer.lastChild.checkBox.addEventListener("click", 
+              function (container) 
+              { 
+                return function (event)
+                {
+                  saveSetting(container);
+                  event.stopPropagation();
+                  event.preventDefault();
+                  return false;
+                };
+              }(tempContainer.lastChild), 
+              false);
+          tempContainer.lastChild.addEventListener("click", 
+          function (container) 
+          { 
+            return function (event)
+            {
+              container.firstChild.checked = !container.firstChild.checked;
+              saveSetting(container);
+              event.stopPropagation();
+              event.preventDefault();
+            };
+          }(tempContainer.lastChild), 
+          false);
+        }
       }
       
       tempContainer.appendChild(tempElement.cloneNode(false));
       tempContainer.lastChild.setAttribute("class", "textNoHover");
+      
       tempContainer.lastChild.appendChild(document.createTextNode(translator.translate("Filmtipset.se user number:")));
       tempContainer.lastChild.appendChild(document.createElement("input"));
+      tempContainer.lastChild.theInput = tempContainer.lastChild.lastChild;
       tempContainer.lastChild.lastChild.style.marginLeft = "0.7em";
       tempContainer.lastChild.lastChild.style.width= "8em";
       tempContainer.lastChild.lastChild.setAttribute("type", "text");
       tempContainer.lastChild.lastChild.setAttribute("maxlength", "8");
+      
+      if (ftSetting)
+      {
+        if (ftSetting.checked)
+        {
+          tempContainer.lastChild.theInput.disabled = "";
+          tempContainer.lastChild.theInput.className = "text";
+        }
+        else
+        {
+          tempContainer.lastChild.theInput.disabled = "disabled";
+          tempContainer.lastChild.theInput.className = "text disabled";
+        }
+        ftSetting.container.checkBox.addEventListener("click", 
+            function (container, checkBox, input) 
+            { 
+              return function (event)
+              {
+                try
+                {
+                  if (checkBox.checked)
+                  {
+                    input.disabled = "";
+                    input.className= "text";
+                  }
+                  else
+                  {
+                    input.disabled = "disabled";
+                    input.className = "text disabled";
+                  }
+                  saveSetting(container);
+                  
+                  event.stopPropagation();
+                }
+                catch (error2)
+                {
+                  debug.alert("ftSetting onclick error " + error2);
+                }
+              };
+            }(ftSetting.container, ftSetting.container.checkBox, tempContainer.lastChild.theInput), 
+            false);
+        ftSetting.container.addEventListener("click", 
+          function (container, input) 
+          { 
+            return function (event)
+            {
+              try
+              {
+                container.firstChild.checked = !container.firstChild.checked;
+                if (container.firstChild.checked)
+                {
+                  input.disabled = "";
+                  input.className = "text";
+                }
+                else
+                {
+                  input.disabled = "disabled";
+                  input.className = "text disabled";
+                }
+                saveSetting(container);
+                
+                event.stopPropagation();
+                event.preventDefault();
+              }
+              catch (error2)
+              {
+                debug.alert("ftSetting onclick error " + error2);
+              }
+            };
+          }(ftSetting.container, tempContainer.lastChild.theInput), 
+          false);
+      }
+      
       if (settings.getPreference(Filmtipset.PREF_NAME_USER_ID) * 1 >= 0)
       {
         tempContainer.lastChild.lastChild.setAttribute("value", settings.getPreference(Filmtipset.PREF_NAME_USER_ID));

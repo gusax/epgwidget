@@ -21,6 +21,10 @@ input
   padding: 0em;
   margin: 0.3em 0.4em 0em 0em;
 }
+input.disabled
+{
+  background: #999;
+}
 
 select
 {
