@@ -9,6 +9,12 @@ Senaste ändringarna ligger alltid överst.
 
 
 ----
+== Nästa version ==
+_Nya funktioner_
+
+_Rättade buggar_
+* Baksidan: Det är inte lägre möjligt att fylla i nåt medlemsnummer från Filmtipset om man inte samtidigt bockat i att man faktiskt vill visa filmbetygen därifrån.
+
 == 20090921 ==
 _Nya funktioner_
  * Framsidan: Möjlighet att samköra information från [http://www.filmtipset.se Filmtipset.se] med tvtablåerna, och visa (förvånansvärt träffande) personligt anpassade betyg på de filmer som går på tv. Valet av aftonfilm har aldrig varit lättare! Medlemsskap på Filmtipset.se krävs, men det är å andra sidan en förutsättning för att betygsättningen ska funka optimalt. Ange medlemsnummer (OBS: EJ användarnamn! Medlemsnumret - i grått - hittar du [http://www.filmtipset.se/yourpage.cgi här]) och aktivera funktionen på baksidan. Stjärnor (1 - 5) efter filmtiteln anger hur pass bra filmen förmodligen är.
