@@ -67,6 +67,12 @@ EPG.skin = function(debug, growl, settings, File)
       skin.author = "Mathias Andersson";
       skin.bgOpacity = "1";
       
+      skin = skinList[skinList.length] = {};
+      skin.id = "orange";
+      skin.title = "Orange";
+      skin.author = "Mathias Andersson";
+      skin.bgOpacity = "1";
+      
       delete that.init;
     },
     
