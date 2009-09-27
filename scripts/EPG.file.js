@@ -105,7 +105,7 @@ EPG.file = function(Debug, growl, currentVersion)
           } 
           catch (e)
           {
-            Debug.warn("Error in file.fileOpened when evaluating javascript: " + e);
+            Debug.warn("Error in file.fileOpened when evaluating javascript: " + e + "\nFile contents:\n" + xhr.responseText);
           	if(xhr.onFailure)
           	{
           	  Debug.warn("file.fileOpened: Opened file " + xhr.path + " but it's contents was not valid javascript:\n");
