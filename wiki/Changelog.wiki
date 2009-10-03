@@ -13,6 +13,8 @@ Senaste ändringarna ligger alltid överst.
 _Nya funktioner_
  * Framsidan: Kopierade temat Orange från Xmltv-widgeten. Det blir det sista tema som kopieras därifrån, de andra är för fula (undantaget det transparenta temat som är för krångligt att kopiera - vill nån fixa det så maila mig.) ([http://code.google.com/p/epgwidget/issues/detail?id=19 19])
 
+ * Framsidan: Provar nu även söka utan "the" om man inte får träff första gången i Filmtipsets tvtablå. På del filmer (The Bourne Supremacy exempelvis) saknas "The" i tvtablåerna nämligen. ([http://code.google.com/p/epgwidget/issues/detail?id=86 86])
+
 _Rättade buggar_
  * Baksidan: Det är inte lägre möjligt att fylla i nåt medlemsnummer från Filmtipset om man inte samtidigt bockat i att man faktiskt vill visa filmbetygen därifrån.
 
