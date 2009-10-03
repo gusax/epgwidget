@@ -27,7 +27,7 @@ EPG.Filmtipset = (function ()
   FileLoader,
   Preferences,
   BASE_URL = "http://www.filmtipset.se/api/api.cgi?returntype=json&accesskey=",
-  ACCESS_KEY = "",
+  ACCESS_KEY = "vf7LLawP7fcxG0mQHdnAg",
   FT_URL,
   FT_STAR = "\u272D",
   userId,
@@ -158,10 +158,16 @@ EPG.Filmtipset = (function ()
     try
     {
       var i,
-      movie;
+      movie,
+      title;
       if (movies && movies.hashed && program && program.title)
       {
+        title = program.title.sv.toLowerCase();
         movie = movies.hashed[program.title.sv.toLowerCase()];
+        if (!movie && title.indexOf("the ") === 0)
+        {
+          movie = movies.hashed[title.substr(4)];
+        }
         if (movie)
         {
           if (movie.filmtipsetgrade && movie.filmtipsetgrade.value * 1 > 0)
@@ -261,7 +267,8 @@ EPG.Filmtipset = (function ()
       day,
       hour,
       minute,
-      second;
+      second,
+      title;
       
       movies.hashed = {};
       for (i = 0 ; i < movies.length; i += 1)
@@ -282,7 +289,12 @@ EPG.Filmtipset = (function ()
         time.setMinutes(minute);
         time.setSeconds(second);
         movie.movie["tv-info"].time = time.getTime();
-        movies.hashed[movie.movie.name.toLowerCase()] = movie.movie;
+        title = movie.movie.name.toLowerCase();
+        movies.hashed[title] = movie.movie;
+        if (title.indexOf("the ") === 0)
+        {
+          movies.hashed[title.substr(4)] = movie.movie;  
+        }
       }
       return movies;
     }
