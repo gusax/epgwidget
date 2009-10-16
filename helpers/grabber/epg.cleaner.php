@@ -7,7 +7,7 @@ function removeOldSchedules($pathToXmltvFolder)
 	{
 		$xmltvFolder = dir($path);
 		
-		$yesterday = date("Ymd",(time() - (24 * 60 * 60)));
+		$yesterday = "20" . date("ymd",(time() - (24 * 60 * 60)));
 		while(($filename = $xmltvFolder->read()) !== false)
 		{
 			// only remove files ending with .xml or .js and not beginning with a dot

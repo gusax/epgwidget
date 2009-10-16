@@ -93,7 +93,7 @@ function createDays($numberOfDays)
 	$timestamp = time() - $oneDay;
 	for($i = 0; $i < $numberOfDays; $i++)
 	{
-		$days[$i] = date("Y-m-d",$timestamp);
+		$days[$i] = "20" . date("y-m-d",$timestamp);
 		$timestamp += $oneDay;
 	}
 	return $days;
