@@ -18,7 +18,7 @@ _Nya funktioner_
 _Rättade buggar_
  * Baksidan: Det är inte lägre möjligt att fylla i nåt medlemsnummer från Filmtipset om man inte samtidigt bockat i att man faktiskt vill visa filmbetygen därifrån.
 
- * Tablånedladdaren: Tablåerna laddas nu ner korrekt även på PowerPC-datorer med vanliga Leopard och senaste säkerhetsuppdateringen. Pga en bugg i php 5.2.10 för PowerPC som Apple skickade med senaste säkerhetsuppdateringen till vanliga Leopard. *Om du har PowerPC och uppdaterat Leopard måste du installera denna version!* (Eller så kan du uppdatera php till version 5.3.0.) 
+ * Tablånedladdaren: Tablåerna laddas nu ner korrekt även på PowerPC-datorer med vanliga Leopard och senaste säkerhetsuppdateringen. Pga en bugg i php 5.2.10 för PowerPC som Apple skickade med senaste säkerhetsuppdateringen till vanliga Leopard så blev årtalet 0000 istället för 2009 tidigare. *Om du har PowerPC och uppdaterat Leopard måste du installera denna version!* (Eller så kan du uppdatera php till version 5.3.0 om du tycker det är roligare.) 
 
 == 20090921 ==
 _Nya funktioner_
