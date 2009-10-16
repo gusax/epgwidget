@@ -3,7 +3,7 @@
 	// An array of all grabbers (their filename excluding .php)
 	//$grabbers = array("tv.xmltv.se.swedb","tv.dvb.dreambox","tv.jsontv.se.swedb");
 	$grabbers = array("tv.jsontv.se.swedb");
-	$userAgent = "se.swedb.tv.widget/20090723J";
+	$userAgent = "se.swedb.tv.widget/20091016J";
 	$useGrowl = false;
 
 	function fixPath($path)
@@ -41,7 +41,7 @@
 	
 	$lastupdatefilename = $pathToXmltvFolder."/grabber/epg.downloader.lastupdate.txt";
 	
-	$today = date("Ymd");
+	$today = "20" . date("ymd"); // date("Y") returns 0000 on PowerPC in php 5.2.10, date("y") returns proper values though
     
   if($force != "1")
   {
@@ -71,7 +71,7 @@
 	  		include($pathToXmltvFolder."/grabber/".$grabber.".settings.php");
 		  	include($pathToXmltvFolder."/grabber/".$grabber.".php");
 			  /*$logfile = fopen(utf8_encode($pathToXmltvFolder."/grabber/epg.downloader.log.php"),"a");
-			  fwrite($logfile,"\n" . utf8_encode(date("Ymd") ." ".date("H:m")." opened grabber " . $grabber));
+			  fwrite($logfile,"\n" . utf8_encode("20" . date("ymd") ." ".date("H:m")." opened grabber " . $grabber));
 		  	fclose($logfile);*/
   		}
   	}
