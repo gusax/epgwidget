@@ -17,7 +17,7 @@ _Nya funktioner_
 
  * Baksidan: Toon Disney omdöpt till Disney XD.
 
- * Baksidan: Ny kanal: SF-kanalen, finns under filmkategorin.
+ * Baksidan: SF-kanalen tillagd bland filmkanalerna.
 
 _Rättade buggar_
  * Baksidan: Det är inte lägre möjligt att fylla i nåt medlemsnummer från Filmtipset om man inte samtidigt bockat i att man faktiskt vill visa filmbetygen därifrån.
