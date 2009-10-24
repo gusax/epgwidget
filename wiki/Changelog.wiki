@@ -15,6 +15,10 @@ _Nya funktioner_
 
  * Framsidan: Provar nu även söka utan "the" om man inte får träff första gången i Filmtipsets tvtablå. På del filmer (The Bourne Supremacy exempelvis) saknas "The" i tvtablåerna nämligen. ([http://code.google.com/p/epgwidget/issues/detail?id=86 86])
 
+ * Baksidan: Toon Disney omdöpt till Disney XD.
+
+ * Baksidan: Ny kanal: SF-kanalen, finns under filmkategorin.
+
 _Rättade buggar_
  * Baksidan: Det är inte lägre möjligt att fylla i nåt medlemsnummer från Filmtipset om man inte samtidigt bockat i att man faktiskt vill visa filmbetygen därifrån.
 
