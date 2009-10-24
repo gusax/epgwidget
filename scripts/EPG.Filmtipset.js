@@ -170,7 +170,7 @@ EPG.Filmtipset = (function ()
         }
         if (movie)
         {
-          if (movie.filmtipsetgrade && movie.filmtipsetgrade.value * 1 > 0)
+          if (movie.grade && movie.grade.value * 1 > 0)
           {
             return movie;
           }
@@ -226,11 +226,10 @@ EPG.Filmtipset = (function ()
           {
             runCallbacks(callbacks[obj.provides.CALLBACK_GET_SCORE].onFailures, program, score);
           }
-          else if (score.filmtipsetgrade && score.filmtipsetgrade.value * 1 > 0)
+          else if (score.grade && score.grade.value * 1 > 0)
           {
-            //Debug.inform("EPG.Filmtipset findScores " + program.title + " found score " + score.filmtipsetgrade.value);
-            program.filmtipsetgrade = score.filmtipsetgrade;
-            program.imdbgrade = score.grade;
+            //Debug.inform("EPG.Filmtipset findScores " + program.title.sv + " found score " + score.grade.value);
+            program.filmtipsetgrade = score.grade; // score.grade is grade can be set by user. If not, it is calculated. score.filmtipsetgrade is always calculated.
             program.imdbid = score.imdb;
             runCallbacks(callbacks[obj.provides.CALLBACK_GET_SCORE].onSuccesses, program);
           }
@@ -247,7 +246,7 @@ EPG.Filmtipset = (function ()
   {
     try
     {
-      FileLoader.downloadFile("\"" + encodeURI(FT_URL + "action=list&id=tv") + "\"", PATH_FILMTIPSET_TV_LIST, onSuccess, findScores, false, true);
+      FileLoader.downloadFile("\"" + encodeURI(FT_URL + "action=list&id=tv&usernr=" + obj.provides.getUserId()) + "\"", PATH_FILMTIPSET_TV_LIST, onSuccess, findScores, false, true);
     }
     catch (error)
     {
