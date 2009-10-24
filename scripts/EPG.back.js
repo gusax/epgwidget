@@ -1095,8 +1095,9 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         "hd.tv1000.viasat.se",
         "hits.canalplus.se",
         "nordic.tv1000.viasat.se",
-        "hits-sport-weekend.canalplus.se",
-        "drama.tv1000.viasat.se"
+        "sf.canalplus.se",
+        "drama.tv1000.viasat.se",
+        "hits-sport-weekend.canalplus.se"
       ]);
       groupChannels("Sport", 
       [
@@ -1122,7 +1123,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         "nickelodeon.se",
         "playhouse.disneychannel.se",
         "nordic.mtve.com",
-        "toon.disneychannel.se",
+        "xd.disneychannel.se",
         "tv400.tv4.se"
       ]
       );
