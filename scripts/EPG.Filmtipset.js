@@ -27,7 +27,7 @@ EPG.Filmtipset = (function ()
   FileLoader,
   Preferences,
   BASE_URL = "http://www.filmtipset.se/api/api.cgi?returntype=json&accesskey=",
-  ACCESS_KEY = "vf7LLawP7fcxG0mQHdnAg",
+  ACCESS_KEY = "",
   FT_URL,
   FT_STAR = "\u272D",
   userId,
