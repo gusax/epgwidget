@@ -118,7 +118,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       topBar.appendChild(document.createTextNode(Translator.translate("overview")));
       topBar.heading = topBar.lastChild;
       topBarContainer = UIcreator.createScalableContainer("topbar", topBar, "uppe.png", currentChannelListIndex);
-      UIcreator.setPosition(topBarContainer, "0em", "0em", "27em", "4.8em", 99, "absolute");
+      topBarContainer.style.width = "27em";
+      topBarContainer.style.height = "4.8em";
+      //UIcreator.setPosition(topBarContainer, "0em", "0em", "27em", "4.8em", 99, "absolute");
       topBarContainer.style.overflow = "hidden";
       return topBarContainer;
     }
@@ -247,7 +249,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       var tempContainer,
       tempElement,
       tempDiv,
-      tempTextNode;
+      tempTextNode,
+      resizers = [];
       /*
        * <div class="scalable bottom">
        *  <div class="contents">
@@ -271,12 +274,15 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       tempElement.firstChild.nodeValue = "A";
       tempDiv.appendChild(tempElement);
       tempContainer.appendChild(tempDiv.cloneNode(true));
+      resizers.push(tempContainer.lastChild);
       tempContainer.lastChild.addEventListener("click", function(){Settings.resizeText(-1);}, false);
       tempElement.setAttribute("class", "normaltext");
       tempContainer.appendChild(tempDiv.cloneNode(true));
+      resizers.push(tempContainer.lastChild);
       tempContainer.lastChild.addEventListener("click", function(){Settings.resizeText(0);}, false);
       tempElement.setAttribute("class", "biggertext");
       tempContainer.appendChild(tempDiv.cloneNode(true));
+      resizers.push(tempContainer.lastChild);
       tempContainer.lastChild.addEventListener("click", function(){Settings.resizeText(1);}, false);
       tempContainer.appendChild(tempDiv.cloneNode(false));
       updateAvailable = tempContainer.lastChild;
@@ -287,7 +293,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       UIcreator.setPosition(updateAvailable, "4em", "-0.1em", "13em", "1.1em", 1, "absolute");
       tempContainer.appendChild(createInfoButton());
       bottomBarContainer =  UIcreator.createScalableContainer("bottombar", tempContainer, "nere.png",currentChannelListIndex);
-      UIcreator.setPosition(bottomBarContainer, "0em", "4.8em", "27em", "3.2em", 99, "absolute");
+      bottomBarContainer.style.width = "27em";
+      bottomBarContainer.style.height = "3.2em";
+      bottomBarContainer.resizers = resizers;
+      //UIcreator.setPosition(bottomBarContainer, "0em", "4.8em", "27em", "3.2em", 99, "absolute");
       return bottomBarContainer;
     
     }
@@ -1949,14 +1958,15 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       frontDiv.appendChild(createTopBar());
       frontDiv.appendChild(document.createElement("div"));
       scrollFrame = frontDiv.lastChild;
-      UIcreator.setPosition(scrollFrame, "0em", "4.8em", "27em", "0em", 1, "absolute");
+      scrollFrame.style.width = "27em";
+      //UIcreator.setPosition(scrollFrame, "0em", "4.8em", "27em", "0em", 1, "absolute");
       scrollFrame.style.overflow = "hidden";
       scrollFrame.appendChild(createOverview());
       frontDiv.appendChild(createBottomBar());
       scrollFrame.appendChild(createDayView());
       scrollFrame.dayView = overviewDiv.dayViewNode = scrollFrame.lastChild;
       scrollFrame.dayView.topY = 0;
-      UIcreator.setPosition(scrollFrame.dayView, "5.7em", "0em", false, false, 3, "absolute");
+      UIcreator.setPosition(scrollFrame.dayView, "5.7em", "0em", false, false, 3, "relative");
       document.addEventListener("keydown", keyHandler, false);
       document.addEventListener("keypress", repeatKeyHandler, false);
       scrollFrame.dayView.addEventListener("DOMMouseScroll", scrollDayView, false);
@@ -2322,17 +2332,20 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         var currentChannelList,
         i,
-        channelListHeight;
+        channelListHeight,
+        tooTallForScreen = false;
         
         currentChannelList = Settings.getChannelList(currentChannelListIndex);
         if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
         {
           //Debug.inform("number of channels in list " + currentChannelListIndex + ": " + currentChannelList.ordered.length);
           height = 80 + currentChannelList.ordered.length * 38;
+          numChannels = currentChannelList.ordered.length;
           channelListHeight = height;
-          overviewDiv.style.height = ((channelListHeight/10) - 8) + "em";
+          overviewDivHeight = ((channelListHeight/10) - 8) + "em";
           while (channelListHeight > screen.height)
           {
+            tooTallForScreen = true;
             channelListHeight -= 19;
           }
           channelListHeight -= 80;
@@ -2348,8 +2361,23 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           height = 80;
           channelListHeight = 0;
         }
-        scrollFrame.style.height = channelListHeight + "em";
-        bottomBarContainer.style.top = (4.8 + channelListHeight) + "em";
+        if (tooTallForScreen)
+        {
+          overviewDiv.style.height = overviewDivHeight;
+          scrollFrame.style.height = channelListHeight + "em";
+          bottomBarContainer.resizers[0].style.visibility = "hidden";
+          bottomBarContainer.resizers[1].style.visibility = "hidden";
+          bottomBarContainer.resizers[2].style.visibility = "hidden";
+        }
+        else
+        {
+          overviewDiv.style.height = "";
+          scrollFrame.style.height = "";
+          bottomBarContainer.resizers[0].style.visibility = "inherit";
+          bottomBarContainer.resizers[1].style.visibility = "inherit";
+          bottomBarContainer.resizers[2].style.visibility = "inherit";
+        }
+        //bottomBarContainer.style.top = (4.8 + channelListHeight) + "em";
         height = 80 + channelListHeight * 10;
         overviewDiv.topY = 0;
         overviewDiv.style.top = overviewDiv.topY + "px";
