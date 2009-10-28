@@ -1,0 +1,280 @@
+#loadingImageFrame
+{
+  position: absolute;
+  top: 0.6em;
+  right: 4em;  	
+}
+
+#loadingImage
+{
+  color: #fff;
+  font-size: 3em; 
+}
+
+#back
+{
+  -apple-dashboard-region: dashboard-region(control, rectangle, 3.9em, 2.2em, 3.9em, 2em); 
+}
+
+input
+{
+  padding: 0em;
+  margin: 0.3em 0.4em 0em 0em;
+}
+input.disabled
+{
+  background: #999;
+}
+
+select
+{
+  margin: 0.4em 0em 0em 0.5em;
+}
+
+a
+{
+  text-decoration: none;
+  color: #aaa; 
+  padding: 0.1em 0em 0em 0.1em;
+}
+
+a:hover
+{
+  text-decoration: underline;
+  color: #fff;
+  text-shadow: #fff 0em 0em 0.2em;
+  
+}
+
+a.inline
+{
+  padding-right: 0.5em;
+}
+
+div.contents div.text, div.contents div.text 
+{
+  font-size: 1.2em;
+  color: #fff;
+  font-weight: bold;
+}
+
+div.scalable div.contents div div
+{
+  margin: 0em; 
+}
+
+div.topbar
+{
+  width: 47.4em;
+  height: 3.9em;
+  overflow: hidden;
+}
+
+div.topbar div.contents div.text
+{
+  margin: 1.2em 1.5em 0em 1.5em;
+  font-size: 1.6em;
+  font-weight: bold;
+  text-shadow: #ccc 0em 0em 0.2em;
+  text-align: center;
+}
+
+div.topbarlist
+{
+  width: 47.4em;
+  height: 1.9em;
+}
+
+div.topbarlist div.contents div.text
+{
+  color: #aaa; 
+  padding: 0.1em 0em 0em 0.1em;
+}
+
+div.topbarlist div.contents div.text:hover
+{
+  color: #fff;
+  text-shadow: #fff 0em 0em 0.2em;
+  padding: 0em 0.1em 0.1em 0em; 
+}
+
+div.channels
+{
+  position: relative;
+  top:0em;
+  left: 0em;
+  width: 47.4em;
+  height: 25em;
+}
+
+div.channellist
+{
+  position: relative;
+  top: 0em;
+  left: 0em;
+  height:24em;
+  overflow: hidden;
+  text-align: left;
+  margin: 0em 4.8em 0em 4.4em !important; 
+}
+
+div.channellist h2
+{
+  color: #fff;
+  font-size: 1.4em;
+  clear:both;
+  margin: 0em;
+  padding: 1em 0em 0.3em 0em;
+  font-weight: bold;
+}
+
+div.channellist div.text
+{
+  margin: 0em !important;
+  padding: 0em 0em 0.3em 0em;
+  color: #aaa;
+  float: left;
+  min-width: 50%;
+}
+
+div.channellist div.text:hover
+{
+  color: #fff;
+  text-shadow: #fff 0em 0em 0.2em;
+}
+
+div.middle
+{
+  width: 47.4em;
+  height: 2.5em;
+}
+
+div.bottombar
+{
+  width: 47.4em;
+  height: 3.9em;
+}
+
+div.bottombarlist
+{
+  width: 47.4em;
+  height: 1.9em;
+}
+
+div.bottombarlist div.contents div.text
+{
+  color: #aaa;
+  padding: 0.1em 0em 0em 0.1em;
+}
+
+div.bottombarlist div.contents div.text:hover
+{
+  color: #fff;
+  text-shadow: #fff 0em 0em 0.2em; 
+  padding: 0em 0.1em 0.1em 0em;
+}
+
+div.bottombar div.contents div.text
+{
+  text-align: left;
+}
+
+
+div.settings
+{
+  position: relative;
+  top:0em;
+  left: 0em;
+  width: 47.4em;
+  height: 11.7em;
+}
+
+div.settingsList
+{
+  position: relative;
+  top:0em;
+  left: 0em;
+  width: 47.4em;
+  height: 11.2em;
+  text-align: left;
+  margin: 0em 4.8em 0em 4.4em !important; 
+}
+
+div.settingsList div.text
+{
+  margin: 0em !important;
+  padding: 0.3em 0em 0em 0.1em;
+  color: #aaa;
+}
+
+div.settingsList div.textNoHover
+{
+  margin: 0em !important;
+  padding: 0.3em 0em 0em 0.1em;
+  color: #aaa;
+  font-size:1.2em;
+}
+
+div.textNoHover a
+{
+  font-weight: bold;
+}
+
+div.settingsList div.withHoverEffect:hover
+{
+  color: #fff;
+  text-shadow: #fff 0em 0em 0.2em;
+  padding: 0.2em 0.1em 0.1em 0em;
+}
+
+div.settingsList div.text:hover
+{
+  color: #fff;
+  text-shadow: #fff 0em 0em 0.2em;
+}
+
+div.support
+{
+  position: relative;
+  top:0em;
+  left: 0em;
+  width: 47.4em;
+  height: 6em;
+  text-align: left;
+}
+
+div.support div.contents div.text
+{
+  margin: 0em 4em 0em 3.6em !important; 
+  color: #aaa;
+}
+
+div.support div.contents div.text a
+{
+  margin: 0.5em 0em;
+}
+
+div.author
+{
+  color: #555;
+}
+
+div.donebutton
+{
+  color: #fff;
+  font-size: 1.4em;
+  font-weight: bold;
+  padding: 0.1em 0em 0em 0.1em;
+  margin: 0em 3em 0em 1.5em; 
+}
+
+div.donebutton:hover
+{
+  text-shadow: #fff 0em 0em 0.2em; 
+  padding: 0em 0.1em 0.1em 0em; 
+}
+
+img.background
+{
+  opacity: 0.9; 
+}
