@@ -9,7 +9,7 @@ Senaste ändringarna ligger alltid överst.
 
 
 ----
-== Nästa version ==
+== 20091028 ==
 _Nya funktioner_
  * Framsidan: Kopierade temat Orange från Xmltv-widgeten. Det blir det sista tema som kopieras därifrån, de andra är för fula (undantaget det transparenta temat som är för krångligt att kopiera - vill nån fixa det så maila mig.) ([http://code.google.com/p/epgwidget/issues/detail?id=19 19])
 
