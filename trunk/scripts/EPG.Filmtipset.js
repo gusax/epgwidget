@@ -222,7 +222,7 @@ EPG.Filmtipset = (function ()
         else
         {
           score = findScore(program, cache);
-          if (score === obj.provides.ERROR_MOVIE_NOT_FOUND || score === obj.provides.ERROR_MOVIE_HAS_NO_SCORE)
+          if (score === obj.provides.ERROR_MOVIE_NOT_FOUND || score === obj.provides.ERROR_MOVIE_HAS_NO_SCORE)
           {
             runCallbacks(callbacks[obj.provides.CALLBACK_GET_SCORE].onFailures, program, score);
           }
