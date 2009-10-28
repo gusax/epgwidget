@@ -64,7 +64,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   scrollInterval,
   showHDsymbol = false,
   showFtScore = false,
-  waitingForScore = [];
+  waitingForScore = [],
+  tooTallForScreen = false;
   
   key.ARROW_UP = 38;
   key.ARROW_DOWN = 40;
@@ -1002,6 +1003,15 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       var index;
       if(currentView === 0)
       {
+        if (!tooTallForScreen)
+        {
+          if (event)
+          {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          return;
+        }
         if(typeof amount === "undefined")
         {
           if(event.detail)
@@ -1959,6 +1969,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       frontDiv.appendChild(document.createElement("div"));
       scrollFrame = frontDiv.lastChild;
       scrollFrame.style.width = "27em";
+      scrollFrame.style.position = "relative";
       //UIcreator.setPosition(scrollFrame, "0em", "4.8em", "27em", "0em", 1, "absolute");
       scrollFrame.style.overflow = "hidden";
       scrollFrame.appendChild(createOverview());
@@ -1966,7 +1977,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       scrollFrame.appendChild(createDayView());
       scrollFrame.dayView = overviewDiv.dayViewNode = scrollFrame.lastChild;
       scrollFrame.dayView.topY = 0;
-      UIcreator.setPosition(scrollFrame.dayView, "5.7em", "0em", false, false, 3, "relative");
+      UIcreator.setPosition(scrollFrame.dayView, "5.7em", "0em", false, false, 3, "absolute");
       document.addEventListener("keydown", keyHandler, false);
       document.addEventListener("keypress", repeatKeyHandler, false);
       scrollFrame.dayView.addEventListener("DOMMouseScroll", scrollDayView, false);
@@ -2332,7 +2343,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         var currentChannelList,
         i,
-        channelListHeight,
+        channelListHeight;
         tooTallForScreen = false;
         
         currentChannelList = Settings.getChannelList(currentChannelListIndex);
