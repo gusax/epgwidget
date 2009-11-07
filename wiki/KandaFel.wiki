@@ -2,7 +2,7 @@
 #labels Featured
 
 = Kända fel =
- * *Rätt versionsnummer står på baksidan men utlovade nya funktioner verkar saknas eller så ser widgeten konstig ut efter uppdatering* : Safari 4 (ingår som standard i Snow Leopard, kan installeras frivilligt i vanliga Leopard) sparar undan källkodsfilerna till widgeten även i Dashboard. Det gör att om du uppdaterar någon widget (vilken som helst, inklusive epgwidgeten) så måste du antingen starta om datorn, logga in och logga ut eller köra killall Dock i terminalen för att Safari ska kasta sina lagrade filer. Om du inte använder Safari för att surfa på internet så kan du få bort problemet på vanliga Leopard genom att återgå till Safari 3. För Snow Leopard finns inte det alternativet.
+ * *Rätt versionsnummer står på baksidan men utlovade nya funktioner verkar saknas eller så ser widgeten konstig ut efter uppdatering* : Safari 4 (ingår som standard i Snow Leopard, kan installeras frivilligt i vanliga Leopard) sparar undan källkodsfilerna till widgeten även i Dashboard. Det gör att om du uppdaterar någon widget (vilken som helst, inklusive epgwidgeten) så måste du antingen starta om datorn, logga ut och logga in eller köra killall Dock i terminalen för att Safari ska kasta sina lagrade filer. Om du inte använder Safari för att surfa på internet så kan du få bort problemet på vanliga Leopard genom att återgå till Safari 3. För Snow Leopard finns inte det alternativet.
 
  * *Alla kanaler påstås ha blivit omdöpta* : Pga ett fel i tablånedladdaren kunde kanallistan råka tas bort om man inte var uppkopplad mot internet just då tablånedladdaren kördes. Detta fel är rättat i alla versioner större än 20080915. Får du detta fel - uppgradera till en nyare version!
 
