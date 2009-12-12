@@ -36,13 +36,12 @@ if (EPG.debug)
   * @param {object} translator EPG.translator.
   * @param {object} ProgramInfo EPG.ProgramInfo.
   */
-EPG.widget = function (front, back, debug, growl, file, settings, translator, ProgramInfo)
+EPG.widget = function (front, back, debug, growl, file, settings, translator, ProgramInfo, GeoLocation)
 {
 	// Private variables
 	var that,
 	internalState = "loading",
 	currentSide,
-	currentChannelListIndex = 0,
 	downloadingChannels = false;
 	
 	// Private methods
@@ -67,24 +66,14 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
         window.widget.onshow = that.onshow;
         window.widget.onhide = that.onhide;
       }
-      //growl.notifyNow(translator.translate("Found") + " " + channels.length + " " + translator.translate("channels") + "!");
-      currentChannelList = settings.getChannelList(currentChannelListIndex);
+      currentChannelList = settings.getChannelList(settings.getCurrentChannelListIndex());
       if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
       {
-        //growl.notifyNow("List with index " + currentChannelListIndex + " had " + currentChannelList.ordered.length + " channels in it.");
         that.toFront(true);
         //that.toBack();
       }
       else
       {
-        if(!currentChannelList)
-        {
-          //growl.notifyNow("List with index " + currentChannelListIndex + " did not exist! Switching to backside!");
-        }
-        else
-        {
-          //growl.notifyNow("List with index " + currentChannelListIndex + " had no channels in it! Switching to backside!");
-        }
         front.hide();
         that.toBack();
       }
@@ -107,7 +96,6 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
   {
     try
     {
-      //growl.notifyNow("Could not load any channels :-( - does your internet connection work?");
       debug.alert("Could not load any channels :-( - does your internet connection work?");
       
       if(!downloadingChannels)
@@ -145,7 +133,6 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 	  {
 	    if(currentSide === back)
 	    {
-	      //debug.alert("Reloading backside");
 	      back.reloadChannelList(channels);
 	    }
 	    else
@@ -173,14 +160,12 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 				
 	 			if(settings.isFirstInstall())
 	 			{
-	 			  //growl.notifyNow(translator.translate("EPG has NOT been installed before!"));
 	 			  debug.inform("This is the first time EPG has been run on this computer (by this user)");
 	 			  settings.getAllChannels(channelsLoaded, channelsLoadedFailed);
           settings.installGrabber(); // this should probably wait until the user has added one channel
 	 			}
 	 			else
 	 			{
-	 			  //growl.notifyNow(translator.translate("EPG has been installed before."));
 	 			  debug.inform("The EPG widget has been run on this computer (by this user) before.");
 	 			  settings.updateGrabber();
 	 			  settings.getAllChannels(channelsLoaded, channelsLoadedFailed);
@@ -199,7 +184,21 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 		  try
 		  {
 		    debug.inform("----------- Onshow! -----------");
-		    settings.getAllChannels(afterOnShow, channelsLoadedFailed, true);
+		    if (settings.getPreference("allowGeoLocation") === "yes")
+		    {
+		      GeoLocation.getPosition(function()
+		          {
+		            settings.getAllChannels(afterOnShow, channelsLoadedFailed, true);
+		          },
+		          function ()
+		          {
+		            settings.getAllChannels(afterOnShow, channelsLoadedFailed, true);
+		          });
+		    }
+		    else
+		    {
+		      settings.getAllChannels(afterOnShow, channelsLoadedFailed, true);
+		    }
 		  }
 		  catch (error)
 		  {
@@ -226,7 +225,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 		  try
 		  {
 		    currentSide = front;
-		    front.show(that.toBack, currentChannelListIndex, widgetJustStarted);
+		    front.show(that.toBack, settings.getCurrentChannelListIndex(), widgetJustStarted);
 		  }
 		  catch (error)
 		  {
@@ -247,6 +246,6 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 		  }
 		}
 	};
-}(EPG.front, EPG.back, EPG.debug, EPG.growl, EPG.file, EPG.settings, EPG.translator, EPG.ProgramInfo);
+}(EPG.front, EPG.back, EPG.debug, EPG.growl, EPG.file, EPG.settings, EPG.translator, EPG.ProgramInfo, EPG.GeoLocation);
 EPG.widget.init();
 EPG.PreLoader.resume();

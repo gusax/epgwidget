@@ -32,7 +32,7 @@ if (EPG.debug)
   * @param {object} growl EPG.growl.
   * @param {object} file EPG.file. 
   */
-EPG.settings = function(Debug, growl, file)
+EPG.settings = function(Debug, growl, file, GeoLocation)
 {
   // Private Variables
   var that,
@@ -54,7 +54,10 @@ EPG.settings = function(Debug, growl, file)
   currentChannelListIndex = 0,
   transparencyValue = 0.95,
   lastVersionCheck = -1,
-  upgradeInfoUrl = "http://epgwidget.googlecode.com/svn/trunk/updateInfo.js";
+  upgradeInfoUrl = "http://epgwidget.googlecode.com/svn/trunk/updateInfo.js",
+  LAST_CHANNELLIST_PREFERENCENAME = "se.bizo.widget.epg.lastChannelListIndex",
+  channelListChangeListeners = [],
+  defaultChannelListIndex = 0;
   
   // Private methods
   function alertCallbackMethods(callbackArrayName, callbackMethod, callbackContents) 
@@ -438,9 +441,9 @@ EPG.settings = function(Debug, growl, file)
       {
         // Debug.inform("getFileDateYYYYMMDD when = " + when);
       }
-      year = when.getUTCFullYear();
-      month = 1 + when.getUTCMonth(); // months are between 0 and 11 so we need to add one to whatever getMonth returns
-      day = when.getUTCDate();
+      year = when.getFullYear();
+      month = 1 + when.getMonth(); // months are between 0 and 11 so we need to add one to whatever getMonth returns
+      day = when.getDate();
       if (month < 10)
       {
         month = "0" + month;
@@ -731,6 +734,48 @@ EPG.settings = function(Debug, growl, file)
     }
   }
   
+  function tellChannelListChangeListeners(index)
+  {
+    var i;
+    for (i = 0; i < channelListChangeListeners.length; i += 1)
+    {
+      channelListChangeListeners[i](index);
+    }
+  }
+  
+  function getChannelListIndexByLocation(longitude, latitude)
+  {
+    var hash = longitude + "x" + latitude;
+    var index = that.getPreference("channelListLocation_" + hash) * 1;
+    if (!typeof index === "number" || isNaN(index))
+    {
+      index = defaultChannelListIndex;
+      that.setCurrentChannelListIndex(defaultChannelListIndex);
+    }
+    if (that.getCurrentChannelListIndex() !== index)
+    {
+      that.setCurrentChannelListIndex(index);
+      tellChannelListChangeListeners(index);
+    }
+  }
+  
+  function onGeoPositionChange(position)
+  {
+    var lastLongitude = that.getPreference("lastLongitude");
+    var lastLatitude = that.getPreference("lastLatitude");
+    var channelListIndex;
+    if (lastLongitude === position.Longitude && lastLatitude === position.Latitude)
+    {
+      // Do nothing
+    }
+    else
+    {
+      getChannelListIndexByLocation(position.Longitude, position.Latitude);
+      that.savePreference("lastLongitude", position.Longitude);
+      that.savePreference("lastLatitude", position.Latitude);
+    }
+  }
+  
   // Public methods
   return {
     init: function()
@@ -743,7 +788,7 @@ EPG.settings = function(Debug, growl, file)
       paths.channelsFolder = "Library/Xmltv/channels/";
       paths.scheduleFolder = "Library/Xmltv/schedules/";
       paths.allChannels = paths.channelsFolder + "tv.jsontv.se.swedb.channels.js";
-      Debug.inform("Settings.init: navigator.userAgent = " + navigator.userAgent);
+      //Debug.inform("Settings.init: navigator.userAgent = " + navigator.userAgent);
       if (navigator.userAgent.match("Safari"))
       {
         if (navigator.userAgent.indexOf("Version/4") > 0) // Leopard with Safari 4 (including the beta versions)
@@ -774,6 +819,7 @@ EPG.settings = function(Debug, growl, file)
         that.safariVersion = 4;
         Debug.inform("Settings.init: that.safariVersion set to " + that.safariVersion);
       }
+      GeoLocation.addEventListener(onGeoPositionChange);
       delete that.init;
     },
     
@@ -810,7 +856,7 @@ EPG.settings = function(Debug, growl, file)
     {
       try
       {
-        if (value)
+        if (typeof value !== undefined)
         {
           key = "" + key;
           value = "" + value;
@@ -1416,7 +1462,7 @@ EPG.settings = function(Debug, growl, file)
     
     /**
      * @memberOf EPG.settings
-     * @function getCurrentChannelListID
+     * @function getCurrentChannelListIndex
      * @description Returns the current channel list id.
      * @return {number} ID of the current channel list.
      */
@@ -1424,7 +1470,45 @@ EPG.settings = function(Debug, growl, file)
     {
       try
       {
+        var listIndex = 1 * that.getPreference(LAST_CHANNELLIST_PREFERENCENAME);
+        if (typeof listIndex === "number" && !isNaN(listIndex))
+        {
+          currentChannelListIndex = listIndex;
+        }
+        else
+        {
+          currentChannelListIndex = 0;
+          that.savePreference(LAST_CHANNELLIST_PREFERENCENAME, currentChannelListIndex);
+        }
         return currentChannelListIndex;
+      }
+      catch (error)
+      {
+        Debug.alert("Error in settings.getCurrentChannelListID: " + error);
+      }
+    },
+    
+    /**
+     * @memberOf EPG.settings
+     * @function setCurrentChannelListIndex
+     * @description Sets the current channel list id.
+     * @param {number} listIndex ID of the current channel list.
+     * @return {Boolean} True if list index could be saved
+     */
+    setCurrentChannelListIndex: function (listIndex) 
+    {
+      try
+      {
+        if (typeof listIndex === "number" && !isNaN(listIndex))
+        {
+          that.savePreference(LAST_CHANNELLIST_PREFERENCENAME, listIndex);
+          currentListIndex = listIndex;
+          return true;
+        }
+        else
+        {
+          return false;
+        }
       }
       catch (error)
       {
@@ -1581,8 +1665,13 @@ EPG.settings = function(Debug, growl, file)
       {
         Debug.alert("Error in EPG.Settings.checkForNewVersion: " + error);
       }
+    },
+    
+    addChannelListChangeListener: function (listener)
+    {
+      channelListChangeListeners.push(listener);
     }
   };
-}(EPG.debug, EPG.growl, EPG.file);
+}(EPG.debug, EPG.growl, EPG.file, EPG.GeoLocation);
 EPG.settings.init();
 EPG.PreLoader.resume();
