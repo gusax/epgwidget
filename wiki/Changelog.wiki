@@ -11,7 +11,7 @@ Senaste ändringarna ligger alltid överst.
 ----
 == Nästa version ==
 _Rättade buggar_
-* Tablåer läses nu in korrekt även mellan kl 00 och 01 samt 00 och 02. ([http://code.google.com/p/epgwidget/issues/detail?id=70 70])
+ * Tablåer läses nu in korrekt även mellan kl 00 och 01 samt 00 och 02. ([http://code.google.com/p/epgwidget/issues/detail?id=70 70])
 
 == 20091028 ==
 _Nya funktioner_
