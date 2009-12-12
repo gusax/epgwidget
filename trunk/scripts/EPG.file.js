@@ -115,7 +115,7 @@ EPG.file = function(Debug, growl, currentVersion)
         }
         else
         {
-          growl.notifyNow("file.fileOpened: Failure! Did not find " + xhr.path + " :-(");
+          Debug.alert("file.fileOpened: Failure! Did not find " + xhr.path + " :-(");
           if(xhr.onFailure)
           {
             xhr.onFailure(xhr.channelID);
@@ -376,7 +376,7 @@ EPG.file = function(Debug, growl, currentVersion)
             }
           }
           //Debug.inform("file.open: don't have HOME-path yet. Trying again in 100ms...");
-          setTimeout(function(){that.open(path, onSuccess, onFailure, channelID);}, 100);
+          setTimeout(function(){that.open(path, onSuccess, onFailure, channelID, dontEval, isUrl, useIsoEncoding);}, 100);
         }
         else
         {

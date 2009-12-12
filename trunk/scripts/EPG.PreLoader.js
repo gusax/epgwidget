@@ -249,6 +249,7 @@ EPG.PreLoader = function (Debug)
 EPG.PreLoader.init();
 EPG.PreLoader.addScript("scripts/EPG.growl.js");
 EPG.PreLoader.addScript("scripts/EPG.file.js");
+EPG.PreLoader.addScript("scripts/EPG.GeoLocation.js");
 EPG.PreLoader.addScript("scripts/EPG.settings.js");
 EPG.PreLoader.addScript("scripts/EPG.skin.js");
 EPG.PreLoader.addScript("scripts/EPG.Reminder.js");

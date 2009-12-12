@@ -44,7 +44,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
   backDiv,
   frontDiv,
   currentChannelList,
-  currentChannelListIndex,
   channelListToScroll,
   backSkin = "back",
   scrollSteps = 10,
@@ -496,7 +495,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         channelListToScroll.listFrame = channelListToScroll.lastChild;
         channelListToScroll.listFrame.style.position = "absolute";
         
-        currentChannelList = settings.getChannelList(currentChannelListIndex);
+        currentChannelList = settings.getChannelList(settings.getCurrentChannelListIndex());
         
         for (groupIndex = 2; groupIndex < categories.length; groupIndex += 1)
         {
@@ -1036,6 +1035,32 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
     }
   }
   
+  function switchToChannelList(newListIndex)
+  {
+    if (newListIndex !== settings.getCurrentChannelListIndex())
+    {
+      settings.setCurrentChannelListIndex(newListIndex);
+      settings.getAllChannels(
+          function(channels)
+          {
+            that.reloadChannelList(channels);
+          },
+          function()
+          {
+            try
+            {
+              resetChannelListScroll(); 
+              createChannelListFailure(channelListContainer);
+            }
+            catch (error2)
+            {
+              debug.alert("Error in back.show when trying to update channel list: " + error2);
+            }
+          },
+          true);
+    }
+  }
+  
   // Public methods
   return {
     init: function()
@@ -1174,7 +1199,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         "ppv7.canalplus.se"
       ]);
       
-      currentChannelListIndex = settings.getCurrentChannelListIndex();
       document.addEventListener("keydown", 
         function(event)
         {
@@ -1320,7 +1344,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         if(div && div.channelID)
         {
           //debug.alert(" div.firstChild = " + div.firstChild);
-          if(settings.addChannelToList(div.channelID, currentChannelListIndex))
+          if(settings.addChannelToList(div.channelID, settings.getCurrentChannelListIndex()))
           {
             div.firstChild.checked = true;
           }
