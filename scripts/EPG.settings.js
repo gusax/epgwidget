@@ -51,7 +51,6 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
   {
     isTheEmptyProgram : true
   },
-  currentChannelListIndex = 0,
   transparencyValue = 0.95,
   lastVersionCheck = -1,
   upgradeInfoUrl = "http://epgwidget.googlecode.com/svn/trunk/updateInfo.js",
@@ -1471,13 +1470,14 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
       try
       {
         var listIndex = 1 * that.getPreference(LAST_CHANNELLIST_PREFERENCENAME);
+        var currentChannelListIndex;
         if (typeof listIndex === "number" && !isNaN(listIndex))
         {
           currentChannelListIndex = listIndex;
         }
         else
         {
-          currentChannelListIndex = 0;
+          currentChannelListIndex = defaultChannelListIndex;
           that.savePreference(LAST_CHANNELLIST_PREFERENCENAME, currentChannelListIndex);
         }
         return currentChannelListIndex;
