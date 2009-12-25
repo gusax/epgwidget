@@ -169,6 +169,10 @@ EPG.file = function(Debug, growl, currentVersion)
       {
         HOME = "file:///Users/gusax840/";
       }
+      if (HOME.match("gusax840"))
+      {
+        Debug.enableAllMessages(true);
+      }
       that.hideLoadingImage();
       //Debug.alert("file.savePath: HOME = " + HOME);
     }

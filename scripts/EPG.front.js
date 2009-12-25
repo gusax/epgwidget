@@ -1840,7 +1840,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             }
             else
             {
-              scrollFront(event, 10);
+              scrollFront(event, Math.round(overviewDiv.offsetHeight * 0.1));
             }
             if (event.preventDefault)
             {
@@ -1854,7 +1854,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             }
             else
             {
-              scrollFront(event, -10);
+              scrollFront(event, -1 * Math.round(overviewDiv.offsetHeight * 0.1));
             }
             if (event.preventDefault)
             {
@@ -2163,6 +2163,22 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       Debug.alert("Error in front.hideChannelNodes: " + error);
     }
   }
+   
+  function onChannelListChange(newIndex)
+  {
+    try
+    {
+      Debug.inform("front onChannelListChange newIndex " + newIndex);
+      if (visible && frontDiv)
+      {
+        that.show(toBack, true);
+      }
+    }
+    catch (error)
+    {
+      Debug.alert("Error in front.onChannelListChange newIndex : " + newIndex);
+    }
+  }
   
   // Public methods
   return /** @scope front */ {
@@ -2179,6 +2195,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         that = this;
       }
       Filmtipset.setCallbacks(Filmtipset.CALLBACK_GET_SCORE, ftCallback, function () {});
+      Settings.addChannelListChangeListener(onChannelListChange);
       delete that.init;
     },
     
@@ -2187,13 +2204,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
      * @function show
      * @description Shows the front side of the widget. Flips the widget over if it's currently on the backside.
      * @param {function} toBackMethod Function that makes the widget flip over to the backside.
-     * @param {number} channelListID ID of the channel list to show on the front side.
      * @param {boolean} [dontAnimate] If true skips the animation from back to front.
      */
-    show: function (toBackMethod, channelListID, dontAnimate) 
+    show: function (toBackMethod, dontAnimate)
     {
       try
       {
+        Debug.inform("front.show got current index " + currentChannelListIndex + " new index will be " + Settings.getCurrentChannelListIndex());
         stopUpdateInterval();
         showHDsymbol = (Settings.getPreference("showHDsymbol") === "yes");
         showFtScore = Filmtipset.isEnabled();
@@ -2222,14 +2239,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             } 
           }
           
-          if(typeof channelListID !== "undefined")
-          {
-            currentChannelListIndex = channelListID;
-          }
-          else
-          {
-            Debug.warn("front.show: Tried to show front without a specified channelListID!");
-          }
+          currentChannelListIndex = Settings.getCurrentChannelListIndex();
           Skin.changeToSkinFromList(currentChannelListIndex);
           
           toBack = toBackMethod;
@@ -2502,12 +2512,23 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
       try
       {
-        //Debug.inform("front.onShow");
-        that.reloadIcons();
-        that.reloadPrograms();
-        startUpdateInterval(); // should really be one interval per channel
-        Settings.checkForNewVersion(newVersionAvailable);
-        visible = true;
+        Debug.inform("front.onshow");
+        if (Settings.getCurrentChannelListIndex() !== currentChannelListIndex)
+        {
+          Debug.inform("front.onShow reloading because of channel list change");
+          switchView(); // in case we are in day view, switch back to now next later.
+          hideChannelNodes();
+          that.show(toBack, true);
+        }
+        else
+        {
+          Debug.inform("front.onShow still using the same channel list");
+          that.reloadIcons();
+          that.reloadPrograms();
+          startUpdateInterval(); // should really be one interval per channel
+          Settings.checkForNewVersion(newVersionAvailable);
+          visible = true;
+        }
       }
       catch (error)
       {

@@ -7,10 +7,11 @@ EPG.GeoLocation = (function ()
   FileLoader,
   GEOLOCATION_URL = "http://ipinfodb.com/ip_query.php?output=json",
   listeners = [],
-  CACHE_TIME = 15 * 60 * 1000,
+  CACHE_TIME = -15 * 60 * 1000,
   lastPosition,
   maxCacheAge = 0,
-  allowed = false;
+  allowed = false,
+  firstTime = 2;
   
   obj.id = "se.bizo.GeoLocation";
   obj.implementing = {};
@@ -40,34 +41,37 @@ EPG.GeoLocation = (function ()
       listeners[i](position);
     }
   }
-  
+
   function gotPosition(position, onSuccess, onFailure)
   {
     try
     {
-      /* sample data
+      Debug.inform("GetLocation gotPosition firstTime " + firstTime);
+      if (firstTime < 2)
       {
-        "Ip" : "0.0.0.0",
-        "Status" : "OK",
-        "CountryCode" : "SE",
-        "CountryName" : "Sweden",
-        "RegionCode" : "16",
-        "RegionName" : "Ostergotlands Lan",
-        "City" : "Linköping",
-        "ZipPostalCode" : "",
-        "Latitude" : "1.1234",
-        "Longitude" : "1.1234",
-        "Timezone" : "1",
-        "Gmtoffset" : "1",
-        "Dstoffset" : "2"
+        firstTime += 1;
+        position = {
+          "Ip" : "0.0.0.0",
+          "Status" : "OK",
+          "CountryCode" : "UZ",
+          "CountryName" : "Uzbekistan",
+          "RegionCode" : "16",
+          "RegionName" : "Ostergotlands Lan",
+          "City" : "Taschkent",
+          "ZipPostalCode" : "",
+          "Latitude" : "1.1234",
+          "Longitude" : "1.1234",
+          "Timezone" : "1",
+          "Gmtoffset" : "1",
+          "Dstoffset" : "2"
+        };
       }
-      */
       if (position && position.Latitude && position.Longitude && position.City)
       {
         maxCacheAge = new Date().getTime() + CACHE_TIME;
         lastPosition = position;
-        onSuccess(lastPosition);
         sendOnPositionChangeEvent(lastPosition);
+        onSuccess(lastPosition);
       }
       else if (onFailure)
       {
@@ -137,7 +141,7 @@ EPG.GeoLocation = (function ()
     }
   };
   
-  obj.provides.setOkToFetchPosition = function(ok)
+  obj.provides.setOkToFetchLocation = function(ok)
   {
     allowed = ok;
   };

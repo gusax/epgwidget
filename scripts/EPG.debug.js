@@ -8,6 +8,7 @@ EPG.debug = function()
 {
 	// Private variables
 	var debuggingEnabled = true,
+	allMessagesEnabled = false,
 	that;
 	
 	// Private methods
@@ -90,17 +91,20 @@ EPG.debug = function()
 		{
 		  try
 		  {
-		    if(window.widget)
-        {
-          window.widget.system("echo '" + (new Date()) + " WARNING " + message + "' >> error.log", afterLogWrite);
-        }
-        else if(window.console && window.console.warn)
+		    if (allMessagesEnabled)
 		    {
-		      window.console.warn(message);
-		    }
-		    else
-		    {
-		      //that.alert(message);
+  		    if(window.widget)
+          {
+            window.widget.system("echo '" + (new Date()) + " WARNING " + message + "' >> error.log", afterLogWrite);
+          }
+          else if(window.console && window.console.warn)
+  		    {
+  		      window.console.warn(message);
+  		    }
+  		    else
+  		    {
+  		      //that.alert(message);
+  		    }
 		    }
 		  }
 		  catch (error)
@@ -119,17 +123,20 @@ EPG.debug = function()
 		{
 		  try
 		  {
-		    if(window.widget)
-        {
-          window.widget.system("echo '" + (new Date()) + " INFO " + message + "' >> error.log", afterLogWrite);
-        }
-        else if(window.console && window.console.info)
+		    if (allMessagesEnabled)
 		    {
-		      window.console.info(message);
-		    }
-		    else
-		    {
-		      //that.alert(message);
+  		    if(window.widget)
+          {
+            window.widget.system("echo '" + (new Date()) + " INFO " + message + "' >> error.log", afterLogWrite);
+          }
+          else if(window.console && window.console.info)
+  		    {
+  		      window.console.info(message);
+  		    }
+  		    else
+  		    {
+  		      //that.alert(message);
+  		    }
 		    }
 		  }
 		  catch (error)
@@ -153,6 +160,11 @@ EPG.debug = function()
 		  {
 		    alert("Error in debug.enable: " + error);
 		  }
+		},
+		
+		enableAllMessages: function(enable)
+		{
+		  allMessagesEnabled = enable;
 		}
 	};
 }();

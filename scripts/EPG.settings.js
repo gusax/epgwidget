@@ -742,36 +742,28 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
     }
   }
   
-  function getChannelListIndexByLocation(longitude, latitude)
+  function onGeoPositionChange(location)
   {
-    var hash = longitude + "x" + latitude;
-    var index = that.getPreference("channelListLocation_" + hash) * 1;
-    if (!typeof index === "number" || isNaN(index))
+    try
     {
-      index = defaultChannelListIndex;
-      that.setCurrentChannelListIndex(defaultChannelListIndex);
+      var lastLongitude = that.getPreference("lastLongitude");
+      var lastLatitude = that.getPreference("lastLatitude");
+      var channelListIndex;
+      if (lastLongitude === location.Longitude && lastLatitude === location.Latitude)
+      {
+        Debug.inform("Settings onGeoPositionChange got the same location as we had previously.");
+      }
+      else
+      {
+        Debug.inform("Settings onGeoPositionChange got a new location! Latitude " + location.Latitude + ", longitude " + location.Longitude + ", city " + location.City);
+        that.savePreference("lastLongitude", location.Longitude);
+        that.savePreference("lastLatitude", location.Latitude);
+      }
+      that.getChannelListIndexByLocation(location);
     }
-    if (that.getCurrentChannelListIndex() !== index)
+    catch (error)
     {
-      that.setCurrentChannelListIndex(index);
-      tellChannelListChangeListeners(index);
-    }
-  }
-  
-  function onGeoPositionChange(position)
-  {
-    var lastLongitude = that.getPreference("lastLongitude");
-    var lastLatitude = that.getPreference("lastLatitude");
-    var channelListIndex;
-    if (lastLongitude === position.Longitude && lastLatitude === position.Latitude)
-    {
-      // Do nothing
-    }
-    else
-    {
-      getChannelListIndexByLocation(position.Longitude, position.Latitude);
-      that.savePreference("lastLongitude", position.Longitude);
-      that.savePreference("lastLatitude", position.Latitude);
+      Debug.alert("Settings onGeoPostionChange error " + error);
     }
   }
   
@@ -1670,6 +1662,52 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
     addChannelListChangeListener: function (listener)
     {
       channelListChangeListeners.push(listener);
+    },
+    
+    getChannelListIndexByLocation: function (location)
+    {
+      try
+      {
+        var hash = location.Latitude + "x" + location.Longitude;
+        var index = that.getPreference("channelListLocation_" + hash) * 1;
+        Debug.inform("getChannelListIndexByLocation hash " + hash + " got channel list index " + index);
+        if (!typeof index === "number" || isNaN(index))
+        {
+          index = defaultChannelListIndex;
+          that.setCurrentChannelListIndex(defaultChannelListIndex);
+        }
+        if (that.getCurrentChannelListIndex() !== index)
+        {
+          Debug.inform("Settings getChannelListIndexByLocation because of a change in location to " + hash + ", switching to channel list with index " + index);
+          that.setCurrentChannelListIndex(index);
+          tellChannelListChangeListeners(index);
+        }
+        return index;
+      }
+      catch (error)
+      {
+        Debug.alert("Settings getChannelListIndexByLocation error " + error);
+      }
+    },
+    
+    setChannelListIndexByLocation: function(location, index, enabled)
+    {
+      try
+      {
+        var hash = location.Latitude + "x" + location.Longitude;
+        if (enabled)
+        {
+          that.savePreference("channelListLocation_" + hash, index);
+        }
+        else
+        {
+          that.deletePreference("channelListLocation_" + hash);
+        }
+      }
+      catch (error)
+      {
+        Debug.alert("Error in EPG.settings.connectChannelListToLocation " + error);
+      }
     }
   };
 }(EPG.debug, EPG.growl, EPG.file, EPG.GeoLocation);

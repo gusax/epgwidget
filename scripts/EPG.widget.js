@@ -55,9 +55,28 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 		return new F();
 	}
 	
+	function proceed(currentChannelList)
+	{
+	  try
+    {
+      if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
+      {
+        that.toFront(true);
+      }
+      else
+      {
+        front.hide();
+        that.toBack();
+      }
+    }
+    catch (error)
+    {
+      debug.alert("widget proceed error " + error);
+    }
+	}
+	
   function channelsLoaded(channels) 
   {
-    var currentChannelList;
     try
     {
       downloadingChannels = false;
@@ -66,16 +85,38 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
         window.widget.onshow = that.onshow;
         window.widget.onhide = that.onhide;
       }
-      currentChannelList = settings.getChannelList(settings.getCurrentChannelListIndex());
-      if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
+      if (settings.getPreference("allowGeoLocation") === "yes")
       {
-        that.toFront(true);
-        //that.toBack();
+        GeoLocation.setOkToFetchLocation(true);
+        GeoLocation.getLocation(function gotLocation1(location)
+            {
+              try
+              {
+                debug.inform("widget.channelsLoaded got location " + location.Longitude + " " + location.Latitude + " " + location.City);
+                proceed(settings.getChannelList(settings.getChannelListIndexByLocation(location)));
+              }
+              catch (error)
+              {
+                debug.alert("widget gotLocation1 error " + error);
+              }
+            },
+            function ()
+            {
+              try
+              {
+                debug.inform("widget.channelsLoaded got no location when asking for one, using previous channel list");
+                proceed(settings.getChannelList(settings.getCurrentChannelListIndex()));
+              }
+              catch (error)
+              {
+                debug.alert("widget didNotGetLocation1 error " + error);
+              }
+            });
       }
       else
       {
-        front.hide();
-        that.toBack();
+        GeoLocation.setOkToFetchLocation(false);
+        that.toFront(true);
       }
       setTimeout(function()
       {
@@ -133,16 +174,48 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 	  {
 	    if(currentSide === back)
 	    {
+	      debug.inform("widget afterOnShow reloading channel list on backside because current side is backside");
 	      back.reloadChannelList(channels);
 	    }
 	    else
 	    {
+	       debug.inform("widget afterOnShow running front.onShow");
 	      front.onShow();
 	    }
 	  }
 	  catch (error)
 	  {
 	    debug.alert("Error in widget.afterOnShow: " + error);
+	  }
+	}
+	
+	function start (callback)
+	{
+	  try
+	  {
+  	  if (settings.getPreference("allowGeoLocation") === "yes")
+      {
+        GeoLocation.setOkToFetchLocation(true);
+        GeoLocation.getLocation(function(location)
+            {
+              debug.inform("widget.onshow got location " + location.Longitude + " " + location.Latitude + " " + location.City);
+              settings.getAllChannels(callback, channelsLoadedFailed, true);
+            },
+            function ()
+            {
+              debug.inform("widget onshow got no location when asking for one");
+              settings.getAllChannels(callback, channelsLoadedFailed, true);
+            });
+      }
+      else
+      {
+        GeoLocation.setOkToFetchLocation(false);
+        settings.getAllChannels(callback, channelsLoadedFailed, true);
+      }
+	  }
+	  catch (error)
+	  {
+	    debug.alert("Error in widget.start: " + error);
 	  }
 	}
 	
@@ -168,7 +241,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 	 			{
 	 			  debug.inform("The EPG widget has been run on this computer (by this user) before.");
 	 			  settings.updateGrabber();
-	 			  settings.getAllChannels(channelsLoaded, channelsLoadedFailed);
+	 			  start(channelsLoaded);
 	 			}
 	 			
 	 			delete that.init;
@@ -184,21 +257,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 		  try
 		  {
 		    debug.inform("----------- Onshow! -----------");
-		    if (settings.getPreference("allowGeoLocation") === "yes")
-		    {
-		      GeoLocation.getPosition(function()
-		          {
-		            settings.getAllChannels(afterOnShow, channelsLoadedFailed, true);
-		          },
-		          function ()
-		          {
-		            settings.getAllChannels(afterOnShow, channelsLoadedFailed, true);
-		          });
-		    }
-		    else
-		    {
-		      settings.getAllChannels(afterOnShow, channelsLoadedFailed, true);
-		    }
+		    start(afterOnShow);
 		  }
 		  catch (error)
 		  {
@@ -225,7 +284,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 		  try
 		  {
 		    currentSide = front;
-		    front.show(that.toBack, settings.getCurrentChannelListIndex(), widgetJustStarted);
+		    front.show(that.toBack, widgetJustStarted);
 		  }
 		  catch (error)
 		  {
