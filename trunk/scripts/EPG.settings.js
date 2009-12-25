@@ -54,9 +54,10 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
   transparencyValue = 0.95,
   lastVersionCheck = -1,
   upgradeInfoUrl = "http://epgwidget.googlecode.com/svn/trunk/updateInfo.js",
-  LAST_CHANNELLIST_PREFERENCENAME = "se.bizo.widget.epg.lastChannelListIndex",
+  LAST_USED_CHANNELLIST_PREFERENCENAME = "se.bizo.widget.epg.lastChannelListIndex",
   channelListChangeListeners = [],
-  defaultChannelListIndex = 0;
+  defaultChannelListIndex = 0,
+  MAX_CHANNEL_LISTS = 10;
   
   // Private methods
   function alertCallbackMethods(callbackArrayName, callbackMethod, callbackContents) 
@@ -253,17 +254,21 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
   {
     try
     {
+      Debug.inform("Settings exportChannelList");
       var channelid,
       listid,
       list,
-      foundChannels = [],
+      foundChannels = {},
       string;
-    
-      for (listid in channelLists)
+
+      file.showLoadingImage();
+      
+      for (listid = 0; listid < MAX_CHANNEL_LISTS; listid += 1)
       {
-        if (channelLists.hasOwnProperty(listid))
+        list = that.getChannelList(listid);
+        if (list)
         {
-          list = channelLists[listid].hashed;
+          list = list.hashed;
           for (channelid in list)
           {
             if (list.hasOwnProperty(channelid))
@@ -273,6 +278,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
           }
         }
       }
+
       for (channelid in foundChannels)
       {
         if (foundChannels.hasOwnProperty(channelid))
@@ -287,15 +293,15 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
           }
         }
       }
-      
+
       if (window.widget && window.widget.system)
       {
-        file.showLoadingImage();
-        //Debug.inform("settings.exportChannelList exporting...");
+        Debug.inform("settings.exportChannelList exporting channel list\n" + string);
         widget.system("/bin/echo '" + string + "' > " + file.getHomePath() + "Library/Xmltv/channels/epg.users.channels.txt", channelListExported);
       }
       else
       {
+        file.hideLoadingImage();
         Debug.inform("settings.exportChannelList: would have run /bin/echo '" + string + "'");
       }
     }
@@ -1461,7 +1467,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
     {
       try
       {
-        var listIndex = 1 * that.getPreference(LAST_CHANNELLIST_PREFERENCENAME);
+        var listIndex = 1 * that.getPreference(LAST_USED_CHANNELLIST_PREFERENCENAME);
         var currentChannelListIndex;
         if (typeof listIndex === "number" && !isNaN(listIndex))
         {
@@ -1470,7 +1476,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
         else
         {
           currentChannelListIndex = defaultChannelListIndex;
-          that.savePreference(LAST_CHANNELLIST_PREFERENCENAME, currentChannelListIndex);
+          that.savePreference(LAST_USED_CHANNELLIST_PREFERENCENAME, currentChannelListIndex);
         }
         return currentChannelListIndex;
       }
@@ -1493,7 +1499,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
       {
         if (typeof listIndex === "number" && !isNaN(listIndex))
         {
-          that.savePreference(LAST_CHANNELLIST_PREFERENCENAME, listIndex);
+          that.savePreference(LAST_USED_CHANNELLIST_PREFERENCENAME, listIndex);
           currentListIndex = listIndex;
           return true;
         }
