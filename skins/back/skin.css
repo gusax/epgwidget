@@ -115,7 +115,7 @@ div.channellist
   height:24em;
   overflow: hidden;
   text-align: left;
-  margin: 0em 4.8em 0em 4.4em !important; 
+  margin: 0em 4.8em 0em 4.4em !important;  
 }
 
 div.channellist h2
@@ -141,6 +141,13 @@ div.channellist div.text:hover
 {
   color: #fff;
   text-shadow: #fff 0em 0em 0.2em;
+}
+
+#channellistframe
+{
+  -webkit-transition-property: top;
+  -webkit-transition-duration: 0.3s;
+  -webkit-transition-timing-function: ease-out;
 }
 
 div.middle
@@ -186,7 +193,7 @@ div.settings
   top:0em;
   left: 0em;
   width: 47.4em;
-  height: 11.7em;
+  height: 12.7em;
 }
 
 div.settingsList
@@ -195,7 +202,7 @@ div.settingsList
   top:0em;
   left: 0em;
   width: 47.4em;
-  height: 11.2em;
+  height: 12.2em;
   text-align: left;
   margin: 0em 4.8em 0em 4.4em !important; 
 }
@@ -239,7 +246,7 @@ div.support
   top:0em;
   left: 0em;
   width: 47.4em;
-  height: 6em;
+  height: 5em;
   text-align: left;
 }
 
@@ -277,4 +284,11 @@ div.donebutton:hover
 img.background
 {
   opacity: 0.9; 
+}
+
+#overview
+{
+  -webkit-transition-property: top;
+  -webkit-transition-duration: 0.3s;
+  -webkit-transition-timing-function: ease-out;
 }
