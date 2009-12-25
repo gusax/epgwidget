@@ -35,7 +35,7 @@ if (EPG.debug)
   * @param {object} translator EPG.translator.
   * @param {object} UIcreator EPG.UIcreator. 
   */
-EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtipset)
+EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtipset, GeoLocation)
 {
   // Private Variables
   var that,
@@ -51,7 +51,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
   channelListContainer,
   topY = 0,
   scrollHeight = 0,
-  categories = [];
+  categories = [],
+  positionSelectorNode;
   
   // Private methods
   
@@ -85,11 +86,11 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         {
           if(direction === "up")
           {
-            amount = -105;
+            amount = -1 * Math.round(channelListContainer.offsetHeight * 0.2);
           }
           else if(direction === "down")
           {
-            amount = 105;
+            amount = Math.round(channelListContainer.offsetHeight * 0.2);
           }
           else if (event.wheelDeltaX)
           {
@@ -114,6 +115,19 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
           {
             amount = 0;
           }
+          
+          if (Math.abs(amount) > channelListContainer.offsetHeight)
+          {
+            if (amount < 0)
+            {
+              amount = -1 * Math.round(channelListContainer.offsetHeight * 0.7);
+            }
+            else
+            {
+              amount = Math.round(channelListContainer.offsetHeight * 0.7);
+            }
+          }
+          
           topY += amount;
           
           if(topY > 0)
@@ -470,6 +484,132 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
     }
   }
   
+  function createBacksideCheckboxNode(parentNode, title, selected, enabled, onClick)
+  {
+    try
+    {
+      var div = document.createElement("div");
+      div.setAttribute("class", "text");
+      div.appendChild(document.createElement("input"));
+      div.lastChild.setAttribute("type", "checkbox");
+      div.checkbox = div.lastChild;
+      div.setSelected = function(selection)
+      {
+        if (selection)
+        {
+          div.checkbox.setAttribute("checked", "checked");
+        }
+        else
+        {
+          div.checkbox.removeAttribute("checked");
+        }
+      };
+      div.setSelected(selected);
+      div.setEnabled = function (enable)
+      {
+        if (!enable)
+        {
+          div.checkbox.setAttribute("disabled", "disabled");
+        }
+        else
+        {
+          div.checkbox.removeAttribute("disabled");
+        }
+      };
+      div.setEnabled(enabled);
+      div.appendChild(document.createTextNode(translator.translate(title)));
+      div.text = div.lastChild;
+      parentNode.appendChild(div);
+      div.addEventListener("click", function(event)
+        {
+          if (div.checkbox.getAttribute("disabled") !== "disabled")
+          {
+            if (div.checkbox.getAttribute("checked") === "checked")
+            {
+              div.setSelected(false);
+              if (onClick)
+              {
+                onClick(false);
+              }
+            }
+            else
+            {
+              div.setSelected(true);
+              if (onClick)
+              {
+                onClick(true);
+              }
+            }
+          }
+        },
+        false);
+      return div;
+    }
+    catch (error)
+    {
+      debug.alert("Error in EPG.back.createBacksideCheckboxNode: " + error);
+    }
+  }
+  
+  function updatePositionNodeLocation(location)
+  {
+    try
+    {
+      if (positionSelectorNode)
+      {
+        debug.inform("Back updatePositionNodeLocation " + settings.getChannelListIndexByLocation(location) + " current index " + settings.getCurrentChannelListIndex());
+        if (settings.getChannelListIndexByLocation(location) === settings.getCurrentChannelListIndex())
+        {
+          positionSelectorNode.setSelected(true);
+        }
+        else
+        {
+          positionSelectorNode.setSelected(false);
+        }
+        positionSelectorNode.text.nodeValue = translator.translate("Use when I am in") + " " + location.City + " (" + location.Latitude + " x " + location.Longitude + ")";
+        positionSelectorNode.location = location;
+      }
+    }
+    catch (error)
+    {
+      debug.alert("Error in EPG.back updatePositionNodeLocation " + error);
+    }
+  }
+  
+  function createPositionSelectorNode(parentNode)
+  {
+    try
+    {
+      var heading = document.createElement("h2");
+      var option;
+      var message;
+      var enable;
+      heading.appendChild(document.createTextNode(translator.translate("Settings for channel list") + " " + settings.getCurrentChannelListIndex()));
+      parentNode.appendChild(heading);
+      if (settings.getPreference("allowGeoLocation") === "yes")
+      {
+        enable = true;
+        message = "Trying to find out current location...";
+      }
+      else
+      {
+        enable = false;
+        message = "Not allowed to find out current position.";
+      }
+      positionSelectorNode = createBacksideCheckboxNode(parentNode, message, false, enable,
+          function(enabled)
+          {
+            settings.setChannelListIndexByLocation(positionSelectorNode.location, settings.getCurrentChannelListIndex(), enabled);
+          });
+      GeoLocation.getLocation(updatePositionNodeLocation,
+      function () {});
+    }
+    catch (error)
+    {
+      debug.alert("Error in back.createPositionSelectorNode " + error);
+    }
+  }
+  
   function createChannelListSuccess (channels, targetElement)
   {
     try
@@ -493,9 +633,12 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         channelListToScroll.setAttribute("class","channellist");
         channelListToScroll.appendChild(document.createElement("div"));
         channelListToScroll.listFrame = channelListToScroll.lastChild;
+        channelListToScroll.listFrame.setAttribute("id", "channellistframe");
         channelListToScroll.listFrame.style.position = "absolute";
         
         currentChannelList = settings.getChannelList(settings.getCurrentChannelListIndex());
+        
+        createPositionSelectorNode(fragment);
         
         for (groupIndex = 2; groupIndex < categories.length; groupIndex += 1)
         {
@@ -725,6 +868,32 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
     }
   }
   
+  function allowGeoLocationToggle()
+  {
+    try
+    {
+      if (settings.getPreference("allowGeoLocation") === "yes")
+      {
+        GeoLocation.setOkToFetchLocation(true);
+        positionSelectorNode.setEnabled(true);
+        positionSelectorNode.setSelected(false);
+        positionSelectorNode.text.nodeValue = translator.translate("Trying to find out current location...");
+        GeoLocation.getLocation(updatePositionNodeLocation, function () {});
+      }
+      else
+      {
+        positionSelectorNode.text.nodeValue = translator.translate("Not allowed to find out current position.");
+        positionSelectorNode.setEnabled(false);
+        positionSelectorNode.setSelected(false);
+        GeoLocation.setOkToFetchLocation(false);
+      }
+    }
+    catch (error)
+    {
+      debug.alert("Error in EPG.back allowGeoLocationToggle " + error);
+    }
+  }
+  
   function createSettingsList () 
   {
     try
@@ -767,6 +936,13 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       settingsObj.title = "Show [HD] after HD programs.";
       
       settingsObj = settingsArray[settingsArray.length] = {};
+      settingsObj.prefName = "allowGeoLocation";
+      settingsObj.checkedValue = "yes";
+      settingsObj.uncheckedValue = "no";
+      settingsObj.title = "Allow EPG to ask for current location.";
+      settingsObj.onClick = allowGeoLocationToggle;
+      
+      settingsObj = settingsArray[settingsArray.length] = {};
       settingsObj.prefName = Filmtipset.PREF_NAME_ENABLED;
       settingsObj.checkedValue = "yes";
       settingsObj.uncheckedValue = "no";
@@ -804,6 +980,10 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
                 return function (event)
                 {
                   saveSetting(container);
+                  if (container.setting.onClick)
+                  {
+                    container.setting.onClick();
+                  }
                   event.stopPropagation();
                   event.preventDefault();
                   return false;
@@ -817,6 +997,10 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
             {
               container.firstChild.checked = !container.firstChild.checked;
               saveSetting(container);
+              if (container.setting.onClick)
+              {
+                container.setting.onClick();
+              }
               event.stopPropagation();
               event.preventDefault();
             };
@@ -1229,6 +1413,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
             }
           }
         }, false);
+      GeoLocation.addEventListener(updatePositionNodeLocation);
       delete that.init;
     },
     
@@ -1378,6 +1563,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       }
     }
   };
-}(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator, EPG.UIcreator, EPG.Filmtipset);
+}(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator, EPG.UIcreator, EPG.Filmtipset, EPG.GeoLocation);
 EPG.back.init();
 EPG.PreLoader.resume();

@@ -81,10 +81,15 @@ EPG.translator = function(debug)
   localizedStrings["Removed or renamed"] = "Borttagna eller omdöpta";
   localizedStrings.by = "av";
   localizedStrings["Schedules from"] = "Tablåer från";
-  localizedStrings["Show ratings from Filmtipset.se (membership required)."] = "Visa betyg från Filmtipset.se (medlemsskap krävs).";
+  localizedStrings["Show ratings from Filmtipset.se (membership required)."] = "Visa betyg från Filmtipset.se (medlemskap krävs).";
   localizedStrings["Movie ratings from"] = "Filmbetyg från";
   localizedStrings["Filmtipset.se user number:"] = "Filmtipset.se medlemsnummer:";
   localizedStrings["(Shown here...)"] = "(Visas här...)";
+  localizedStrings["Allow EPG to ask for current location."] = "Tillåt EPG att fråga efter nuvarande plats.";
+  localizedStrings["Settings for channel list"] = "Inställningar för kanallista";
+  localizedStrings["Trying to find out current location..."] = "Försöker ta reda på nuvarande plats...";
+  localizedStrings["Not allowed to find out current position."] = "Får inte ta reda på nuvarande plats.";
+  localizedStrings["Use when I am in"] = "Använd när jag är i";
   // Private methods
   
   
