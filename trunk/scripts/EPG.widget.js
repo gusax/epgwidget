@@ -116,7 +116,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
       else
       {
         GeoLocation.setOkToFetchLocation(false);
-        that.toFront(true);
+        proceed(settings.getChannelList(settings.getCurrentChannelListIndex()));
       }
       setTimeout(function()
       {
@@ -179,7 +179,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 	    }
 	    else
 	    {
-	       debug.inform("widget afterOnShow running front.onShow");
+	      debug.inform("widget afterOnShow running front.onShow");
 	      front.onShow();
 	    }
 	  }
