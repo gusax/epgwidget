@@ -7,7 +7,7 @@ EPG.GeoLocation = (function ()
   FileLoader,
   GEOLOCATION_URL = "http://ipinfodb.com/ip_query.php?output=json",
   listeners = [],
-  CACHE_TIME = -15 * 60 * 1000,
+  CACHE_TIME = 15 * 60 * 1000,
   lastPosition,
   maxCacheAge = 0,
   allowed = false,
