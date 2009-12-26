@@ -52,7 +52,9 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
   topY = 0,
   scrollHeight = 0,
   categories = [],
-  positionSelectorNode;
+  positionSelectorNode,
+  MAX_CHANNEL_LISTS = 10,
+  channelListSelector;
   
   // Private methods
   
@@ -160,7 +162,9 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
     try
     {
       var tempElement,
-      tempTextNode;
+      tempTextNode,
+      select,
+      currentList = settings.getCurrentChannelListIndex();
       
       /*
        * <div class="scalable top">
@@ -176,8 +180,24 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       tempElement.setAttribute("class", "text");
       tempElement.appendChild(tempTextNode.cloneNode(false));
       tempElement.firstChild.nodeValue = "EPG version " + EPG.currentVersion;
-      
-      return UIcreator.createScalableContainer("topbar", tempElement.cloneNode(true), "uppe.png", "back");
+
+      select = document.createElement("select");
+      select.setAttribute("id", "channellistdroplist");
+      select.setAttribute("name", "channellistdroplist");
+      for (i = 0; i < MAX_CHANNEL_LISTS; i += 1)
+      {
+        select.appendChild(document.createElement("option"));
+        select.lastChild.appendChild(document.createTextNode(translator.translate("List") + " " + (i + 1)));
+        select.lastChild.setAttribute("value", i);
+        if (i === currentList)
+        {
+          select.lastChild.setAttribute("selected", "selected");
+        }
+      }
+      tempElement.appendChild(select);
+      select.addEventListener("change", function(event){changeChannelList(this);}, false);
+      channelListSelector = select;
+      return UIcreator.createScalableContainer("topbar", tempElement, "uppe.png", "back");
     }
     catch (error)
     {
@@ -439,7 +459,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       i,
       channel,
       channelID;
-      
       if (evenWhenEmpty || (group.channels && group.channels.length > 0))
       {
         heading = document.createElement("h2");
@@ -557,8 +576,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
     {
       if (positionSelectorNode)
       {
-        debug.inform("Back updatePositionNodeLocation " + settings.getChannelListIndexByLocation(location) + " current index " + settings.getCurrentChannelListIndex());
-        if (settings.getChannelListIndexByLocation(location) === settings.getCurrentChannelListIndex())
+        debug.inform("updatePositionnodeLocation 1 settings.getCurrentChannelListIndex() = " + settings.getCurrentChannelListIndex());
+        if (settings.getChannelListIndexByLocation(location, true) === settings.getCurrentChannelListIndex())
         {
           positionSelectorNode.setSelected(true);
         }
@@ -566,6 +585,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         {
           positionSelectorNode.setSelected(false);
         }
+        debug.inform("updatePositionnodeLocation 2 settings.getCurrentChannelListIndex() = " + settings.getCurrentChannelListIndex());
         positionSelectorNode.text.nodeValue = translator.translate("Use when I am in") + " " + location.City + " (" + location.Latitude + " x " + location.Longitude + ")";
         positionSelectorNode.location = location;
       }
@@ -584,7 +604,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       var option;
       var message;
       var enable;
-      heading.appendChild(document.createTextNode(translator.translate("Settings for channel list") + " " + settings.getCurrentChannelListIndex()));
+      heading.appendChild(document.createTextNode(translator.translate("Settings for channel list") + " " + (settings.getCurrentChannelListIndex() + 1)));
       parentNode.appendChild(heading);
       if (settings.getPreference("allowGeoLocation") === "yes")
       {
@@ -625,7 +645,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       i,
       alreadyFoundMissingChannel,
       fragment = document.createDocumentFragment();
-      
       if (targetElement)
       {
         channelListToScroll = targetElement;
@@ -658,7 +677,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
             channel = channels[channelId];
             if (!channel.alreadyKnownByWidget && channelId !== "orderedChannelIDs" && channelId !== "length")
             {
-              debug.inform(channelId + " looks like a new channel");
               categories[0].channels[categories[0].channels.length] = channelId;
             }
           }
@@ -1223,7 +1241,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
   {
     if (newListIndex !== settings.getCurrentChannelListIndex())
     {
-      settings.setCurrentChannelListIndex(newListIndex);
+      settings.setCurrentChannelListIndex(1 * newListIndex);
       settings.getAllChannels(
           function(channels)
           {
@@ -1243,6 +1261,11 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
           },
           true);
     }
+  }
+  
+  function changeChannelList(option)
+  {
+    switchToChannelList(option.value);
   }
   
   // Public methods
@@ -1551,7 +1574,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       {
         if(channels && channelListContainer)
         {
-          debug.inform("reloading channel list with " + channels.length + " channels");
           createChannelListSuccess(channels, channelListContainer);
           resetChannelListScroll();
           

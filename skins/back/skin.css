@@ -16,6 +16,14 @@
   -apple-dashboard-region: dashboard-region(control, rectangle, 3.9em, 2.2em, 3.9em, 2em); 
 }
 
+#channellistdroplist
+{
+  position:absolute;
+  top: 1.4em;
+  right: 3.1em;
+  z-index: 10;
+}
+
 input
 {
   padding: 0em;
