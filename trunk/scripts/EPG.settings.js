@@ -254,7 +254,6 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
   {
     try
     {
-      Debug.inform("Settings exportChannelList");
       var channelid,
       listid,
       list,
@@ -769,7 +768,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
     }
     catch (error)
     {
-      Debug.alert("Settings onGeoPostionChange error " + error);
+      Debug.alert("Settings onGeoPositionChange error " + error);
     }
   }
   
@@ -859,7 +858,6 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
           value = "" + value;
           if (window.widget)
           {
-            //Debug.alert("trying to save key " + key + " = value " + value);
             window.widget.setPreferenceForKey(value, key);
           }
           cachedPreferences[key] = value;
@@ -871,6 +869,10 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
               window.widget.setPreferenceForKey("true", "hasBeenInstalledBefore");
             }
           }
+        }
+        else
+        {
+          Debug.alert("settings savePreference could not save " + key + " because value was undefined " + value);
         }
       }
       catch (error)
@@ -891,7 +893,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
           }
         }
         
-        //Debug.alert("settings.getPreference(" + key + ") returning " + cachedPreferences[key]);
+        //Debug.inform("settings.getPreference(" + key + ") returning " + cachedPreferences[key]);
         return cachedPreferences[key];
       }
       catch (error)
@@ -1478,6 +1480,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
           currentChannelListIndex = defaultChannelListIndex;
           that.savePreference(LAST_USED_CHANNELLIST_PREFERENCENAME, currentChannelListIndex);
         }
+        Debug.inform("settings getCurrentChannelListIndex returning " + currentChannelListIndex);
         return currentChannelListIndex;
       }
       catch (error)
@@ -1505,6 +1508,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
         }
         else
         {
+          Debug.alert("settings setCurrentChannelListIndex could not save index " + listIndex + " because it was not a number!");
           return false;
         }
       }
@@ -1670,24 +1674,24 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
       channelListChangeListeners.push(listener);
     },
     
-    getChannelListIndexByLocation: function (location)
+    getChannelListIndexByLocation: function (location, dontSwitch)
     {
       try
       {
         var hash = location.Latitude + "x" + location.Longitude;
         var index = that.getPreference("channelListLocation_" + hash) * 1;
-        Debug.inform("getChannelListIndexByLocation hash " + hash + " got channel list index " + index);
         if (!typeof index === "number" || isNaN(index))
         {
           index = defaultChannelListIndex;
           that.setCurrentChannelListIndex(defaultChannelListIndex);
         }
-        if (that.getCurrentChannelListIndex() !== index)
+        if (!dontSwitch && that.getCurrentChannelListIndex() !== index)
         {
           Debug.inform("Settings getChannelListIndexByLocation because of a change in location to " + hash + ", switching to channel list with index " + index);
           that.setCurrentChannelListIndex(index);
           tellChannelListChangeListeners(index);
         }
+        Debug.inform("Settings getChannelListIndexByLocation returning " + index);
         return index;
       }
       catch (error)

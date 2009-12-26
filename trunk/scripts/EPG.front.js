@@ -2195,7 +2195,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         that = this;
       }
       Filmtipset.setCallbacks(Filmtipset.CALLBACK_GET_SCORE, ftCallback, function () {});
-      Settings.addChannelListChangeListener(onChannelListChange);
+      //Settings.addChannelListChangeListener(onChannelListChange);
       delete that.init;
     },
     

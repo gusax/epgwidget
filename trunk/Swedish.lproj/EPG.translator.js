@@ -32,6 +32,7 @@ EPG.translator = function(debug)
   localizedStrings.Done = "Klar";
   localizedStrings["Downloading channels..."] = "Laddar ner kanaler...";
   localizedStrings.list = "lista";
+  localizedStrings.List = "Lista";
   localizedStrings.Found = "Hittade";
   localizedStrings.channels = "kanaler";
   localizedStrings["Jippie, you can use Growl together with the EPG widget :-)"] = "Jippie, du kan använda Growl tillsammans med EPG-widgeten :-)";

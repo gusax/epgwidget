@@ -35,6 +35,7 @@ EPG.GeoLocation = (function ()
 
   function sendOnPositionChangeEvent(position)
   {
+    Debug.inform("GeoLocation sendOnPositionChangeEvent");
     var i;
     for (i = 0; i < listeners.length; i += 1)
     {
@@ -68,10 +69,14 @@ EPG.GeoLocation = (function ()
       }
       if (position && position.Latitude && position.Longitude && position.City)
       {
-        maxCacheAge = new Date().getTime() + CACHE_TIME;
+        var prevPosition = lastPosition;
         lastPosition = position;
-        sendOnPositionChangeEvent(lastPosition);
-        onSuccess(lastPosition);
+        maxCacheAge = new Date().getTime() + CACHE_TIME;
+        onSuccess(position);
+        if (!prevPosition || (prevPosition && prevPosition.Longitude !== position.Longitude && prevPosition.Latitude !== position.Latitude))
+        {
+          sendOnPositionChangeEvent(position);
+        }
       }
       else if (onFailure)
       {
