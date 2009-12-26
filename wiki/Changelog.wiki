@@ -11,7 +11,7 @@ Senaste ändringarna ligger alltid överst.
 ----
 == Nästa version ==
 _Nya funktioner_
- * Stöd för flera kanallistor. Byt på baksidan (högst upp till höger). Upp till 10 kanallistor kan sparas.
+ * Stöd för flera kanallistor. Byt på baksidan (högst upp till höger). Upp till 10 kanallistor kan sparas. ([http://code.google.com/p/epgwidget/issues/detail?id=10 10])
 
  * Kanallistor går att koppla till specifika geografiska platser. Om man exempelvis tar med sin bärbara dator till mormor på julmiddag, kan man skapa en kanallista specifikt för mormors tvutbud och koppla denna lista till mormors adress. När man kommer hem byter EPG automatiskt tillbaka till den kanallista som är kopplad till dit hem (standardvalet är lista 1), och nästa gång man besöker mormor byter EPG automatiskt till mormors kanallista - så länge inte mormor flyttat förstås. Observera att denna funktion kräver att EPG ges tillåtelse ta reda på din position, något som du aktivt måste tillåta av säkerhetskäl. Ingen information om var du befinner dig skickas till mig, min egen mormor, Henrik Pontén på Antipiratbyrån eller något annat likaledes oönskat. Det går utmärkt att själv granska källkoden för att verifiera detta.
 
