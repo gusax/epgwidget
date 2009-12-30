@@ -8,21 +8,7 @@ if (EPG.debug)
 
 EPG.Filmtipset = (function ()
 {
-  var obj = 
-  {
-    id: "se.filmtipset.Grabber",
-    needs : 
-    {
-      DebugIF : { id: "org.noIp.ghettot.jsframework.interface.singleton.DebugIF" },
-      FileLoaderIF : { id: "org.noIp.ghettot.jsframework.interface.singleton.FileLoaderIF" },
-      PreferenceIF : { id: "org.noIp.ghettot.jsframework.interface.singleton.PreferenceIF" }
-    },
-    implementing: 
-    {
-      LoadIF : { id: "org.noIp.ghettot.jsframework.interface.LoadIF", provides: {} } 
-    },
-    provides : {}
-  },
+  var obj = {},
   Debug,
   FileLoader,
   Preferences,
@@ -39,6 +25,32 @@ EPG.Filmtipset = (function ()
   isUpdating = false,
   PATH_FILMTIPSET_TV_LIST = "Library/Xmltv/schedules/se.filmtipset.tvlist.js",
   channelNameToXmltvId = {};
+  
+  function setNeed(name, id)
+  {
+    var need = {};
+    need.id = id;
+    obj.needs[name] = need;
+  }
+  
+  function setImplementation(name, id)
+  {
+    var impl = {};
+    impl.id = id;
+    impl.provides = {};
+    obj.implementing[name] = impl;
+  }
+
+  obj.id = "se.filmtipset.Grabber";
+  obj.implementing = {};
+  obj.provides = {};
+  obj.needs = {};
+  
+  setNeed("DebugIF", "org.noIp.ghettot.jsframework.interface.singleton.DebugIF");
+  setNeed("FileLoaderIF", "org.noIp.ghettot.jsframework.interface.singleton.FileLoaderIF");
+  setNeed("PreferenceIF", "org.noIp.ghettot.jsframework.interface.singleton.PreferenceIF");
+  
+  setImplementation("LoadIF", "org.noIp.ghettot.jsframework.interface.LoadIF");
   
   channelNameToXmltvId.svt1 = "svt1.svt.se";
   channelNameToXmltvId.svt2 = "svt2.svt.se";
