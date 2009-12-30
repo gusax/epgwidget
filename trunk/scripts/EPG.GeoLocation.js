@@ -13,11 +13,6 @@ EPG.GeoLocation = (function ()
   allowed = false,
   firstTime = 2;
   
-  obj.id = "se.bizo.GeoLocation";
-  obj.implementing = {};
-  obj.provides = {};
-  obj.needs = {};
-  
   function emptyFunction() {}
   
   function setNeed(name, id)
@@ -27,11 +22,23 @@ EPG.GeoLocation = (function ()
     obj.needs[name] = need;
   }
   
+  function setImplementation(name, id)
+  {
+    var impl = {};
+    impl.id = id;
+    impl.provides = {};
+    obj.implementing[name] = impl;
+  }
+  
+  obj.id = "se.bizo.GeoLocation";
+  obj.implementing = {};
+  obj.provides = {};
+  obj.needs = {};
+  
   setNeed("DebugIF", "org.noIp.ghettot.jsframework.interface.singleton.DebugIF");
   setNeed("FileLoaderIF", "org.noIp.ghettot.jsframework.interface.singleton.FileLoaderIF");
   
-  obj.implementing.LoadIF = {};
-  obj.implementing.LoadIF.provides = {};
+  setImplementation("LoadIF", "org.noIp.ghettot.jsframework.interface.LoadIF");
 
   function sendOnPositionChangeEvent(position)
   {
