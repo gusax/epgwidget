@@ -9,7 +9,7 @@ EPG.GeoLocation = (function ()
   listeners = [],
   CACHE_TIME = 15 * 60 * 1000,
   lastPosition,
-  maxCacheAge = 0,
+  maxCacheAge = 2,
   allowed = false,
   firstTime = 2;
   
