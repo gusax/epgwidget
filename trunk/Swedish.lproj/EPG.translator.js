@@ -91,6 +91,7 @@ EPG.translator = function(debug)
   localizedStrings["Trying to find out current location..."] = "Försöker ta reda på nuvarande plats...";
   localizedStrings["Not allowed to find out current position."] = "Får inte ta reda på nuvarande plats.";
   localizedStrings["Use when I am in"] = "Använd när jag är i";
+  localizedStrings["Could not get current location."] = "Kunde inte ta reda på nuvarande plats.";
   // Private methods
   
   

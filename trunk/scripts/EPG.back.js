@@ -577,17 +577,28 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       if (positionSelectorNode)
       {
         debug.inform("updatePositionnodeLocation 1 settings.getCurrentChannelListIndex() = " + settings.getCurrentChannelListIndex());
-        if (settings.getChannelListIndexByLocation(location, true) === settings.getCurrentChannelListIndex())
+        if (location)
         {
-          positionSelectorNode.setSelected(true);
+          positionSelectorNode.setEnabled(true);
+          if (settings.getChannelListIndexByLocation(location, true) === settings.getCurrentChannelListIndex())
+          {
+            positionSelectorNode.setSelected(true);
+          }
+          else
+          {
+            positionSelectorNode.setSelected(false);
+          }
+          debug.inform("updatePositionnodeLocation 2 settings.getCurrentChannelListIndex() = " + settings.getCurrentChannelListIndex());
+          positionSelectorNode.text.nodeValue = translator.translate("Use when I am in") + " " + location.City + " (" + location.Latitude + " x " + location.Longitude + ")";
+          positionSelectorNode.location = location;
         }
         else
         {
+          positionSelectorNode.setEnabled(false);
           positionSelectorNode.setSelected(false);
+          positionSelectorNode.text.nodeValue = translator.translate("Could not get current location.");
+          
         }
-        debug.inform("updatePositionnodeLocation 2 settings.getCurrentChannelListIndex() = " + settings.getCurrentChannelListIndex());
-        positionSelectorNode.text.nodeValue = translator.translate("Use when I am in") + " " + location.City + " (" + location.Latitude + " x " + location.Longitude + ")";
-        positionSelectorNode.location = location;
       }
     }
     catch (error)
@@ -622,7 +633,10 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
             settings.setChannelListIndexByLocation(positionSelectorNode.location, settings.getCurrentChannelListIndex(), enabled);
           });
       GeoLocation.getLocation(updatePositionNodeLocation,
-      function () {});
+      function ()
+      {
+        updatePositionNodeLocation();
+      });
     }
     catch (error)
     {
@@ -896,7 +910,10 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         positionSelectorNode.setEnabled(true);
         positionSelectorNode.setSelected(false);
         positionSelectorNode.text.nodeValue = translator.translate("Trying to find out current location...");
-        GeoLocation.getLocation(updatePositionNodeLocation, function () {});
+        GeoLocation.getLocation(updatePositionNodeLocation, function ()
+        {
+          updatePositionNodeLocation();
+        });
       }
       else
       {
