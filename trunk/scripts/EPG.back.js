@@ -54,7 +54,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
   categories = [],
   positionSelectorNode,
   MAX_CHANNEL_LISTS = 10,
-  channelListSelector;
+  channelListSelector,
+  skinList;
   
   // Private methods
   
@@ -578,7 +579,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       {
         if (location)
         {
-          debug.inform("updatePositionnodeLocation 1 settings.getCurrentChannelListIndex() = " + settings.getCurrentChannelListIndex() + " settings.getChannelListIndexByLocation(location, true) = " + settings.getChannelListIndexByLocation(location, true));
           positionSelectorNode.setEnabled(true);
           if (settings.getChannelListIndexByLocation(location, true) === settings.getCurrentChannelListIndex())
           {
@@ -588,7 +588,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
           {
             positionSelectorNode.setSelected(false);
           }
-          debug.inform("updatePositionnodeLocation 2 settings.getCurrentChannelListIndex() = " + settings.getCurrentChannelListIndex());
           positionSelectorNode.text.nodeValue = translator.translate("Use when I am in") + " " + location.City + " (" + location.Latitude + " x " + location.Longitude + ")";
           positionSelectorNode.location = location;
         }
@@ -942,7 +941,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       skins,
       index,
       currentSkin,
-      skinList,
       skinListItem,
       i,
       ftSetting;
@@ -1252,6 +1250,19 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       debug.alert("Error in back.groupChannels: " + error);
     }
   }
+
+  function changeSkinDropDownList(listIndex)
+  {
+    var currentSkin = skin.getSkinForList(listIndex);
+    for (i = 0; i < skinList.childNodes.length; i += 1)
+    {
+      if (skinList.childNodes[i].value === currentSkin)
+      {
+        skinList.selectedIndex = i;
+        break;
+      }
+    }
+  }
   
   function switchToChannelList(newListIndex)
   {
@@ -1282,6 +1293,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
   function changeChannelList(option)
   {
     switchToChannelList(option.value);
+    changeSkinDropDownList(option.value);
   }
   
   // Public methods
@@ -1489,19 +1501,17 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
             settings.getAllChannels(
             function(channels)
             {
-              /*var i;
+              var i;
               var currentChannelListIndex = settings.getCurrentChannelListIndex();
               for (i = 0; i < channelListSelector.childNodes.length; i += 1)
               {
                 if (channelListSelector.childNodes[i].value * 1 === currentChannelListIndex)
                 {
-                  channelListSelector.childNodes[i].setAttribute("selected", "selected");
+                  channelListSelector.selectedIndex = i;
+                  break;
                 }
-                else if (channelListSelector.childNodes[i].getAttribute("selected"))
-                {
-                  channelListSelector.childNodes[i].removeAttribute("selected");
-                }
-              }*/
+              }
+              changeSkinDropDownList(currentChannelListIndex);
               that.reloadChannelList(channels);
               settings.resizeTo(474, 648); // So that the keep/remove dialog on first install does not flow outside the screen.
             },

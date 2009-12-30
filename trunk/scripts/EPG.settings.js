@@ -756,7 +756,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
       var channelListIndex;
       if (lastLongitude === location.Longitude && lastLatitude === location.Latitude)
       {
-        Debug.inform("Settings onGeoPositionChange got the same location as we had previously.");
+        //Debug.inform("Settings onGeoPositionChange got the same location as we had previously.");
       }
       else
       {
@@ -1690,7 +1690,6 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
           that.setCurrentChannelListIndex(index);
           tellChannelListChangeListeners(index);
         }
-        Debug.inform("Settings getChannelListIndexByLocation returning " + index + " for hash " + hash);
         return index;
       }
       catch (error)
