@@ -576,9 +576,9 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
     {
       if (positionSelectorNode)
       {
-        debug.inform("updatePositionnodeLocation 1 settings.getCurrentChannelListIndex() = " + settings.getCurrentChannelListIndex());
         if (location)
         {
+          debug.inform("updatePositionnodeLocation 1 settings.getCurrentChannelListIndex() = " + settings.getCurrentChannelListIndex() + " settings.getChannelListIndexByLocation(location, true) = " + settings.getChannelListIndexByLocation(location, true));
           positionSelectorNode.setEnabled(true);
           if (settings.getChannelListIndexByLocation(location, true) === settings.getCurrentChannelListIndex())
           {
@@ -597,7 +597,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
           positionSelectorNode.setEnabled(false);
           positionSelectorNode.setSelected(false);
           positionSelectorNode.text.nodeValue = translator.translate("Could not get current location.");
-          
         }
       }
     }
@@ -1490,6 +1489,19 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
             settings.getAllChannels(
             function(channels)
             {
+              /*var i;
+              var currentChannelListIndex = settings.getCurrentChannelListIndex();
+              for (i = 0; i < channelListSelector.childNodes.length; i += 1)
+              {
+                if (channelListSelector.childNodes[i].value * 1 === currentChannelListIndex)
+                {
+                  channelListSelector.childNodes[i].setAttribute("selected", "selected");
+                }
+                else if (channelListSelector.childNodes[i].getAttribute("selected"))
+                {
+                  channelListSelector.childNodes[i].removeAttribute("selected");
+                }
+              }*/
               that.reloadChannelList(channels);
               settings.resizeTo(474, 648); // So that the keep/remove dialog on first install does not flow outside the screen.
             },

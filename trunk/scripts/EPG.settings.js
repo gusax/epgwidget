@@ -1683,7 +1683,6 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
         if (!typeof index === "number" || isNaN(index))
         {
           index = defaultChannelListIndex;
-          that.setCurrentChannelListIndex(defaultChannelListIndex);
         }
         if (!dontSwitch && that.getCurrentChannelListIndex() !== index)
         {
@@ -1691,7 +1690,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
           that.setCurrentChannelListIndex(index);
           tellChannelListChangeListeners(index);
         }
-        Debug.inform("Settings getChannelListIndexByLocation returning " + index);
+        Debug.inform("Settings getChannelListIndexByLocation returning " + index + " for hash " + hash);
         return index;
       }
       catch (error)
@@ -1705,6 +1704,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
       try
       {
         var hash = location.Latitude + "x" + location.Longitude;
+        Debug.inform("Settings setChannelListIndexByLocation setting index " + index + " for hash " + hash);
         if (enabled)
         {
           that.savePreference("channelListLocation_" + hash, index);
