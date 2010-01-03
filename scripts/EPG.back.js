@@ -55,7 +55,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
   positionSelectorNode,
   MAX_CHANNEL_LISTS = 10,
   channelListSelector,
-  skinList;
+  skinList,
+  listFrameTimeout;
   
   // Private methods
   
@@ -91,9 +92,17 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
           {
             amount = -1 * Math.round(channelListContainer.offsetHeight * 0.2);
           }
+          else if (direction === "pageUp")
+          {
+            amount = -1 * Math.round(channelListContainer.offsetHeight); 
+          }
           else if(direction === "down")
           {
             amount = Math.round(channelListContainer.offsetHeight * 0.2);
+          }
+          else if(direction === "pageDown")
+          {
+            amount = Math.round(channelListContainer.offsetHeight);
           }
           else if (event.wheelDeltaX)
           {
@@ -105,6 +114,19 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
           }
           else if(event.wheelDelta)
           {
+            channelListToScroll.listFrame.removeAttribute("id");
+            clearTimeout(listFrameTimeout);
+            listFrameTimeout = setTimeout(function()
+            {
+              try
+              {
+                channelListToScroll.listFrame.setAttribute("id", "channellistframe");
+              }
+              catch (error)
+              {
+                // fail silently
+              }
+            }, 100);
             if (settings.safariVersion === 4)
             {
               amount = event.wheelDelta;
@@ -113,6 +135,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
             {
               amount = event.wheelDelta / 40;
             }
+            
           }
           else
           {
@@ -1455,11 +1478,11 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
             {
               if (event.shiftKey)
               {
-                scrollChannelList(event,"down");
+                scrollChannelList(event,"pageDown");
               }
               else
               {
-                scrollChannelList(event,"up");
+                scrollChannelList(event,"pageUp");
               }
             }
           }
