@@ -65,7 +65,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   showHDsymbol = false,
   showFtScore = false,
   waitingForScore = [],
-  tooTallForScreen = false;
+  tooTallForScreen = false,
+  overviewTimeout;
   
   key.ARROW_UP = 38;
   key.ARROW_DOWN = 40;
@@ -1034,6 +1035,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             {
               amount = event.wheelDelta / 40;
             }
+            overviewDiv.removeAttribute("id");
+            clearTimeout(overviewTimeout);
+            overviewTimeout = setTimeout(function(){overviewDiv.setAttribute("id", "overview");}, 100);
           }
           else
           {
