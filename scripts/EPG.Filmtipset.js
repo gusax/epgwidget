@@ -285,7 +285,7 @@ EPG.Filmtipset = (function ()
       for (i = 0 ; i < movies.length; i += 1)
       {
         movie = movies[i];
-        time = movie.movie["tv-info"].time;
+        time = movie.movie.tvInfo.time;
         year = time.substring(0, 4);
         month = (1 * time.substring(5, 7)) - 1;
         day = 1 * time.substring(8, 10);
@@ -299,7 +299,7 @@ EPG.Filmtipset = (function ()
         time.setHours(hour);
         time.setMinutes(minute);
         time.setSeconds(second);
-        movie.movie["tv-info"].time = time.getTime();
+        movie.movie.tvInfo.time = time.getTime();
         title = movie.movie.name.toLowerCase();
         movies.hashed[title] = movie.movie;
         if (title.indexOf("the ") === 0)
