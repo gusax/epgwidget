@@ -1806,8 +1806,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       if(event && visible)
       {
         switch (event.keyCode) {
-        	case key.ZERO:
-          case key.ONE:
+          case key.N_ZERO:
+          case key.ZERO:
+            addKeyToHistory(0);
+            break;
+        	case key.ONE:
           case key.TWO:
           case key.THREE:
           case key.FOUR:
@@ -1816,9 +1819,16 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           case key.SEVEN:
           case key.EIGHT:
           case key.NINE:
-            addKeyToHistory(event.keyCode - key.ZERO);
-          break;
-          case key.N_ZERO:
+            if (event.metaKey)
+            {
+              Settings.setCurrentChannelListIndex(event.keyCode - key.ONE);
+              that.onShow();
+            }
+            else
+            {
+              addKeyToHistory(event.keyCode - key.ZERO);
+            }
+            break;
           case key.N_ONE:
           case key.N_TWO:
           case key.N_THREE:
@@ -1828,7 +1838,15 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           case key.N_SEVEN:
           case key.N_EIGHT:
           case key.N_NINE:
-            addKeyToHistory(event.keyCode - key.N_ZERO);
+            if (event.metaKey)
+            {
+              Settings.setCurrentChannelListIndex(event.keyCode - key.N_ONE);
+              that.onShow();
+            }
+            else
+            {
+              addKeyToHistory(event.keyCode - key.N_ZERO);
+            }
           break;
           case key.BACKSPACE:
             if(!updateInterval)
@@ -2218,58 +2236,58 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         stopUpdateInterval();
         showHDsymbol = (Settings.getPreference("showHDsymbol") === "yes");
         showFtScore = Filmtipset.isEnabled();
-        if (!visible)
+        if(!backDiv)
         {
-          if(!backDiv)
+          backDiv = document.getElementById("back");
+        }
+        
+        if(!dontAnimate)
+        {
+          if (window.widget) 
           {
-            backDiv = document.getElementById("back");
+            Settings.resizeTo(474, screen.height, true);
+            window.widget.prepareForTransition("ToFront");
+            Settings.resizeTo(width, height);
           }
-          
-          if(!dontAnimate)
+          backDiv.style.display = "none";
+        }
+        else
+        {
+          if(window.widget)
           {
-            if (window.widget) 
-            {
-              Settings.resizeTo(474, screen.height, true);
-              window.widget.prepareForTransition("ToFront");
-              Settings.resizeTo(width, height);
-            }
-            backDiv.style.display = "none";
-          }
-          else
-          {
-            if(window.widget)
-            {
-              Settings.resizeTo(width, height); // calculate how many channels there are and then resize
-            } 
-          }
-          
-          currentChannelListIndex = Settings.getCurrentChannelListIndex();
-          Skin.changeToSkinFromList(currentChannelListIndex);
-          
+            Settings.resizeTo(width, height); // calculate how many channels there are and then resize
+          } 
+        }
+        
+        currentChannelListIndex = Settings.getCurrentChannelListIndex();
+        Skin.changeToSkinFromList(currentChannelListIndex);
+
+        if (toBackMethod)
+        {
           toBack = toBackMethod;
-          
-          if(!frontDiv)
-          {
-            frontDiv = document.getElementById("front");
-            create();
-            ProgramInfo.updateSkin(Skin.getSkinForList(currentChannelListIndex));
-          }
-          else
-          {
-            applySkin(Skin.getSkinForList(currentChannelListIndex));
-          }
-      
-          showChannelNodes();
-          that.reloadPrograms(new Date());
-          updateClock(new Date());
-          that.resize();
-          
-          frontDiv.style.display="block";
-          visible = true;
-          if(!dontAnimate && window.widget)
-          {
-            setTimeout(function(){window.widget.performTransition(); startUpdateInterval();}, 300);
-          }
+        }
+
+        if(!frontDiv)
+        {
+          frontDiv = document.getElementById("front");
+          create();
+          ProgramInfo.updateSkin(Skin.getSkinForList(currentChannelListIndex));
+        }
+        else
+        {
+          applySkin(Skin.getSkinForList(currentChannelListIndex));
+        }
+    
+        showChannelNodes();
+        that.reloadPrograms(new Date());
+        updateClock(new Date());
+        that.resize();
+        
+        frontDiv.style.display="block";
+        visible = true;
+        if(!dontAnimate && window.widget)
+        {
+          setTimeout(function(){window.widget.performTransition(); startUpdateInterval();}, 300);
         }
       }
       catch (error)
