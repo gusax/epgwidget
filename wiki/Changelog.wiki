@@ -17,11 +17,11 @@ _Nya funktioner_
 
  Om man exempelvis tar med sin bärbara dator till mormor på släktmiddag (ett säkert tillfälle då man vill fly in i tvns värld), kan man skapa en kanallista specifikt för mormors tvutbud. Denna lista kopplas sedan till mormors adress. När man kommer hem byter EPG automatiskt tillbaka till den kanallista som är kopplad till ditt hem (lista 1 om du inte valt något annat). Nästa gång man besöker mormor byter EPG automatiskt till mormors kanallista igen - så länge inte mormor flyttat förstås.
 
- OBS 1: Denna funktion *kräver att EPG ges tillåtelse ta reda på din position*, något som *du aktivt måste tillåta* av säkerhetskäl. *Ingen information om var du befinner dig skickas till mig*, min egen mormor, Henrik Pontén på Antipiratbyrån eller något annat likaledes oönskat. Det går utmärkt att själv granska källkoden för att verifiera detta. Positioneringstjänsten som används finns på adress [ipinfodb.com http://ipinfodb.com].
+ OBS 1: Denna funktion *kräver att EPG ges tillåtelse ta reda på din position*, något som *du aktivt måste tillåta* av säkerhetskäl. *Ingen information om var du befinner dig skickas till mig*, min egen mormor, Henrik Pontén på Antipiratbyrån eller något annat likaledes oönskat. Det går utmärkt att själv granska källkoden för att verifiera detta. Positioneringstjänsten som används finns på adress [http://ipinfodb.com ipinfodb.com].
 
  OBS 2: *Fungerar ej om du surfar via 3G-modem eller 3G-mobiltelefon*! I alla fall inte via Tre, för där påstås man jämt befinna sig i Stockholm. Antagligen går all datatrafik i mobilnätet in och ut där, och därför blir positioneringen fel.
 
- OBS 3: Positioneringen funkar bra på stora avstånd (orter) men verkar vara lite sisådär om man går till grannen. Har du ett tips på en bättre (och gratis!) positioneringstjänst än [ipinfodb.com http://ipinfodb.com] så mottages det tacksamt.
+ OBS 3: Positioneringen funkar bra på stora avstånd (orter) men verkar vara lite sisådär om man går till grannen. Har du ett tips på en bättre (och gratis!) positioneringstjänst än [http://ipinfodb.com ipinfodb.com] så mottages det tacksamt.
 
  * Baksidan: Byt kanallista manuellt via rullgardinsmenyn högst upp till höger.
 
