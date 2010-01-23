@@ -17,6 +17,10 @@ _Nya funktioner_
 
  * Lade till mjuk scrollning på framsidan samt listan med valbara kanaler på baksidan. (Fungerar ej i Tiger. Vissa effekter kräver Safari 4 i Leopard.) 
 
+ * Tog bort SVTB/Kunskapskanalen och lade till SVTB/SVT24. SVT har tydligen möblerat om lite i kanalutbudet, och nu ska Kunskapskanalen sända mer och SVT24 mindre.
+
+ * Lade till Canal Plus Sport 1/SF-kanalen.
+
 _Rättade buggar_
  * Tablåer läses nu in korrekt även mellan kl 00 och 01 samt 00 och 02. ([http://code.google.com/p/epgwidget/issues/detail?id=70 70])
 
