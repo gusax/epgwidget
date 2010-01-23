@@ -1332,7 +1332,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       groupChannels("Swedish", 
       [
         "svt1.svt.se",
-        "svtb-kunskap.svt.se",
+        "svtb-svt24.svt.se",
         "svt2.svt.se",
         "svt24.svt.se",
         "tv3.viasat.se",
@@ -1342,7 +1342,8 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         "kanal5.se",
         "kanal9.se",
         "tv6.viasat.se",
-        "tv7.nu"
+        "tv7.nu",
+        "kunskapskanalen.svt.se"
       ]);
       groupChannels("Documentaries & nature", 
       [
@@ -1358,7 +1359,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         "nordic.animalplanet.discovery.com",
         "fakta.tv4.se",
         "axess.se",
-        "kunskapskanalen.svt.se",
         "ngcsverige.com",
         "hd.ngcsverige.com"
       ]);
@@ -1380,6 +1380,7 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         "nordic.tv1000.viasat.se",
         "sf.canalplus.se",
         "drama.tv1000.viasat.se",
+        "sport1sf.canalplus.se",
         "hits-sport-weekend.canalplus.se"
       ]);
       groupChannels("Sport", 
