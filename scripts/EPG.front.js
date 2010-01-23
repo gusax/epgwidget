@@ -1808,7 +1808,15 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         switch (event.keyCode) {
           case key.N_ZERO:
           case key.ZERO:
-            addKeyToHistory(0);
+            if (event.metaKey)
+            {
+              Settings.setCurrentChannelListIndex(9);
+              that.onShow();
+            }
+            else
+            {
+              addKeyToHistory(0);
+            }
             break;
         	case key.ONE:
           case key.TWO:
