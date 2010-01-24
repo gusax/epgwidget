@@ -20,11 +20,15 @@ EPG.Filmtipset = (function ()
   callbacks = {},
   lastRefresh = -1,
   ONE_DAY = 86400000,
-  cache,
+  cache = {},
   updateTimeout,
   isUpdating = false,
   PATH_FILMTIPSET_TV_LIST = "Library/Xmltv/schedules/se.filmtipset.tvlist.js",
-  channelNameToXmltvId = {};
+  PATH_FILMTIPSET_MOVIE_LIST = "Library/Xmltv/schedules/se.filmtipset.movielist",
+  channelNameToXmltvId = {},
+  moviesToDownload,
+  movieListDownloadTimer,
+  MOVIE_LIST_DOWNLOAD_DELAY = 1000;
   
   function setNeed(name, id)
   {
@@ -172,13 +176,13 @@ EPG.Filmtipset = (function ()
       var i,
       movie,
       title;
-      if (movies && movies.hashed && program && program.title)
+      if (movies && program && program.title)
       {
         title = program.title.sv.toLowerCase();
-        movie = movies.hashed[program.title.sv.toLowerCase()];
+        movie = movies[program.title.sv.toLowerCase()];
         if (!movie && title.indexOf("the ") === 0)
         {
-          movie = movies.hashed[title.substr(4)];
+          movie = movies[title.substr(4)];
         }
         if (movie)
         {
@@ -227,7 +231,7 @@ EPG.Filmtipset = (function ()
       while (callback.programmes.length > 0)
       {
         program = callback.programmes.pop();
-        if (!cache || (cache && cache.length === 0))
+        if (!cache || (cache && cache.ordered && cache.ordered.length === 0))
         {
           runCallbacks(callbacks[obj.provides.CALLBACK_GET_SCORE].onFailures, program, obj.provides.ERROR_NO_CACHE);
         }
@@ -281,7 +285,6 @@ EPG.Filmtipset = (function ()
       second,
       title;
       
-      movies.hashed = {};
       for (i = 0 ; i < movies.length; i += 1)
       {
         movie = movies[i];
@@ -301,13 +304,15 @@ EPG.Filmtipset = (function ()
         time.setSeconds(second);
         movie.movie.tvInfo.time = time.getTime();
         title = movie.movie.name.toLowerCase();
-        movies.hashed[title] = movie.movie;
-        if (title.indexOf("the ") === 0)
+        if (!cache[title])
         {
-          movies.hashed[title.substr(4)] = movie.movie;  
+          cache[title] = movie.movie;
+          if (title.indexOf("the ") === 0)
+          {
+            cache[title.substr(4)] = movie.movie;  
+          }
         }
       }
-      return movies;
     }
     catch (error)
     {
@@ -319,11 +324,20 @@ EPG.Filmtipset = (function ()
   {
     try
     {
+      var data;
       isUpdating = false;
       lastRefresh = new Date().getTime();
-      if (jsonObj && jsonObj[0] && jsonObj[0].data && jsonObj[0].data[0] && jsonObj[0].data[0].movies && jsonObj[0].data[0].movies.length > 0)
+      if (jsonObj && jsonObj[0] && jsonObj[0].data && jsonObj[0].data[0])
       {
-        cache = convertDates(jsonObj[0].data[0].movies);
+        data = jsonObj[0].data[0];
+        if (data.movies && data.movies.length > 0)
+        { // tv list
+          convertDates(data.movies);
+        }
+        else if (data.hits && data.hits.length > 0)
+        { // movie search
+          convertDates(data.hits);
+        }
       }
       findScores();
     }
@@ -425,11 +439,81 @@ EPG.Filmtipset = (function ()
   {
     if (enabled)
     {
-      Settings.setPreference(obj.id + ".enabled", "yes");
+      Preferences.setPreference(obj.id + ".enabled", "yes");
     }
     else
     {
-      Settings.deletePreference(obj.id + ".enabled");
+      Preferences.deletePreference(obj.id + ".enabled");
+    }
+  };
+  
+  function performDownloadOfMovieScores()
+  {
+    try
+    {
+      var i,
+      movies = [];
+      if (window.widget)
+      {
+        for (i = 0; i < moviesToDownload.length; i += 1)
+        {
+          title = moviesToDownload[i].title.sv.toLowerCase();
+          if (!title)
+          {
+            title = moviesToDownload[i].title.en.toLowerCase();
+          }
+          movies.push(title);
+        }
+        FileLoader.downloadFile("\"" + encodeURI(FT_URL + "action=search&id=" + movies.split(",") + "&usernr=" + obj.provides.getUserId()) + "\"", PATH_FILMTIPSET_MOVIE_LIST, addMoviesToList, onFailure, false, true);
+      }
+      else
+      {
+        FileLoader.open(PATH_FILMTIPSET_MOVIE_LIST, openTvListSuccess, function(){downloadTvList(openTvListSuccess);}, false, false, false, true);
+      }
+    }
+    catch (error)
+    {
+      Debug.alert(obj.id + " performDownloadOfMovieScores " + error);
+    }
+  }
+  
+  function stopMovieListDowloadTimer()
+  {
+    if (movieListDownloadTimer)
+    {
+      clearTimeout(movieListDownloadTimer);
+      movieListDownloadTimer = false;
+    }
+  }
+  
+  function startMovieListDownloadTimer()
+  {
+    stopMovieListDownloadTimer();
+    movieListDownloadTimer = setTimeout(performDownloadOfMovieScores, MOVIE_LIST_DOWNLOAD_DELAY);
+  }
+  
+  obj.provides.downloadMovieScores = function (movies)
+  {
+    try
+    {
+      if (!movies)
+      {
+        return;
+      }
+      if (!userId || userId === "")
+      {
+        userId = obj.provides.getUserId();
+        if (!userId || userId === "")
+        {
+          return obj.provides.ERROR_USER_ID_REQUIRED;
+        }
+      }
+      moviesToDownload.concat(movies);
+      startMovieListDownloadTimer();
+    }
+    catch (error)
+    {
+      Debug.alert(obj.id + " downloadMovieScores " + error);
     }
   };
   
