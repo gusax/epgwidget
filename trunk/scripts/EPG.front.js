@@ -2020,6 +2020,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       Debug.alert("Error in front.create: " + error);
     }
   }
+   
+  function isNowNextLater()
+  {
+    return (currentView === 0);
+  }
   
   
   /**
@@ -2097,7 +2102,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           for(i = 0; i < programs.length; i += 1)
           {
             program = programs[i];
-            pNode = UIcreator.createProgramNode(program, ProgramInfo, showHDsymbol, showFtScore);
+            pNode = UIcreator.createProgramNode(program, ProgramInfo, showHDsymbol, showFtScore, isNowNextLater);
             if (showFtScore)
             {
               ftAddToQueue(pNode);

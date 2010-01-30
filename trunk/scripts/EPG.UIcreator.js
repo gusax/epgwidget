@@ -127,7 +127,7 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
      * @param {boolean} showHDsymbol True to allow [HD] symbol after HD programs.
      * @return {object} A DOM-node representing the programNode.
      */
-    createProgramNode: function (program, programInfoObject, showHDsymbol, showFtScore) 
+    createProgramNode: function (program, programInfoObject, showHDsymbol, showFtScore, isNowNextLater) 
     {
     	var programNode,
     	startNode,
@@ -194,7 +194,7 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         
         if(programInfoObject)
         {
-          titleNode.addEventListener("mousedown", function(){try{programInfoObject.show(programNode.program);}catch(e){Debug.alert("Error when clicking on titleNode: " + e);}}, false);
+          titleNode.addEventListener("mousedown", function(){try{if(!isNowNextLater || isNowNextLater()){programInfoObject.show(programNode.program);}}catch(e){Debug.alert("Error when clicking on titleNode: " + e);}}, false);
           titleNode.addEventListener("DOMMouseScroll", function(event){try{return programInfoObject.scroll(event, programNode.program);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
           titleNode.addEventListener("mousewheel", function(event){try{return programInfoObject.scroll(event, programNode.program);}catch(e){Debug.alert("Error when scrolling on titleNode: " + e);}}, false);
         }
