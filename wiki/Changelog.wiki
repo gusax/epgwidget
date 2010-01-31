@@ -34,7 +34,9 @@ _Nya funktioner_
  * Lade till Canal Plus Sport 1/SF-kanalen.
 
 _Rättade buggar_
- * Tablåer läses nu in korrekt även mellan kl 00 och 01 samt 00 och 02. ([http://code.google.com/p/epgwidget/issues/detail?id=70 70])
+ * Framsidan: Tablåer läses nu in korrekt även mellan kl 00 och 01 samt 00 och 02. ([http://code.google.com/p/epgwidget/issues/detail?id=70 70])
+
+ * Framsidan: Klick på osynliga program ur nu-nästa-senare öppnar inte längre programinfo när man är i heldagsvyn.
 
  * Baksidan: Rättade felstavning, medlemskap heter det.
 
