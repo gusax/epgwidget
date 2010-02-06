@@ -27,7 +27,7 @@ _Nya funktioner_
 
  * Framsidan: Byt kanallista manuellt genom att hålla inne cmd (Apple-tangenten) och därefter trycka på någon av siffertangenterna. Siffra 1 för kanallista 1 osv. Observera att siffran 0 går till kanallista 10.
 
- * Framsidan: Om tablåer saknas skrivs det ut på framsidan, tillsammans med en knapp man kan trycka på för att försöka ladda ner tablåer. Borde innebära att [http://code.google.com/p/epgwidget/issues/detail?id=30 30], [http://code.google.com/p/epgwidget/issues/detail?id=90 90] och [http://code.google.com/p/epgwidget/issues/detail?id=91 91] nu kan hanteras av användaren.
+ * Framsidan: Om tablåer saknas skrivs det ut på framsidan, tillsammans med en knapp man kan trycka på för att försöka ladda ner tablåer. ([http://code.google.com/p/epgwidget/issues/detail?id=30 30], [http://code.google.com/p/epgwidget/issues/detail?id=90 90] och [http://code.google.com/p/epgwidget/issues/detail?id=91 91]).
 
  * Lade till mjuk scrollning på framsidan samt listan med valbara kanaler på baksidan. (Fungerar ej i Tiger. Vissa effekter kräver Safari 4 i Leopard.) 
 
