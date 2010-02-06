@@ -377,11 +377,19 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
       else
       {
         Debug.alert("settings.grabberUpdated got no response!");
+        if (onFailure)
+        {
+          onFailure();
+        }
       }
     }
     catch (error)
     {
       Debug.alert("Error in settings.grabberUpdated: " + error + " (systemResponse = " + systemResponse + ")");
+      if (onFailure)
+      {
+        onFailure();
+      }
     }
   }
   
@@ -420,11 +428,19 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
       else
       {
         Debug.alert("settings.ranGrabber got no response!");
+        if (onFailure)
+        {
+          onFailure();
+        }
       }
     }
     catch (error)
     {
       Debug.alert("Error in settings.ranGrabber: " + error + " (systemResponse = " + systemResponse + ")");
+      if (onFailure)
+      {
+        onFailure();
+      }
     }
   }
   
