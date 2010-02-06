@@ -66,7 +66,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   showFtScore = false,
   waitingForScore = [],
   tooTallForScreen = false,
-  overviewTimeout;
+  overviewTimeout,
+  dayViewTimeout;
   
   key.ARROW_UP = 38;
   key.ARROW_DOWN = 40;
@@ -942,6 +943,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           else if(event.wheelDelta)
           {
             amount = event.wheelDelta / 40;
+            scrollFrame.dayView.style.webkitTransition = "";
+            clearTimeout(dayViewTimeout);
+            dayViewTimeout = setTimeout(function(){scrollFrame.dayView.style.webkitTransition = "top 0.3s ease-out";}, 100);
           }
           else
           {
@@ -1771,19 +1775,21 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         stopUpdateInterval();
       }
-      updateInterval = {};
-      
-      millisecondsLeftToFullMinute = new Date();
-      millisecondsLeftToFullMinute = 61000 - (millisecondsLeftToFullMinute.getSeconds()*1000 + millisecondsLeftToFullMinute.getMilliseconds());
-      updateInterval.type = "timeout";
-      updateInterval.timeout = setTimeout(function()
-        {
-          updateInterval.type = "interval";
-          updateInterval.interval = setInterval(update, 60000);
-          update();
-          delete updateInterval.timeout;
-        },
-        millisecondsLeftToFullMinute);
+      if (visible)
+      {
+        updateInterval = {};
+        millisecondsLeftToFullMinute = new Date();
+        millisecondsLeftToFullMinute = 61000 - (millisecondsLeftToFullMinute.getSeconds()*1000 + millisecondsLeftToFullMinute.getMilliseconds());
+        updateInterval.type = "timeout";
+        updateInterval.timeout = setTimeout(function()
+          {
+            updateInterval.type = "interval";
+            updateInterval.interval = setInterval(update, 60000);
+            update();
+            delete updateInterval.timeout;
+          },
+          millisecondsLeftToFullMinute);
+      }
     }
     catch (error)
     {
@@ -1925,14 +1931,16 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           case key.T:
             if(visible)
             {
+              stopUpdateInterval();
+              UIcreator.resetAllDataNodes();
               if (event.altKey)
               {
                 Debug.inform("Front.keyHandler: Trying to force update grabber...");
-                Settings.updateGrabber(true);
+                Settings.updateGrabber(true, that.onShow, startUpdateInterval);
               }
               else
               {
-                Settings.runGrabber(true);
+                Settings.runGrabber(true, that.onShow, startUpdateInterval);
               }
             }
           break;
@@ -2006,6 +2014,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       frontDiv.appendChild(createBottomBar());
       scrollFrame.appendChild(createDayView());
       scrollFrame.dayView = overviewDiv.dayViewNode = scrollFrame.lastChild;
+      scrollFrame.dayView.style.webkitTransition = "top 0.3s ease-out";
       scrollFrame.dayView.topY = 0;
       UIcreator.setPosition(scrollFrame.dayView, "5.7em", "0em", false, false, 3, "absolute");
       document.addEventListener("keydown", keyHandler, false);
@@ -2054,7 +2063,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       if(channelNode && programs)
       {
         channelNode = channelNode.programsNode;
-        if(channelNode.childNodes.length === programs.length)
+        if(channelNode.childNodes.length === programs.length && !channelNode.hadNoProgramsNode)
         {
           for(i = 0; i < programs.length; i += 1)
           {
@@ -2098,6 +2107,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         }
         else
         {
+          channelNode.hadNoProgramsNode = undefined;
           UIcreator.removeChildNodes(channelNode);
           for(i = 0; i < programs.length; i += 1)
           {
@@ -2156,14 +2166,35 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @private
    * @param {string} channelID ID of the channel that is waiting for an update.
    */
-  function reloadProgramsForChannelFailed (channelID)
+  function reloadProgramsForChannelFailed (channelID, when)
   {
     try
     {
-      
+      var channelNode = channelNodes[channelID],
+      now = new Date(),
+      whenCopy = when,
+      pNode;
       if(typeof channelID !== "undefined")
       {
-        Debug.warn("front.reloadProgramsForChannelFailed: could not reload programs for channel with id " + channelID + "!");
+        Debug.warn("front.reloadProgramsForChannelFailed: could not reload programs for channel with id " + channelID + "! channelNodes[" + channelID + "] = " + channelNodes[channelID]);
+      }
+      if (now.getFullYear() === when.getFullYear() && now.getMonth() === when.getMonth() && now.getDate() === when.getDate())
+      {
+        if (channelNode)
+        {
+          channelNode = channelNode.programsNode;
+          UIcreator.removeChildNodes(channelNode);
+          pNode = UIcreator.createProgramInfoMissingNode(function()
+          {
+            stopUpdateInterval();
+            Settings.runGrabber(true, that.onShow, startUpdateInterval);
+          });
+          channelNode.appendChild(pNode);
+        }
+        else
+        {
+
+        }
       }
     }
     catch (error)
@@ -2483,7 +2514,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           	  	if(channelNode && channelNode.isVisible && channelNode.contents)
           	  	{
           	  	  //Debug.inform("reloading programs for channelID " + channelID + " (but channelNode.channelID = " + channelNode.channelID + ")");
-          	      Settings.getProgramsForChannel(channelID, function(theID, when){return function(thePrograms){reloadProgramsForChannel(theID, thePrograms, when);};}(channelID, when), function(theID){ return function(){reloadProgramsForChannelFailed(theID);};}(channelID), 3, when);
+          	      Settings.getProgramsForChannel(channelID, function(theID, when){return function(thePrograms){reloadProgramsForChannel(theID, thePrograms, when);};}(channelID, when), function(theID){ return function(){reloadProgramsForChannelFailed(theID, when);};}(channelID), 3, when);
           	  	}
         	    }
         	    else
@@ -2560,9 +2591,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           Debug.inform("front.onShow still using the same channel list");
           that.reloadIcons();
           that.reloadPrograms();
-          startUpdateInterval(); // should really be one interval per channel
           Settings.checkForNewVersion(newVersionAvailable);
           visible = true;
+          startUpdateInterval(); // should really be one interval per channel
         }
       }
       catch (error)

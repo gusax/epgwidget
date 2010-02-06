@@ -92,6 +92,10 @@ EPG.translator = function(debug)
   localizedStrings["Not allowed to find out current position."] = "Får inte ta reda på nuvarande plats.";
   localizedStrings["Use when I am in"] = "Använd när jag är i";
   localizedStrings["Could not get current location."] = "Kunde inte ta reda på nuvarande plats.";
+  localizedStrings["Schedules for channel missing!"] = "Tablåer för kanalen saknas!";
+  localizedStrings["Redownload all schedules."] = "Ladda ner alla tablåer på nytt.";
+  localizedStrings["Downloading schedules..."] = "Laddar ner tablåer...";
+  localizedStrings["Might take a while."] = "Kan ta en stund.";
   // Private methods
   
   

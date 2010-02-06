@@ -352,7 +352,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
     * @private
     * @param {object} systemResponse Response from widget.system.
     */
-  function grabberUpdated (systemResponse) 
+  function grabberUpdated (systemResponse, onSuccess, onFailure) 
   {
     try
     {
@@ -362,12 +362,16 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
         if (systemResponse.errorString)
         {
           Debug.alert("settings.grabberUpdated: Error when trying to update grabber! Message was " + systemResponse.errorString);
+          if (onFailure)
+          {
+            onFailure();
+          }
         }
         else
         {
           that.savePreference("grabberVersion", EPG.grabberVersion);
           Debug.inform("settings.grabberUpdated success!");
-          that.runGrabber(true);
+          that.runGrabber(true, onSuccess, onFailure);
         }
       }
       else
@@ -407,6 +411,10 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
         else
         {
           Debug.inform("settings.ranGrabber success!");
+          if (onSuccess)
+          {
+            onSuccess();
+          }
         }
       }
       else
@@ -1616,7 +1624,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
      * @function runGrabber
      * @description Runs the grabber.
      */
-    runGrabber: function (force)
+    runGrabber: function (force, onSuccess, onFailure)
     {
       try
       {
@@ -1629,7 +1637,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
         if (window.widget && window.widget.system)
         {
           file.showLoadingImage();
-          window.widget.system(command, ranGrabber);
+          window.widget.system(command, function (systemResponse) {ranGrabber(systemResponse, onSuccess, onFailure);});
         }
       }
       catch (error)
