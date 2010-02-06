@@ -127,6 +127,25 @@ span.ftScore
   padding-left: 0.3em;
 }
 
+div.programInfoMissing
+{
+	padding-left: 1em;
+	color: #c6d5ea;
+	font-weight: bold;
+}
+
+div.programInfoMissingDownloadLink
+{
+  text-decoration: underline;
+  color: #7d91ab;
+}
+
+div.programInfoMissingDownloading
+{
+	color: inherit;
+	font-weight: inherit;
+}
+
 div.programs div.currentprogram
 {
   font-style: normal; 

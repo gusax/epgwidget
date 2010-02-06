@@ -89,6 +89,25 @@ div.onechannel img.logo:hover
   -moz-border-radius: 0.4em;
 }
 
+div.programInfoMissing
+{
+  padding-left: 1em;
+  color: #fff;
+  font-weight: bold;
+}
+
+div.programInfoMissingDownloadLink
+{
+  text-decoration: underline;
+  color: #ffc047;
+}
+
+div.programInfoMissingDownloading
+{
+  color: inherit;
+  font-weight: inherit;
+}
+
 div.programs
 {
   margin-left: 4.2em;

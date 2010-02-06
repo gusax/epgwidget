@@ -34,7 +34,8 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
   // Private Variables
   var that,
   transparentElements = [],
-  FT_STAR = "\u272D";
+  FT_STAR = "\u272D",
+  downloadDataNodes = [];
   
   // Private methods
   
@@ -431,6 +432,71 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
       catch (error)
       {
         Debug.alert("Error in EPG.UIcreator.createListItem: " + error);
+      }
+    },
+    
+    resetAllDataNodes: function(clickedNode)
+    {
+      try
+      {
+        var i,
+        node;
+        for (i = 0; i < downloadDataNodes.length; i += 1)
+        {
+          node = downloadDataNodes[i];
+          node.removeEventListener("click", node.eventListener);
+          node.infoTextNode.nodeValue = Translator.translate("Downloading schedules...");
+          if (node === clickedNode)
+          {
+            node.downloadTextNode.parentNode.parentNode.setAttribute("class", "programInfoMissingDownloading");
+            node.downloadTextNode.nodeValue = "(" + Translator.translate("Might take a while.") + ")";
+          }
+          else
+          {
+            node.downloadTextNode.nodeValue = "";
+          }
+        }
+        downloadDataNodes = [];
+      }
+      catch (error)
+      {
+        Debug.alert("UIcreator resetAllDataNodes error " + error);
+      }
+    },
+    
+    createProgramInfoMissingNode: function(downloadNewDataFunction)
+    {
+      try
+      {
+        var programNode = document.createElement("div"),
+        infoTextNode,
+        downloadDataNode;
+        programNode.hadNoProgramsNode = true;
+        programNode.setAttribute("class", "programInfoMissing");
+        that.setPosition(programNode, "0.2em", "0.3em", "23.8em", "1.2em", false, "relative");
+        infoTextNode = document.createElement("div");
+        infoTextNode.setAttribute("class", "programInfoMissingText");
+        infoTextNode.appendChild(document.createTextNode(Translator.translate("Schedules for channel missing!")));
+        programNode.appendChild(infoTextNode);
+        downloadDataNode = document.createElement("div");
+        downloadDataNodes.push(programNode);
+        downloadDataNode.setAttribute("class", "programInfoMissingDownloadLink");
+        downloadDataNode.appendChild(document.createElement("a"));
+        downloadDataNode.lastChild.appendChild(document.createTextNode("\u27A4 " + Translator.translate("Redownload all schedules.")));
+        downloadDataNode.eventListener = function()
+        {
+          that.resetAllDataNodes(programNode);
+          downloadNewDataFunction();
+        };
+        downloadDataNode.lastChild.addEventListener("click", downloadDataNode.eventListener, false);
+        programNode.appendChild(downloadDataNode);
+        programNode.infoTextNode = infoTextNode.lastChild;
+        programNode.downloadTextNode = downloadDataNode.lastChild.lastChild;
+        return programNode;
+      }
+      catch (error)
+      {
+        Debug.alert("ERror in EPG.UIcreator.createProgramInfoMissingNode " + error);
       }
     }
   };
