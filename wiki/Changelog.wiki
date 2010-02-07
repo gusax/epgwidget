@@ -9,7 +9,7 @@ Senaste ändringarna ligger alltid överst.
 
 
 ----
-== Nästa version ==
+== 20100207 ==
 _Nya funktioner_
  * Stöd för flera kanallistor. Upp till 10 kanallistor kan sparas. ([http://code.google.com/p/epgwidget/issues/detail?id=10 10], [http://code.google.com/p/epgwidget/issues/detail?id=74 74])
 
