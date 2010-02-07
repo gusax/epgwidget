@@ -23,9 +23,13 @@ På framsidan kan du:
 
  * *Scrolla kanalerna* : Om alla kanaler inte får plats på skärmen kan du scrolla hela listan med kanaler. Scrolla med hjälp av piltangenterna upp eller ner eller med scrollhjulet/pekplattan. (Kräver version >= 20080826)
 
+ * *Byta kanallista manuellt* : Byt kanallista manuellt genom att först hålla inne cmd-tangenten och därefter trycka på någon av siffertangenterna. Håll nere cmd och tryck på 1 för kanallista 1 osv. Siffra 0 går till kanallista 10.
+
 == Baksidan ==
 På baksidan kan du:
 
   * *Lägga till en kanal i kanallistan* : För att lägga till en kanal i den aktiva kanallistan, klicka på kanalnamnet. Kanalen läggs då till sist i kanallistan. (På framsidan kan du sedan sortera kanalerna i rätt ordning.)
  
   * *Ta bort en kanal ur kanallistan* : För att ta bort en kanal ur den aktiva kanallistan, klicka på kanalnamnet för att bocka bort den.
+
+  * *Byta kanallista manuellt* : Byt kanallista med hjälp av rullgardinsmenyn överst till höger.
