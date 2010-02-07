@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AllowFileAccessOutsideOfWidget</key>
+	<true/>
+	<key>AllowMultipleInstances</key>
+	<false/>
+	<key>AllowNetworkAccess</key>
+	<true/>
+	<key>AllowSystem</key>
+	<true/>
+	<key>CFBundleDisplayName</key>
+	<string>EPG</string>
+	<key>CFBundleIdentifier</key>
+	<string>se.bizo.widget.epg</string>
+	<key>CFBundleName</key>
+	<string>epgwidget</string>
+	<key>CFBundleVersion</key>
+	<string>20090131</string>
+	<key>CloseBoxInsetX</key>
+	<integer>12</integer>
+	<key>CloseBoxInsetY</key>
+	<integer>8</integer>
+	<key>MainHTML</key>
+	<string>epg.html</string>
+	<key>Width</key>
+	<integer>270</integer>
+</dict>
+</plist>

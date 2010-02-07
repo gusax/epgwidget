@@ -1,0 +1,363 @@
+/*
+  IMPORTANT! 
+  - Use em or percent (%), DO NOT use px or pt! (The widget must be scalable)
+  - 1 em = 10 px (defined in /skins/sharedstyles.css - DO NOT CHANGE!)
+  
+  Example.
+  Wrong:
+  img.myimage
+  {
+    width: 210px;
+    height: 33px;
+  }
+  
+  Right:
+  img.myimage
+  {
+    width: 21em; 
+    height: 3.3em;
+  }
+  
+  Orange HC (High Contrast)
+  by Mathias Andersson
+*/
+
+#loadingImageFrame
+{
+  position: absolute;
+  top: 0.6em;
+  left: 23.2em;
+}
+
+#loadingImage
+{
+  color: #000; 
+  font-size: 3em;
+}
+
+#topbarText
+{
+  color: #222;
+  margin: 1.2em 1.5em 0em 1.5em;
+  height: 1.2em;
+  overflow: hidden;
+  font-size: 1.6em;
+  font-weight: bold;
+  text-shadow: #222 0em 0em 0.2em;
+  text-align: center;
+}
+
+#bottombarText
+{
+  text-align: left;
+  padding-left: 0.5em;
+}
+
+#filmtipsetScore
+{
+  color: #5F5F5F;
+  opacity: 0.4;
+}
+
+div.channelnode
+{
+  margin: 0em 2em 0em 1.5em;  
+}
+
+div.onechannel
+{
+  width: 27em;
+  height: 3.8em;
+  overflow: hidden;
+  color: #4c4331;
+  text-shadow: #fde6aa 0 0 0px;
+  -apple-dashboard-region: dashboard-region(control, rectangle, 0em, 0.5em, 0em, 0.5em); 
+}
+
+div.onechannel img.logo
+{
+  width: 3.4em;
+  height: 3.4em;
+  margin: 0.3em 0.2em 0em 0.6em;
+  float: left;
+  opacity: 1;
+  -webkit-border-radius: 0.4em;
+  -moz-border-radius: 0.4em;
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 0.5s;
+  -webkit-transition-timing-function: ease-out;
+}
+
+div.onechannel img.logo:hover
+{
+  background: #4c4331;
+  -webkit-border-radius: 0.4em;
+  -moz-border-radius: 0.4em;
+}
+
+div.programInfoMissing
+{
+  padding-left: 1em;
+  color: #000;
+  font-weight: bold;
+}
+
+div.programInfoMissingDownloadLink
+{
+  text-decoration: underline;
+  color: #4c4331;
+}
+
+div.programInfoMissingDownloading
+{
+  color: inherit;
+  font-weight: inherit;
+}
+
+div.programs
+{
+  margin-left: 4.2em;
+  color: #4c4331;
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 0.5s;
+  -webkit-transition-timing-function: ease-out;
+}
+
+div.programs div.program
+{ 
+  position: relative;
+  top: 0.4em;
+  margin-right: 0.2em;
+  line-height: 1.1em;
+  overflow: hidden;
+  font-weight: bold;
+  font-style: italic;
+}
+
+span.currentProgramDuration
+{
+  
+}
+
+span.hdSymbol
+{
+  padding-left: 0.5em;
+}
+
+span.ftScore
+{
+  padding-left: 0.3em;
+}
+
+div.programs div.currentprogram
+{
+  font-style: normal; 
+}
+
+div.program div.start
+{
+  text-align: center;
+  color: #fff;
+  text-shadow: #000000 0 0 0.2em;
+}
+
+div.program div.title
+{
+  white-space: nowrap; 
+  text-align: left;
+  color: #4c4331;
+}
+
+div.program div.title:hover
+{
+  text-decoration: underline; 
+}
+
+div.currentprogram div.title
+{
+  color: #000; 
+}
+
+div.currentprogram div.title:hover
+{
+  text-decoration: underline;
+}
+
+div.resizer
+{
+  padding-top: 0.2em; 
+}
+
+img.background
+{
+  
+}
+
+#front
+{
+  font-family: sans-serif; 
+}
+
+#infobutton
+{
+  color: #000;
+  bottom: 0.2em;
+  right: 1.2em;
+}
+
+#infobutton:hover
+{
+  text-shadow: #000 0em 0em 0.2em;
+  bottom: 0.25em;
+  right: 1.25em;
+}
+
+#backgroundlogo
+{
+  position: absolute;
+  z-index: -1;
+  width: 10em;
+  height: 10em;
+  bottom: 4em;
+  left: 4em;
+  opacity: 0.1; 
+}
+
+#dayView
+{
+  -webkit-transition-property: opacity;
+  -webkit-transition-duration: 0.5s;
+  -webkit-transition-timing-function: ease-out;
+}
+
+#dayView div.program
+{ 
+  line-height: 1.3em;
+  overflow: hidden;
+  font-weight: bold;
+  color: #000;
+}
+
+#dayView div.program div.title
+{
+  color: #4c4331;
+  text-shadow: #172905 0 0 0px;
+  font-style: italic;
+}
+
+#dayView div.program div.start
+{
+  color: #4c4331;
+  text-shadow: #172905 0 0 0px;
+  font-style: italic;
+}
+
+#dayView div.upcomingprogram div.title
+{
+  text-shadow: #172905 0 0 0em;
+  color: #000;
+  font-style: normal;
+}
+
+#dayView div.upcomingprogram div.start
+{
+  text-shadow: #172905 0 0 0em;
+  color: #000;
+  font-style: normal;
+}
+
+#programInfo
+{
+  color: #000;
+}
+
+div.programInfoScrollButton
+{
+  background: #4c4331;
+  opacity: 0.7;
+  -webkit-border-radius: 0.3em;
+  color: #000;
+}
+
+div.programInfoScrollButton:hover
+{
+  text-shadow: #000 0em 0em 0.2em;
+  opacity: 1;  
+}
+
+#programInfo div.title
+{
+  color: #363431;
+}
+
+#programInfo div.startAndStop
+{
+   
+}
+
+#programInfo div.startAndStop div.start
+{
+   
+}
+
+#programInfo div.progressbarEmpty
+{
+   
+}
+
+#programInfo div.contents div div.descriptionFrame div.description
+{
+  
+}
+
+div.progressbarFullContainer
+{
+  
+}
+
+div.progressbarScalableContainer
+{  
+  width: 0em;
+  -webkit-transition-property: width;
+  -webkit-transition-duration: 0.3s;
+  -webkit-transition-timing-function: ease-out;
+}
+
+div.progressbarFull
+{  
+  
+}
+
+#programInfo div.startAndStop div.stop
+{
+   
+}
+
+#programInfo div.descriptionFrame
+{
+  color: #000;
+}
+
+#programInfo div.descriptionFrame div.description
+{
+  font-size: 1.1em;
+  margin: 0.8em 0.8em 0em 0.2em; 
+}
+
+#programInfo div.descriptionFrame div.duration
+{
+  font-size: 1.1em;
+  margin: 0.8em 0.8em 0em 0.2em; 
+}
+
+#updateAvailable
+{
+  color: #000;
+}
+
+#overview
+{
+  -webkit-transition-property: visibility;
+  -webkit-transition-duration: 0.3s;
+  -webkit-transition-timing-function: linear;
+}
