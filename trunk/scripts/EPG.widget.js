@@ -88,7 +88,7 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
       if (settings.getPreference("allowGeoLocation") === "yes")
       {
         GeoLocation.setOkToFetchLocation(true);
-        GeoLocation.getLocation(function gotLocation1(location)
+        GeoLocation.getLocation(function (location)
             {
               try
               {
