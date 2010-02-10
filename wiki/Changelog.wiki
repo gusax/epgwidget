@@ -9,6 +9,12 @@ Senaste ändringarna ligger alltid överst.
 
 
 ----
+== Nästa version ==
+_Nya funktioner_
+
+_Rättade buggar_
+ * Widgeten startar nu ordentligt även i Tiger ([http://code.google.com/p/epgwidget/issues/detail?id=92 92])
+
 == 20100207 ==
 _Nya funktioner_
  * Stöd för flera kanallistor. Upp till 10 kanallistor kan sparas. ([http://code.google.com/p/epgwidget/issues/detail?id=10 10], [http://code.google.com/p/epgwidget/issues/detail?id=74 74])
