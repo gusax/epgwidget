@@ -9,7 +9,7 @@ Senaste ändringarna ligger alltid överst.
 
 
 ----
-== Nästa version ==
+== 20100213 ==
 _Nya funktioner_
 
 _Rättade buggar_
