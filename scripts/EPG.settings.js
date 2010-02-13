@@ -1745,4 +1745,4 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
   };
 }(EPG.debug, EPG.growl, EPG.file, EPG.GeoLocation);
 EPG.settings.init();
-EPG.PreLoader.resume();
+//EPG.PreLoader.resume();

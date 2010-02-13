@@ -502,4 +502,4 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
   };
 }(EPG.debug, EPG.skin, EPG.translator, EPG.settings, EPG.Reminder);
 EPG.UIcreator.init();
-EPG.PreLoader.resume();
+//EPG.PreLoader.resume();

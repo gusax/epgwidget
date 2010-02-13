@@ -921,4 +921,4 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
   };
 }(EPG.debug, EPG.UIcreator, EPG.translator, EPG.settings, EPG.skin, EPG.file, EPG.Reminder, EPG.Filmtipset);
 EPG.ProgramInfo.init();
-EPG.PreLoader.resume();
+//EPG.PreLoader.resume();

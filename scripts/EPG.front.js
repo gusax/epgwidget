@@ -21,7 +21,6 @@ if (EPG.debug)
 {
   EPG.debug.inform("EPG.front.js loaded");
 }
-
 /**
   * @name EPG.front
   * @static
@@ -2604,4 +2603,4 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   };
 }(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator, EPG.UIcreator, EPG.file, EPG.ProgramInfo, EPG.Filmtipset);
 EPG.front.init();
-EPG.PreLoader.resume();
+//EPG.PreLoader.resume();

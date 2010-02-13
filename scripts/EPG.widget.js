@@ -307,4 +307,4 @@ EPG.widget = function (front, back, debug, growl, file, settings, translator, Pr
 	};
 }(EPG.front, EPG.back, EPG.debug, EPG.growl, EPG.file, EPG.settings, EPG.translator, EPG.ProgramInfo, EPG.GeoLocation);
 EPG.widget.init();
-EPG.PreLoader.resume();
+//EPG.PreLoader.resume();

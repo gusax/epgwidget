@@ -521,4 +521,4 @@ EPG.Filmtipset = (function ()
 }());
 EPG.Filmtipset.implementing.LoadIF.provides.onLoad(EPG.debug, EPG.file, EPG.settings);
 EPG.Filmtipset = EPG.Filmtipset.provides;
-EPG.PreLoader.resume();
+//EPG.PreLoader.resume();
