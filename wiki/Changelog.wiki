@@ -15,6 +15,8 @@ _Nya funktioner_
 _Rättade buggar_
  * Widgeten startar nu ordentligt även i Tiger ([http://code.google.com/p/epgwidget/issues/detail?id=92 92])
 
+ * Hittade en omväg runt cachningsbuggen i Safari 4, så man kan nu uppgradera widgeten utan att behöva logga in och logga ut / starta om Dock. Tyvärr innebar det att "uppstartsanimationen" (punkterna) behövde tas bort. Så att widgeten blir osynlig ett tag under uppstarten är ett normalt beteende.
+
 == 20100207 ==
 _Nya funktioner_
  * Stöd för flera kanallistor. Upp till 10 kanallistor kan sparas. ([http://code.google.com/p/epgwidget/issues/detail?id=10 10], [http://code.google.com/p/epgwidget/issues/detail?id=74 74])
