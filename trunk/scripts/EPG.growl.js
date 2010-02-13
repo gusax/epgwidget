@@ -278,4 +278,4 @@ EPG.growl = function(Debug, Translator)
   };
 }(EPG.debug, EPG.translator);
 EPG.growl.init();
-EPG.PreLoader.resume();
+//EPG.PreLoader.resume();

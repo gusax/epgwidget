@@ -169,4 +169,4 @@ EPG.debug = function()
 	};
 }();
 EPG.debug.init();
-EPG.bootstrap();
+//EPG.bootstrap();

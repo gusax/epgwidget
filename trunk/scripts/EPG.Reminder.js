@@ -142,4 +142,4 @@ EPG.Reminder = function(Debug, Growl, Settings, Translator)
   };
 }(EPG.debug, EPG.growl, EPG.settings, EPG.translator);
 EPG.Reminder.init();
-EPG.PreLoader.resume();
+//EPG.PreLoader.resume();

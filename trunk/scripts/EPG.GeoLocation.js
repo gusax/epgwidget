@@ -200,4 +200,4 @@ EPG.GeoLocation = (function ()
 }());
 EPG.GeoLocation.implementing.LoadIF.provides.onLoad(EPG.debug, EPG.file);
 EPG.GeoLocation = EPG.GeoLocation.provides;
-EPG.PreLoader.resume();
+//EPG.PreLoader.resume();

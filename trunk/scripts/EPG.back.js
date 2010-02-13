@@ -1650,4 +1650,4 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
   };
 }(EPG.debug, EPG.growl, EPG.settings, EPG.skin, EPG.translator, EPG.UIcreator, EPG.Filmtipset, EPG.GeoLocation);
 EPG.back.init();
-EPG.PreLoader.resume();
+//EPG.PreLoader.resume();
