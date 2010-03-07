@@ -9,6 +9,12 @@ Senaste ändringarna ligger alltid överst.
 
 
 ----
+== Nästa version ==
+_Nya funktioner_
+
+_Rättade buggar_
+ * Laddar nu ner eventuella uppdateringar även för kanalloggor. Har du Safari 4 och Leopard eller Snow Leopard måste du logga ut och logga in igen för att befintliga loggor ska uppdateras (i de fall de har uppdaterats). Har du Tiger eller Leopard med Safari 3 installerat så ska loggorna bytas ut automatiskt om de har ändrats.
+
 == 20100213 ==
 _Nya funktioner_
 
