@@ -1239,7 +1239,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
               break;
             }
           }
-          if (showHDsymbol && program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("Programmet s\u00e4nds i hd-format.") > -1)
+          if (showHDsymbol && program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("S\u00e4nds i HD.") > -1)
           {
             programNode.hdSymbolNode.style.display = "inline";
           }
@@ -1311,7 +1311,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                   }
                   dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
                 }
-                if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("Programmet s\u00e4nds i hd-format.") > -1)
+                if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("S\u00e4nds i HD.") > -1)
                 {
                   dayViewDiv.childNodes[i].hdSymbolNode.style.display = "inline";
                 }
@@ -1390,7 +1390,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                 }
               }
               dayViewDiv.childNodes[i].durationNode.nodeValue = "";
-              if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("Programmet s\u00e4nds i hd-format.") > -1)
+              if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("S\u00e4nds i HD.") > -1)
               {
                 dayViewDiv.childNodes[i].hdSymbolNode.style.display = "inline";
               }
@@ -1421,7 +1421,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                 dayViewDiv.childNodes[i].durationNode.nodeValue = "";
               }
               dayViewDiv.childNodes[i].style.display = "block";
-              if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("Programmet s\u00e4nds i hd-format.") > -1)
+              if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("S\u00e4nds i HD.") > -1)
               {
                 dayViewDiv.childNodes[i].hdSymbolNode.style.display = "inline";
               }
@@ -1463,7 +1463,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             }
             
             dayViewDiv.childNodes[i].durationNode.nodeValue = "";
-            if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("Programmet s\u00e4nds i hd-format.") > -1)
+            if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("S\u00e4nds i HD.") > -1)
             {
               dayViewDiv.childNodes[i].hdSymbolNode.style.display = "inline";
             }
@@ -2085,7 +2085,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             {
               channelNode.childNodes[i].durationNode.nodeValue = "";
             }
-            if (showHDsymbol && program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("Programmet s\u00e4nds i hd-format.") > -1)
+            if (showHDsymbol && program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("S\u00e4nds i HD.") > -1)
             {
               channelNode.childNodes[i].hdSymbolNode.style.display = "inline";
             }
