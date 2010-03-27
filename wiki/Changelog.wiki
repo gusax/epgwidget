@@ -15,7 +15,7 @@ _Nya funktioner_
 _Rättade buggar_
  * Laddar nu ner eventuella uppdateringar även för kanalloggor. Har du Safari 4 och Leopard eller Snow Leopard måste du logga ut och logga in igen för att befintliga loggor ska uppdateras (i de fall de har uppdaterats). Har du Tiger eller Leopard med Safari 3 installerat så ska loggorna bytas ut automatiskt om de har ändrats.
 
- * HD-program på SVT HD markeras nu korrekt med [HD] igen (om den funktionen är påslagen på baksidan).
+ * HD-program på SVT HD markeras nu korrekt som HD-program igen (om den funktionen är påslagen på baksidan).
 
 == 20100213 ==
 _Nya funktioner_
