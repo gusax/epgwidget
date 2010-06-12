@@ -215,6 +215,7 @@ function downloadJsontv($links,$userAgent,$pathToTargetFolder)
 	    }
 	    else if(strrpos($link, ".png") === (strlen($link) - 4))
 	    {
+	    	$start = strrpos($link,"/")+1;
 	    	$target = $pathToTargetFolder."".substr($link,$start);
 	    	if(file_exists($target))
 	      {
@@ -227,7 +228,7 @@ function downloadJsontv($links,$userAgent,$pathToTargetFolder)
 	        }
 	      }
 	    }
-		//echo "\nTrying to download ".substr($link,$start);
+		//echo "\nTrying to download ".substr($link,$start) . " from " . $link . " to ". $target;
 		system("/usr/bin/curl -s -R --user-agent $userAgent --compressed $link -o $target -z $target");
 	}
 }
