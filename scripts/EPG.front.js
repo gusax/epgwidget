@@ -1003,8 +1003,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
   {
     try
     {
-      var limit;
-      var index;
+      var limit,
+      index;
       if(currentView === 0)
       {
         if (!tooTallForScreen)
@@ -1157,7 +1157,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         fixTitle("sv", program);
       }
-      callbacks = waitingForScore[program.title.sv.toLowerCase()]
+      callbacks = waitingForScore[program.title.sv.toLowerCase()];
       if (showFtScore && callbacks)
       {
         if (callbacks.length > 0)
@@ -2418,7 +2418,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         var currentChannelList,
         i,
-        channelListHeight;
+        channelListHeight,
+        numChannels,
+        overviewDivHeight;
         tooTallForScreen = false;
         
         currentChannelList = Settings.getChannelList(currentChannelListIndex);
@@ -2428,7 +2430,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           height = 80 + currentChannelList.ordered.length * 38;
           numChannels = currentChannelList.ordered.length;
           channelListHeight = height;
-          overviewDivHeight = ((channelListHeight/10) - 8) + "em";
+          overviewDivHeight = ((channelListHeight / 10 ) - 8) + "em";
           while (channelListHeight > screen.height)
           {
             tooTallForScreen = true;
