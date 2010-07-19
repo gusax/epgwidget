@@ -1,21 +1,3 @@
-/*jslint adsafe:false, 
- bitwise: true, 
- browser:true, 
- cap:false, 
- debug:false,
- eqeqeq: true,
- evil: false,
- forin: false,
- fragment:false, 
- laxbreak:false, 
- nomen:true, 
- passfail:false, 
- plusplus:true, 
- rhino:false, 
- undef:true, 
- white:false, 
- widget:false */
-
 /*extern EPG*/
 if (EPG.debug)
 {
@@ -34,7 +16,7 @@ if (EPG.debug)
   * @param {object} UIcreator EPG.UIcreator. 
   * @param {object} File EPG.file. 
   */
-EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, ProgramInfo, Filmtipset) 
+EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File, ProgramInfo, Filmtipset) 
 {
   // Private Variables
   var that,
@@ -107,7 +89,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @return {object} An element (div tag) representing the top bar.
    * @private
    */
-  function createTopBar ()  
+  function createTopBar()  
   {
     try
     {
@@ -140,11 +122,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @private
    * @param {object} event The event.
    */
-  function stopEvent (event)
+  function stopEvent(event)
   {
     try
     {
-      if(event && event.stopPropagation)
+      if (event && event.stopPropagation)
       {
         event.stopPropagation();
         event.preventDefault();
@@ -216,11 +198,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @description Creates the infobutton shown on the front of the widget.
    * @private
    */
-  function createInfoButton () 
+  function createInfoButton() 
   {
     try
     {
-      if(!infoButton)
+      if (!infoButton)
       {
         infoButton = document.createElement("div");
         infoButton.setAttribute("id", "infobutton");
@@ -244,7 +226,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @private
    * @return {object} An element (div tag) representing the bottom bar.
    */
-  function createBottomBar () 
+  function createBottomBar() 
   {
     try
     {
@@ -277,15 +259,24 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       tempDiv.appendChild(tempElement);
       tempContainer.appendChild(tempDiv.cloneNode(true));
       resizers.push(tempContainer.lastChild);
-      tempContainer.lastChild.addEventListener("click", function(){Settings.resizeText(-1);}, false);
+      tempContainer.lastChild.addEventListener("click", function ()
+      {
+        Settings.resizeText(-1);
+      }, false);
       tempElement.setAttribute("class", "normaltext");
       tempContainer.appendChild(tempDiv.cloneNode(true));
       resizers.push(tempContainer.lastChild);
-      tempContainer.lastChild.addEventListener("click", function(){Settings.resizeText(0);}, false);
+      tempContainer.lastChild.addEventListener("click", function ()
+      {
+        Settings.resizeText(0);
+      }, false);
       tempElement.setAttribute("class", "biggertext");
       tempContainer.appendChild(tempDiv.cloneNode(true));
       resizers.push(tempContainer.lastChild);
-      tempContainer.lastChild.addEventListener("click", function(){Settings.resizeText(1);}, false);
+      tempContainer.lastChild.addEventListener("click", function ()
+      {
+        Settings.resizeText(1);
+      }, false);
       tempContainer.appendChild(tempDiv.cloneNode(false));
       updateAvailable = tempContainer.lastChild;
       updateAvailable.appendChild(document.createTextNode("\u27a0 " + Translator.translate("Update available!")));
@@ -294,7 +285,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       updateAvailable.style.display = "none";
       UIcreator.setPosition(updateAvailable, "4em", "-0.1em", "13em", "1.1em", 1, "absolute");
       tempContainer.appendChild(createInfoButton());
-      bottomBarContainer =  UIcreator.createScalableContainer("bottombar", tempContainer, "nere.png",currentChannelListIndex);
+      bottomBarContainer =  UIcreator.createScalableContainer("bottombar", tempContainer, "nere.png", currentChannelListIndex);
       bottomBarContainer.style.width = "27em";
       bottomBarContainer.style.height = "3.2em";
       bottomBarContainer.resizers = resizers;
@@ -316,7 +307,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @private
    * @param {string} channelID ID of the channel that the logo belongs to.
    */
-  function couldNotFindLogo (channelID)
+  function couldNotFindLogo(channelID)
   {
     try
     {
@@ -324,7 +315,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       
       Debug.warn("Could not find logo for channel with ID " + channelID + "!");
       Settings.getChannel(channelID);
-      if(channel && channel.icon)
+      if (channel && channel.icon)
       {
         //File.downloadLogoForChannel(channelID) 
       }
@@ -347,7 +338,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @description Switches two channel nodes.
    * @private
    */
-  function switchChannelNodes (channelNode) 
+  function switchChannelNodes(channelNode) 
   {
     try
     {
@@ -360,21 +351,21 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       channelNodeID;
       
       parentNode = channelNode.parentNode;
-      for(i = 0; i < parentNode.childNodes.length; i += 1)
+      for (i = 0; i < parentNode.childNodes.length; i += 1)
       {
         currentNode = parentNode.childNodes[i];
-        if(currentNode === channelNode)
+        if (currentNode === channelNode)
         {
           channelNodePosition = i;
-          if(dragElementPosition >= 0)
+          if (dragElementPosition >= 0)
           {
             break;
           }
         }
-        else if(currentNode === dragElement)
+        else if (currentNode === dragElement)
         {
           dragElementPosition = i;
-          if(channelNodePosition >= 0)
+          if (channelNodePosition >= 0)
           {
             break;
           }
@@ -385,7 +376,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       dragElementID = dragElement.channelID;
       // Switch nodes
       parentNode.removeChild(dragElement);
-      if(dragElementPosition < channelNodePosition)
+      if (dragElementPosition < channelNodePosition)
       {
         parentNode.insertBefore(dragElement, channelNode.nextSibling);
       }
@@ -416,47 +407,47 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
      * @private
      * @return {string} Comma separated string with the current channel order.
      */
-    function saveCurrentChannelOrder () 
+  function saveCurrentChannelOrder() 
+  {
+    try
     {
-      try
+      var i,
+      length,
+      childNodes,
+      channelOrder = [],
+      channelsHash = {},
+      channelList,
+      position;
+      
+      childNodes = overviewDiv.childNodes;
+      length = childNodes.length;
+      if (length > 0)
       {
-        var i,
-        length,
-        childNodes,
-        channelOrder = [],
-        channelsHash = {},
-        channelList,
-        position;
-        
-        childNodes = overviewDiv.childNodes;
-        length = childNodes.length;
-        if(length > 0)
+        for (i = 0; i < length; i += 1)
         {
-          for(i = 0; i < length; i+=1)
+          if (typeof childNodes[i].channelID !== "undefined" && childNodes[i].style.display !== "none")
           {
-            if(typeof childNodes[i].channelID !== "undefined" && childNodes[i].style.display !== "none")
-            {
-              position = channelOrder.length;
-              channelOrder[position] = childNodes[i].channelID;
-              channelsHash[channelOrder[position]] = position;
-            }
+            position = channelOrder.length;
+            channelOrder[position] = childNodes[i].channelID;
+            channelsHash[channelOrder[position]] = position;
           }
         }
-        
-        channelList = Settings.getChannelList(currentChannelListIndex);
-        if(channelList && channelList.ordered)
-        {
-          channelList.ordered = channelOrder;
-          channelList.hashed = channelsHash;
-          Settings.saveChannelList(currentChannelListIndex);
-        }
-        
       }
-      catch (error)
+      
+      channelList = Settings.getChannelList(currentChannelListIndex);
+      if (channelList && channelList.ordered)
       {
-        Debug.alert("Error in front.saveChannelOrder: " + error);
+        channelList.ordered = channelOrder;
+        channelList.hashed = channelsHash;
+        Settings.saveChannelList(currentChannelListIndex);
       }
+      
     }
+    catch (error)
+    {
+      Debug.alert("Error in front.saveChannelOrder: " + error);
+    }
+  }
   
   /**
    * @memberOf EPG.front
@@ -467,12 +458,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @param {object} event The event that caused the drag to start (most likely a mouse down event).
    * @param {object} channelNode The channelNode (or rather the scalable container containing the channelNode) beeing dragged.
    */
-  function startChannelDrag (event, channelNode)
+  function startChannelDrag(event, channelNode)
   {
     try
     {
       stopEvent(event);
-      if(dragElement !== channelNode)
+      if (dragElement !== channelNode)
       {
         dragElement = channelNode;
         //Debug.inform("Started dragging element: " + dragElement);
@@ -493,12 +484,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @param {object} event The event (mouse move).
    * @param {object} channelNode The current channelNode that the mouse is over.
    */
-  function continueChannelDrag (event, channelNode)
+  function continueChannelDrag(event, channelNode)
   {
     try
     {
       stopEvent(event);
-      if(dragElement && channelNode && dragElement !== channelNode)
+      if (dragElement && channelNode && dragElement !== channelNode)
       {
         //Debug.inform("Dragged over element: " + channelNode);
         dragElement.hasBeenDragged = true;
@@ -519,41 +510,41 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @private
    * @param {string} channelID ID of active channel (in case of dayview)
    */
-  function updateTopBar (channelID)
+  function updateTopBar(channelID)
   {
     try
     {
       var channel;
       
-      if(currentView === 0)
+      if (currentView === 0)
       {
-        topBar.setAttribute("title","");
+        topBar.setAttribute("title", "");
         topBar.heading.nodeValue = topBar.heading.overview;
       }
-      else if(currentView === 1)
+      else if (currentView === 1)
       {
         channel = Settings.getChannel(channelID);
-        if(channel && channel.displayName)
+        if (channel && channel.displayName)
         {
-          if(channel.displayName.sv)
+          if (channel.displayName.sv)
           {
-            topBar.setAttribute("title",channel.displayName.sv);
+            topBar.setAttribute("title", channel.displayName.sv);
             topBar.heading.nodeValue = channel.displayName.sv;  
           }
-          else if(channel.displayName.en)
+          else if (channel.displayName.en)
           {
-            topBar.setAttribute("title",channel.displayName.en);
+            topBar.setAttribute("title", channel.displayName.en);
             topBar.heading.nodeValue = channel.displayName.en;
           }
           else
           {
-            topBar.setAttribute("title","");
+            topBar.setAttribute("title", "");
             topBar.heading.nodeValue = Translator.translate("day view");
           }
         }
         else
         {
-          topBar.setAttribute("title","");
+          topBar.setAttribute("title", "");
           topBar.heading.nodeValue = Translator.translate("day view");
         } 
       }
@@ -573,11 +564,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @param {object} channelNode Node that should be dimmed.
    * @param {boolean} reverse True to reverse effect (make node visible again).
    */
-  function dimChannelNode (channelNode, reverse)
+  function dimChannelNode(channelNode, reverse)
   {
     try
     {
-      if(reverse)
+      if (reverse)
       {
         channelNode.logo.style.opacity = "0.8";
         channelNode.programsNode.style.opacity = "1";
@@ -603,7 +594,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @param {object} channelNode Node that should be left alone.
    * @param {boolean} reverse True to reverse effect (make channel nodes visible again).
    */
-  function dimAllChannelNodesExcept (channelNode, reverse)
+  function dimAllChannelNodesExcept(channelNode, reverse)
   {
     try
     {
@@ -611,13 +602,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       
       for (id in channelNodes)
       {
-        if(channelNodes.hasOwnProperty(id))
+        if (channelNodes.hasOwnProperty(id))
         {
           node = channelNodes[id];
-          if(channelNode === node)
+          if (channelNode === node)
           {
             dayViewNode = channelNode;
-            if(reverse)
+            if (reverse)
             {
               channelNode.logo.style.opacity = "0.8";
               channelNode.programsNode.style.opacity = "1";
@@ -648,7 +639,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @description Runs if an error happened when day view programs.
    * @private
    */
-  function fillDayViewFailed () 
+  function fillDayViewFailed() 
   {
     try
     {
@@ -726,7 +717,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @private
    * @return {object} An element (div tag) containing all channels.
    */
-  function createDayView () 
+  function createDayView() 
   {
     try
     {
@@ -751,7 +742,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @private
    * @return {object} An element (div tag) containing all channels.
    */
-  function createOverview () 
+  function createOverview() 
   {
     try
     {
@@ -781,16 +772,16 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @private
    * @param {string} time The time to print at the top bar.
    */
-  function updateClock (time)
+  function updateClock(time)
   {
     try
     {
       //Debug.inform("Front.updateClock: time = " + time);
-      if(typeof time  === "string")
+      if (typeof time  === "string")
       {
         topBar.heading.overview = time;
       }
-      else if(typeof time  === "object" && time.getHours)
+      else if (typeof time  === "object" && time.getHours)
       {
         topBar.heading.overview = Settings.getHHMM(time);
       }
@@ -798,7 +789,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         topBar.heading.overview = Translator.translate("overview");
       }
-      if(currentView === 0)
+      if (currentView === 0)
       {
         topBar.heading.nodeValue = topBar.heading.overview;
       }
@@ -816,13 +807,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @description Stops the update interval.
    * @private
    */
-  function stopUpdateInterval ()
+  function stopUpdateInterval()
   {
     try
     {
-      if(updateInterval)
+      if (updateInterval)
       {
-        if(updateInterval.type === "timeout")
+        if (updateInterval.type === "timeout")
         {
           clearTimeout(updateInterval.timeout);
         }
@@ -847,24 +838,24 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @private
    * @param {number} number Number on the key pressed.
    */
-  function addKeyToHistory (number)
+  function addKeyToHistory(number)
   {
     try
     {
       var num, time, hour, minute;
       //Debug.inform("number " + number);
-      if(typeof key.firstKey !== "number" && number < 3) // first number, must be 0, 1 or 2
+      if (typeof key.firstKey !== "number" && number < 3) // first number, must be 0, 1 or 2
       {
         key.firstKey = number;
         updateClock(key.firstKey + "_:__");
       }
-      else if(key.firstKey >= 0)
+      else if (key.firstKey >= 0)
       {
-        if(typeof key.secondKey !== "number")
+        if (typeof key.secondKey !== "number")
         {
           key.secondKey = number;
           num = (key.firstKey + "" + key.secondKey) * 1;
-          if(num > 24)
+          if (num > 24)
           {
             delete key.secondKey;
           }
@@ -878,20 +869,20 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             updateClock(key.firstKey + "" + key.secondKey + ":__");
           }
         }
-        else if(key.secondKey >= 0)
+        else if (key.secondKey >= 0)
         {
-          if(typeof key.thirdKey !== "number" && number < 6)
+          if (typeof key.thirdKey !== "number" && number < 6)
           {
             key.thirdKey = number;
             updateClock(key.firstKey + "" + key.secondKey + ":" + key.thirdKey + "_");
           }
-          else if(key.thirdKey >= 0 && typeof key.forthKey !== "number")
+          else if (key.thirdKey >= 0 && typeof key.forthKey !== "number")
           {
             key.forthKey = number;
             time = new Date();
             time = new Date(time.getFullYear(), time.getMonth(), time.getDate(), (key.firstKey + "" + key.secondKey) * 1, (key.thirdKey + "" + key.forthKey) * 1); // To to specified time
             
-            if(time < new Date())
+            if (time < new Date())
             {
               time = new Date(new Date().getTime() + 86400000); // jump to tomorrow 
               time = new Date(time.getFullYear(), time.getMonth(), time.getDate(), (key.firstKey + "" + key.secondKey) * 1, (key.thirdKey + "" + key.forthKey) * 1); // To to specified time
@@ -933,29 +924,32 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       var limit;
       if (currentView === 1)
       {
-        if(typeof amount === "undefined")
+        if (typeof amount === "undefined")
         {
-          if(event.detail)
+          if (event.detail)
           {
             amount = event.detail * -1;
           }
-          else if(event.wheelDelta)
+          else if (event.wheelDelta)
           {
             amount = event.wheelDelta / 40;
             scrollFrame.dayView.style.webkitTransition = "";
             clearTimeout(dayViewTimeout);
-            dayViewTimeout = setTimeout(function(){scrollFrame.dayView.style.webkitTransition = "top 0.3s ease-out";}, 100);
+            dayViewTimeout = setTimeout(function ()
+            {
+              scrollFrame.dayView.style.webkitTransition = "top 0.3s ease-out";
+            }, 100);
           }
           else
           {
             amount = 0;
           }
         }
-        limit = -1*(scrollFrame.dayView.scrollHeight - scrollFrame.offsetHeight) - 5;
-        if(limit < 0)
+        limit = -1 * (scrollFrame.dayView.scrollHeight - scrollFrame.offsetHeight) - 5;
+        if (limit < 0)
         {
           scrollFrame.dayView.topY = scrollFrame.dayView.topY + amount;
-          if(scrollFrame.dayView.topY > 0)
+          if (scrollFrame.dayView.topY > 0)
           {
             //startBounceback(amount, 0);
             scrollFrame.dayView.topY = 0;
@@ -964,7 +958,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
               clearInterval(scrollInterval);
             }
           }
-          else if(scrollFrame.dayView.topY < limit)
+          else if (scrollFrame.dayView.topY < limit)
           {
             //startBounceback(amount, limit);
             scrollFrame.dayView.topY = limit;
@@ -1005,7 +999,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     {
       var limit,
       index;
-      if(currentView === 0)
+      if (currentView === 0)
       {
         if (!tooTallForScreen)
         {
@@ -1016,9 +1010,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           }
           return;
         }
-        if(typeof amount === "undefined")
+        if (typeof amount === "undefined")
         {
-          if(event.detail)
+          if (event.detail)
           {
             amount = event.detail * -1;
           }
@@ -1028,7 +1022,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             //Debug.inform("Front scrollFront would have scrolled sideways: " + (event.wheelDeltaX / 40));
             amount = 0;
           }
-          else if(event.wheelDelta)
+          else if (event.wheelDelta)
           {
             if (Settings.safariVersion === 4)
             {
@@ -1040,7 +1034,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             }
             overviewDiv.removeAttribute("id");
             clearTimeout(overviewTimeout);
-            overviewTimeout = setTimeout(function(){overviewDiv.setAttribute("id", "overview");}, 100);
+            overviewTimeout = setTimeout(function ()
+            {
+              overviewDiv.setAttribute("id", "overview");
+            }, 100);
           }
           else
           {
@@ -1048,16 +1045,16 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           }
         }
               
-        limit = -1*(scrollFrame.scrollHeight - scrollFrame.offsetHeight);
-        if(limit < 0)
+        limit = -1 * (scrollFrame.scrollHeight - scrollFrame.offsetHeight);
+        if (limit < 0)
         {
           overviewDiv.topY = overviewDiv.topY + amount;
-          if(overviewDiv.topY > 0)
+          if (overviewDiv.topY > 0)
           {
             //startBounceback(amount, 0);
             overviewDiv.topY = 0;
           }
-          else if(overviewDiv.topY < limit)
+          else if (overviewDiv.topY < limit)
           {
             //startBounceback(amount, limit);
             overviewDiv.topY = limit;
@@ -1067,7 +1064,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         event.preventDefault();
         event.stopPropagation();
       }
-      else if(currentView === 1)
+      else if (currentView === 1)
       {
         scrollDayView(event, amount);
       }
@@ -1087,7 +1084,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         if (pNode.program.filmtipsetgrade)
         {
-          if(pNode.program.filmtipsetgrade.value * 1 > 0)
+          if (pNode.program.filmtipsetgrade.value * 1 > 0)
           {
             pNode.ftScoreNode.firstChild.nodeValue = Filmtipset.getStars(pNode.program.filmtipsetgrade);
             pNode.ftScoreNode.style.display = "inline";
@@ -1146,7 +1143,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
     }
   }
   
-  function ftCallback (program)
+  function ftCallback(program)
   {
     try
     {
@@ -1193,7 +1190,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @param {object} programsNode The programsNode.
    * @param {object} program The program containing the new info.
    */
-  function updateProgramNode (programNode, program)
+  function updateProgramNode(programNode, program)
   {
     try
     {
@@ -1202,15 +1199,15 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       start,
       locale;
       
-      if(program && program !== programNode.program)
+      if (program && program !== programNode.program)
       {
-        if(programNode.titleNode.parentNode.isAnimating)
+        if (programNode.titleNode.parentNode.isAnimating)
         {
-          if(programNode.titleNode.parentNode.animationType === "interval")
+          if (programNode.titleNode.parentNode.animationType === "interval")
           {
             clearInterval(programNode.titleNode.parentNode.isAnimating);
           }
-          else if(programNode.titleNode.parentNode.animationType === "timeout")
+          else if (programNode.titleNode.parentNode.animationType === "timeout")
           {
             clearTimeout(programNode.titleNode.isAnimating);
           }
@@ -1220,7 +1217,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           programNode.titleNode.parentNode.style.left = "0px";
         }
         programNode.program = program;
-        if(program.isTheEmptyProgram)
+        if (program.isTheEmptyProgram)
         {
           programNode.startNode.nodeValue = "";
           programNode.titleNode.nodeValue = "- " + Translator.translate("No program") + " -";
@@ -1228,12 +1225,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         }
         else
         {
-          startDate = new Date(program.start*1000);
+          startDate = new Date(program.start * 1000);
           programNode.startNode.nodeValue = Settings.getHHMM(startDate);
           programNode.titleNode.parentNode.removeAttribute("title");
           for (locale in program.title)
           {
-            if(program.title.hasOwnProperty(locale))
+            if (program.title.hasOwnProperty(locale))
             {
               programNode.titleNode.nodeValue = program.title[locale]; // just pick the first translation and then break
               break;
@@ -1274,32 +1271,32 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @param {array} programs The programs for a specific date.
    * @param {object} [when] Current date.
    */
-  function fillDayView (programs, when)
+  function fillDayView(programs, when)
   {
     try
     {
       var i, length, programsLength, stopDate, currentNode, limit, pNode;
       
-      if(!when)
+      if (!when)
       {
         when = new Date();
       }
-      if(programs && programs.length > 0)
+      if (programs && programs.length > 0)
       {
-        if(dayViewDiv.childNodes && dayViewDiv.childNodes.length > 0)
+        if (dayViewDiv.childNodes && dayViewDiv.childNodes.length > 0)
         {
           // reuse child nodes
           length = dayViewDiv.childNodes.length;
           programsLength = programs.length;
-          if(length > programsLength)
+          if (length > programsLength)
           {
-            for(i = 0; i < length; i += 1)
+            for (i = 0; i < length; i += 1)
             {
-              if(i < programsLength)
+              if (i < programsLength)
               {
                 updateProgramNode(dayViewDiv.childNodes[i], programs[i]);
-                stopDate = new Date(programs[i].stop*1000);
-                if(stopDate < when)
+                stopDate = new Date(programs[i].stop * 1000);
+                if (stopDate < when)
                 {
                   dayViewDiv.childNodes[i].setAttribute("class", "program");
                 }
@@ -1320,7 +1317,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                   dayViewDiv.childNodes[i].hdSymbolNode.style.display = "none";
                 }
                 dayViewDiv.childNodes[i].style.display = "block";
-                if(showFtScore)
+                if (showFtScore)
                 {
                   ftAddToQueue(dayViewDiv.childNodes[i]);
                   Filmtipset.getScore(dayViewDiv.childNodes[i].program);
@@ -1340,16 +1337,16 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
               
             }
           }
-          else if(programsLength > length)
+          else if (programsLength > length)
           {
-            for(i = 0; i < programsLength; i += 1)
+            for (i = 0; i < programsLength; i += 1)
             {
-              if(i < length)
+              if (i < length)
               {
                 updateProgramNode(dayViewDiv.childNodes[i], programs[i]);
                 dayViewDiv.childNodes[i].style.display = "block";
-                stopDate = new Date(programs[i].stop*1000);
-                if(stopDate < when)
+                stopDate = new Date(programs[i].stop * 1000);
+                if (stopDate < when)
                 {
                   dayViewDiv.childNodes[i].setAttribute("class", "program");
                 }
@@ -1365,7 +1362,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
               else
               {
                 pNode = UIcreator.createProgramNode(programs[i], ProgramInfo, showHDsymbol, showFtScore);
-                if(showFtScore)
+                if (showFtScore)
                 {
                   ftAddToQueue(pNode);
                   Filmtipset.getScore(pNode.program);
@@ -1376,7 +1373,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
                 }
                 dayViewDiv.appendChild(pNode);
                 stopDate = new Date(programs[i].stop * 1000);
-                if(stopDate < when)
+                if (stopDate < when)
                 {
                   dayViewDiv.childNodes[i].setAttribute("class", "program");
                 }
@@ -1402,11 +1399,11 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           }
           else 
           {
-            for(i = 0; i < length; i += 1)
+            for (i = 0; i < length; i += 1)
             {
               updateProgramNode(dayViewDiv.childNodes[i], programs[i]);
-              stopDate = new Date(programs[i].stop*1000);
-              if(stopDate < when)
+              stopDate = new Date(programs[i].stop * 1000);
+              if (stopDate < when)
               {
                 dayViewDiv.childNodes[i].setAttribute("class", "program");
                 dayViewDiv.childNodes[i].durationNode.nodeValue = "";
@@ -1432,13 +1429,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
             }
           }
         }
-        else if(programs.length > 0)
+        else if (programs.length > 0)
         {
           length = programs.length;
-          for(i = 0; i < length; i += 1)
+          for (i = 0; i < length; i += 1)
           {
             pNode = UIcreator.createProgramNode(programs[i], ProgramInfo, showHDsymbol, showFtScore);
-            if(showFtScore)
+            if (showFtScore)
             {
               ftAddToQueue(pNode);
               Filmtipset.getScore(pNode.program);
@@ -1448,8 +1445,8 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
               pNode.ftScoreNode.style.display = "none";
             }
             dayViewDiv.appendChild(pNode);
-            stopDate = new Date(programs[i].stop*1000);
-            if(stopDate < when)
+            stopDate = new Date(programs[i].stop * 1000);
+            if (stopDate < when)
             {
               dayViewDiv.childNodes[i].setAttribute("class", "program");
             }
@@ -1505,14 +1502,14 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @private
    * @param {object} channelNode Node of channel that was clicked.
    */
-  function switchView (channelNode)
+  function switchView(channelNode)
   {
     try
     {
       ProgramInfo.hide();
-      if(channelNode)
+      if (channelNode)
       {
-        if(currentView === 0 || (currentView === 1 && channelNode !== dayViewNode))
+        if (currentView === 0 || (currentView === 1 && channelNode !== dayViewNode))
         {
           dimAllChannelNodesExcept(channelNode, false);
           currentView = 1; // Day view
@@ -1530,7 +1527,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         }
         updateTopBar(channelNode.channelID);
       }
-      else if(currentView !== 0) // current view is not now next later
+      else if (currentView !== 0) // current view is not now next later
       {
         //dayViewDiv.style.display = "none";
         dayViewDiv.style.opacity = "0";
@@ -1555,19 +1552,19 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @param {object} event The event (mouse up).
    * @param {object} channelNode The channelNode that the mouse has been released at.
    */
-  function stopChannelDrag (event, channelNode)
+  function stopChannelDrag(event, channelNode)
   {
     try
     {
       stopEvent(event);
-      if(dragElement)
+      if (dragElement)
       {
-        if(channelNode && dragElement !== channelNode)
+        if (channelNode && dragElement !== channelNode)
         {
           channelNode.hasBeenDragged = true;
           switchChannelNodes(channelNode);
         }
-        if(dragElement.hasBeenDragged)
+        if (dragElement.hasBeenDragged)
         {
           delete dragElement.hasBeenDragged;
           saveCurrentChannelOrder(); // save changes
@@ -1596,7 +1593,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @param {string} channelID ID of the channel that should be shown in this container.
    * @return {object} An element (div tag) containing a logo and three program titles.
    */
-  function createChannelNode (channelID) 
+  function createChannelNode(channelID) 
   {
     try
     {
@@ -1608,7 +1605,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       channelFound;
       
       channelNode = channelNodes[channelID];
-      if(channelNode)
+      if (channelNode)
       {
         return channelNode; // No need to create a node for the same channelID twice
       }
@@ -1618,10 +1615,10 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         channelNode.channelID = channelID;
         channelNode.setAttribute("class", "channelnode");
         channel = Settings.getChannel(channelID);
-        if(channel)
+        if (channel)
         {
           channelFound = true;
-          //if(channel.icon)
+          //if (channel.icon)
           //{
             
           /*}
@@ -1639,9 +1636,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         
         logo = document.createElement("img");
         logo.setAttribute("src", File.getHomePath() + "Library/Xmltv/logos/" + channelID + ".png");
-        logo.addEventListener("error", function(){couldNotFindLogo(channelID);}, false);
+        logo.addEventListener("error", function ()
+        {
+          couldNotFindLogo(channelID);
+        }, false);
         logo.setAttribute("class", "logo");
-        if(channelFound && channel.displayName && channel.displayName.sv)
+        if (channelFound && channel.displayName && channel.displayName.sv)
         {
           logo.setAttribute("title", channel.displayName.sv + ". " + Translator.translate("Click to show more programs, press and drag to move."));
         }
@@ -1657,7 +1657,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         channelNode.appendChild(textNode);
         
         tempScalableContainer = UIcreator.createScalableContainer("onechannel", channelNode, "bakgrund.png", currentChannelListIndex);
-        if(channelNode.logo)
+        if (channelNode.logo)
         {
           tempScalableContainer.logo = channelNode.logo;
           delete channelNode.logo;
@@ -1665,17 +1665,29 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         channelNodes[channelID] = tempScalableContainer;
         tempScalableContainer.channelID = channelID;
         tempScalableContainer.programsNode = textNode;
-        logo.addEventListener("mousedown", function(event){startChannelDrag(event, tempScalableContainer);}, false);
-        tempScalableContainer.addEventListener("mouseover", function(event){continueChannelDrag(event, tempScalableContainer);}, false);
-        tempScalableContainer.addEventListener("mouseup", function(event){stopChannelDrag(event, tempScalableContainer);}, false);
+        logo.addEventListener("mousedown", function (event)
+        {
+          startChannelDrag(event, tempScalableContainer);
+        }, false);
+        tempScalableContainer.addEventListener("mouseover", function (event)
+        {
+          continueChannelDrag(event, tempScalableContainer);
+        }, false);
+        tempScalableContainer.addEventListener("mouseup", function (event)
+        {
+          stopChannelDrag(event, tempScalableContainer);
+        }, false);
         
-        if(!channelFound)
+        if (!channelFound)
         {
           tempScalableContainer.programsNode.appendChild(document.createTextNode(Translator.translate("Channel with id") + " " + channelID + " " + Translator.translate("was not found :-( It might have been renamed.")));
           tempScalableContainer.programsNode.appendChild(document.createElement("span"));
           tempScalableContainer.programsNode.lastChild.setAttribute("class", "phantomChannelWarning");
           tempScalableContainer.programsNode.lastChild.style.textDecoration = "underline !important";
-          tempScalableContainer.programsNode.lastChild.addEventListener("click", function() { deletePhantomChannel(channelID); }, false);
+          tempScalableContainer.programsNode.lastChild.addEventListener("click", function ()
+          {
+            deletePhantomChannel(channelID);
+          }, false);
           tempScalableContainer.programsNode.lastChild.appendChild(document.createTextNode(" " + Translator.translate("Click to remove.")));
         }
         
@@ -1696,7 +1708,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @description Shows existing channel nodes and creates new ones (if needed) after returning from backside.
    * @private
    */
-  function showChannelNodes () 
+  function showChannelNodes() 
   {
     try
     {
@@ -1710,17 +1722,17 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       channelList = Settings.getChannelList(currentChannelListIndex);
       hideDuration = (Settings.getPreference("hideDuration") === "yes");
       
-      if(channelList && channelList.ordered)
+      if (channelList && channelList.ordered)
       {
         orderedList = channelList.ordered;
         
         for (index in orderedList)
         {
-          if(orderedList.hasOwnProperty(index))
+          if (orderedList.hasOwnProperty(index))
           {
             channelID = orderedList[index];
             channelNode = channelNodes[channelID];
-            if(!channelNode) // Channel was just added
+            if (!channelNode) // Channel was just added
             {
               //Debug.inform("Creating channelNode for channelID " + channelID);
               channelNode = createChannelNode(channelID); 
@@ -1743,7 +1755,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @description Updates the front side (reloads programs).
    * @private
    */
-  function update () 
+  function update() 
   {
     try
     {
@@ -1765,12 +1777,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @description Starts the update timer.
    * @private
    */
-  function startUpdateInterval () 
+  function startUpdateInterval() 
   {
     try
     {
       var millisecondsLeftToFullMinute;
-      if(updateInterval)
+      if (updateInterval)
       {
         stopUpdateInterval();
       }
@@ -1778,9 +1790,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         updateInterval = {};
         millisecondsLeftToFullMinute = new Date();
-        millisecondsLeftToFullMinute = 61000 - (millisecondsLeftToFullMinute.getSeconds()*1000 + millisecondsLeftToFullMinute.getMilliseconds());
+        millisecondsLeftToFullMinute = 61000 - (millisecondsLeftToFullMinute.getSeconds() * 1000 + millisecondsLeftToFullMinute.getMilliseconds());
         updateInterval.type = "timeout";
-        updateInterval.timeout = setTimeout(function()
+        updateInterval.timeout = setTimeout(function ()
           {
             updateInterval.type = "interval";
             updateInterval.interval = setInterval(update, 60000);
@@ -1804,147 +1816,147 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @private
    * @param {object} event Keypress event.
    */
-  function keyHandler (event)
+  function keyHandler(event)
   {
     try
     {
-      if(event && visible)
+      if (event && visible)
       {
         switch (event.keyCode) {
-          case key.N_ZERO:
-          case key.ZERO:
-            if (event.metaKey)
+        case key.N_ZERO:
+        case key.ZERO:
+          if (event.metaKey)
+          {
+            Settings.setCurrentChannelListIndex(9);
+            that.onShow();
+          }
+          else
+          {
+            addKeyToHistory(0);
+          }
+          break;
+      	case key.ONE:
+        case key.TWO:
+        case key.THREE:
+        case key.FOUR:
+        case key.FIVE:
+        case key.SIX:
+        case key.SEVEN:
+        case key.EIGHT:
+        case key.NINE:
+          if (event.metaKey)
+          {
+            Settings.setCurrentChannelListIndex(event.keyCode - key.ONE);
+            that.onShow();
+          }
+          else
+          {
+            addKeyToHistory(event.keyCode - key.ZERO);
+          }
+          break;
+        case key.N_ONE:
+        case key.N_TWO:
+        case key.N_THREE:
+        case key.N_FOUR:
+        case key.N_FIVE:
+        case key.N_SIX:
+        case key.N_SEVEN:
+        case key.N_EIGHT:
+        case key.N_NINE:
+          if (event.metaKey)
+          {
+            Settings.setCurrentChannelListIndex(event.keyCode - key.N_ONE);
+            that.onShow();
+          }
+          else
+          {
+            addKeyToHistory(event.keyCode - key.N_ZERO);
+          }
+          break;
+        case key.BACKSPACE:
+          if (!updateInterval)
+          {
+            update();
+            startUpdateInterval();
+          }
+          break;
+        case key.ARROW_UP:
+          if (ProgramInfo.isVisible())
+          {
+            ProgramInfo.scroll(false, false, 10);
+          }
+          else
+          {
+            scrollFront(event, Math.round(overviewDiv.offsetHeight * 0.1));
+          }
+          if (event.preventDefault)
+          {
+            event.preventDefault();
+          }
+          break;
+        case key.ARROW_DOWN:
+          if (ProgramInfo.isVisible())
+          {
+            ProgramInfo.scroll(false, false, -10);
+          }
+          else
+          {
+            scrollFront(event, -1 * Math.round(overviewDiv.offsetHeight * 0.1));
+          }
+          if (event.preventDefault)
+          {
+            event.preventDefault();
+          }
+          break;
+        case key.COMMA:
+          if (visible && event.metaKey)
+          {
+            that.goToBack(event);
+          }
+          break;
+        case key.SPACE:
+          if (ProgramInfo.isVisible())
+          {
+            if (event.shiftKey)
             {
-              Settings.setCurrentChannelListIndex(9);
-              that.onShow();
+              ProgramInfo.scroll(false, false, 40);
             }
             else
             {
-              addKeyToHistory(0);
+              ProgramInfo.scroll(false, false, -40);
             }
-            break;
-        	case key.ONE:
-          case key.TWO:
-          case key.THREE:
-          case key.FOUR:
-          case key.FIVE:
-          case key.SIX:
-          case key.SEVEN:
-          case key.EIGHT:
-          case key.NINE:
-            if (event.metaKey)
+          }
+          else if (event.shiftKey)
+          {
+            scrollFront(event, Math.round(scrollFrame.offsetHeight / 2));
+          }
+          else
+          {
+            scrollFront(event, -Math.round(scrollFrame.offsetHeight / 2));
+          }
+          if (event.preventDefault)
+          {
+            event.preventDefault();
+          }
+          break;
+        case key.T:
+          if (visible)
+          {
+            stopUpdateInterval();
+            UIcreator.resetAllDataNodes();
+            if (event.altKey)
             {
-              Settings.setCurrentChannelListIndex(event.keyCode - key.ONE);
-              that.onShow();
+              Debug.inform("Front.keyHandler: Trying to force update grabber...");
+              Settings.updateGrabber(true, that.onShow, startUpdateInterval);
             }
             else
             {
-              addKeyToHistory(event.keyCode - key.ZERO);
+              Settings.runGrabber(true, that.onShow, startUpdateInterval);
             }
-            break;
-          case key.N_ONE:
-          case key.N_TWO:
-          case key.N_THREE:
-          case key.N_FOUR:
-          case key.N_FIVE:
-          case key.N_SIX:
-          case key.N_SEVEN:
-          case key.N_EIGHT:
-          case key.N_NINE:
-            if (event.metaKey)
-            {
-              Settings.setCurrentChannelListIndex(event.keyCode - key.N_ONE);
-              that.onShow();
-            }
-            else
-            {
-              addKeyToHistory(event.keyCode - key.N_ZERO);
-            }
+          }
           break;
-          case key.BACKSPACE:
-            if(!updateInterval)
-            {
-              update();
-              startUpdateInterval();
-            }
-          break;
-          case key.ARROW_UP:
-            if (ProgramInfo.isVisible())
-            {
-              ProgramInfo.scroll(false, false, 10);
-            }
-            else
-            {
-              scrollFront(event, Math.round(overviewDiv.offsetHeight * 0.1));
-            }
-            if (event.preventDefault)
-            {
-              event.preventDefault();
-            }
-          break;
-          case key.ARROW_DOWN:
-            if (ProgramInfo.isVisible())
-            {
-              ProgramInfo.scroll(false, false, -10);
-            }
-            else
-            {
-              scrollFront(event, -1 * Math.round(overviewDiv.offsetHeight * 0.1));
-            }
-            if (event.preventDefault)
-            {
-              event.preventDefault();
-            }
-          break;
-          case key.COMMA:
-            if(visible && event.metaKey)
-            {
-              that.goToBack(event);
-            }
-          break;
-          case key.SPACE:
-            if (ProgramInfo.isVisible())
-            {
-              if (event.shiftKey)
-              {
-                ProgramInfo.scroll(false, false, 40);
-              }
-              else
-              {
-                ProgramInfo.scroll(false, false, -40);
-              }
-            }
-            else if (event.shiftKey)
-            {
-              scrollFront(event, Math.round(scrollFrame.offsetHeight / 2));
-            }
-            else
-            {
-              scrollFront(event, -Math.round(scrollFrame.offsetHeight / 2));
-            }
-            if (event.preventDefault)
-            {
-              event.preventDefault();
-            }
-          break;
-          case key.T:
-            if(visible)
-            {
-              stopUpdateInterval();
-              UIcreator.resetAllDataNodes();
-              if (event.altKey)
-              {
-                Debug.inform("Front.keyHandler: Trying to force update grabber...");
-                Settings.updateGrabber(true, that.onShow, startUpdateInterval);
-              }
-              else
-              {
-                Settings.runGrabber(true, that.onShow, startUpdateInterval);
-              }
-            }
-          break;
-        	default:
-        	  //Debug.inform("Front.keyHandler: event.keyCode = " + event.keyCode);
+      	default:
+      	  //Debug.inform("Front.keyHandler: event.keyCode = " + event.keyCode);
           break;
         }
       }
@@ -1963,24 +1975,24 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @private
    * @param {object} event Key event.
    */
-  function repeatKeyHandler (event)
+  function repeatKeyHandler(event)
   {
     try
     {
-      if(event)
+      if (event)
       {
-        switch(event.keyCode)
+        switch (event.keyCode)
         {
-          case 63232:
-            event.keyCode = key.ARROW_UP;
-            keyHandler(event);
+        case 63232:
+          event.keyCode = key.ARROW_UP;
+          keyHandler(event);
           break;
-          case 63233:
-            event.keyCode = key.ARROW_DOWN;
-            keyHandler(event);
+        case 63233:
+          event.keyCode = key.ARROW_DOWN;
+          keyHandler(event);
           break;
-          default:
-           // ignore
+        default:
+         // ignore
           break;
         }
       }
@@ -1998,7 +2010,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @description Creates all elements and text nodes on the front side of the widget and then appends the elements to frontDiv.
    * @private
    */
-  function create () 
+  function create() 
   {
     try
     {
@@ -2044,7 +2056,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @param {string} channelID ID of the channel that should reload programs.
    * @param {array} programs The programs that are to be shown.
    */
-  function reloadProgramsForChannel (channelID, programs, when)
+  function reloadProgramsForChannel(channelID, programs, when)
   {
     try
     {
@@ -2059,18 +2071,18 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       duration;
       
       channelNode = channelNodes[channelID];
-      if(channelNode && programs)
+      if (channelNode && programs)
       {
         channelNode = channelNode.programsNode;
-        if(channelNode.childNodes.length === programs.length && !channelNode.hadNoProgramsNode)
+        if (channelNode.childNodes.length === programs.length && !channelNode.hadNoProgramsNode)
         {
-          for(i = 0; i < programs.length; i += 1)
+          for (i = 0; i < programs.length; i += 1)
           {
             program = programs[i];
             updateProgramNode(channelNode.childNodes[i], program);
-            if(i === 0)
+            if (i === 0)
             {
-              if(program.isTheEmptyProgram || hideDuration)
+              if (program.isTheEmptyProgram || hideDuration)
               {
                 channelNode.childNodes[i].durationNode.nodeValue = "";
               }
@@ -2108,7 +2120,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         {
           channelNode.hadNoProgramsNode = undefined;
           UIcreator.removeChildNodes(channelNode);
-          for(i = 0; i < programs.length; i += 1)
+          for (i = 0; i < programs.length; i += 1)
           {
             program = programs[i];
             pNode = UIcreator.createProgramNode(program, ProgramInfo, showHDsymbol, showFtScore, isNowNextLater);
@@ -2122,9 +2134,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
               pNode.ftScoreNode.style.display = "none";
             }
             channelNode.appendChild(pNode);
-            if(i === 0)
+            if (i === 0)
             {
-              if(program.isTheEmptyProgram || hideDuration)
+              if (program.isTheEmptyProgram || hideDuration)
               {
                 channelNode.childNodes[i].durationNode.nodeValue = "";
               }
@@ -2140,7 +2152,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
               channelNode.childNodes[i].durationNode.nodeValue = "";
             }
           }
-          if(channelNode.firstChild)
+          if (channelNode.firstChild)
           {
             channelNode.firstChild.setAttribute("class", "program currentprogram");
           }
@@ -2150,7 +2162,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       {
         Debug.alert(channelID + ": Can't reload programs!");
       }
-   }
+    }
     catch (error)
     {
       Debug.alert("Error in front.reloadProgramsForChannel: " + error + " (channelID = " + channelID + ", programs = " + programs + ")");
@@ -2165,7 +2177,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @private
    * @param {string} channelID ID of the channel that is waiting for an update.
    */
-  function reloadProgramsForChannelFailed (channelID, when)
+  function reloadProgramsForChannelFailed(channelID, when)
   {
     try
     {
@@ -2173,7 +2185,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       now = new Date(),
       whenCopy = when,
       pNode;
-      if(typeof channelID !== "undefined")
+      if (typeof channelID !== "undefined")
       {
         Debug.warn("front.reloadProgramsForChannelFailed: could not reload programs for channel with id " + channelID + "! channelNodes[" + channelID + "] = " + channelNodes[channelID]);
       }
@@ -2183,7 +2195,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         {
           channelNode = channelNode.programsNode;
           UIcreator.removeChildNodes(channelNode);
-          pNode = UIcreator.createProgramInfoMissingNode(function()
+          pNode = UIcreator.createProgramInfoMissingNode(function ()
           {
             stopUpdateInterval();
             Settings.runGrabber(true, that.onShow, startUpdateInterval);
@@ -2209,14 +2221,14 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
    * @description Hides all channelNodes when going to the backside, in case we add or remove a channel.
    * @private
    */
-  function hideChannelNodes ()
+  function hideChannelNodes()
   {
     try
     {
       var i,
       length;
       
-      while(overviewDiv.lastChild && overviewDiv.lastChild !== overviewDiv.dayViewNode)
+      while (overviewDiv.lastChild && overviewDiv.lastChild !== overviewDiv.dayViewNode)
       {
         overviewDiv.removeChild(overviewDiv.lastChild);
       }
@@ -2253,9 +2265,9 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
      * @function init
      * @description Initializes the singleton and saves the this-object.
      */
-    init: function()
+    init: function ()
     {
-      if(!that)
+      if (!that)
       {
         that = this;
       }
@@ -2279,12 +2291,12 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         stopUpdateInterval();
         showHDsymbol = (Settings.getPreference("showHDsymbol") === "yes");
         showFtScore = Filmtipset.isEnabled();
-        if(!backDiv)
+        if (!backDiv)
         {
           backDiv = document.getElementById("back");
         }
         
-        if(!dontAnimate)
+        if (!dontAnimate)
         {
           if (window.widget) 
           {
@@ -2296,7 +2308,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         }
         else
         {
-          if(window.widget)
+          if (window.widget)
           {
             Settings.resizeTo(width, height); // calculate how many channels there are and then resize
           } 
@@ -2310,7 +2322,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           toBack = toBackMethod;
         }
 
-        if(!frontDiv)
+        if (!frontDiv)
         {
           frontDiv = document.getElementById("front");
           create();
@@ -2326,11 +2338,15 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         updateClock(new Date());
         that.resize();
         
-        frontDiv.style.display="block";
+        frontDiv.style.display = "block";
         visible = true;
-        if(!dontAnimate && window.widget)
+        if (!dontAnimate && window.widget)
         {
-          setTimeout(function(){window.widget.performTransition(); startUpdateInterval();}, 300);
+          setTimeout(function ()
+          {
+            window.widget.performTransition();
+            startUpdateInterval();
+          }, 300);
         }
       }
       catch (error)
@@ -2388,7 +2404,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
       try
       {
         stopEvent(event);
-        if(toBack)
+        if (toBack)
         {
           switchView(); // in case we are in day view, switch back to now next later.
           hideChannelNodes();
@@ -2424,13 +2440,13 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         tooTallForScreen = false;
         
         currentChannelList = Settings.getChannelList(currentChannelListIndex);
-        if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
+        if (currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
         {
           //Debug.inform("number of channels in list " + currentChannelListIndex + ": " + currentChannelList.ordered.length);
           height = 80 + currentChannelList.ordered.length * 38;
           numChannels = currentChannelList.ordered.length;
           channelListHeight = height;
-          overviewDivHeight = ((channelListHeight / 10 ) - 8) + "em";
+          overviewDivHeight = ((channelListHeight / 10) - 8) + "em";
           while (channelListHeight > screen.height)
           {
             tooTallForScreen = true;
@@ -2439,7 +2455,7 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
           channelListHeight -= 80;
           channelListHeight = channelListHeight / 10;
           //Debug.inform("channelListHeight = " + channelListHeight);
-          if(channelListHeight < 0)
+          if (channelListHeight < 0)
           {
             channelListHeight = 0;
           }
@@ -2491,31 +2507,47 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         channelID,
         channelNode;
         
-      	if(!when)
+      	if (!when)
       	{
       		when = new Date();
       	}
-      	if(!skipUpdate)
+      	if (!skipUpdate)
       	{
       	  updateClock(when);
       	}
       	
       	currentChannelList = Settings.getChannelList(currentChannelListIndex);
-      	if(currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
+      	if (currentChannelList && currentChannelList.ordered && currentChannelList.ordered.length > 0)
         {
         	currentChannelList = currentChannelList.hashed;
         	for (channelID in currentChannelList)
         	{
-        	  if(currentChannelList.hasOwnProperty(channelID)) 
+        	  if (currentChannelList.hasOwnProperty(channelID)) 
         	  {
         	    channelNode = channelNodes[channelID];
-        	    if(Settings.getChannel(channelID)) // Only try to download programs from channels that are present in channels.js
+        	    if (Settings.getChannel(channelID)) // Only try to download programs from channels that are present in channels.js
         	    {
           	  	channelNode = channelNodes[channelID];
-          	  	if(channelNode && channelNode.isVisible && channelNode.contents)
+          	  	if (channelNode && channelNode.isVisible && channelNode.contents)
           	  	{
           	  	  //Debug.inform("reloading programs for channelID " + channelID + " (but channelNode.channelID = " + channelNode.channelID + ")");
-          	      Settings.getProgramsForChannel(channelID, function(theID, when){return function(thePrograms){reloadProgramsForChannel(theID, thePrograms, when);};}(channelID, when), function(theID){ return function(){reloadProgramsForChannelFailed(theID, when);};}(channelID), 3, when);
+          	      Settings.getProgramsForChannel(channelID,
+          	      function (theID, when)
+          	      {
+          	        return function (thePrograms)
+          	        {
+          	          reloadProgramsForChannel(theID, thePrograms, when);
+          	        };
+          	      }(channelID, when),
+          	      function (theID)
+          	      {
+          	        return function ()
+          	        {
+          	          reloadProgramsForChannelFailed(theID, when);
+          	        };
+          	      }(channelID),
+          	      3,
+          	      when);
           	  	}
         	    }
         	    else
@@ -2548,17 +2580,17 @@ EPG.front = function(Debug, Growl, Settings, Skin, Translator, UIcreator, File, 
         
         for (index in channelNodes)
         {
-          if(channelNodes.hasOwnProperty(index))
+          if (channelNodes.hasOwnProperty(index))
           {
             channelNode = channelNodes[index];
-            if(channelNode && channelNode.logo)
+            if (channelNode && channelNode.logo)
             {
             	logo = channelNode.logo;
             	src = logo.getAttribute("src");
-            	if(src)
+            	if (src)
             	{
             	  logo.removeAttribute("src");
-            	  logo.setAttribute("src", ""+src);
+            	  logo.setAttribute("src", "" + src);
             	}
             }
           }
