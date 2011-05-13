@@ -1,23 +1,6 @@
-/*jslint adsafe:false, 
- bitwise: true, 
- browser:true, 
- cap:false, 
- debug:false,
- eqeqeq: true,
- evil: false,
- fragment:false, 
- laxbreak:false, 
- nomen:true, 
- passfail:false, 
- plusplus:true, 
- rhino:false, 
- undef:true, 
- white:false, 
- widget:false */
+/*global EPG*/
 
-/*extern EPG*/
-
-if(!EPG)
+if (!EPG)
 {
   var EPG = {};
 }
@@ -36,12 +19,12 @@ EPG.translator = function(debug)
   return {
     init: function()
     {
-      if(!that)
+      if (!that)
       {
         that = this;
       }
       
-      delete init;
+      delete that.init;
     },
     
     translate: function (string)
@@ -49,7 +32,7 @@ EPG.translator = function(debug)
       try
       {
         string = "" + string;
-        if(string && localizedStrings[string])
+        if (string && localizedStrings[string])
         {
           return localizedStrings[string];
         }
