@@ -1,28 +1,11 @@
-/*jslint adsafe:false, 
- bitwise: true, 
- browser:true, 
- cap:false, 
- debug:false,
- eqeqeq: true,
- evil: false,
- fragment:false, 
- laxbreak:false, 
- nomen:true, 
- passfail:false, 
- plusplus:true, 
- rhino:false, 
- undef:true, 
- white:false, 
- widget:false */
+/*global EPG*/
 
-/*extern EPG*/
-
-if(!EPG)
+if (!EPG)
 {
   var EPG = {};
 }
 
-EPG.translator = function(debug)
+EPG.translator = function (debug)
 {
   // Private Variables
   var that,
@@ -50,7 +33,7 @@ EPG.translator = function(debug)
   localizedStrings["No description."] = "Beskrivning saknas.";
   localizedStrings["Click to open description."] = "Klicka för att öppna beskrivning.";
   localizedStrings["Click to open description, use mousewheel/trackpad to scroll description."] = "Klicka för att läsa beskrivning, använd scrollhjul/pekplatta för att scrolla beskrivning.";
-  localizedStrings["Duration"] = "Längd";
+  localizedStrings.Duration = "Längd";
   localizedStrings["\u00A0left"] = "\u00A0kvar";
   localizedStrings["starts\u00A0in"] = "börjar\u00A0om";
   localizedStrings.ended = "slutade\u00A0för";
@@ -65,7 +48,7 @@ EPG.translator = function(debug)
   localizedStrings.hr = localizedStrings.hrs = "tim";
   localizedStrings["Update available!"] = "Uppdatering tillgänglig!";
   localizedStrings["Skin:"] = "Utseende:";
-  localizedStrings["Plastic"] = "Plast";
+  localizedStrings.Plastic = "Plast";
   localizedStrings["Click to remove."] = "Klicka för att ta bort";
   localizedStrings["Show [HD] after HD programs."] = "Visa [HD] efter HD-program.";
   localizedStrings["Channel list download failed :-( Please check that your internet connection works. If you're using Little Snitch, make sure both EPG and the grabber is permitted to access the Internet."] = "Lyckades inte ladda ner kanallistan\u00A0:-( Kontrollera att din internetuppkoppling fungerar. Om du använder Little Snitch, säkerställ att både EPG och tablånedladdaren har tillåtelse att gå ut på Internet.";
@@ -101,9 +84,9 @@ EPG.translator = function(debug)
   
   // Public methods
   return {
-    init: function()
+    init: function ()
     {
-      if(!that)
+      if (!that)
       {
         that = this;
       }
@@ -116,7 +99,7 @@ EPG.translator = function(debug)
       try
       {
         string = "" + string;
-        if(string && localizedStrings[string])
+        if (string && localizedStrings[string])
         {
           return localizedStrings[string];
         }
