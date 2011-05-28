@@ -1336,14 +1336,14 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         "svt2.svt.se",
         "svt24.svt.se",
         "tv3.viasat.se",
-        "hd.svt.se",
         "tv4.se",
         "plus.tv4.se",
         "kanal5.se",
         "kanal9.se",
         "tv6.viasat.se",
-        "tv7.nu",
-        "kunskapskanalen.svt.se"
+        "kunskapskanalen.svt.se",
+        "tv10.viasat.se",
+        "tv11.tv4.se"
       ]);
       groupChannels("Documentaries & nature", 
       [
@@ -1353,22 +1353,20 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         "explorer.viasat.se",
         "world.discovery.com",
         "history.viasat.se",
-        "hd.discovery.com",
-        "nature.viasat.se",
-        "nordic.travel.discovery.com",
+        "showcasehd.discovery.com",
         "nordic.animalplanet.discovery.com",
         "fakta.tv4.se",
         "axess.se",
         "ngcsverige.com",
-        "hd.ngcsverige.com"
+        "hd.ngcsverige.com",
+        "nature-crime.viasat.se",
+        "tlc.discovery.com"
       ]);
       groupChannels("Movies", 
       [
         "film.tv4.se",
         "tv1000.viasat.se",
         "action.canalplus.se",
-        "plus-1.tv1000.viasat.se",
-        "comedy.canalplus.se",
         "action.tv1000.viasat.se",
         "drama.canalplus.se",
         "classic.tv1000.viasat.se",
@@ -1378,10 +1376,15 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         "hd.tv1000.viasat.se",
         "hits.canalplus.se",
         "nordic.tv1000.viasat.se",
-        "sf.canalplus.se",
+        "series.canalplus.se",
         "drama.tv1000.viasat.se",
-        "sport1sf.canalplus.se",
-        "hits-sport-weekend.canalplus.se"
+        "extra1.canalplus.se",
+        "extra2.canalplus.se",
+        "extra3.canalplus.se",
+        "extra4.canalplus.se",
+        "extrahd.canalplus.se",
+        "hits-boxer.canalplus.se",
+        "sf.canalplus.se"
       ]);
       groupChannels("Sport", 
       [
@@ -1389,7 +1392,6 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         "sport.tv4.se",
         "eurosport2.eurosport.com",
         "fotboll.viasat.se",
-        "se.nasn.com",
         "golf.viasat.se",
         "sport1.canalplus.se",
         "hockey.viasat.se",
@@ -1398,7 +1400,11 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         "sport-extra.canalplus.se",
         "sport.viasat.se",
         "sporthd.canalplus.se",
-        "sporthd.viasat.se"
+        "motorhd.viasat.se",
+        "fotboll.canalplus.se",
+        "fotbollhd.viasat.se",
+        "hockey.canalplus.se",
+        "sport1-sf.canalplus.se"
       ]);
       groupChannels("Children & youth", 
       [ 
@@ -1407,21 +1413,20 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
         "nickelodeon.se",
         "playhouse.disneychannel.se",
         "nordic.mtve.com",
-        "xd.disneychannel.se",
-        "tv400.tv4.se"
+        "xd.disneychannel.se"
       ]
       );
       groupChannels("Music", 
       [
         "vh1.com",
-        "mtv2.mtve.com",
-        "ztv.se",
-        "hd.mtve.com"
+        "hd.mtve.com",
+        "rocks.mtve.com"
       ]);
       groupChannels("Nordic", 
       [
         "dr1.dr.dk",
-        "dr2.dr.dk"
+        "dr2.dr.dk",
+        "hd.dr.dk"
       ]);
       groupChannels("European", 
       [
@@ -1436,26 +1441,21 @@ EPG.back = function(debug, growl, settings, skin, translator, UIcreator, Filmtip
       groupChannels("Other", 
       [
         "guld.tv4.se",
-        "viasat-nature-nick.spa.se",
         "komedi.tv4.se",
         "se.comedycentral.tv",
-        "sf.tv4.se"
+        "sf.tv4.se",
+        "tnt7.nonstop.tv"
       ]);
       groupChannels("PPV",
       [
-        "ppv1.canalplus.se",
-        "ppv8.canalplus.se",
-        "ppv2.canalplus.se",
-        "ppvsport1.canalplus.se",
-        "ppv3.canalplus.se",
-        "ppvsport2.canalplus.se",
-        "ppv4.canalplus.se",
-        "ppvsport3.canalplus.se",
-        "ppv5.canalplus.se",
-        "ppvsport4.canalplus.se",
-        "ppv6.canalplus.se",
-        "ppvsport5.canalplus.se",
-        "ppv7.canalplus.se"
+        "k2.canalplus.se",
+        "k6.canalplus.se",
+        "k3.canalplus.se",
+        "k10.canalplus.se",
+        "k4.canalplus.se",
+        "k11.canalplus.se",
+        "k5.canalplus.se",
+        "k12.canalplus.se"
       ]);
       
       document.addEventListener("keydown", 
