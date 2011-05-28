@@ -1439,6 +1439,8 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
       }
     },
     
+    getYYYYMMDD: getFileDateYYYYMMDD,
+    
     /**
      * @memberOf EPG.settings
      * @function removeOldPrograms
