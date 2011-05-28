@@ -47,6 +47,17 @@
   text-align: center;
 }
 
+#topbardate
+{
+  position: absolute;
+  top: 2.4em;
+  left: 0em;
+  width: 100%;
+  color: inherit;
+  text-align: center;
+  font-size: 0.9em;
+}
+
 #bottombarText
 {
   text-align: left;
