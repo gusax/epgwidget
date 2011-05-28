@@ -137,20 +137,28 @@ EPG.Filmtipset = (function ()
     try
     {
       var i;
-      if (program && program.category && program.category.en && program.category.en.length > 0)
+      if (program)
       {
-        for (i = 0; i < program.category.en.length; i += 1)
+        if (program.category && program.category.en && program.category.en.length > 0)
         {
-          if (program.category.en[i] === "movie")
+          for (i = 0; i < program.category.en.length; i += 1)
           {
-            return true;
+            if (program.category.en[i] === "movie")
+            {
+              return true;
+            }
           }
         }
-      }
-      else if (program && program.credits && program.credits.director)
-      {
-        // SVT does not tag their movies with category movie
-        return true;
+        else if (program.credits && program.credits.director)
+        {
+          // SVT does not tag their movies with category movie
+          return true;
+        }
+        if ((program.stop - program.start) > 5400)
+        { // anything longer than one  and a half hour is considered a movie
+          Debug.alert(program.title + " might be a movie");
+          return true;
+        }
       }
       return false;
     }
@@ -179,11 +187,24 @@ EPG.Filmtipset = (function ()
       if (movies && program && program.title)
       {
         title = program.title.sv.toLowerCase();
-        movie = movies[program.title.sv.toLowerCase()];
-        if (!movie && title.indexOf("the ") === 0)
+        if (title.indexOf("the") === 0)
         {
-          movie = movies[title.substr(4)];
+          title = title.substr(4);
         }
+        else if (title.indexOf("nattfilm:") === 0)
+        {
+          title = title.substr(10);
+        }
+        else if (title.indexOf("filmklubben:") === 0)
+        {
+          title = title.substr(13);
+        }
+        else if (title.indexOf("film:") === 0)
+        {
+          title = title.substr(6);
+        }
+//        Debug.alert("findScore for title " + title);
+        movie = movies[title];
         if (movie)
         {
           if (movie.grade && movie.grade.value * 1 > 0)
@@ -263,6 +284,7 @@ EPG.Filmtipset = (function ()
     try
     {
       FileLoader.downloadFile("\"" + encodeURI(FT_URL + "action=list&id=tv&usernr=" + obj.provides.getUserId()) + "\"", PATH_FILMTIPSET_TV_LIST, onSuccess, findScores, false, true);
+      //Debug.alert(encodeURI(FT_URL + "action=list&id=tv&usernr=" + obj.provides.getUserId()));
     }
     catch (error)
     {
@@ -304,13 +326,26 @@ EPG.Filmtipset = (function ()
         time.setSeconds(second);
         movie.movie.tvInfo.time = time.getTime();
         title = movie.movie.name.toLowerCase();
+        if (title.indexOf("the") === 0)
+        {
+          title = title.substr(4);
+        }
+        else if (title.indexOf("nattfilm:") === 0)
+        {
+          title = title.substr(10);
+        }
+        else if (title.indexOf("filmklubben:") === 0)
+        {
+          title = title.substr(13);
+        }
+        else if (title.indexOf("film:") === 0)
+        {
+          title = title.substr(6);
+        }
         if (!cache[title])
         {
           cache[title] = movie.movie;
-          if (title.indexOf("the ") === 0)
-          {
-            cache[title.substr(4)] = movie.movie;  
-          }
+          //Debug.alert("found filmtipset movie " + title);
         }
       }
     }
@@ -375,7 +410,10 @@ EPG.Filmtipset = (function ()
           Debug.inform("EPG.Filmtipset downloading tv list from Filmtipset and updating cache");
           if (window.widget)
           {
-            downloadTvList(openTvListSuccess);
+            downloadTvList(function ()
+            {
+              FileLoader.open(PATH_FILMTIPSET_TV_LIST, openTvListSuccess, stopUpdate, false, false, false, true);
+            });
           }
           else
           {
