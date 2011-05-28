@@ -399,7 +399,7 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
       if (programInfoNode.program === programWithScore && programInfoNode.program.filmtipsetgrade.value)
       {
         programInfoNode.titleContainer.style.marginRight = "3.7em";
-        programInfoNode.filmtipsetScore.nodeValue = Filmtipset.getStars(programInfoNode.program.filmtipsetgrade);
+        programInfoNode.filmtipsetScore.nodeValue = Filmtipset.getStars(programInfoNode.program.filmtipsetgrade, programInfoNode.program.watched);
       }
     }
     catch (error)

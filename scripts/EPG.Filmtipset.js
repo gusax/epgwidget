@@ -15,6 +15,7 @@ EPG.Filmtipset = (function ()
   BASE_URL = "http://www.filmtipset.se/api/api.cgi?returntype=json&accesskey=",
   ACCESS_KEY = "",
   FT_URL,
+  FT_WATCHED = "\u2713",
   FT_STAR = "\u272D",
   userId,
   callbacks = {},
@@ -256,6 +257,7 @@ EPG.Filmtipset = (function ()
       while (callback.programmes.length > 0)
       {
         program = callback.programmes.pop();
+        program.watched = false;
         if (!cache || (cache && cache.ordered && cache.ordered.length === 0))
         {
           runCallbacks(callbacks[obj.provides.CALLBACK_GET_SCORE].onFailures, program, obj.provides.ERROR_NO_CACHE);
@@ -267,20 +269,25 @@ EPG.Filmtipset = (function ()
           {
             runCallbacks(callbacks[obj.provides.CALLBACK_GET_SCORE].onFailures, program, score);
           }
-          else if (score.filmtipsetgrade && score.filmtipsetgrade.value * 1 > 0)
-          {
-            //Debug.inform("EPG.Filmtipset findScores " + program.title.sv + " found score " + score.grade.value);
-            program.filmtipsetgrade = score.filmtipsetgrade; // score.grade is grade can be set by user. If not, it is calculated. score.filmtipsetgrade is always calculated.
-            program.imdbid = score.imdb;
-            runCallbacks(callbacks[obj.provides.CALLBACK_GET_SCORE].onSuccesses, program);
-          }
           else if (score.grade && score.grade.value * 1 > 0)
           {
             //Debug.inform("EPG.Filmtipset findScores " + program.title.sv + " found score " + score.grade.value);
             program.filmtipsetgrade = score.grade; // score.grade is grade can be set by user. If not, it is calculated. score.filmtipsetgrade is always calculated.
             program.imdbid = score.imdb;
+            if (score.grade.type === "seen")
+            {
+              program.watched = true;
+            }
             runCallbacks(callbacks[obj.provides.CALLBACK_GET_SCORE].onSuccesses, program);
           }
+//          else if (score.filmtipsetgrade && score.filmtipsetgrade.value * 1 > 0)
+//          {
+//            //Debug.inform("EPG.Filmtipset findScores " + program.title.sv + " found score " + score.grade.value);
+//            program.filmtipsetgrade = score.filmtipsetgrade; // score.grade is grade can be set by user. If not, it is calculated. score.filmtipsetgrade is always calculated.
+//            program.imdbid = score.imdb;
+//            program.watched = true;
+//            runCallbacks(callbacks[obj.provides.CALLBACK_GET_SCORE].onSuccesses, program);
+//          }
         }
       }
     }
@@ -444,11 +451,15 @@ EPG.Filmtipset = (function ()
     }
   };
   
-  obj.provides.getStars = function (grade)
+  obj.provides.getStars = function (grade, watched)
   {
     var answer = "";
     if (grade && grade.value)
     {
+      if (watched)
+      {
+        answer += FT_WATCHED;
+      }
       switch (grade.value * 1)
       {
       case 5:

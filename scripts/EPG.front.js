@@ -1109,7 +1109,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
         {
           if (pNode.program.filmtipsetgrade.value * 1 > 0)
           {
-            pNode.ftScoreNode.firstChild.nodeValue = Filmtipset.getStars(pNode.program.filmtipsetgrade);
+            pNode.ftScoreNode.firstChild.nodeValue = Filmtipset.getStars(pNode.program.filmtipsetgrade, pNode.program.watched);
             pNode.ftScoreNode.style.display = "inline";
           }
           else
