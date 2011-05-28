@@ -101,6 +101,18 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
       topBar.appendChild(document.createTextNode("EPG: "));
       topBar.appendChild(document.createTextNode(Translator.translate("overview")));
       topBar.heading = topBar.lastChild;
+      topBar.appendChild(document.createElement("div"));
+      topBar.lastChild.setAttribute("id", "topbardate");
+      topBar.dateContainer = topBar.lastChild;
+      topBar.lastChild.appendChild(document.createElement("span"));
+      topBar.lastChild.lastChild.appendChild(document.createTextNode("<"));
+      topBar.prevDateButton = topBar.lastChild.lastChild.firstChild;
+      topBar.lastChild.appendChild(document.createElement("span"));
+      topBar.lastChild.lastChild.appendChild(document.createTextNode(" 2010-08-10 "));
+      topBar.date = topBar.lastChild.lastChild.firstChild;
+      topBar.lastChild.appendChild(document.createElement("span"));
+      topBar.lastChild.lastChild.appendChild(document.createTextNode(">"));
+      topBar.nextDateButton = topBar.lastChild.lastChild.firstChild;
       topBarContainer = UIcreator.createScalableContainer("topbar", topBar, "uppe.png", currentChannelListIndex);
       topBarContainer.style.width = "27em";
       topBarContainer.style.height = "4.8em";
@@ -510,7 +522,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
    * @private
    * @param {string} channelID ID of active channel (in case of dayview)
    */
-  function updateTopBar(channelID)
+  function updateTopBar(channelID, date)
   {
     try
     {
@@ -520,10 +532,21 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
       {
         topBar.setAttribute("title", "");
         topBar.heading.nodeValue = topBar.heading.overview;
+        if (topBar.dateContainer.top !== "3.4")
+        {
+          topBar.dateContainer.top = "3.4";
+          topBar.dateContainer.style.top = topBar.dateContainer.top + "em";
+        }
       }
       else if (currentView === 1)
       {
         channel = Settings.getChannel(channelID);
+        if (topBar.dateContainer.top !== "2.4")
+        {
+          topBar.dateContainer.top = "2.4";
+          topBar.dateContainer.style.top = topBar.dateContainer.top + "em";
+        }
+        topBar.date.nodeValue = " " + Settings.getYYYYMMDD(date) + " ";
         if (channel && channel.displayName)
         {
           if (channel.displayName.sv)
@@ -546,7 +569,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
         {
           topBar.setAttribute("title", "");
           topBar.heading.nodeValue = Translator.translate("day view");
-        } 
+        }
       }
     }
     catch (error)
@@ -1525,7 +1548,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
           dimAllChannelNodesExcept(channelNode, true);
           currentView = 0; // now next later
         }
-        updateTopBar(channelNode.channelID);
+        updateTopBar(channelNode.channelID, ((currentView === 1) ? new Date() : undefined));
       }
       else if (currentView !== 0) // current view is not now next later
       {
@@ -2015,6 +2038,9 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
     try
     {
       frontDiv.appendChild(createTopBar());
+      topBar.dateContainer.top = "3.4";
+      topBar.dateContainer.style.top = topBar.dateContainer.top + "em";
+      topBar.dateContainer.style.webkitTransition = "top 0.1s ease-out";
       frontDiv.appendChild(document.createElement("div"));
       scrollFrame = frontDiv.lastChild;
       scrollFrame.style.width = "27em";
