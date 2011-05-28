@@ -207,7 +207,11 @@ EPG.Filmtipset = (function ()
         movie = movies[title];
         if (movie)
         {
-          if (movie.grade && movie.grade.value * 1 > 0)
+          if (movie.filmtipsetgrade && movie.filmtipsetgrade.value * 1 > 0)
+          {
+            return movie;
+          }
+          else if (movie.grade && movie.grade.value * 1 > 0)
           {
             return movie;
           }
@@ -262,6 +266,13 @@ EPG.Filmtipset = (function ()
           if (score === obj.provides.ERROR_MOVIE_NOT_FOUND || score === obj.provides.ERROR_MOVIE_HAS_NO_SCORE)
           {
             runCallbacks(callbacks[obj.provides.CALLBACK_GET_SCORE].onFailures, program, score);
+          }
+          else if (score.filmtipsetgrade && score.filmtipsetgrade.value * 1 > 0)
+          {
+            //Debug.inform("EPG.Filmtipset findScores " + program.title.sv + " found score " + score.grade.value);
+            program.filmtipsetgrade = score.filmtipsetgrade; // score.grade is grade can be set by user. If not, it is calculated. score.filmtipsetgrade is always calculated.
+            program.imdbid = score.imdb;
+            runCallbacks(callbacks[obj.provides.CALLBACK_GET_SCORE].onSuccesses, program);
           }
           else if (score.grade && score.grade.value * 1 > 0)
           {
@@ -330,18 +341,7 @@ EPG.Filmtipset = (function ()
         {
           title = title.substr(4);
         }
-        else if (title.indexOf("nattfilm:") === 0)
-        {
-          title = title.substr(10);
-        }
-        else if (title.indexOf("filmklubben:") === 0)
-        {
-          title = title.substr(13);
-        }
-        else if (title.indexOf("film:") === 0)
-        {
-          title = title.substr(6);
-        }
+//        Debug.alert("found filmtipset movie " + title);
         if (!cache[title])
         {
           cache[title] = movie.movie;
