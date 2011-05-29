@@ -208,7 +208,7 @@ EPG.UIcreator = function(Debug, Skin, Translator, Settings, Reminder)
         titleNode.firstChild.lastChild.setAttribute("class", "hdSymbol");
         titleNode.firstChild.lastChild.appendChild(document.createTextNode("[HD]"));
         programNode.hdSymbolNode = titleNode.firstChild.lastChild;
-        if (showHDsymbol && program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("Programmet s\u00e4nds i hd-format.") != -1)
+        if (showHDsymbol)
         {
           programNode.hdSymbolNode.style.display = "inline";
         }

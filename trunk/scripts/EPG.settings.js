@@ -569,6 +569,7 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
           {
             copyIndex = 1;
             foundPrograms[0] = theEmptyProgram;
+            foundPrograms[0].channel = channelID;
           }
           else
           {

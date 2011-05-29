@@ -81,6 +81,25 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
   key.T = 84;
   
   // Private methods
+  function turnOnHDsymbol(program)
+  {
+    try
+    {
+      return !!(showHDsymbol && !program.isTheEmptyProgram && program.channel.indexOf("svt") > -1 && program.desc && program.desc.sv && program.desc.sv.indexOf("HD.") > -1);
+    }
+    catch (error)
+    {
+      var index;
+      for (index in program)
+      {
+        if (program.hasOwnProperty(index))
+        {
+          Debug.alert("program." + index + " = " + program[index]);
+        }
+      }
+      throw error;
+    }
+  }
   /**
    * @memberOf EPG.front
    * @name createTopBar
@@ -1259,7 +1278,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
               break;
             }
           }
-          if (showHDsymbol && program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("S\u00e4nds i HD.") > -1)
+          if (turnOnHDsymbol(program))
           {
             programNode.hdSymbolNode.style.display = "inline";
           }
@@ -1331,7 +1350,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
                   }
                   dayViewDiv.childNodes[i].setAttribute("class", "program upcomingprogram");
                 }
-                if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("S\u00e4nds i HD.") > -1)
+                if (turnOnHDsymbol(programs[i]))
                 {
                   dayViewDiv.childNodes[i].hdSymbolNode.style.display = "inline";
                 }
@@ -1384,7 +1403,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
               }
               else
               {
-                pNode = UIcreator.createProgramNode(programs[i], ProgramInfo, showHDsymbol, showFtScore);
+                pNode = UIcreator.createProgramNode(programs[i], ProgramInfo, turnOnHDsymbol(programs[i]), showFtScore);
                 if (showFtScore)
                 {
                   ftAddToQueue(pNode);
@@ -1410,7 +1429,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
                 }
               }
               dayViewDiv.childNodes[i].durationNode.nodeValue = "";
-              if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("S\u00e4nds i HD.") > -1)
+              if (turnOnHDsymbol(programs[i]))
               {
                 dayViewDiv.childNodes[i].hdSymbolNode.style.display = "inline";
               }
@@ -1441,7 +1460,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
                 dayViewDiv.childNodes[i].durationNode.nodeValue = "";
               }
               dayViewDiv.childNodes[i].style.display = "block";
-              if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("S\u00e4nds i HD.") > -1)
+              if (turnOnHDsymbol(programs[i]))
               {
                 dayViewDiv.childNodes[i].hdSymbolNode.style.display = "inline";
               }
@@ -1457,7 +1476,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
           length = programs.length;
           for (i = 0; i < length; i += 1)
           {
-            pNode = UIcreator.createProgramNode(programs[i], ProgramInfo, showHDsymbol, showFtScore);
+            pNode = UIcreator.createProgramNode(programs[i], ProgramInfo, turnOnHDsymbol(programs[i]), showFtScore);
             if (showFtScore)
             {
               ftAddToQueue(pNode);
@@ -1483,7 +1502,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
             }
             
             dayViewDiv.childNodes[i].durationNode.nodeValue = "";
-            if (showHDsymbol && programs[i].channel === "hd.svt.se" && programs[i].desc && programs[i].desc.sv && programs[i].desc.sv.indexOf("S\u00e4nds i HD.") > -1)
+            if (turnOnHDsymbol(programs[i]))
             {
               dayViewDiv.childNodes[i].hdSymbolNode.style.display = "inline";
             }
@@ -2123,7 +2142,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
             {
               channelNode.childNodes[i].durationNode.nodeValue = "";
             }
-            if (showHDsymbol && program.channel === "hd.svt.se" && program.desc && program.desc.sv && program.desc.sv.indexOf("S\u00e4nds i HD.") > -1)
+            if (turnOnHDsymbol(program))
             {
               channelNode.childNodes[i].hdSymbolNode.style.display = "inline";
             }
@@ -2149,7 +2168,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
           for (i = 0; i < programs.length; i += 1)
           {
             program = programs[i];
-            pNode = UIcreator.createProgramNode(program, ProgramInfo, showHDsymbol, showFtScore, isNowNextLater);
+            pNode = UIcreator.createProgramNode(program, ProgramInfo, turnOnHDsymbol(program), showFtScore, isNowNextLater);
             if (showFtScore)
             {
               ftAddToQueue(pNode);
