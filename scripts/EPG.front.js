@@ -105,13 +105,13 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
       topBar.lastChild.setAttribute("id", "topbardate");
       topBar.dateContainer = topBar.lastChild;
       topBar.lastChild.appendChild(document.createElement("span"));
-      topBar.lastChild.lastChild.appendChild(document.createTextNode("<"));
+      topBar.lastChild.lastChild.appendChild(document.createTextNode("\u2190"));
       topBar.prevDateButton = topBar.lastChild.lastChild.firstChild;
       topBar.lastChild.appendChild(document.createElement("span"));
       topBar.lastChild.lastChild.appendChild(document.createTextNode(" 2010-08-10 "));
       topBar.date = topBar.lastChild.lastChild.firstChild;
       topBar.lastChild.appendChild(document.createElement("span"));
-      topBar.lastChild.lastChild.appendChild(document.createTextNode(">"));
+      topBar.lastChild.lastChild.appendChild(document.createTextNode("\u2192"));
       topBar.nextDateButton = topBar.lastChild.lastChild.firstChild;
       topBarContainer = UIcreator.createScalableContainer("topbar", topBar, "uppe.png", currentChannelListIndex);
       topBarContainer.style.width = "27em";
