@@ -52,6 +52,8 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
   
   key.ARROW_UP = 38;
   key.ARROW_DOWN = 40;
+  key.ARROW_RIGHT = 39;
+  key.ARROW_LEFT = 37;
   key.BACKSPACE = 8;
   key.COMMA = 188;
   key.SPACE = 32;
@@ -125,13 +127,13 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
       topBar.dateContainer = topBar.lastChild;
       topBar.lastChild.appendChild(document.createElement("span"));
       topBar.lastChild.lastChild.appendChild(document.createTextNode("\u2190"));
-      topBar.prevDateButton = topBar.lastChild.lastChild.firstChild;
+      topBar.prevDateButton = topBar.lastChild.lastChild;
       topBar.lastChild.appendChild(document.createElement("span"));
       topBar.lastChild.lastChild.appendChild(document.createTextNode(" 2010-08-10 "));
       topBar.date = topBar.lastChild.lastChild.firstChild;
       topBar.lastChild.appendChild(document.createElement("span"));
       topBar.lastChild.lastChild.appendChild(document.createTextNode("\u2192"));
-      topBar.nextDateButton = topBar.lastChild.lastChild.firstChild;
+      topBar.nextDateButton = topBar.lastChild.lastChild;
       topBarContainer = UIcreator.createScalableContainer("topbar", topBar, "uppe.png", currentChannelListIndex);
       topBarContainer.style.width = "27em";
       topBarContainer.style.height = "4.8em";
@@ -533,6 +535,26 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
     }
   }
   
+  function updateTopBarDate(amount)
+  {
+    if (topBar.date.realDate)
+    {
+      topBar.date.realDate.setDate(topBar.date.realDate.getDate() + amount);
+      topBar.date.nodeValue = " " + Settings.getYYYYMMDD(topBar.date.realDate) + " ";
+      if (Settings.getYYYYMMDD(topBar.date.realDate) === Settings.getYYYYMMDD(new Date()))
+      { // today
+        if (topBar.prevDateButton.style.visibility !== "hidden")
+        {
+          topBar.prevDateButton.style.visibility = "hidden";
+        }
+      }
+      else if (topBar.prevDateButton.style.visibility !== "visible")
+      {
+        topBar.prevDateButton.style.visibility = "visible";
+      }
+    }
+  }
+  
   /**
    * @memberOf EPG.front
    * @name updateTopBar
@@ -565,7 +587,8 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
           topBar.dateContainer.top = "2.4";
           topBar.dateContainer.style.top = topBar.dateContainer.top + "em";
         }
-        topBar.date.nodeValue = " " + Settings.getYYYYMMDD(date) + " ";
+        topBar.date.realDate = new Date();
+        updateTopBarDate(0);
         if (channel && channel.displayName)
         {
           if (channel.displayName.sv)
@@ -681,11 +704,13 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
    * @description Runs if an error happened when day view programs.
    * @private
    */
-  function fillDayViewFailed() 
+  function fillDayViewFailed(channelID, ymd, when) 
   {
     try
     {
-      Debug.alert("front.fillDayViewFailed: Could not get programs :-(");
+      Debug.inform("front.fillDayViewFailed: Could not get programs for channelID " + channelID + " ymd " + ymd + " :-(");
+      fillDayView([], when);
+      
     }
     catch (error)
     {
@@ -1264,6 +1289,14 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
           programNode.startNode.nodeValue = "";
           programNode.titleNode.nodeValue = "- " + Translator.translate("No program") + " -";
           programNode.hdSymbolNode.nodeValue = "";
+          programNode.ftScoreNode.style.display = "none";
+        }
+        else if (program.isTheNoEpgAvailableProgram)
+        {
+          programNode.startNode.nodeValue = "";
+          programNode.titleNode.nodeValue = Translator.translate("No program information available");
+          programNode.hdSymbolNode.nodeValue = "";
+          programNode.ftScoreNode.style.display = "none";
         }
         else
         {
@@ -1318,7 +1351,6 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
     try
     {
       var i, length, programsLength, stopDate, currentNode, limit, pNode;
-      
       if (!when)
       {
         when = new Date();
@@ -1375,8 +1407,6 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
                 dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "";
                 dayViewDiv.childNodes[i].ftScoreNode.style.display = "none";
               }
-              
-              
             }
           }
           else if (programsLength > length)
@@ -1471,7 +1501,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
             }
           }
         }
-        else if (programs.length > 0)
+        else
         {
           length = programs.length;
           for (i = 0; i < length; i += 1)
@@ -1512,14 +1542,28 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
             }
           }
         }
-        else
-        {
-          // print error?
-        }
       }
       else
-      {
-        // print error
+      { // programs.length === 0 || !programs
+        length = dayViewDiv.childNodes.length;
+        if (length)
+        {
+          for (i = 0; i < length; i += 1)
+          {
+            dayViewDiv.childNodes[i].style.display = "none";
+            dayViewDiv.childNodes[i].hdSymbolNode.nodeValue = "";
+            dayViewDiv.childNodes[i].ftScoreNode.style.display = "none";
+          }
+          updateProgramNode(dayViewDiv.childNodes[0], Settings.theNoEpgAvailableProgram);
+          dayViewDiv.childNodes[0].style.display = "block";
+        }
+        else
+        {
+          pNode = UIcreator.createProgramNode(Settings.theNoEpgAvailableProgram, ProgramInfo, false, false);
+          pNode.ftScoreNode.style.display = "none";
+          dayViewDiv.appendChild(pNode);
+          dayViewDiv.childNodes[0].hdSymbolNode.style.display = "none";
+        }
       }
       //dayViewDiv.style.display = "block";
       if (currentNode)
@@ -1535,7 +1579,11 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
       Debug.alert("Error in EPG.front.fillDayView: " + error + " (programs = " + programs + ", i = " + i + ")");
     }
   }
-  
+
+  function paintDayViewAtDate(channelNode, date)
+  {
+    Settings.getProgramsForDay(channelNode.channelID, fillDayView, fillDayViewFailed, date);
+  }
   /**
    * @memberOf EPG.front
    * @name switchView
@@ -1557,7 +1605,7 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
           currentView = 1; // Day view
           scrollFrame.dayView.topY = 0;
           scrollFrame.dayView.style.top = scrollFrame.dayView.topY + "px";
-          Settings.getProgramsForDay(channelNode.channelID, fillDayView, fillDayViewFailed, new Date());
+          paintDayViewAtDate(channelNode, new Date());
         }
         else
         {
@@ -1950,6 +1998,18 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
             event.preventDefault();
           }
           break;
+        case key.ARROW_RIGHT:
+          if (visible && currentView === 1)
+          {
+            toNextDay();
+          }
+          break;
+        case key.ARROW_LEFT:
+          if (visible && currentView === 1 && topBar.prevDateButton.style.visibility === "visible")
+          {
+            toPreviousDay();
+          }
+          break;
         case key.COMMA:
           if (visible && event.metaKey)
           {
@@ -2045,6 +2105,18 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
     }
   }
   
+  function toPreviousDay()
+  {
+    updateTopBarDate(-1);
+    paintDayViewAtDate(dayViewNode, topBar.date.realDate);
+  }
+  
+  function toNextDay()
+  {
+    updateTopBarDate(1);
+    paintDayViewAtDate(dayViewNode, topBar.date.realDate);
+  }
+  
   /**
    * @memberOf EPG.front
    * @name create
@@ -2060,6 +2132,9 @@ EPG.front = function (Debug, Growl, Settings, Skin, Translator, UIcreator, File,
       topBar.dateContainer.top = "3.4";
       topBar.dateContainer.style.top = topBar.dateContainer.top + "em";
       topBar.dateContainer.style.webkitTransition = "top 0.1s ease-out";
+      topBar.prevDateButton.style.visibility = "hidden";
+      topBar.prevDateButton.addEventListener("click", toPreviousDay, false);
+      topBar.nextDateButton.addEventListener("click", toNextDay, false);
       frontDiv.appendChild(document.createElement("div"));
       scrollFrame = frontDiv.lastChild;
       scrollFrame.style.width = "27em";

@@ -79,6 +79,7 @@ EPG.translator = function (debug)
   localizedStrings["Redownload all schedules."] = "Ladda ner alla tablåer på nytt.";
   localizedStrings["Downloading schedules..."] = "Laddar ner tablåer...";
   localizedStrings["Might take a while."] = "Kan ta en stund.";
+  localizedStrings["No program information available"] = "Ingen programinformation tillgänglig";
   // Private methods
   
   

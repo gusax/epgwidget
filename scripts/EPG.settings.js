@@ -713,12 +713,12 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
    * @private
    * @param {function} callback Callback function that should be notified of the failure.
    */
-  function programsDownloadFailed (callback, contents, channelID, ymd)
+  function programsDownloadFailed (callback, contents, channelID, ymd, when)
   {
     try
     {
       // Perhaps the schedule has not been downloaded yet? In that case we should perhaps force an update.
-      callback();
+      callback(channelID, ymd, when);
     }
     catch (error)
     {
@@ -1337,13 +1337,13 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
           }
           else
           {
-            file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd);});
+            file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd, when);});
           }
         }
         else
         {
           cachedPrograms[channelID] = {};
-          file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd, false, false, false, onFailure, when);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd, false);});
+          file.openSchedule(channelID, ymd, function(schedule, theChannelID){programsDownloadSucceeded(onSuccess, schedule, channelID, ymd, false, false, false, onFailure, when);}, function(contents, thechannelID){programsDownloadFailed(onFailure, contents, channelID, ymd, when);});
         }
       }
       catch (error)
@@ -1744,6 +1744,12 @@ EPG.settings = function(Debug, growl, file, GeoLocation)
       {
         Debug.alert("Error in EPG.settings.connectChannelListToLocation " + error);
       }
+    },
+    
+    theEmptyProgram : theEmptyProgram,
+    
+    theNoEpgAvailableProgram : {
+      "isTheNoEpgAvailableProgram" : true 
     }
   };
 }(EPG.debug, EPG.growl, EPG.file, EPG.GeoLocation);
