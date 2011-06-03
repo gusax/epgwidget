@@ -13,12 +13,13 @@ Senaste ändringarna ligger alltid överst.
 _Nya funktioner_
  * Det är nu möjligt att byta dag i heldagsvyn genom att klicka på pilarna åt höger (nästa dag) eller vänster (föregående dag). Även piltangenterna går bra att använda. ([http://code.google.com/p/epgwidget/issues/detail?id=20 20])
 
+ * Laddar nu ner eventuella uppdateringar även för kanalloggor. Har du Safari 4 och Leopard eller Snow Leopard måste du logga ut och logga in igen för att befintliga loggor ska uppdateras (i de fall de har uppdaterats). Har du Tiger eller Leopard med Safari 3 installerat så ska loggorna bytas ut automatiskt om de har ändrats. ([http://code.google.com/p/epgwidget/issues/detail?id=5 5])
+
  * Filmer som man själv betygsatt på filmtipset.se har nu en bock efter titeln (innan betygstjärnorna), så det är möjligt att skilja på verkliga betyg och de förmodade betygen.
 
  * Matchningen mot filmtipset.se hanterar nu titlar som i tablån börjar med "Film:", "Nattfilm:", "Filmklubben:" osv.
 
 _Rättade buggar_
- * Laddar nu ner eventuella uppdateringar även för kanalloggor. Har du Safari 4 och Leopard eller Snow Leopard måste du logga ut och logga in igen för att befintliga loggor ska uppdateras (i de fall de har uppdaterats). Har du Tiger eller Leopard med Safari 3 installerat så ska loggorna bytas ut automatiskt om de har ändrats.
 
  * HD-program på SVT-kanalerna markeras nu som HD-program igen (om den funktionen är påslagen på baksidan).
 
