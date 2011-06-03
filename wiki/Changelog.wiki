@@ -11,6 +11,7 @@ Senaste ändringarna ligger alltid överst.
 ----
 == Nästa version ==
 _Nya funktioner_
+ * Det är nu möjligt att byta dag i heldagsvyn genom att klicka på pilarna åt höger (nästa dag) eller vänster (föregående dag). Även piltangenterna går bra att använda. ([http://code.google.com/p/epgwidget/issues/detail?id=20 20])
 
  * Filmer som man själv betygsatt på filmtipset.se har nu en bock efter titeln (innan betygstjärnorna), så det är möjligt att skilja på verkliga betyg och de förmodade betygen.
 
