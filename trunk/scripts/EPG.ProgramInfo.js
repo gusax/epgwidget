@@ -624,10 +624,18 @@ EPG.ProgramInfo = function(Debug, UIcreator, Translator, Settings, Skin, File, R
             }
             
             // Title
-            if(program.isTheEmptyProgram)
+            if(program.isTheEmptyProgram || program.isTheNoEpgAvailableProgram)
             {
-              programInfoNode.titleNode.nodeValue = Translator.translate("No program");
-              programInfoNode.descriptionNode.nodeValue = Translator.translate("No program") + ".";
+              if (program.isTheEmptyProgram)
+              {
+                programInfoNode.titleNode.nodeValue = Translator.translate("No program");
+                programInfoNode.descriptionNode.nodeValue = Translator.translate("No program") + ".";
+              }
+              else
+              {
+                programInfoNode.titleNode.nodeValue = Translator.translate("No program information available");
+                programInfoNode.descriptionNode.nodeValue = Translator.translate("No program information available") + ".";
+              }
               programInfoNode.startNode.nodeValue = "";
               programInfoNode.stopNode.nodeValue = "";
               programInfoNode.durationNode.nodeValue = "";
